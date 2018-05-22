@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GXDT</string>
+
+    <string-array name="discover_title">
+        <item>推荐</item>
+        <item>全部</item>
+    </string-array>
 </resources>
