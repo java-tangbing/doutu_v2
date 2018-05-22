@@ -2,8 +2,10 @@ package com.pufei.gxdt.module.discover.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -25,18 +27,21 @@ import java.util.List;
 import butterknife.BindView;
 
 public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
-
     @BindView(R.id.tab_discover)
     TabLayout tabLayout;
     @BindView(R.id.vp_discover)
     MyViewPager myViewPager;
     private List<Fragment> fragmentList;
     private List<String> titleList;
-    private String[] titleArray = getResources().getStringArray(R.array.discover_title);
+    private String[] titleArray = {"推荐", "全部"};
 
     @Override
     public void initView() {
+//        if (isAdded()) {
+//            titleArray = getResources().getStringArray(R.array.discover_title);
+//        }
         addfragment();
+        init();
     }
 
     @Override
@@ -65,13 +70,17 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
         //    reflex(tabDriver);
         tabLayout.addOnTabSelectedListener(this);
         tabLayout.setupWithViewPager(myViewPager);
-//        reflexTabIndicatorWidth();
+        setIndicator(tabLayout,70,70);
     }
 
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-
+//if(tab.getPosition()==0){
+//
+//}else {
+//
+//}
     }
 
     @Override
@@ -84,35 +93,67 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
 
     }
 
-    @SuppressLint("NewApi")
-    public void reflexTabIndicatorWidth() {
-        Class<?> tablayout = tabLayout.getClass();
+    public void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
+        Class<?> tabLayout = tabs.getClass();
         Field tabStrip = null;
         try {
-            tabStrip = tablayout.getDeclaredField("mTabStrip");
-            tabStrip.setAccessible(true);
-            LinearLayout ll_tab = (LinearLayout) tabStrip.get(tabLayout);
-            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-                View child = ll_tab.getChildAt(i);
-                child.setPadding(0, 0, 0, 0);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                params.setMarginStart(dip2px(App.AppContext, 28f));
-                params.setMarginEnd(dip2px(App.AppContext, 28f));
-                child.setLayoutParams(params);
-                child.invalidate();
-            }
+            tabStrip = tabLayout.getDeclaredField("mTabStrip");
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
+        }
+
+        tabStrip.setAccessible(true);
+        LinearLayout llTab = null;
+        try {
+            llTab = (LinearLayout) tabStrip.get(tabs);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
+        int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
+        int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
+
+        for (int i = 0; i < llTab.getChildCount(); i++) {
+            View child = llTab.getChildAt(i);
+            child.setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            params.leftMargin = left;
+            params.rightMargin = right;
+            child.setLayoutParams(params);
+            child.invalidate();
+        }
+
+
     }
-
-
-    public int dip2px(Context context, float dipValue) {
-
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale + 0.5f);
-    }
+//    @SuppressLint("NewApi")
+//    public void reflexTabIndicatorWidth() {
+//        Class<?> tablayout = tabLayout.getClass();
+//        Field tabStrip = null;
+//        try {
+//            tabStrip = tablayout.getDeclaredField("mTabStrip");
+//            tabStrip.setAccessible(true);
+//            LinearLayout ll_tab = (LinearLayout) tabStrip.get(tabLayout);
+//            for (int i = 0; i < ll_tab.getChildCount(); i++) {
+//                View child = ll_tab.getChildAt(i);
+//                child.setPadding(0, 0, 0, 0);
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+//                params.setMarginStart(dip2px(App.AppContext, 28f));
+//                params.setMarginEnd(dip2px(getContext(), 28f));
+//                child.setLayoutParams(params);
+//                child.invalidate();
+//            }
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//
+//    public int dip2px(Context context, float dipValue) {
+//
+//        final float scale = context.getResources().getDisplayMetrics().density;
+//        return (int) (dipValue * scale + 0.5f);
+//    }
 }

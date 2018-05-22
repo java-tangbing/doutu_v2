@@ -40,7 +40,7 @@
         app:tabIndicatorHeight="2dp"
         app:tabTextColor="@color/hint_color" />
 
-    <com.pufei.dashi.widget.viewpager.MyViewPager
+    <com.pufei.gxdt.widgets.viewpager.MyViewPager
         android:id="@+id/vp_discover"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
