@@ -52,14 +52,33 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++)
         {
+//            final View child = parent.getChildAt(i);
+//            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+//                    .getLayoutParams();
+//            final int left = child.getLeft() - params.leftMargin;
+//            final int right = child.getRight() + params.rightMargin
+//                    + mDivider.getIntrinsicWidth();
+//            final int top = child.getBottom() + params.bottomMargin;
+//            final int bottom = top + mDivider.getIntrinsicHeight();
+//            mDivider.setBounds(left, top, right, bottom);
+//            mDivider.draw(c);
             final View child = parent.getChildAt(i);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int left = child.getLeft() - params.leftMargin;
             final int right = child.getRight() + params.rightMargin
                     + mDivider.getIntrinsicWidth();
-            final int top = child.getBottom() + params.bottomMargin;
-            final int bottom = top + mDivider.getIntrinsicHeight();
+            int top = 0;
+            int bottom = 0;
+
+            //画item最上面的分割线
+            top = child.getTop(); //该处一开始是top = 0，没考虑到布局中recyclerview的padding情况
+            bottom = top + mDivider.getIntrinsicHeight();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+            //画item下面的分割线
+            top = child.getBottom() + params.bottomMargin;
+            bottom = top + mDivider.getIntrinsicHeight();
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }
@@ -70,14 +89,35 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++)
         {
+//            final View child = parent.getChildAt(i);
+//
+//            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+//                    .getLayoutParams();
+//            final int top = child.getTop() - params.topMargin;
+//            final int bottom = child.getBottom() + params.bottomMargin;
+//            final int left = child.getRight() + params.rightMargin;
+//            final int right = left + mDivider.getIntrinsicWidth();
+//
+//            mDivider.setBounds(left, top, right, bottom);
+//            mDivider.draw(c);
             final View child = parent.getChildAt(i);
 
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int top = child.getTop() - params.topMargin;
             final int bottom = child.getBottom() + params.bottomMargin;
-            final int left = child.getRight() + params.rightMargin;
-            final int right = left + mDivider.getIntrinsicWidth();
+            int left = 0;
+            int right = 0;
+
+
+            //item左边分割线
+            left = child.getLeft();//该处一开始是left = 0，        没考虑到布局中recyclerview的padding情况
+            right = left + mDivider.getIntrinsicWidth();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+            //item右边分割线
+            left = child.getRight() + params.rightMargin;
+            right = left + mDivider.getIntrinsicWidth();
 
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
