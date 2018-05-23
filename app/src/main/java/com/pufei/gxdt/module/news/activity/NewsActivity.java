@@ -1,4 +1,20 @@
 package com.pufei.gxdt.module.news.activity;
 
-public class NewsActivity {
+import com.pufei.gxdt.base.BaseActivity;
+
+public class NewsActivity extends BaseActivity {
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void getData() {
+
+    }
+
+    @Override
+    public int getLayout() {
+        return 0;
+    }
 }

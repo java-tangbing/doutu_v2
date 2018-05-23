@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.discover.activity.DiscoverDetailedActivity"></activity>
+        <activity android:name=".module.news.activity.NewsActivity"></activity>
     </application>
 
 </manifest>
