@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+        <LinearLayout
+            android:id="@+id/activity_home1_cancel"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:src="@mipmap/back0"
+                android:layout_width="20dp"
+                android:layout_height="match_parent" />
+            <TextView
+                android:visibility="gone"
+                android:textSize="18sp"
+                android:textColor="#333"
+                android:gravity="center"
+                android:text="返回"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/activity_home1_title"
+            android:textColor="#333"
+            android:textSize="20sp"
+            android:text=""
+            android:gravity="center"
+            android:ellipsize="end"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:layout_weight="7"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:background="@mipmap/detail_save"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/activity_home1_shoucang"
+                android:background="@mipmap/detail_shoucang"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/activity_picturedetail_vp"
+        android:layout_width="match_parent"
+        android:layout_height="320dp">
+    </android.support.v4.view.ViewPager>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+    <com.pufei.gxdt.widgets.MyFrontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_text_normal"
+        android:textSize="12sp"
+        android:drawableLeft="@mipmap/home_search"
+        android:text="123435" />
+
+    <com.pufei.gxdt.widgets.MyFrontTextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="21dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/home_search"
+        android:textColor="@color/color_text_normal"
+        android:textSize="12sp"
+        android:text="1234" />
+
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="21dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/home_search"
+            android:textColor="@color/color_text_normal"
+            android:textSize="12sp"
+            android:text="120张改图" />
+
+</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="12sp"
+                    android:textColor="#333333"
+                    android:text="@string/qq"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/share_border"
+                    android:drawableLeft="@mipmap/shoucang1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="12sp"
+                    android:textColor="#333333"
+                    android:text="@string/weixin"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/share_border"
+                    android:drawableLeft="@mipmap/shoucang1"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="20dp"
+                    android:gravity="right">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="12sp"
+                    android:textColor="#333333"
+                    android:text="@string/gaitu"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/share_border"
+                    android:drawableLeft="@mipmap/shoucang1"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/line_color"
+                />
+
+         <include layout="@layout/adver_layout"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/qitabiaoqing"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

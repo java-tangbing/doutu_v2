@@ -6,7 +6,8 @@ package com.pufei.gxdt.utils;
  */
 
 public class Contents {
-    public static final String BASE_URL="https://jiakao.xianwan.com/task/";
+    //public static final String BASE_URL="https://jiakao.xianwan.com/task/";
+    public static final String BASE_URL="http://erp.xianwan.com/";
     public static final String USER_DETAIL="USER_DETAIL";
     private static final String TAG="http://erp.xianwan.com";
     public static final String friststart=TAG+"/api/apiStart/firstStart";

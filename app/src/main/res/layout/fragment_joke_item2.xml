@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:scaleType="fitXY"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="18dp"
+        android:id="@+id/fragment_joke_itme2_image"
+        android:layout_width="103dp"
+        android:layout_height="93dp" />
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="15dp"
+            android:gravity="left"
+            android:textSize="18sp"
+            android:textColor="#333"
+            android:layout_weight="3"
+            android:id="@+id/fragment_joke_itme2_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+</LinearLayout>
+       <View
+           android:background="@color/bg_invite_text"
+           android:layout_width="match_parent"
+           android:layout_height="0.5dp">
+
+       </View>
+
+</LinearLayout>
