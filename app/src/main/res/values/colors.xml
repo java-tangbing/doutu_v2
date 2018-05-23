@@ -6,5 +6,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="hint_color">#9c9c9c</color>
+    <color name="image_default_color">#D8D8D8</color>
+    <color name="text_default_color">#686868</color>
 
 </resources>

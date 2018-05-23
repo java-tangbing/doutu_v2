@@ -6,6 +6,8 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
+        android:background="@color/white"
+        android:id="@+id/rv_all_dis"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

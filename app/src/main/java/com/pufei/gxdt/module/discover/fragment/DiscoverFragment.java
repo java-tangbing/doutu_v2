@@ -70,7 +70,7 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
         //    reflex(tabDriver);
         tabLayout.addOnTabSelectedListener(this);
         tabLayout.setupWithViewPager(myViewPager);
-        setIndicator(tabLayout,70,70);
+        setIndicator(tabLayout,100,100);
     }
 
 
