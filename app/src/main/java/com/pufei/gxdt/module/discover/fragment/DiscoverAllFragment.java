@@ -1,5 +1,6 @@
 package com.pufei.gxdt.module.discover.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.module.discover.activity.DiscoverDetailedActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
@@ -72,6 +74,9 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+        Intent intent = new Intent(activity, DiscoverDetailedActivity.class);
+//        intent.putExtra("a", a);
+//        intent.putExtra("b", b);
+        startActivity(intent);
     }
 }
