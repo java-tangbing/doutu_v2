@@ -31,9 +31,9 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginLeft="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
             android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
@@ -47,8 +47,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="收到最新消息的测试时测试" />
+                android:text="您的账号还未绑定手机号码" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="立即绑定"
+                android:textColor="@color/khaki" />
 
         </LinearLayout>
     </LinearLayout>

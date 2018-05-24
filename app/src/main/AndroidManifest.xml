@@ -38,9 +38,9 @@
         <activity android:name=".module.discover.activity.DiscoverDetailedActivity" />
         <activity android:name=".module.news.activity.NewsActivity" />
         <activity android:name=".module.news.activity.NewsSystemActivity"></activity>
+        <activity android:name=".module.news.activity.NewsFeedBackActivity" />
+        <activity android:name=".module.news.activity.NewsPictureActivity" />
         <activity android:name=".module.login.activity.LoginActivity" />
-
-
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />
         <provider
             android:name="android.support.v4.content.FileProvider"

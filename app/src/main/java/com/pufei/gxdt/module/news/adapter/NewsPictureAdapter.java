@@ -7,7 +7,7 @@ import com.pufei.gxdt.module.news.bean.NewsSystemBean;
 
 import java.util.List;
 
-public class NewsSystemAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean, BaseViewHolder> {
+public class NewsPictureAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean, BaseViewHolder> {
 
 
     /**
@@ -16,10 +16,10 @@ public class NewsSystemAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean,
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public NewsSystemAdapter(List data) {
+    public NewsPictureAdapter(List data) {
         super(data);
-        addItemType(1101, R.layout.activity_news_item_unlanded);
-        addItemType(1102, R.layout.activity_news_system_item);
+        addItemType(1101, R.layout.activity_news_picture_item);
+        addItemType(1102, R.layout.activity_news_item_unlanded);
     }
 
 
