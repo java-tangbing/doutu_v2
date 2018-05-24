@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:src="@mipmap/loading3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <Button
+        android:id="@+id/frist_loading3_btn"
+        android:text="立即开始"
+        android:layout_gravity="bottom"
+        android:background="@drawable/cruncheies_tv"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:checked="true"
+        style="@style/RideoStyle"
+        android:textColor="#797979"
+        android:id="@+id/checkBox"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginBottom="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/frist_loading3_btn"
+        android:layout_alignStart="@+id/frist_loading3_btn" />
+    <com.pufei.gxdt.view.MyFrontTextView
+        android:text="开启悬浮窗"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myFrontTextView"
+        android:layout_alignBottom="@+id/checkBox"
+        android:layout_alignRight="@+id/frist_loading3_btn"
+        android:layout_alignEnd="@+id/frist_loading3_btn" />
+</RelativeLayout>

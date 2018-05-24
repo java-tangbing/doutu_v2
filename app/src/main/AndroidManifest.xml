@@ -37,10 +37,51 @@
         </activity>
         <activity android:name=".module.discover.activity.DiscoverDetailedActivity" />
         <activity android:name=".module.news.activity.NewsActivity" />
-        <activity android:name=".module.news.activity.NewsSystemActivity"></activity>
+        <activity android:name=".module.news.activity.NewsSystemActivity" />
         <activity android:name=".module.news.activity.NewsFeedBackActivity" />
         <activity android:name=".module.news.activity.NewsPictureActivity" />
         <activity android:name=".module.login.activity.LoginActivity" />
+        <activity android:name=".module.login.activity.BindPhoneActivity" />
+        <activity android:name=".module.user.activity.AboutProductActivity" />
+        <activity android:name=".module.user.activity.AccountSafetyActivity" />
+        <activity android:name=".module.user.activity.AgreeementActivity" />
+        <activity android:name=".module.user.activity.EditNameActivity" />
+        <activity android:name=".module.user.activity.ProfileActivity" />
+        <activity android:name=".module.user.activity.SettingActivity" />
+        <activity
+            android:name="com.pufei.gxdt.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1105886594" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.pufei.gxdt.module.start.ui.FristActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!--<meta-data-->
+        <!--android:name="UMENG_APPKEY"-->
+        <!--android:value="5850b381734be40cef0006f8" />-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5aa64afe8f4a9d11ab0000e4" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
+
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />
         <provider
             android:name="android.support.v4.content.FileProvider"
