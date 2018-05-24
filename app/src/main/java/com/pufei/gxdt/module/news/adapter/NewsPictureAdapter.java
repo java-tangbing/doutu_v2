@@ -18,8 +18,8 @@ public class NewsPictureAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean
      */
     public NewsPictureAdapter(List data) {
         super(data);
-        addItemType(1101, R.layout.activity_news_system_item_server);
-        addItemType(1102, R.layout.activity_news_system_item_user);
+        addItemType(1101, R.layout.activity_news_picture_item);
+        addItemType(1102, R.layout.activity_news_item_unlanded);
     }
 
 

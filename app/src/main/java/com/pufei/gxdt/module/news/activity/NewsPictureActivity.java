@@ -7,7 +7,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.news.adapter.NewsPictureAdapter;
-import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
+
 import com.pufei.gxdt.module.news.bean.NewsSystemBean;
 
 import java.util.ArrayList;

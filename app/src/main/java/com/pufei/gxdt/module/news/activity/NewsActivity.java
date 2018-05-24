@@ -36,12 +36,14 @@ public class NewsActivity extends BaseActivity {
 
     @OnClick({R.id.news_system_message, R.id.news_picture_message, R.id.news_feedback_message})
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.news_system_message:
-                Intent intent = new Intent(this,NewsSystemActivity.class);
+                Intent intent = new Intent(this, NewsSystemActivity.class);
                 startActivity(intent);
                 break;
             case R.id.news_picture_message:
+                Intent intent1 = new Intent(this, NewsPictureActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.news_feedback_message:
                 break;
