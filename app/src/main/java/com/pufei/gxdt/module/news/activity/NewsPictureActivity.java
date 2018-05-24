@@ -6,21 +6,19 @@ import android.support.v7.widget.RecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
-import com.pufei.gxdt.base.BaseView;
-import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
+import com.pufei.gxdt.module.news.adapter.NewsPictureAdapter;
 import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
 import com.pufei.gxdt.module.news.bean.NewsSystemBean;
-import com.pufei.gxdt.module.view.DiscoverView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class NewsSystemActivity extends BaseMvpActivity {
-    @BindView(R.id.news_system_rv)
+public class NewsPictureActivity extends BaseMvpActivity {
+    @BindView(R.id.news_picture_rv)
     RecyclerView recyclerView;
-    NewsSystemAdapter newsSystemAdapter;
+    NewsPictureAdapter newsPictureAdapter;
     private List<NewsSystemBean> mlist;
 
     @Override
@@ -37,16 +35,16 @@ public class NewsSystemActivity extends BaseMvpActivity {
             NewsSystemBean bean = new NewsSystemBean();
             mlist.add(bean);
         }
-        newsSystemAdapter = new NewsSystemAdapter(mlist);
+        newsPictureAdapter = new NewsPictureAdapter(mlist);
 //        newsSystemAdapter.setOnItemClickListener(this);
 //        discoverAdapter.addHeaderView(videoHeaderView);
-        recyclerView.setAdapter(newsSystemAdapter);
+        recyclerView.setAdapter(newsPictureAdapter);
 //        setAdapter();
     }
 
     @Override
     public int getLayout() {
-        return R.layout.activity_news_system;
+        return R.layout.activity_news_picture;
     }
 
     @Override
