@@ -1,11 +1,14 @@
 package com.pufei.gxdt.module.news.activity;
 
+import android.content.Intent;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class NewsActivity extends BaseActivity {
     @BindView(R.id.news_system_message)
@@ -14,6 +17,7 @@ public class NewsActivity extends BaseActivity {
     LinearLayout picturelinearLayout;
     @BindView(R.id.news_feedback_message)
     LinearLayout feedbacklinearLayout;
+
     @Override
     public void initView() {
 
@@ -27,5 +31,20 @@ public class NewsActivity extends BaseActivity {
     @Override
     public int getLayout() {
         return R.layout.activity_news;
+    }
+
+
+    @OnClick({R.id.news_system_message, R.id.news_picture_message, R.id.news_feedback_message})
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.news_system_message:
+                Intent intent = new Intent(this,NewsSystemActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.news_picture_message:
+                break;
+            case R.id.news_feedback_message:
+                break;
+        }
     }
 }
