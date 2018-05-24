@@ -18,8 +18,8 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsSystemBea
      */
     public NewsFeedBackAdapter(List data) {
         super(data);
-        addItemType(1101, R.layout.activity_news_item_unlanded);
-        addItemType(1102, R.layout.activity_news_system_item);
+        addItemType(1101, R.layout.activity_news_feedback_item_user);
+        addItemType(1102, R.layout.activity_news_feedback_item_server);
     }
 
 
