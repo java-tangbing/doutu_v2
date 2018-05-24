@@ -40,8 +40,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/white"
             android:gravity="left|center_vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/hint_color" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +56,16 @@
                 android:layout_marginLeft="10dp"
                 android:text="收到最新消息的测试时测试" />
 
-
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/background_gray"
+        android:gravity="center"
+        android:text="查看详情"
+        android:textColor="@color/khaki" />
 </LinearLayout>

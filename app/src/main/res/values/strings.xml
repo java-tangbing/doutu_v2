@@ -12,6 +12,10 @@
     <string name="gain_code">获取验证码</string>
     <string name="login">登录</string>
     <string name="please_login">您好，请登录</string>
+    <string name="about_product">关于产品</string>
+    <string name="versions_detection">版本检</string>
+    <string name="data_edit">资料编辑</string>
+    <string name="setting">设置</string>
     <string-array name="discover_title">
         <item>推荐</item>
         <item>全部</item>
