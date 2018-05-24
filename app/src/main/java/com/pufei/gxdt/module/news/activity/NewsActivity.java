@@ -46,6 +46,8 @@ public class NewsActivity extends BaseActivity {
                 startActivity(intent1);
                 break;
             case R.id.news_feedback_message:
+                Intent intent2 = new Intent(this, NewsFeedBackActivity.class);
+                startActivity(intent2);
                 break;
         }
     }
