@@ -2,6 +2,7 @@ package com.pufei.gxdt.module.discover.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
 import com.pufei.gxdt.module.discover.adapter.DiscoverTabVpAdapter;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
+import com.pufei.gxdt.module.news.activity.NewsActivity;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
 
@@ -25,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
     @BindView(R.id.tab_discover)
@@ -70,9 +73,21 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
         //    reflex(tabDriver);
         tabLayout.addOnTabSelectedListener(this);
         tabLayout.setupWithViewPager(myViewPager);
-        setIndicator(tabLayout,70,70);
+        setIndicator(tabLayout, 70, 70);
     }
 
+    @OnClick({R.id.discover_news_btn})
+    public void onViewClick(View view) {
+        switch (view.getId()) {
+            case R.id.discover_news_btn:
+                Intent intent = new Intent(getContext(), NewsActivity.class);
+//        intent.putExtra("a", a);
+//        intent.putExtra("b", b);
+                startActivity(intent);
+                break;
+        }
+
+    }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -93,6 +108,8 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
 
     }
 
+
+    //下划线长短
     public void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
         Class<?> tabLayout = tabs.getClass();
         Field tabStrip = null;
@@ -125,6 +142,7 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
 
 
     }
+
 //    @SuppressLint("NewApi")
 //    public void reflexTabIndicatorWidth() {
 //        Class<?> tablayout = tabLayout.getClass();
