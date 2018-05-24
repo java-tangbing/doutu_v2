@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:layout_centerVertical="true"
         android:text="消息" />
 </RelativeLayout>
