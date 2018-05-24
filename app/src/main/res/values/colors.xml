@@ -15,4 +15,15 @@
     <color name="update_true">#6389ED</color>
     <color name="blank">#000000</color>
     <color name="backgrond">#F7F7F7</color>
+    <color name="lineColor">#dddddd</color>
+    <color name="bgColor">#ededed</color>
+    <color name="textColor">#ffb500</color>
+    <color name="about_tv_color">#686868</color>
+    <color name="setting_btn">#4BA8EE</color>
+    <color name="tv_login_color">#333333</color>
+    <color name="line">#ececec</color>
+    <color name="transparent">#00000000</color>
+    <color name="text_title_black">#333333</color>
+    <color name="bgCircleColor">#9D9EFF</color>
+    <color name="log_divider_tab_selector">#FF0000</color>
 </resources>
