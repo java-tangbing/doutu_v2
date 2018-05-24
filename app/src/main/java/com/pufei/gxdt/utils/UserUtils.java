@@ -16,8 +16,6 @@ public class UserUtils {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("name", user.getName());
-                jsonObject.put("alipay", user.getAlipay());
-                jsonObject.put("realname", user.getRealname());
                 jsonObject.put("gender", user.getGender());
                 jsonObject.put("head", user.getHead());
                 jsonObject.put("address", user.getAddress());

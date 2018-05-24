@@ -6,8 +6,6 @@ package com.pufei.gxdt.module.user.bean;
 
 public class UserBean {
     private String name;
-    private String alipay;
-    private String realname;
     private String head;
     private String gender;
     private String address;
@@ -15,10 +13,8 @@ public class UserBean {
     private String phone;
     private boolean pwd;
 
-    public UserBean(String name,String alipay,String realname, String head, String gender, String address, String auth, String phone, boolean pwd) {
+    public UserBean(String name, String head, String gender, String address, String auth, String phone, boolean pwd) {
         this.name = name;
-        this.alipay = alipay;
-        this.realname = realname;
         this.head = head;
         this.gender = gender;
         this.address = address;
@@ -71,22 +67,6 @@ public class UserBean {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAlipay() {
-        return alipay;
-    }
-
-    public void setAlipay(String alipay) {
-        this.alipay = alipay;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public void setRealname(String realname) {
-        this.realname = realname;
     }
 
     public String getHead() {

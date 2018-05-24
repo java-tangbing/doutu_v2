@@ -99,9 +99,6 @@ public class SettingActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     @Override
     protected void onResume() {
         super.onResume();
-        if (App.userBean.getAlipay() != null) {
-            userdata_address.setText("已绑定");
-        }
     }
 
     @Override
@@ -164,20 +161,6 @@ public class SettingActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.BOTTOM, 0, 0);
                 break;
             case R.id.userdata_safe_ll:
-                break;
-            case R.id.userdata_alipay_ll:
-                if (App.userBean.getAlipay() != null) {
-                    ToastUtils.showLong(this, "已绑定");
-                } else {
-//                    startActivity(new Intent(this, SettingAlipayActivity.class));
-
-                }
-//                if(!SharedPreferencesUtil.getInstance().getBoolean("is_bind",false)){
-//                    startActivity(new Intent(this, SettingAlipayActivity.class));
-//                }else {
-//                    ToastUtils.showLong(this, "已绑定");
-//                }
-
                 break;
             case R.id.login_state:
                 if (App.userBean != null) {

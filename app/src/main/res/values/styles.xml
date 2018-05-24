@@ -24,5 +24,8 @@
         <item name="android:windowEnterAnimation">@anim/pop_bottombar_in</item>
         <item name="android:windowExitAnimation">@anim/pop_bottombar_out</item>
     </style>
+    <style name="checkBoxStyle">
+        <item name="android:button">@drawable/checkbox_state</item>
+    </style>
 
 </resources>

@@ -10,6 +10,7 @@ import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.user.activity.AboutProductActivity;
 import com.pufei.gxdt.module.user.activity.SettingActivity;
 
@@ -91,15 +92,15 @@ public class UserFragment extends BaseFragment {
                     startActivity(new Intent(getActivity(), SettingActivity.class));
                 }
                 break;
-            case R.id.tv_user_favorite:
-                startActivity(new Intent(getActivity(), FavoriteTaskActivity.class));
-                break;
+//            case R.id.tv_user_favorite:
+//                startActivity(new Intent(getActivity(), FavoriteTaskActivity.class));
+//                break;
             case R.id.tv_about_product:
                 startActivity(new Intent(getActivity(), AboutProductActivity.class));
                 break;
-            case R.id.tv_user_task:
-                startActivity(new Intent(getActivity(), UserTaskActivity.class));
-                break;
+//            case R.id.tv_user_task:
+//                startActivity(new Intent(getActivity(), UserTaskActivity.class));
+//                break;
             default:
                 break;
         }

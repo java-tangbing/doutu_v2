@@ -26,4 +26,5 @@
     <color name="text_title_black">#333333</color>
     <color name="bgCircleColor">#9D9EFF</color>
     <color name="log_divider_tab_selector">#FF0000</color>
+    <color name="circle_color">#929292</color>
 </resources>

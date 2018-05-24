@@ -50,4 +50,10 @@ dependencies {
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     implementation 'com.github.donkingliang:ImageSelector:1.2.0'
+    implementation 'com.umeng.sdk:analytics:7.5.0'
+    implementation 'com.umeng.sdk:common:1.5.0'
+    implementation 'com.umeng.sdk:share-core:6.9.1'
+    //   implementation 'com.umeng.sdk:share-qq:latest.integration'
+    implementation files('libs/umeng-share-QQ-simplify-6.9.1.jar')
+    implementation 'com.umeng.sdk:share-wechat:6.9.1'
 }
