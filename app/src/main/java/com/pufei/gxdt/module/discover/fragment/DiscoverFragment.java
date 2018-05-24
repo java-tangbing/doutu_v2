@@ -11,14 +11,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseFragment;
-import com.pufei.gxdt.base.BaseMvpActivity;
-import com.pufei.gxdt.base.TabVpAdapter;
 import com.pufei.gxdt.module.discover.adapter.DiscoverTabVpAdapter;
-import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.news.activity.NewsActivity;
-import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
 
 import java.lang.reflect.Field;
@@ -109,7 +104,7 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
     }
 
 
-    //下划线长短
+    //下划线长�
     public void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
         Class<?> tabLayout = tabs.getClass();
         Field tabStrip = null;
