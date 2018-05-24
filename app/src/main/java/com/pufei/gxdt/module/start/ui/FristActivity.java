@@ -18,6 +18,8 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.module.floating.FloatWindowService;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class FristActivity extends Activity {
     private int oldPosition = 0;// 记录上一次点的位置
 
     private int currentItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +125,7 @@ public class FristActivity extends Activity {
                 currentItem = position;
                 if (position >= viewList.size()) {
                     if (cb.isChecked()) {
-                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (!Settings.canDrawOverlays(FristActivity.this)) {
                                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                         Uri.parse("package:" + getPackageName()));
@@ -131,17 +134,18 @@ public class FristActivity extends Activity {
                                 editor.putBoolean(SHARE_APP_USER, true).apply();
                                 startService(new Intent(FristActivity.this, FloatWindowService.class));
                             }
-                        }else{
+                        } else {
                             editor.putBoolean(SHARE_APP_USER, true).apply();
                             startService(new Intent(FristActivity.this, FloatWindowService.class));
                         }
 
 
                     }
-                    startActivity(new Intent(FristActivity.this, StartLoadingActivity.class));//点击跳转回主页面
+                    startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
                     finish();
                 }
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -165,7 +169,7 @@ public class FristActivity extends Activity {
             public void onClick(View v) {
                 if (cb.isChecked()) {
 
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (!Settings.canDrawOverlays(FristActivity.this)) {
                             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                     Uri.parse("package:" + getPackageName()));
@@ -173,15 +177,15 @@ public class FristActivity extends Activity {
                         } else {
                             editor.putBoolean(SHARE_APP_USER, true).apply();
                             startService(new Intent(FristActivity.this, FloatWindowService.class));
-                            Log.e("fristactivity","111111111111111");
-                            startActivity(new Intent(FristActivity.this, StartLoadingActivity.class));//点击跳转回主页面
+                            Log.e("fristactivity", "111111111111111");
+                            startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
                             finish();
                         }
-                    }else{
+                    } else {
                         editor.putBoolean(SHARE_APP_USER, true).apply();
                         startService(new Intent(FristActivity.this, FloatWindowService.class));
-                        Log.e("fristactivity","111111111111111");
-                        startActivity(new Intent(FristActivity.this, StartLoadingActivity.class));//点击跳转回主页面
+                        Log.e("fristactivity", "111111111111111");
+                        startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
                         finish();
                     }
 
@@ -203,19 +207,20 @@ public class FristActivity extends Activity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case 101:
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (Settings.canDrawOverlays(FristActivity.this)) {
                         editor.putBoolean(SHARE_APP_USER, true).apply();
                         startService(new Intent(FristActivity.this, FloatWindowService.class));
                     } else {
-                        Toast.makeText(FristActivity.this,"悬浮窗权限被拒绝，请在设置里面开启相应权限，若无相应权限会影响使用",Toast.LENGTH_LONG).show();
+                        Toast.makeText(FristActivity.this, "悬浮窗权限被拒绝，请在设置里面开启相应权限，若无相应权限会影响使用", Toast.LENGTH_LONG).show();
                     }
-                    Log.e("fristactivity","111111111111111");
-                    startActivity(new Intent(FristActivity.this, StartLoadingActivity.class));//点击跳转回主页面
+                    Log.e("fristactivity", "111111111111111");
+                    startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
                     finish();
                 }
 
