@@ -1,7 +1,5 @@
 package com.pufei.gxdt.module.discover.fragment;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,13 +8,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseFragment;
-import com.pufei.gxdt.base.BaseMvpActivity;
-import com.pufei.gxdt.base.TabVpAdapter;
 import com.pufei.gxdt.module.discover.adapter.DiscoverTabVpAdapter;
-import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
-import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
 
 import java.lang.reflect.Field;
