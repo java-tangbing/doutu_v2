@@ -9,14 +9,13 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 /**
- * 创建者： wangwenzhang 时间： 2018/3/9.
+ * 创建者： caozw 时间： 2018/5/25.
  */
 
 public interface DiscoverApi {
-
     @POST("v5/User/getFindList")
     Observable<DiscoverListBean> getFindList(@Body RequestBody body);
-
 }

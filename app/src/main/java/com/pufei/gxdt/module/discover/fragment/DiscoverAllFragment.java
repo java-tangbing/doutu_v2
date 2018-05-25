@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
@@ -22,11 +23,15 @@ import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.view.DiscoverView;
 import com.pufei.gxdt.utils.IntenetUtil;
+import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.viewpager.DividerGridItemDecoration;
 import com.pufei.gxdt.widgets.viewpager.GridSpacingItemDecoration;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import okhttp3.RequestBody;
 
 public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView, BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.rv_all_dis)
@@ -42,13 +48,13 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
+    private boolean isDiscover = false;
 
     @Override
     public void initView() {
 
         GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManage);
-
         int spanCount = 2; //  columns
         int spacing = 20; // px
         boolean includeEdge = true;
@@ -61,57 +67,36 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     @Override
     public void getData() {
         mlist = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            DiscoverListBean.ResultBean bean = new DiscoverListBean.ResultBean();
-            mlist.add(bean);
-        }
+//        for (int i = 0; i < 5; i++) {
+//            DiscoverListBean.ResultBean bean = new DiscoverListBean.ResultBean();
+//            mlist.add(bean);
+//        }
         discoverAdapter = new DiscoverAdapter(mlist);
+        discoverAdapter.setEnableLoadMore(false);
         discoverAdapter.setOnItemClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
         recyclerView.setAdapter(discoverAdapter);
+        discoverAdapter.disableLoadMoreIfNotFullPage();
+        page = 1;
         setMyadapter();
     }
 
     private void setMyadapter() {
+        JSONObject jsonObject = KeyUtil.getJson(getContext());
+        try {
+            jsonObject.put("order", "");
+            jsonObject.put("page", page + "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
-            TelephonyManager tm = (TelephonyManager) App.AppContext.getSystemService((Context.TELEPHONY_SERVICE));
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            if (tm.getDeviceId() == null) {
-                return;
-            }
-            Map<String, String> map = new HashMap<>();
-            map.put("sign", "sign");
-            map.put("key", "key");
-            map.put("timestamp", getTime());
-            map.put("os", "2");
-            map.put("version", "1.0");
-            map.put("net", IntenetUtil.getNetworkState(getContext()) + "");
-            map.put("order", "");
-            page = 1;
-            map.put("order", page + "");
-            presenter.discoverHotList(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
+            presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
             ToastUtils.showShort(getActivity(), "请检查网络设置");
         }
     }
 
-    //getTime方法返回的就是10位的时间戳
-    public String getTime() {
-        long time = System.currentTimeMillis() / 1000;//获取系统时间的10位的时间戳
-        String str = String.valueOf(time);
-        return str;
-
-    }
 
     @Override
     public int getLayout() {
@@ -136,23 +121,31 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
-        page = page + 1;
         if (bean.getResult().size() > 0) {
+            page = page + 1;
+            if (isDiscover) {
+                isDiscover = false;
+                mlist.clear();
+                mlist.addAll(bean.getResult());
+                discoverAdapter.setNewData(mlist);
+            } else {
+                mlist.addAll(bean.getResult());
+                discoverAdapter.loadMoreComplete();
+            }
+
             mlist.addAll(bean.getResult());
-            discoverAdapter.notifyDataSetChanged();
+            discoverAdapter.setNewData(mlist);
             discoverAdapter.loadMoreComplete();
-            isLoadMore = false;
+            discoverAdapter.notifyDataSetChanged();
+//            isLoadMore = false;
         } else {
-            isLoadMore = false;
-            discoverAdapter.loadMoreEnd(true);
+//            isLoadMore = false;
+            discoverAdapter.loadMoreEnd();
         }
     }
 
     @Override
     public void onLoadMoreRequested() {
-        if (!isLoadMore) {
-            isLoadMore = true;
-            setMyadapter();
-        }
+        setMyadapter();
     }
 }
