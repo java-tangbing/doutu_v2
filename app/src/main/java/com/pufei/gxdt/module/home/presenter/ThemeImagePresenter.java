@@ -5,7 +5,6 @@ import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
-import com.pufei.gxdt.module.home.view.ImageTypeView;
 import com.pufei.gxdt.module.home.view.ThemeImageView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,6 +23,19 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                     @Override
                     public void accept(ThemeResultBean result) throws Exception {
                         baseview.resultThemeImage(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
+
+    public void getThemeDetail(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getThemeImageDetailList(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<PictureResultBean>() {
+                    @Override
+                    public void accept(PictureResultBean result) throws Exception {
+                        baseview.resultThemeImageDetail(result);
                     }
                 });
         addSubscription(disposable);
