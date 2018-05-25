@@ -27,6 +27,7 @@ public class NewsPictureAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean
     protected void convert(BaseViewHolder helper, NewsSystemBean item) {
         switch (helper.getItemViewType()) {
             case 1101:
+                helper.addOnClickListener(R.id.news_picture_item);
 //                helper.setImageUrl(R.id.tv, item.getContent());
                 break;
             case 1102:

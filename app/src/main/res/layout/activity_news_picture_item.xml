@@ -24,52 +24,88 @@
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:gravity="center_horizontal"
         android:minHeight="56dp"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_marginTop="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
+
             android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:id="@+id/news_picture_item"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
-            android:background="@color/white"
-            android:gravity="center_vertical">
 
-            <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/hint_color" />
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/hint_color" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="【"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="大米粒"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="】"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+
+                        android:text="引用了您的表情"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
-                android:gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:text="【大米粒】引用了您的表情" />
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/background_gray_white"
+                android:gravity="center"
+                android:text="查看详情"
+                android:textColor="@color/khaki" />
+
 
         </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="40dp"
-        android:background="@color/background_gray_white"
-        android:gravity="center"
-        android:text="查看详情"
-        android:textColor="@color/khaki" />
+
 </LinearLayout>
