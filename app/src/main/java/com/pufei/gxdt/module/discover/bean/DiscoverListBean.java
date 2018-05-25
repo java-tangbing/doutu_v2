@@ -7,7 +7,7 @@ public class DiscoverListBean {
     /**
      * code : 0
      * msg : success
-     * result : [{"id":"4","uid":"339839","hot":"","orginid":"111","orgintable":"amuse_images","height":"200","width":"300","title":"标题","dateline":"1527215999","background":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"abdcddd","uid":"2323"}}]
+     * result : [{"id":"4","uid":"339839","hot":"","orginid":"111","orgintable":"amuse_images","height":"200","width":"300","title":"标题","dateline":"1527215999","url":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"abdcddd","uid":"2323"}}]
      */
 
     private String code;
@@ -49,7 +49,7 @@ public class DiscoverListBean {
          * width : 300
          * title : 标题
          * dateline : 1527215999
-         * background :
+         * url :
          * user : {"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"abdcddd","uid":"2323"}
          */
 
@@ -62,7 +62,7 @@ public class DiscoverListBean {
         private String width;
         private String title;
         private String dateline;
-        private String background;
+        private String url;
         private UserBean user;
 
         public String getId() {
@@ -137,12 +137,12 @@ public class DiscoverListBean {
             this.dateline = dateline;
         }
 
-        public String getBackground() {
-            return background;
+        public String getUrl() {
+            return url;
         }
 
-        public void setBackground(String background) {
-            this.background = background;
+        public void setUrl(String url) {
+            this.url = url;
         }
 
         public UserBean getUser() {
