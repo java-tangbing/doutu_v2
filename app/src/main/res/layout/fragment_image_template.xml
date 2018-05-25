@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/text_default_color"
+            android:text="取消"/>
+
+        <TextView
+            android:id="@+id/tv_featured"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/text_default_color"
+            android:text="精选"/>
+        <TextView
+            android:id="@+id/tv_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/text_default_color"
+            android:text="形象"/>
+        <TextView
+            android:id="@+id/tv_expression"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/text_default_color"
+            android:text="表情"/>
+        <TextView
+            android:id="@+id/tv_finish"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="13dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:background="@drawable/text_border"
+            android:textColor="@color/text_default_color"
+            android:text="完成"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_color"/>
+
+    <FrameLayout
+        android:id="@+id/content_sticker"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>

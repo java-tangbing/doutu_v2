@@ -36,4 +36,6 @@
     <color name="skin">#333333</color>
     <color name="bg_invite_text">#f4f4f4</color>
     <color name="background">#eaeaea</color>
+    <color name="maker_bg">#f1f1f1</color>
+    <color name="recommed_color">#d79700</color>
 </resources>

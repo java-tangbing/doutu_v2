@@ -1,5 +1,0 @@
-<root>
-    <item name='io.reactivex.functions.Consumer'>
-        <annotation name='java.lang.Deprecated' />
-    </item>
-</root>

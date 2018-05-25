@@ -20,12 +20,13 @@
         <item name="android:backgroundDimAmount">0.5</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
     <style name="anim_menu_pop">
         <item name="android:windowEnterAnimation">@anim/pop_bottombar_in</item>
         <item name="android:windowExitAnimation">@anim/pop_bottombar_out</item>
     </style>
+
     <style name="checkBoxStyle">
         <item name="android:button">@drawable/checkbox_state</item>
     </style>
-
 </resources>

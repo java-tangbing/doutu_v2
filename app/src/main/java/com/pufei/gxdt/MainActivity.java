@@ -17,6 +17,7 @@ import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
 import com.pufei.gxdt.module.discover.fragment.DiscoverFragment;
 import com.pufei.gxdt.module.home.fragment.HomeFragment;
+import com.pufei.gxdt.module.maker.fragment.MakerFragment;
 import com.pufei.gxdt.utils.AppManager;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class MainActivity extends BaseActivity {
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
                 ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setSelected(true);
                 homeVp.setCurrentItem(tab.getPosition());
+
             }
 
             @Override
@@ -88,9 +90,8 @@ public class MainActivity extends BaseActivity {
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HomeFragment());
         fragmentList.add(new DiscoverFragment());
+        fragmentList.add(new MakerFragment());
         fragmentList.add(new HomeFragment());
-        fragmentList.add(new HomeFragment());
-
     }
 
 
