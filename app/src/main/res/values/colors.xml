@@ -13,4 +13,7 @@
     <color name="update_true">#6389ED</color>
     <color name="blank">#000000</color>
     <color name="backgrond">#F7F7F7</color>
+    <color name="maker_bg">#f1f1f1</color>
+    <color name="line_color">#dddddd</color>
+    <color name="recommed_color">#d79700</color>
 </resources>
