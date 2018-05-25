@@ -13,4 +13,6 @@ public interface ImageTypeApi {
     Observable<PictureResultBean> getHotList(@Body RequestBody body);
     @POST("api/v4/Category/getRandList")
     Observable<ThemeResultBean> getThemeImageList(@Body RequestBody body);
+    @POST("api/v4/AmuseImages/getList")
+    Observable<PictureResultBean> getThemeImageDetailList(@Body RequestBody body);
 }

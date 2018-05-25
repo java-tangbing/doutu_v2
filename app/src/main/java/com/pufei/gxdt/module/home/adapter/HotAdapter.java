@@ -24,23 +24,6 @@ import java.util.List;
 public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     private List<PictureResultBean.ResultBean>list;
     private Context mcontext;
-    private int a=0;
-    private Boolean is=false;
-    public int getA() {
-        return a;
-    }
-
-    public void setA(int a) {
-        this.a = a;
-    }
-
-    public Boolean getIs() {
-        return is;
-    }
-
-    public void setIs(Boolean is) {
-        this.is = is;
-    }
 
     public HotAdapter(Context context, List<PictureResultBean.ResultBean> list){//获取数据源
         this.mcontext=context;
