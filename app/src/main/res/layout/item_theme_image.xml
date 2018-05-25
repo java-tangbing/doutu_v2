@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="25dp">
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:ellipsize="end"
+            android:maxEms="8"
+            android:maxLines="1"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:id="@+id/fragment_pager_itme_title"
+            android:textColor="#333"
+            android:text="标题"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp">
+        </View>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_marginRight="15dp"
+                android:background="@mipmap/many_right"
+                android:layout_width="15dp"
+                android:layout_height="20dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="95dp">
+        <ImageView
+            android:padding="1dp"
+            android:background="@drawable/shape"
+            android:scaleType="fitXY"
+            android:id="@+id/fragment_pager_item_image1"
+            android:src="@mipmap/newloding"
+            android:layout_weight="1"
+            android:layout_width="103dp"
+            android:layout_height="95dp" />
+
+        <ImageView
+            android:id="@+id/fragment_pager_item_image2"
+            android:layout_width="103dp"
+            android:layout_height="95dp"
+            android:layout_marginLeft="7dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/newloding" />
+
+        <ImageView
+            android:background="@drawable/shape"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:id="@+id/fragment_pager_item_image3"
+            android:layout_marginLeft="7dp"
+            android:src="@mipmap/newloding"
+            android:layout_weight="1"
+            android:layout_width="103dp"
+            android:layout_height="95dp" />
+    </LinearLayout>
+    <View
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="0.5px">
+    </View>
 
 </LinearLayout>

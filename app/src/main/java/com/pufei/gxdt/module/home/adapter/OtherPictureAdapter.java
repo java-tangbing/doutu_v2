@@ -1,4 +1,4 @@
-package com.pufei.dashi.module.mistakes.adapter;
+package com.pufei.gxdt.module.home.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pufei.dashi.R;
-import com.pufei.dashi.app.App;
+
+import com.bumptech.glide.Glide;
+import com.pufei.gxdt.R;
+import com.pufei.gxdt.module.home.model.PictureResultBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +20,17 @@ import java.util.List;
  * Created by tangbing on 2018/4/26.
  */
 
-public class MisTakesAdapter  extends RecyclerView.Adapter<MisTakesAdapter.MyHodler> {
-    private List<String> list = new ArrayList<>();
-    private List<Integer>nuberList = new ArrayList<>();
+public class OtherPictureAdapter extends RecyclerView.Adapter<OtherPictureAdapter.MyHodler> {
+    private List<PictureResultBean.ResultBean> list = new ArrayList<>();
     private Context mcontext;
-    private String[] titles;
-    private int[] frist_picture;
-    public MisTakesAdapter(Context context, List<String> list, List<Integer> nuberList,int[] frist_picture,String[] titles) {//获取数据源
+    public OtherPictureAdapter(Context context, List<PictureResultBean.ResultBean> list) {//获取数据源
         this.mcontext = context;
         this.list = list;
-        this.nuberList = nuberList;
-        this.frist_picture = frist_picture;
-        this.titles = titles;
     }
 
     @Override
     public MyHodler onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mcontext).inflate(R.layout.item_mistakes, parent, false);
+        View view = LayoutInflater.from(mcontext).inflate(R.layout.item_hot, parent, false);
         MyHodler hodler = new MyHodler(view, mListener);
         return hodler;
     }
@@ -47,30 +43,16 @@ public class MisTakesAdapter  extends RecyclerView.Adapter<MisTakesAdapter.MyHod
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
-        if(App.KEMU == 1){
-            holder.mistake_title.setText(titles[Integer.parseInt(list.get(position))-2]);
-            holder.mistake_image.setBackgroundResource(frist_picture[Integer.parseInt(list.get(position))-2]);
-        }else {
-            holder.mistake_title.setText(titles[Integer.parseInt(list.get(position))-20]);
-            holder.mistake_image.setBackgroundResource(frist_picture[Integer.parseInt(list.get(position))-20]);
-        }
-
-        holder.mistake_count.setText(nuberList.get(position)+"" );
-//        holder.iv1.setImageResource(idlist[position]);
+        Glide.with(mcontext).load(list.get(position).getUrl()).into( holder.activity_picture_item_image);
     }
 
     class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private TextView mistake_title;
-        private TextView mistake_count;
-        private ImageView mistake_image;
+        private ImageView activity_picture_item_image;
 
         public MyHodler(View itemView, MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener = myItemClickListener;
-            mistake_title = (TextView) itemView.findViewById(R.id.mistake_title);
-            mistake_count = (TextView) itemView.findViewById(R.id.mistake_count);
-            mistake_image = (ImageView) itemView.findViewById(R.id.mistake_image);
+            activity_picture_item_image = (ImageView) itemView.findViewById(R.id.activity_picture_item_image);
             itemView.setOnClickListener(this);//单项点击
         }
 

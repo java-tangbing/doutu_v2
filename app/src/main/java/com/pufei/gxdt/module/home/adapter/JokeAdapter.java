@@ -93,7 +93,6 @@ public class JokeAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>
 //                    placeholder(R.mipmap.loading).fitCenter()
 //                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
 //                   crossFade().into(((OneHolder) holder).iv11);
-            LogUtils.d("tb",list.get(position).getImages().get(0));
             Glide.with(mcontext)
                     .load(list.get(position).getImages().get(0))
                     .into(((OneHolder) holder).iv11);

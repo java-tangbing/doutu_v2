@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.home.presenter;
 
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
+import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.view.JokeView;
 
@@ -26,5 +27,16 @@ public class JokePresenter extends BasePresenter<JokeView> {
                 });
         addSubscription(disposable);
     }
-
+    public void getJokDetail(RequestBody body) {
+        Disposable disposable = ApiService.getJokeApi().getJokeDetail(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<JokeDetailBean>() {
+                    @Override
+                    public void accept(JokeDetailBean result) throws Exception {
+                        baseview.resultJokeDetail(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
 }

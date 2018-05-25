@@ -1,4 +1,4 @@
-package com.pufei.gxdt.module.joke.model;
+package com.pufei.gxdt.module.home.model;
 
 import java.util.List;
 

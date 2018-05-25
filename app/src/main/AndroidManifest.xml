@@ -24,8 +24,11 @@
         </activity>
         <activity android:name=".module.home.activity.FaceTypeActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".module.home.activity.JokeActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".module.home.activity.JokeDetailActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".module.home.activity.PictureActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".module.home.activity.PictureDetailActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".module.home.activity.HotImageActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".module.home.activity.ThemeImageActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

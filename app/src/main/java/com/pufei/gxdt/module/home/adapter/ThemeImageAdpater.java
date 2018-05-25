@@ -1,4 +1,4 @@
-package com.pufei.gxdt.module.find.adapter;
+package com.pufei.gxdt.module.home.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,43 +6,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.module.commonality.model.RecommendBean;
-import com.pufei.gxdt.util.AddHeader;
-import com.pufei.gxdt.util.DensityUtils;
-import com.pufei.gxdt.util.TimeUtils;
-import com.pufei.gxdt.view.GlideRoundTransform;
+import com.pufei.gxdt.module.home.model.ThemeResultBean;
+import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.List;
 
 /**
  * Created by wangwenzhang on 2016/11/9.
  */
-public class FindPagerAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewHolder> {
-    private List<RecommendBean.ResultBean>list;
+public class ThemeImageAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewHolder> {
+    private List<ThemeResultBean.ResultBean> list;
     private Context mcontext;
-    private final RequestManager glide;
-    public FindPagerAdpater(Context context, List<RecommendBean.ResultBean> list, RequestManager glide){//获取数据源
+    public ThemeImageAdpater(Context context, List<ThemeResultBean.ResultBean> list){//获取数据源
         this.mcontext=context;
         this.list=list;
-        this.glide = glide;
     }
     @Override
     public XRecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType==0){
-            View view= LayoutInflater.from(mcontext).inflate(R.layout.fragment_pager_itme,parent,false);
+//        if (viewType==0){
+            View view= LayoutInflater.from(mcontext).inflate(R.layout.item_theme_image,parent,false);
             MyHodler hodler=new MyHodler(view,mListener);
             return hodler;
-        }else {
-            View view=LayoutInflater.from(mcontext).inflate(R.layout.fragment_pager_advert,parent,false);
-            AdvertHodler hodler=new AdvertHodler(view,mListener);
-            return hodler;
-        }
+//        }else {
+//            View view=LayoutInflater.from(mcontext).inflate(R.layout.fragment_pager_advert,parent,false);
+//            AdvertHodler hodler=new AdvertHodler(view,mListener);
+//            return hodler;
+//        }
     }
 
     @Override
@@ -59,23 +51,10 @@ public class FindPagerAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewHo
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler)holder).titletv.setText(list.get(position).getCategory_name());
-            glide.load(AddHeader.buildGlideUrl(list.get(position).getImgs().get(0).getUrl())).
-                    placeholder(R.mipmap.newloding).diskCacheStrategy(DiskCacheStrategy.SOURCE).
-                    centerCrop()
-                    .crossFade().into(((MyHodler)holder).iv1);
-            glide.load(AddHeader.buildGlideUrl(list.get(position).getImgs().get(1).getUrl())).
-                    placeholder(R.mipmap.newloding).diskCacheStrategy(DiskCacheStrategy.SOURCE).
-                    centerCrop()
-                    .crossFade().into(((MyHodler)holder).iv2);
-            glide.load(AddHeader.buildGlideUrl(list.get(position).getImgs().get(2).getUrl())).
-                    placeholder(R.mipmap.newloding).centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-                    crossFade().into(((MyHodler)holder).iv3);
+            GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler)holder).iv1);
+            GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler)holder).iv2);
+            GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler)holder).iv3);
         }else if (holder instanceof AdvertHodler){
-            glide.load(AddHeader.buildGlideUrl(list.get(position).getAdvert_image_url())).
-                    placeholder(R.mipmap.newloding).centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-                    crossFade().into(((AdvertHodler)holder).image);
         }
 
     }
@@ -104,7 +83,7 @@ public class FindPagerAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewHo
         private ImageView image;
         public AdvertHodler(final View itemView, MyItemClickListener listener) {
             super(itemView);
-            image= (ImageView) itemView.findViewById(R.id.fragment_pager_advert_image);
+            //image= (ImageView) itemView.findViewById(R.id.fragment_pager_advert_image);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,12 +99,5 @@ public class FindPagerAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewHo
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
     }
-   /* private OnCountClickListener onCountClickListener;
-    public void setOnCountClickListener(OnCountClickListener listener){
-        this.onCountClickListener=listener;
-    }
-    public interface OnCountClickListener{
-        void OnLike(int position);
-        void OnBtDelete(int position);
-    }*/
+
 }
