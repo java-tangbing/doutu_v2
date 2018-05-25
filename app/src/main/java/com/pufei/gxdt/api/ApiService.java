@@ -1,6 +1,5 @@
 package com.pufei.gxdt.api;
 
-
 import com.pufei.gxdt.utils.RetrofitFactory;
 
 import retrofit2.Retrofit;
@@ -14,7 +13,24 @@ public class ApiService {
     private static LoginApi loginApi;
     private static PersonalApi personalApi;
     private static SettingApi settingApi;
+    private static JokeApi jokeApi;
+    private static ImageTypeApi imageTypeApi;
 
+    public static JokeApi getJokeApi() {
+        if (jokeApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            jokeApi = retrofit.create(JokeApi.class);
+        }
+        return jokeApi;
+    }
+
+    public static ImageTypeApi getImageTypeAoi() {
+        if (imageTypeApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            imageTypeApi = retrofit.create(ImageTypeApi.class);
+        }
+        return imageTypeApi;
+    }
 
 
     public static LoginApi getSendCode() {
@@ -42,7 +58,6 @@ public class ApiService {
     }
 
 
-
     public static PersonalApi setPersonal() {
 
         if (personalApi == null) {
@@ -60,5 +75,4 @@ public class ApiService {
         }
         return settingApi;
     }
-
 }

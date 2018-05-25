@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="Android.permission.WRITE_APN_SETTINGS" />
@@ -22,6 +21,7 @@
     <uses-permission android:name="S" />
 
     <application
+        android:name=".app.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -35,20 +35,70 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.discover.activity.DiscoverDetailedActivity" />
-        <activity android:name=".module.news.activity.NewsActivity" />
-        <activity android:name=".module.news.activity.NewsSystemActivity" />
-        <activity android:name=".module.news.activity.NewsFeedBackActivity" />
-        <activity android:name=".module.news.activity.NewsPictureActivity" />
-        <activity android:name=".module.login.activity.LoginActivity" />
-        <activity android:name=".module.login.activity.BindPhoneActivity" />
-        <activity android:name=".module.user.activity.AboutProductActivity" />
-        <activity android:name=".module.user.activity.AccountSafetyActivity" />
-        <activity android:name=".module.user.activity.AgreeementActivity" />
-        <activity android:name=".module.user.activity.EditNameActivity" />
-        <activity android:name=".module.user.activity.ProfileActivity" />
-        <activity android:name=".module.user.activity.SettingActivity" />
-        <activity android:name=".module.start.ui.StartActivity" />
+
+        <activity
+            android:name=".module.discover.activity.DiscoverDetailedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.news.activity.NewsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.news.activity.NewsSystemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.news.activity.NewsFeedBackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.news.activity.NewsPictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.login.activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.login.activity.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.AboutProductActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.AccountSafetyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.AgreeementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.EditNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.start.ui.StartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.FaceTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.JokeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.JokeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.PictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.PictureDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.HotImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.ThemeImageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.pufei.gxdt.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -77,11 +127,11 @@
         <!--android:name="UMENG_APPKEY"-->
         <!--android:value="5850b381734be40cef0006f8" />-->
         <!--<meta-data-->
-            <!--android:name="UMENG_APPKEY"-->
-            <!--android:value="5aa64afe8f4a9d11ab0000e4" />-->
+        <!--android:name="UMENG_APPKEY"-->
+        <!--android:value="5aa64afe8f4a9d11ab0000e4" />-->
         <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="${UMENG_CHANNEL_VALUE}" />-->
+        <!--android:name="UMENG_CHANNEL"-->
+        <!--android:value="${UMENG_CHANNEL_VALUE}" />-->
 
         <service android:name="com.pufei.gxdt.module.floating.FloatWindowService" />
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />
@@ -95,7 +145,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>
