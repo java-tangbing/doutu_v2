@@ -50,7 +50,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
             <ImageButton
-                android:background="@mipmap/detail_save"
+                android:background="@drawable/report_select"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:background="@drawable/download_select"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -60,7 +70,7 @@
             android:layout_height="match_parent">
             <ImageButton
                 android:id="@+id/activity_home1_shoucang"
-                android:background="@mipmap/detail_shoucang"
+                android:background="@mipmap/com_bt_ttab_star_normal"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -87,15 +97,17 @@
         android:layout_height="wrap_content"
         android:textColor="@color/color_text_normal"
         android:textSize="12sp"
-        android:drawableLeft="@mipmap/home_search"
+        android:drawableLeft="@mipmap/con_ic_eyes"
+        android:drawablePadding="5dp"
         android:text="123435" />
 
     <com.pufei.gxdt.widgets.MyFrontTextView
         android:layout_width="wrap_content"
         android:layout_marginLeft="21dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/home_search"
+        android:drawableLeft="@mipmap/con_ic_hot"
         android:textColor="@color/color_text_normal"
+        android:drawablePadding="5dp"
         android:textSize="12sp"
         android:text="1234" />
 
@@ -103,7 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="21dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/home_search"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/con_ic_change"
             android:textColor="@color/color_text_normal"
             android:textSize="12sp"
             android:text="120张改图" />
@@ -113,35 +126,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
                     android:textSize="12sp"
                     android:textColor="#333333"
                     android:text="@string/qq"
+                    android:drawablePadding="3dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/share_border"
-                    android:drawableLeft="@mipmap/shoucang1"/>
+                    android:drawableLeft="@mipmap/bt_ic_logo_qq"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
                     android:textSize="12sp"
                     android:textColor="#333333"
                     android:text="@string/weixin"
+                    android:drawablePadding="3dp"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="30dp"
                     android:background="@drawable/share_border"
-                    android:drawableLeft="@mipmap/shoucang1"/>
+                    android:drawableLeft="@mipmap/bt_ic_logo_wechat"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -152,15 +167,16 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
                     android:textSize="12sp"
                     android:textColor="#333333"
                     android:text="@string/gaitu"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="30dp"
+                    android:drawablePadding="3dp"
                     android:background="@drawable/share_border"
-                    android:drawableLeft="@mipmap/shoucang1"/>
+                    android:drawableLeft="@mipmap/bt_ic_logo_change"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -172,16 +188,30 @@
                 />
 
          <include layout="@layout/adver_layout"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp">
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#ebcc00"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
+                android:textSize="12sp"
+                android:textColor="@color/blank"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginLeft="4dp"
                 android:text="@string/qitabiaoqing"/>
-
+            </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rl_picture"
                 android:paddingRight="10dp"
+                android:layout_marginBottom="46dp"
                 android:paddingLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"

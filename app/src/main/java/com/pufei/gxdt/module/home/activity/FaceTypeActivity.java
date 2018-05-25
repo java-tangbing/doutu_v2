@@ -2,8 +2,10 @@ package com.pufei.gxdt.module.home.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -43,10 +45,9 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
         addfragment();
         fragmentHomeTb.setTabMode(TabLayout.MODE_SCROLLABLE);
         homeVpDriver.setAdapter(new MyPagerAdapder(getSupportFragmentManager(), fragmentList, titleList));
-        //    reflex(tabDriver);
         fragmentHomeTb.addOnTabSelectedListener(this);
         fragmentHomeTb.setupWithViewPager(homeVpDriver);
-        reflexTabIndicatorWidth();
+        setIndicator(fragmentHomeTb,5,5);
     }
     @Override
     public void getData() {
@@ -85,28 +86,35 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
 
     }
     @SuppressLint("NewApi")
-    public void reflexTabIndicatorWidth(){
-        Class<?> tablayout = fragmentHomeTb.getClass();
+    public void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
+        Class<?> tabLayout = tabs.getClass();
         Field tabStrip = null;
         try {
-            tabStrip = tablayout.getDeclaredField("mTabStrip");
-            tabStrip.setAccessible(true);
-            LinearLayout ll_tab= (LinearLayout) tabStrip.get(fragmentHomeTb);
-            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-                View child = ll_tab.getChildAt(i);
-                child.setPadding(0,0,0,0);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT,1);
-                params.setMarginStart(dip2px(App.AppContext,5f));
-                params.setMarginEnd(dip2px(App.AppContext,5f));
-                child.setLayoutParams(params);
-                child.invalidate();
-            }
+            tabStrip = tabLayout.getDeclaredField("mTabStrip");
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
+        }
+
+        tabStrip.setAccessible(true);
+        LinearLayout llTab = null;
+        try {
+            llTab = (LinearLayout) tabStrip.get(tabs);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
+        int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
+        int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
+
+        for (int i = 0; i < llTab.getChildCount(); i++) {
+            View child = llTab.getChildAt(i);
+            child.setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            params.leftMargin = left;
+            params.rightMargin = right;
+            child.setLayoutParams(params);
+            child.invalidate();
+        }
     }
     public int dip2px(Context context, float dipValue) {
 

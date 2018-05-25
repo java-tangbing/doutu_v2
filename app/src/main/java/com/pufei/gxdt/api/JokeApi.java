@@ -8,8 +8,8 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface JokeApi {
-    @POST("api/v3/Article/getList/")
+    @POST("api/v1/Article/getList/")
     Observable<JokeResultBean> getJokelist(@Body RequestBody body);
-    @POST("api/v3/Article/getDetail/")
+    @POST("api/v1/Article/getDetail/")
     Observable<JokeDetailBean> getJokeDetail(@Body RequestBody body);
 }
