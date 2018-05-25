@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
+import com.pufei.gxdt.module.discover.fragment.DiscoverFragment;
 import com.pufei.gxdt.module.home.fragment.HomeFragment;
 import com.pufei.gxdt.utils.AppManager;
 
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivity {
     private void addFragment() {
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HomeFragment());
-        fragmentList.add(new HomeFragment());
+        fragmentList.add(new DiscoverFragment());
         fragmentList.add(new HomeFragment());
         fragmentList.add(new HomeFragment());
 

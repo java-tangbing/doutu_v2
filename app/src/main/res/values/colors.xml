@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="black">#000000</color>
+    <color name="background_gray">#F0F0F0</color>
+    <color name="background_gray_white">#F8F8F8</color>
+    <color name="yellow">#FFEA5C</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
+    <color name="hint_color">#9c9c9c</color>
+    <color name="image_default_color">#D8D8D8</color>
+    <color name="text_default_color">#686868</color>
+    <color name="khaki">#D79700</color>
+    <color name="update_false">#B9B9B9</color>
+    <color name="update_true">#6389ED</color>
+    <color name="blank">#000000</color>
+    <color name="backgrond">#F7F7F7</color>
+    <color name="lineColor">#dddddd</color>
+    <color name="bgColor">#ededed</color>
+    <color name="textColor">#ffb500</color>
+    <color name="about_tv_color">#686868</color>
+    <color name="setting_btn">#4BA8EE</color>
+    <color name="tv_login_color">#333333</color>
+    <color name="line">#ececec</color>
+    <color name="transparent">#00000000</color>
+    <color name="text_title_black">#333333</color>
+    <color name="bgCircleColor">#9D9EFF</color>
+    <color name="log_divider_tab_selector">#FF0000</color>
+    <color name="circle_color">#929292</color>
+    <color name="light_grey">#a5a5a5</color>
+    <color name="possible_result_points">#c0ffff00</color>
     <color name="color_text_normal">#9c9c9c</color>
     <color name="line_color">#e8e8e8</color>
     <color name="text_color">#686868</color>
