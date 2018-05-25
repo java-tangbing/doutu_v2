@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp">
+
+    </View>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textIsSelectable="true"
+        android:textSize="16sp"
+        android:lineSpacingExtra="8dp"
+        android:id="@+id/activity_jokedetail_item_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <FrameLayout
+        android:id="@+id/activity_jokedetail_item_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:scaleType="fitXY"
+            android:id="@+id/activity_jokedetail_item_iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/activity_jokedetail_item_gif"
+            android:layout_gravity="center"
+            android:src="@mipmap/gif"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+    </FrameLayout>
+
+</FrameLayout>
+</LinearLayout>

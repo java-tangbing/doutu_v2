@@ -2,22 +2,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/common_title"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:layout_gravity="top">
+    android:layout_height="50dp"
+    android:background="@color/white">
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_centerVertical="true"
-        android:background="@color/colorAccent" />
+    <LinearLayout
+        android:id="@+id/ll_title_left"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back0" />
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:text="斗图大师"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        android:layout_centerVertical="true"
-        android:text="消息" />
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_title_right"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/ll_title_right2"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:orientation="vertical"-->
+    <!--android:gravity="center"-->
+    <!--android:visibility="gone">-->
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_title_right2"-->
+    <!--android:layout_width="24dp"-->
+    <!--android:layout_height="24dp"-->
+    <!--android:src="@mipmap/com_bt_ttab_my_set_normal"/>-->
+    <!--</LinearLayout>-->
+
+
 </RelativeLayout>

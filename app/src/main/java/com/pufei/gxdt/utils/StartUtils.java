@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.update.model.UpdateBean;
 import com.pufei.gxdt.module.update.service.UpdateService;
 

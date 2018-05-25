@@ -17,6 +17,7 @@
             android:textSize="18sp" />
 
         <LinearLayout
+            android:id="@+id/discover_news_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -25,7 +26,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-
                 android:orientation="vertical"
                 android:src="@mipmap/ic_launcher" />
         </LinearLayout>

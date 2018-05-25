@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:gravity="left"
+            android:layout_marginTop="20dp"
+            android:textColor="#333"
+            android:id="@+id/frgament_second_joke_tiltletv"
+            android:textSize="18sp"
+            android:text="中国小老板掌握美国大秘密!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+
+                android:scaleType="fitXY"
+                android:layout_marginLeft="2dp"
+                android:id="@+id/fragment_second_joke_image1"
+                android:layout_weight="1"
+                android:src="@mipmap/nianqingren"
+                android:layout_width="103dp"
+                android:layout_height="93dp" />
+            <ImageView
+                android:scaleType="fitXY"
+                android:layout_marginLeft="4dp"
+                android:id="@+id/fragment_second_joke_image2"
+                android:layout_weight="1"
+                android:src="@mipmap/nianqingren"
+                android:layout_width="103dp"
+                android:layout_height="93dp" />
+            <ImageView
+                android:scaleType="fitXY"
+                android:layout_marginLeft="4dp"
+                android:id="@+id/fragment_second_joke_image3"
+                android:layout_weight="1"
+                android:src="@mipmap/nianqingren"
+                android:layout_width="103dp"
+                android:layout_height="93dp" />
+          <!--  <ImageView
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:id="@+id/fragment_second_joke_image4"
+                android:layout_weight="1"
+                android:src="@mipmap/nianqingren"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp" />-->
+        </LinearLayout>
+
+      <!--  <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.pufei.gxdt.view.MyFrontTextView
+                android:layout_marginLeft="9dp"
+                android:text="5分钟前"
+                android:textColor="#aaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="9dp"
+                android:id="@+id/textView3" />
+            <LinearLayout
+                android:id="@+id/fragment_joke_fenxiang"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="17dp"
+                android:layout_marginEnd="17dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/fragment_joke_shoucang"
+                android:layout_toStartOf="@+id/fragment_joke_shoucang"
+                android:layout_alignParentBottom="true">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@mipmap/list_share"
+                    android:layout_width="12dp"
+                    android:layout_height="11dp" />
+                <com.pufei.gxdt.view.MyFrontTextView
+                    android:textColor="#aaa"
+                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/fragment_second_joke_xihuan"
+                    style="@style/button"
+                    android:text="分享"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_joke_shoucang"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true">
+                <ImageView
+                    android:id="@+id/fragment_second_joke_fenxiang_image"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/list_fav"
+                    android:layout_width="12.5dp"
+                    android:layout_height="25dp" />
+                <com.pufei.gxdt.view.MyFrontTextView
+                    android:layout_marginLeft="8dp"
+                    android:textColor="#aaa"
+                    android:layout_gravity="center"
+                    android:id="@+id/fragment_second_joke_fenxiang"
+                    android:gravity="center"
+                    android:text="300"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true" />
+            </LinearLayout>
+
+        </RelativeLayout>-->
+    </LinearLayout>
+
+<View
+    android:background="@color/bg_invite_text"
+    android:layout_width="match_parent"
+    android:layout_height="1dp">
+
+</View>
+</LinearLayout>

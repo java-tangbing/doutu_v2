@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@mipmap/bg2"
+        android:layout_height="120dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/back0"/>
+
+    </FrameLayout>
+   <TextView
+       android:id="@+id/tv_theme_name"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textColor="#333333"
+       android:text="小猪佩奇"
+       android:layout_marginLeft="10dp"
+       android:textStyle="bold"
+       android:layout_marginTop="15dp"
+       android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_text_normal"
+        android:text="小猪佩奇hhhhhh哈哈哈哈哈哈哈哈哈哈哈"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="12sp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+            <com.jcodecraeer.xrecyclerview.XRecyclerView
+                android:layout_marginTop="27dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:focusableInTouchMode="true"
+                android:id="@+id/rl_theme"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        <include layout="@layout/internet_fail"/>
+    </FrameLayout>
+
+</LinearLayout>

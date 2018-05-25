@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+        <LinearLayout
+            android:id="@+id/activity_home1_cancel"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:src="@mipmap/back0"
+                android:layout_width="20dp"
+                android:layout_height="match_parent" />
+            <TextView
+                android:visibility="gone"
+                android:textSize="18sp"
+                android:textColor="#333"
+                android:gravity="center"
+                android:text="返回"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/activity_home1_title"
+            android:textColor="#333"
+            android:textSize="20sp"
+            android:text=""
+            android:gravity="center"
+            android:ellipsize="end"
+            android:maxLength="7"
+            android:maxLines="1"
+            android:layout_weight="7"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/activity_home1_shoucang"
+                android:background="@drawable/shoucang"
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/activity_picture_rcv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.jcodecraeer.xrecyclerview.XRecyclerView>
+      <include
+          layout="@layout/internet_fail"
+          />
+    </FrameLayout>
+
+</LinearLayout>
