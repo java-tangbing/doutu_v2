@@ -48,7 +48,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.news.activity.NewsFeedBackActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Design.Light.NoActionBar"/>
         <activity
             android:name=".module.news.activity.NewsPictureActivity"
             android:screenOrientation="portrait" />
