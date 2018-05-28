@@ -9,10 +9,10 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface ImageTypeApi {
-    @POST("api/v4/AmuseImages/getNewList")
+    @POST("AmuseImages/getNewList")
     Observable<PictureResultBean> getHotList(@Body RequestBody body);
-    @POST("api/v4/Category/getRandList")
+    @POST("Category/getRandList")
     Observable<ThemeResultBean> getThemeImageList(@Body RequestBody body);
-    @POST("api/v4/AmuseImages/getList")
+    @POST("AmuseImages/getList")
     Observable<PictureResultBean> getThemeImageDetailList(@Body RequestBody body);
 }

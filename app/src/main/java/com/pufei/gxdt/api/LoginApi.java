@@ -14,19 +14,19 @@ import retrofit2.http.POST;
  */
 
 public interface LoginApi {
-    @POST("v2/login/get_vcode")
+    @POST("login/get_vcode")
     Observable<SendCodeBean> getTestContent(@Body RequestBody body);
-    @POST("v2/login/vcode")
+    @POST("login/vcode")
     Observable<LoginResultBean> getCodeResult(@Body RequestBody body);
-    @POST("v2/login/qq")
+    @POST("login/qq")
     Observable<LoginResultBean> loginWithQQ(@Body RequestBody body);
-    @POST("v2/login/wx")
+    @POST("login/wx")
     Observable<LoginResultBean> loginWithWX(@Body RequestBody body);
-    @POST("v2/login/regist")
+    @POST("login/regist")
     Observable<LoginResultBean> bindPhone(@Body RequestBody body);
-    @POST("v2/login/pwd")
+    @POST("login/pwd")
     Observable<LoginResultBean> loginWithPwd(@Body RequestBody request);
-    @POST("v2/login/retrieve_password")
+    @POST("login/retrieve_password")
     Observable<ModifyResultBean> retrievePwd(@Body RequestBody body);
 
 }
