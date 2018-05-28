@@ -16,6 +16,6 @@ import retrofit2.http.Url;
  */
 
 public interface DiscoverApi {
-    @POST("v5/User/getFindList")
+    @POST("User/getFindList")
     Observable<DiscoverListBean> getFindList(@Body RequestBody body);
 }

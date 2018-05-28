@@ -7,7 +7,7 @@ package com.pufei.gxdt.contents;
 
 public class Contents {
     public static final int SleepTime = 1500;
-    public static final String BASE_URL="http://erp.xianwan.com/api/";
+    public static final String BASE_URL="http://erp.xianwan.com/api/v5/android/";
     //public static final String Update ="http://erp.xianwan.com/api/apiStart/version";
     public static final String Update= "https://jiakao.xianwan.com/version?pname=com.pufei.dashi";
     private static final String TAG="http://erp.xianwan.com";

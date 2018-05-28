@@ -123,15 +123,15 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     public void getDiscoverHotList(DiscoverListBean bean) {
         if (bean.getResult().size() > 0) {
             page = page + 1;
-            if (isDiscover) {
-                isDiscover = false;
-                mlist.clear();
-                mlist.addAll(bean.getResult());
-                discoverAdapter.setNewData(mlist);
-            } else {
-                mlist.addAll(bean.getResult());
-                discoverAdapter.loadMoreComplete();
-            }
+//            if (isDiscover) {
+//                isDiscover = false;
+//                mlist.clear();
+//                mlist.addAll(bean.getResult());
+//                discoverAdapter.setNewData(mlist);
+//            } else {
+//                mlist.addAll(bean.getResult());
+//                discoverAdapter.loadMoreComplete();
+//            }
 
             mlist.addAll(bean.getResult());
             discoverAdapter.setNewData(mlist);
