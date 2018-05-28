@@ -9,6 +9,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.SoftKeyboardStateHelper;
+import com.pufei.gxdt.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -74,6 +75,11 @@ public class ImageTextEditFragment extends BaseFragment implements EditTextBotto
                 }
                 break;
             case R.id.ll_select_color:
+                int type1 = activity.getTypes();
+                if(type1 == 1) {
+                    SelectTextColorBottomFragment selectTextColor = new SelectTextColorBottomFragment();
+                    selectTextColor.show(getActivity().getSupportFragmentManager(),"");
+                }
                 break;
             case R.id.ll_select_font:
                 break;

@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.module.maker.adapter.StickerImageAdapter;
-import com.pufei.gxdt.module.maker.common.EventMsg;
+import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -66,6 +66,6 @@ public class ExpressionFragment extends BaseFragment implements BaseQuickAdapter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        EventBus.getDefault().post(new EventMsg(1,imgList.get(position)));
+        EventBus.getDefault().post(new MakerEventMsg(1,imgList.get(position)));
     }
 }

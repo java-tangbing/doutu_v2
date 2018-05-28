@@ -38,4 +38,34 @@
     <color name="background">#eaeaea</color>
     <color name="maker_bg">#f1f1f1</color>
     <color name="recommed_color">#d79700</color>
+    <color name="select_color1">#00B0FF</color>
+    <color name="select_color2">#0080DF</color>
+    <color name="select_color3">#0051B4</color>
+    <color name="select_color4">#1E2087</color>
+    <color name="select_color5">#601A86</color>
+    <color name="select_color6">#920983</color>
+    <color name="select_color7">#E4007F</color>
+    <color name="select_color8">#FF00FF</color>
+    <color name="select_color9">#F60013</color>
+    <color name="select_color10">#E16800</color>
+    <color name="select_color11">#FFA818</color>
+    <color name="select_color12">#FFF100</color>
+    <color name="select_color13">#96DD00</color>
+    <color name="select_color14">#21F142</color>
+    <color name="select_color15">#00C116</color>
+    <color name="select_color16">#00BFB7</color>
+    <color name="select_color17">#000000</color>
+    <color name="select_color18">#424242</color>
+    <color name="select_color19">#737373</color>
+    <color name="select_color20">#B6B6B6</color>
+    <color name="select_color21">#DBDBDB</color>
+    <color name="select_color22">#F0F0F0</color>
+    <color name="select_color23">#F5F5F5</color>
+    <color name="select_color24">#FFFFFF</color>
+    <color name="select_earse">#979797</color>
+    <color name="seekbar_bg">#dedede</color>
+    <color name="seekbar_progress">#6A6A6A</color>
+
+
+
 </resources>

@@ -2,7 +2,6 @@ package com.pufei.gxdt.module.maker.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -19,8 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.mylhyl.acp.Acp;
@@ -28,13 +25,15 @@ import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
-import com.pufei.gxdt.module.maker.common.EventMsg;
-import com.pufei.gxdt.module.maker.fragment.EditTextBottomFragment;
+import com.pufei.gxdt.db.DraftInfo;
+import com.pufei.gxdt.db.DraftInfo_Table;
+import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.module.maker.fragment.ImageBlushFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageStickerFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageTextEditFragment;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,19 +46,22 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import ja.burhanrashid52.photoeditor.AddViewBean;
+import ja.burhanrashid52.photoeditor.DraftBean;
 import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
+import ja.burhanrashid52.photoeditor.TextBean;
 import ja.burhanrashid52.photoeditor.ViewType;
 
-public class EditImageActivity extends BaseActivity implements OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback {
+public class EditImageActivity extends BaseActivity implements OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback, ImageBlushFragment.SetBlushPropertiesListener {
     @BindView(R.id.btn_next)
     TextView btnNext;
     @BindView(R.id.photoEditorView)
     PhotoEditorView photoEditorView;
     @BindView(R.id.tv_save_draft)
     TextView tvSaveDraft;
-    @BindView(R.id.tv_undeo)
+    @BindView(R.id.tv_redo)
     TextView tvUndeo;
     @BindView(R.id.tv_undo)
     TextView tvUndo;
@@ -80,6 +82,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     private List<Fragment> fragmentList;
     private int previousIndex;
     private View rootView;
+    private String text;
     private int type = 0;
     private ProgressDialog mProgressDialog;
 
@@ -108,19 +111,38 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         return R.layout.activity_image_edit;
     }
 
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_undeo, R.id.tv_undo, R.id.tv_delete, R.id.tv_pic_mode, R.id.tv_text_mode, R.id.tv_blush_mode})
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_redo, R.id.tv_undo, R.id.tv_delete, R.id.tv_pic_mode, R.id.tv_text_mode, R.id.tv_blush_mode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_next:
                 saveImage();
                 break;
             case R.id.tv_save_draft:
+                for (int i = 0; i < mPhotoEditor.getAddViews().size(); i++) {
+                    TextBean bean = mPhotoEditor.getAddViews().get(i);
+                    TextView view1 = (TextView) bean.getTextView();
+                    DraftInfo draft = new DraftInfo();
+                    draft.viewId = 2;
+                    draft.color = view1.getCurrentTextColor();
+                    draft.type = view1.getGravity();
+                    draft.height = view1.getMeasuredHeight();
+                    draft.width = view1.getMeasuredWidth();
+                    draft.rotation = view1.getRotation();
+                    draft.xPos = view1.getX();
+                    draft.yPos = view1.getY();
+                    draft.text = view1.getText().toString();
+                    draft.insert();
+                }
+
                 break;
-            case R.id.tv_undeo:
+            case R.id.tv_redo:
+                mPhotoEditor.redo();
                 break;
             case R.id.tv_undo:
+                mPhotoEditor.undo();
                 break;
             case R.id.tv_delete:
+                mPhotoEditor.clearAllViews();
                 break;
             case R.id.tv_pic_mode:
                 setSelectedItemState(tvPicMode);
@@ -156,11 +178,11 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(EventMsg msg) {
-        if (msg.getType() == 0) {
+    public void onEvent(MakerEventMsg msg) {
+        if (msg.getType() == 0) {//替换背景图
             mPhotoEditor.clearAllViews();
             GlideApp.with(this).load(msg.getUrl()).into(photoEditorView.getSource());
-        } else if (msg.getType() == 1) {
+        } else if (msg.getType() == 1) {//贴图
             SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(240, 240) {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
@@ -168,6 +190,8 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 }
             };
             GlideApp.with(this).asBitmap().load(msg.getUrl()).into(simpleTarget);
+        } else if (msg.getType() == 2) {//更改文本颜色
+            mPhotoEditor.editText(rootView, text, msg.getColor());
         }
     }
 
@@ -212,7 +236,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
                             @Override
                             public void onDenied(List<String> permissions) {
-                                ToastUtils.showShort(EditImageActivity.this,"请求权限失败,请手动开启！");
+                                ToastUtils.showShort(EditImageActivity.this, "请求权限失败,请手动开启！");
                             }
                         });
     }
@@ -254,20 +278,20 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     private void defaultSelect() {
         setSelectedItemState(tvPicMode);
-        setUnSelectedItemState(tvTextMode,tvBlushMode);
-        showFragment(0,previousIndex);
+        setUnSelectedItemState(tvTextMode, tvBlushMode);
+        showFragment(0, previousIndex);
         previousIndex = 0;
     }
 
     private void setSelectedItemState(TextView tv) {
-        tv.setTextColor(ContextCompat.getColor(this,R.color.black));
+        tv.setTextColor(ContextCompat.getColor(this, R.color.black));
         tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 
     private void setUnSelectedItemState(TextView tv1, TextView tv2) {
-        tv1.setTextColor(ContextCompat.getColor(this,R.color.text_default_color));
+        tv1.setTextColor(ContextCompat.getColor(this, R.color.text_default_color));
         tv1.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        tv2.setTextColor(ContextCompat.getColor(this,R.color.text_default_color));
+        tv2.setTextColor(ContextCompat.getColor(this, R.color.text_default_color));
         tv2.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
     }
 
@@ -280,9 +304,10 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     @Override
     public void onEditTextChangeListener(View rootView, String text, int colorCode) {
         this.rootView = rootView;
-        if(rootView == null) {
+        if (rootView == null) {
             type = 0;
-        }else {
+        } else {
+            this.text = text;
             type = 1;
         }
     }
@@ -308,16 +333,37 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     }
 
     @Override
-    public void getInputTextCallback(int type,String text, int color) {
-        if(type == 0) {
-            mPhotoEditor.addText(text,color);
-        }else {
-            mPhotoEditor.editText(rootView,text,color);
+    public void getInputTextCallback(int type, String text, int color) {
+        if (type == 0) {
+            mPhotoEditor.addText(text, color);
+        } else {
+            mPhotoEditor.editText(rootView, text, color);
         }
     }
 
     public int getTypes() {
         return type;
     }
+
+    @Override
+    public void setBlushMode(boolean isOpenBlush) {
+        mPhotoEditor.setBrushDrawingMode(isOpenBlush);
+    }
+
+    @Override
+    public void setBlushColor(int color) {
+        mPhotoEditor.setBrushColor(color);
+    }
+
+    @Override
+    public void setBlushSize(int size) {
+        mPhotoEditor.setBrushSize(size);
+    }
+
+    @Override
+    public void setBlushEraser() {
+        mPhotoEditor.brushEraser();
+    }
+
 
 }

@@ -1,12 +1,26 @@
 package com.pufei.gxdt.module.maker.common;
 
-public class EventMsg {
+public class MakerEventMsg {
     private int type;
     private String url;
+    private int color;
 
-    public EventMsg(int type, String url) {
+    public MakerEventMsg(int type, String url) {
         this.type = type;
         this.url = url;
+    }
+
+    public MakerEventMsg(int type, int color) {
+        this.type = type;
+        this.color = color;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public int getType() {

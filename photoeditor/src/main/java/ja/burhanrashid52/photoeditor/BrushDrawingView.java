@@ -240,7 +240,7 @@ public class BrushDrawingView extends View {
             invalidate();
         }
         if (mBrushViewChangeListener != null) {
-            mBrushViewChangeListener.onViewAdd(this);
+            mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
         }
         return mRedoLinePaths.size() != 0;
     }
@@ -276,7 +276,7 @@ public class BrushDrawingView extends View {
         mPath = new Path();
         if (mBrushViewChangeListener != null) {
             mBrushViewChangeListener.onStopDrawing();
-            mBrushViewChangeListener.onViewAdd(this);
+            mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
         }
     }
 }

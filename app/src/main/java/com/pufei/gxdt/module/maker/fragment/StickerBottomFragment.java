@@ -1,13 +1,9 @@
 package com.pufei.gxdt.module.maker.fragment;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,9 +16,12 @@ import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * 图片选择
+ */
 
 public class StickerBottomFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 

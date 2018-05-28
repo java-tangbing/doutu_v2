@@ -4,13 +4,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class TextBean {
     private View addEditText;
+    private TextView textView;
     private ImageView addImageClose;
     private FrameLayout addFrameLayout;
     private boolean isVisibleBorder;
 
+
+    public TextView getTextView() {
+        return textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
 
     public ImageView getAddImageClose() {
         return addImageClose;
