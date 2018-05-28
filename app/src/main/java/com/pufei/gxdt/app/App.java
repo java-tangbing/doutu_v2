@@ -8,6 +8,7 @@ import android.os.Environment;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 
@@ -27,7 +28,7 @@ public class App extends Application {
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
         initPrefs();
-
+        FlowManager.init(this);
     }
 
     /**

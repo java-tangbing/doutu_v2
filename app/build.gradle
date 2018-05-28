@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
+def dbflow_version = "4.2.4"
 
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.pufei.gxdt"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -19,7 +20,7 @@ android {
     buildToolsVersion '27.0.3'
 }
 
-dependencies {
+dependencies { 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
@@ -40,6 +41,7 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.umeng.sdk:share-core:latest.integration'
     implementation 'com.umeng.sdk:share-wechat:latest.integration'
@@ -51,7 +53,13 @@ dependencies {
         exclude module: 'support-v13'
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    implementation project(':photoeditor')
+    implementation 'com.mylhyl:acp:1.2.0'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation 'com.github.donkingliang:ImageSelector:1.2.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
     implementation 'com.jcodecraeer:xrecyclerview:1.2.7'
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 }

@@ -35,7 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".module.maker.activity.EditImageActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".module.discover.activity.DiscoverDetailedActivity"
             android:screenOrientation="portrait" />
@@ -138,7 +139,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.pufei.association.fileProvider"
+            android:authorities="com.pufei.gxdt.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
