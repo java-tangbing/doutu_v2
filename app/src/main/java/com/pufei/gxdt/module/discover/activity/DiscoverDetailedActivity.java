@@ -21,7 +21,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
     @BindView(R.id.dis_det_ry)
     RecyclerView recyclerView;
-    private List<DiscoverListBean> mlist;
+    private List<DiscoverListBean.ResultBean> mlist;
     private DiscoverAdapter discoverAdapter;
 
     @Override
@@ -36,6 +36,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         //边框线
         recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
     }
+
     /**
      * convert dp to its equivalent px
      */
@@ -47,7 +48,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     public void getData() {
         mlist = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            DiscoverListBean bean = new DiscoverListBean();
+            DiscoverListBean.ResultBean bean = new DiscoverListBean.ResultBean();
             mlist.add(bean);
         }
         discoverAdapter = new DiscoverAdapter(mlist);

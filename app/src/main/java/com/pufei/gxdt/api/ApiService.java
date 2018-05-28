@@ -15,6 +15,7 @@ public class ApiService {
     private static SettingApi settingApi;
     private static JokeApi jokeApi;
     private static ImageTypeApi imageTypeApi;
+    private static DiscoverApi discoverApi;
 
     public static JokeApi getJokeApi() {
         if (jokeApi == null) {
@@ -75,4 +76,13 @@ public class ApiService {
         }
         return settingApi;
     }
+
+    public static DiscoverApi getDiscoverApi() {
+        if (discoverApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            discoverApi = retrofit.create(DiscoverApi.class);
+        }
+        return discoverApi;
+    }
+
 }
