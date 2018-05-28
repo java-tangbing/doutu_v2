@@ -1,5 +1,6 @@
 package com.pufei.gxdt.api;
 
+import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
@@ -18,4 +19,7 @@ import retrofit2.http.Url;
 public interface DiscoverApi {
     @POST("User/getFindList")
     Observable<DiscoverListBean> getFindList(@Body RequestBody body);
+
+    @POST("User/getEditImage")
+    Observable<DiscoverEditImageBean> getEditImage(@Body RequestBody body);
 }

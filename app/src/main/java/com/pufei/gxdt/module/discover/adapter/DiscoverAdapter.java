@@ -19,6 +19,10 @@ public class DiscoverAdapter extends BaseQuickAdapter<DiscoverListBean.ResultBea
 
     @Override
     protected void convert(BaseViewHolder helper, DiscoverListBean.ResultBean item) {
+//        helper.setText(R.id.dis_item_iv);
         GlideApp.with(mContext).load(item.getUrl()).into((ImageView) helper.getView(R.id.dis_item_iv));
+        GlideApp.with(mContext).load(item.getUser().getHeader()).into((ImageView) helper.getView(R.id.dis_item_user_header_iv));
+        helper.setText(R.id.dis_item_user_name_tv, item.getUser().getUsername())
+                .setText(R.id.dis_item_hot_tv, item.getHot());
     }
 }

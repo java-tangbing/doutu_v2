@@ -19,6 +19,7 @@ import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.module.discover.activity.DiscoverDetailedActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
+import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.view.DiscoverView;
@@ -142,6 +143,11 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //            isLoadMore = false;
             discoverAdapter.loadMoreEnd();
         }
+    }
+
+    @Override
+    public void getDiscoverDetailed(DiscoverEditImageBean bean) {
+
     }
 
     @Override
