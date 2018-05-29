@@ -2,6 +2,7 @@ package com.pufei.gxdt.module.user.fragment;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,10 +25,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserFragment extends BaseFragment {
 
-    @BindView(R.id.tv_user_name)
+    @BindView(R.id.tv_checkin_state)
+    TextView tv_checkin_state;
+    @BindView(R.id.user_name)
     TextView tvUserName;
-    @BindView(R.id.iv_user_head)
+    @BindView(R.id.user_dec)
+    TextView user_dec;
+    @BindView(R.id.user_head)
     CircleImageView ivUserHead;
+    @BindView(R.id.iv_sex)
+    ImageView iv_sex;
 
     @Override
     public void initView() {
@@ -71,36 +78,35 @@ public class UserFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.btn_checkin, R.id.btn_setting, R.id.fm_head, R.id.tv_user_favorite, R.id.tv_about_product, R.id.tv_user_task})
+    @OnClick({R.id.tv_checkin_state, R.id.fm_head, R.id.user_edit, R.id.tv_user_favorite, R.id.tv_user_publish, R.id.tv_about_product, R.id.tv_douqi, R.id.tv_user_draft})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_checkin:
-                break;
-            case R.id.btn_setting:
-                if (App.userBean == null) {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    startActivity(new Intent(getActivity(), SettingActivity.class));
-                }
+            case R.id.tv_checkin_state:
                 break;
             case R.id.fm_head:
                 if (App.userBean == null) {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
-                } else {
-                    startActivity(new Intent(getActivity(), SettingActivity.class));
                 }
                 break;
-//            case R.id.tv_user_favorite:
-//                startActivity(new Intent(getActivity(), FavoriteTaskActivity.class));
-//                break;
+            case R.id.user_edit:
+                startActivity(new Intent(getActivity(), SettingActivity.class));
+                break;
+            case R.id.tv_user_favorite:
+                startActivity(new Intent(getActivity(), SettingActivity.class));
+                break;
+            case R.id.tv_user_publish:
+                startActivity(new Intent(getActivity(), SettingActivity.class));
+                break;
             case R.id.tv_about_product:
                 startActivity(new Intent(getActivity(), AboutProductActivity.class));
                 break;
-//            case R.id.tv_user_task:
-//                startActivity(new Intent(getActivity(), UserTaskActivity.class));
-//                break;
+            case R.id.tv_douqi:
+                startActivity(new Intent(getActivity(), AboutProductActivity.class));
+                break;
+            case R.id.tv_user_draft:
+                startActivity(new Intent(getActivity(), SettingActivity.class));
+                break;
             default:
                 break;
         }

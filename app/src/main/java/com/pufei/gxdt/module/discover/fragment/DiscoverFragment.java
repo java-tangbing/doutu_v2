@@ -8,12 +8,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.module.discover.adapter.DiscoverTabVpAdapter;
 import com.pufei.gxdt.module.news.activity.NewsActivity;
+import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
 
 import java.lang.reflect.Field;
@@ -25,10 +28,17 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
+    @BindView(R.id.tv_title)
+    TextView titleTextView;
     @BindView(R.id.tab_discover)
     TabLayout tabLayout;
     @BindView(R.id.vp_discover)
     MyViewPager myViewPager;
+    @BindView(R.id.iv_title_right)
+    ImageView newsImageView;
+
+    @BindView(R.id.ll_title_right)
+    LinearLayout newsLinearLayout;
     private List<Fragment> fragmentList;
     private List<String> titleList;
     private String[] titleArray = {"推荐", "全部"};
@@ -38,6 +48,9 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
 //        if (isAdded()) {
 //            titleArray = getResources().getStringArray(R.array.discover_title);
 //        }
+        titleTextView.setText("发现");
+        GlideApp.with(getActivity()).load(R.mipmap.com_bt_ttab_news_normal).into(newsImageView);
+        newsLinearLayout.setVisibility(View.VISIBLE);
         addfragment();
         init();
     }
@@ -71,10 +84,10 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
         setIndicator(tabLayout, 70, 70);
     }
 
-    @OnClick({R.id.discover_news_btn})
+    @OnClick({R.id.ll_title_right})
     public void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.discover_news_btn:
+            case R.id.ll_title_right:
                 Intent intent = new Intent(getContext(), NewsActivity.class);
 //        intent.putExtra("a", a);
 //        intent.putExtra("b", b);

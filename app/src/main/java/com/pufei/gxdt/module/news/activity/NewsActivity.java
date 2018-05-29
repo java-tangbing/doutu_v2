@@ -15,12 +15,14 @@ public class NewsActivity extends BaseActivity {
     LinearLayout systemlinearLayout;
     @BindView(R.id.news_picture_message)
     LinearLayout picturelinearLayout;
+    @BindView(R.id.ll_title_left)
+    LinearLayout backlinearLayout;
     @BindView(R.id.news_feedback_message)
     LinearLayout feedbacklinearLayout;
 
     @Override
     public void initView() {
-
+        backlinearLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
