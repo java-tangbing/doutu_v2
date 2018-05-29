@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
@@ -27,6 +28,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
+    @BindView(R.id.tv_title)
+    TextView titleTextView;
     @BindView(R.id.tab_discover)
     TabLayout tabLayout;
     @BindView(R.id.vp_discover)
@@ -45,6 +48,7 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
 //        if (isAdded()) {
 //            titleArray = getResources().getStringArray(R.array.discover_title);
 //        }
+        titleTextView.setText("发现");
         GlideApp.with(getActivity()).load(R.mipmap.com_bt_ttab_news_normal).into(newsImageView);
         newsLinearLayout.setVisibility(View.VISIBLE);
         addfragment();

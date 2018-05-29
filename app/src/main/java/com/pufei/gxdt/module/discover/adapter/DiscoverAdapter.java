@@ -20,9 +20,23 @@ public class DiscoverAdapter extends BaseQuickAdapter<DiscoverListBean.ResultBea
     @Override
     protected void convert(BaseViewHolder helper, DiscoverListBean.ResultBean item) {
 //        helper.setText(R.id.dis_item_iv);
-        GlideApp.with(mContext).load(item.getUrl()).into((ImageView) helper.getView(R.id.dis_item_iv));
-        GlideApp.with(mContext).load(item.getUser().getHeader()).into((ImageView) helper.getView(R.id.dis_item_user_header_iv));
-        helper.setText(R.id.dis_item_user_name_tv, item.getUser().getUsername())
-                .setText(R.id.dis_item_hot_tv, item.getHot());
+        GlideApp.with(mContext).load(item.getUrl())
+                .placeholder(R.mipmap.newloding)
+                .error(R.mipmap.ic_default_picture)
+                .fallback(R.mipmap.ic_default_picture)
+                .into((ImageView) helper.getView(R.id.dis_item_iv));
+        GlideApp.with(mContext).load(item.getUser().getHeader())
+                .placeholder(R.mipmap.newloding)
+                .error(R.mipmap.my_uer_picture)
+                .fallback(R.mipmap.my_uer_picture)
+                .into((ImageView) helper.getView(R.id.dis_item_user_header_iv));
+        if (item.getUser().getUsername().length() > 0 || !item.getUser().getUsername().isEmpty()) {
+            helper.setText(R.id.dis_item_user_name_tv, item.getUser().getUsername());
+        }
+        if (item.getHot().length() > 0 || !item.getHot().isEmpty()) {
+            helper.setText(R.id.dis_item_hot_tv, item.getHot());
+        }
+//        helper.setText(R.id.dis_item_user_name_tv, item.getUser().getUsername())
+//                .setText(R.id.dis_item_hot_tv, item.getHot());
     }
 }
