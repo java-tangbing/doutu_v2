@@ -2,6 +2,8 @@ package com.pufei.gxdt.module.news.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -18,11 +20,14 @@ import butterknife.BindView;
 public class NewsFeedBackActivity extends BaseMvpActivity {
     @BindView(R.id.news_feedback_rv)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_title_left)
+    LinearLayout backlinearLayout;
     NewsFeedBackAdapter newsFeedBackAdapter;
     private List<NewsSystemBean> mlist;
 
     @Override
     public void initView() {
+        backlinearLayout.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
