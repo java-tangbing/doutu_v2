@@ -16,6 +16,7 @@ public class ApiService {
     private static JokeApi jokeApi;
     private static ImageTypeApi imageTypeApi;
     private static DiscoverApi discoverApi;
+    private static NewsApi newsApi;
 
     public static JokeApi getJokeApi() {
         if (jokeApi == null) {
@@ -83,6 +84,14 @@ public class ApiService {
             discoverApi = retrofit.create(DiscoverApi.class);
         }
         return discoverApi;
+    }
+
+    public static NewsApi getNewsApi() {
+        if (newsApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            newsApi = retrofit.create(NewsApi.class);
+        }
+        return newsApi;
     }
 
 }

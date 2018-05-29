@@ -8,12 +8,11 @@ import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
-import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.adapter.DiscoverDetailedAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
-import com.pufei.gxdt.module.view.DiscoverView;
+import com.pufei.gxdt.module.discover.view.DiscoverView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
