@@ -2,11 +2,14 @@ package com.pufei.gxdt.module.maker.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import com.mylhyl.acp.Acp;
@@ -16,6 +19,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.utils.ToastUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,6 +36,7 @@ public class ImageStickerFragment extends BaseFragment  {
     private static final int CAMERA_REQUEST = 52;
     private static final int PICK_REQUEST = 53;
     private ShowBitmapCallback callback;
+    private ShowGifCallback gifCallback;
     private Activity activity;
 
     public static ImageStickerFragment newInstance() {
@@ -46,6 +51,7 @@ public class ImageStickerFragment extends BaseFragment  {
         this.activity = activity;
         if(activity != null) {
             callback = (ShowBitmapCallback)activity;
+            gifCallback = (ShowGifCallback) activity;
         }
     }
 
@@ -107,8 +113,15 @@ public class ImageStickerFragment extends BaseFragment  {
                 case PICK_REQUEST:
                     try {
                         Uri uri = data.getData();
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-                        callback.showBitmap(bitmap);
+                        String path = getRealFilePath(activity,uri);
+                        if(path != null) {
+                            if(path.contains(".gif") || path.contains(".GIF")) {
+                                gifCallback.showGif(new File(path));
+                            }else {
+                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+                                callback.showBitmap(bitmap);
+                            }
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -117,7 +130,32 @@ public class ImageStickerFragment extends BaseFragment  {
         }
     }
 
+    public static String getRealFilePath( final Context context, final Uri uri ) {
+        if ( null == uri ) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if ( scheme == null )
+            data = uri.getPath();
+        else if ( ContentResolver.SCHEME_FILE.equals( scheme ) ) {
+            data = uri.getPath();
+        } else if ( ContentResolver.SCHEME_CONTENT.equals( scheme ) ) {
+            Cursor cursor = context.getContentResolver().query( uri, new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null );
+            if ( null != cursor ) {
+                if ( cursor.moveToFirst() ) {
+                    int index = cursor.getColumnIndex( MediaStore.Images.ImageColumns.DATA );
+                    if ( index > -1 ) {
+                        data = cursor.getString( index );
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
 
+    public interface ShowGifCallback {
+        void showGif(File gif);
+    }
 
     public interface ShowBitmapCallback {
         void showBitmap(Bitmap bitmap);

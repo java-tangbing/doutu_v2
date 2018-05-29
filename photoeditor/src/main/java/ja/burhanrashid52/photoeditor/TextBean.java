@@ -1,5 +1,6 @@
 package ja.burhanrashid52.photoeditor;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -12,7 +13,15 @@ public class TextBean {
     private ImageView addImageClose;
     private FrameLayout addFrameLayout;
     private boolean isVisibleBorder;
+    private Bitmap bitmap;
 
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     public TextView getTextView() {
         return textView;
