@@ -125,6 +125,7 @@
             android:name="com.pufei.gxdt.module.start.ui.FristActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity android:name=".module.user.activity.PublishActivity" />
         <!--<meta-data-->
         <!--android:name="UMENG_APPKEY"-->
         <!--android:value="5850b381734be40cef0006f8" />-->

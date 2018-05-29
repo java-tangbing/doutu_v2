@@ -37,6 +37,7 @@
     <color name="bg_invite_text">#f4f4f4</color>
     <color name="background">#eaeaea</color>
     <color name="maker_bg">#f1f1f1</color>
+    <color name="hex_bcbcbc">#FFBCBCBC</color>
     <color name="recommed_color">#d79700</color>
     <color name="select_color1">#00B0FF</color>
     <color name="select_color2">#0080DF</color>
@@ -65,7 +66,12 @@
     <color name="select_earse">#979797</color>
     <color name="seekbar_bg">#dedede</color>
     <color name="seekbar_progress">#6A6A6A</color>
-
-
+    <color name="heise">#333</color>
+    <color name="hex_9c9c9c">#FF9C9C9C</color>
+    <color name="hex_e9e9ea">#FFE9E9EA</color>
+    <color name="hex_1b89cd">#FF1B89CD</color>
+    <color name="submit_btn_normal">@color/hex_1b89cd</color>
+    <color name="submit_btn_pressed">#166EA5</color>
+    <color name="submit_btn_disabled">@color/hex_bcbcbc</color>
 
 </resources>

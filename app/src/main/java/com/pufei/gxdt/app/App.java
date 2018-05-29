@@ -20,6 +20,8 @@ public class App extends Application {
     public static int KEMU = 1;
     public static int TEXT = 1;
     public static UserBean userBean;
+    public static String token=null;
+    public static String Total_score="0";
     public static String path1 = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
 
     @Override

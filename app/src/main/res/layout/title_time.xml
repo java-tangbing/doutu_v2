@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.pufei.gxdt.widgets.MyFrontTextView
+        android:id="@+id/title_time_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20sp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:text="我的嗨咯"
+        android:textColor="#333"
+        android:textSize="32sp" />
+
+    <com.pufei.gxdt.widgets.MyFrontTextView
+        android:layout_marginBottom="16dp"
+        android:id="@+id/title_time_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5分钟以前" />
+</LinearLayout>

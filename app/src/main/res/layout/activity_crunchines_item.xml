@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.pufei.gxdt.widgets.MyFrontTextView
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:id="@+id/activity_crunchies_item_positon"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <!--<FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/activity_crunchies_item_type"
+            android:padding="5dp"
+            android:src="@mipmap/icon_crown1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/activity_crunchies_item_header"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/nianqingren"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+    <!--</FrameLayout>-->
+    <LinearLayout
+        android:layout_gravity="center|left"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/activity_crunchies_item_type"
+                android:src="@mipmap/icon_crown1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.pufei.gxdt.widgets.MyFrontTextView
+                android:id="@+id/activity_crunchies_item_name"
+
+                android:textColor="#333"
+                android:text="今夕是何年"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:textStyle="bold"
+            android:layout_gravity="center|left"
+            android:id="@+id/activity_crunchies_item_id"
+            android:layout_marginTop="5dp"
+            android:text="ID；100000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:textColor="#333"
+            android:id="@+id/activity_crunchies_item_score"
+            android:layout_gravity="center"
+           android:gravity="center"
+            android:text="10000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:gravity="center"
+            android:text="斗气"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>
+    <View
+        android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
+
+    </View>
+</LinearLayout>
