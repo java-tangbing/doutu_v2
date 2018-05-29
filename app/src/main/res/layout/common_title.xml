@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/iv_back"
