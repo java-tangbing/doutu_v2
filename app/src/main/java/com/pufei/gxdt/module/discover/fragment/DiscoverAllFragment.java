@@ -123,7 +123,10 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //        startActivity(intent);
         Intent intent = new Intent(activity, PictureDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("picture_index", position);
+//        bundle.putInt("picture_index", position);
+        bundle.putString("type", "discover");
+        bundle.putString("orginid", mlist.get(position).getOrginid());
+        bundle.putString("orgintable", mlist.get(position).getOrgintable());
         bundle.putSerializable("picture_list", (Serializable) mlist);
         intent.putExtras(bundle);
         startActivity(intent);
