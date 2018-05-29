@@ -22,9 +22,11 @@ import com.pufei.gxdt.utils.RetrofitFactory;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     SmartRefreshLayout refresh_theme;
     private ThemeImageAdpater adpater;
     private List<ThemeResultBean.ResultBean> list = new ArrayList<>();
+    private int page = 1;
     @Override
     public void initView() {
         tv_title.setText("主题表情");
@@ -57,22 +60,36 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adpater = new ThemeImageAdpater(ThemeImageActivity.this,list);
         recyclerView.setAdapter(adpater);
-        refresh_theme.setLoadmoreFinished(true);
-        refresh_theme.setRefreshHeader(new ClassicsHeader(ThemeImageActivity.this).setSpinnerStyle(SpinnerStyle.Translate));
-        refresh_theme.setEnableLoadmore(false);
+        refresh_theme.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
+        refresh_theme.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
+        refresh_theme.setEnableLoadmore(true);
         refresh_theme.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadmore();
-                refreshlayout.setLoadmoreFinished(true);
+            public void onLoadmore(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        page++;
+                        requestTheme(page);
+                        try {
+                            refreshlayout.finishLoadmore();
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, 2000);
+
             }
+
 
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
                 refreshlayout.getLayout().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        requestTheme();
+                        page = 1;
+                        requestTheme(page);
                         refreshlayout.finishRefresh();
                     }
                 }, 2000);
@@ -85,7 +102,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                 Bundle bundle = new Bundle();
                 try {
                     bundle.putString("id", list.get(postion).getId());
-                    bundle.putString("time", list.get(postion).getDateline());
+                    bundle.putString("desc", list.get(postion).getDesc());
                     bundle.putString("title", list.get(postion).getCategory_name());
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -101,14 +118,20 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     @Override
     public void getData() {
         if (NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
-            requestTheme();
+            requestTheme(page);
         }else{
             request_failed.setVisibility(View.VISIBLE);
         }
     }
-    private void requestTheme(){
-        JSONObject jsonObject = KeyUtil.getJson(this);
-        presenter.getThemeImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
+    private void requestTheme(int page){
+        try{
+           JSONObject jsonObject = KeyUtil.getJson(this);
+           jsonObject.put("page",page+"");
+           presenter.getThemeImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -127,7 +150,9 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     @Override
     public void resultThemeImage(ThemeResultBean bean) {
         if (bean!=null){
-            list.clear();
+            if(page == 1){
+                list.clear();
+            }
             list.addAll(bean.getResult());
             adpater.notifyDataSetChanged();
         }
