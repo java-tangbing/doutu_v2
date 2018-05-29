@@ -53,6 +53,8 @@ public class SettingActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     LinearLayout llTitleLeft;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tv_right)
+    TextView tvRight;
     @BindView(R.id.userdata_name)
     TextView userdataname;
     @BindView(R.id.tv_sex)
@@ -62,8 +64,8 @@ public class SettingActivity extends BaseMvpActivity<SetPersonalPresenter> imple
 
     @BindView(R.id.userdata_head)
     CircleImageView userdataHead;
-    @BindView(R.id.userdata_address)
-    TextView userdata_address;
+    @BindView(R.id.userdata_dec)
+    TextView userdata_dec;
     private String sex;
     private static final int REQUEST_CODE = 17;
     private CommonPopupWindow popupWindow;
@@ -72,6 +74,7 @@ public class SettingActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
         tvTitle.setText("资料设置");
+        tvRight.setText("保存");
         if (App.userBean != null) {
 
             if (!App.userBean.getHead().isEmpty()) {
