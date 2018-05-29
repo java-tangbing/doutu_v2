@@ -1,5 +1,6 @@
 package com.pufei.gxdt.module.discover.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class DiscoverListBean {
@@ -39,7 +40,7 @@ public class DiscoverListBean {
         this.result = result;
     }
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         /**
          * id : 4
          * uid : 339839

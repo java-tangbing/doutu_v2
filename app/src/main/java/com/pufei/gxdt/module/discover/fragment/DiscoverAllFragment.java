@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +23,7 @@ import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.view.DiscoverView;
 import com.pufei.gxdt.utils.IntenetUtil;
 import com.pufei.gxdt.utils.KeyUtil;
@@ -34,6 +36,7 @@ import com.pufei.gxdt.widgets.viewpager.GridSpacingItemDecoration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,9 +117,15 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Intent intent = new Intent(activity, DiscoverDetailedActivity.class);
-//        intent.putExtra("a", a);
-//        intent.putExtra("b", b);
+//        Intent intent = new Intent(activity, DiscoverDetailedActivity.class);
+////        intent.putExtra("a", a);
+////        intent.putExtra("b", b);
+//        startActivity(intent);
+        Intent intent = new Intent(activity, PictureDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("picture_index", position);
+        bundle.putSerializable("picture_list", (Serializable) mlist);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
