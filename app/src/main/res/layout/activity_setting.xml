@@ -7,43 +7,38 @@
 
     <include layout="@layout/common_toolbar" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/userdata_head_ll"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:background="@color/white"
+        android:layout_height="100dp"
+        android:background="@color/background_gray"
         android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="头像"
-            android:textColor="@color/text_title_black"
-            android:textSize="16sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userdata_head"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:src="@mipmap/my_uer_picture" />
 
-        <ImageView
-            android:layout_width="14.5dp"
-            android:layout_height="14.5dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userdata_head"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/com_bt_next" />
-    </LinearLayout>
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:text="点击更换头像"
+            android:textColor="@color/text_title_black"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/lineColor"/>
+        android:background="@color/lineColor" />
 
     <LinearLayout
         android:id="@+id/userdata_name_ll"
@@ -122,7 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/lineColor"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/userdata_safe_ll"
@@ -176,16 +171,16 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:text="支付宝账号"
+            android:text="个性签名"
             android:textColor="@color/text_title_black"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/userdata_address"
+            android:id="@+id/userdata_dec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="未绑定"
+            android:text="个性的签名"
             android:textSize="16sp" />
 
         <ImageView
@@ -201,7 +196,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/lineColor"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/login_state"

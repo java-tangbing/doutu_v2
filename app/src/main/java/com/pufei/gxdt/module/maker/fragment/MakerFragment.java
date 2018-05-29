@@ -9,8 +9,8 @@ import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 public class MakerFragment extends BaseFragment {
     @Override
     public void initView() {
-        Intent intent = new Intent(getActivity(), EditImageActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), EditImageActivity.class);
+//        startActivity(intent);
     }
 
     @Override
