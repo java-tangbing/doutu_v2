@@ -24,7 +24,7 @@ public class NewsPictureActivity extends BaseMvpActivity implements BaseQuickAda
     @BindView(R.id.news_picture_rv)
     RecyclerView recyclerView;
     NewsPictureAdapter newsPictureAdapter;
-    private List<NewsBean> mlist;
+    private List<NewsBean.ResultBean> mlist;
 
     @Override
     public void initView() {
@@ -36,10 +36,10 @@ public class NewsPictureActivity extends BaseMvpActivity implements BaseQuickAda
     @Override
     public void getData() {
         mlist = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            NewsBean bean = new NewsBean();
-            mlist.add(bean);
-        }
+//        for (int i = 0; i < 5; i++) {
+//            NewsBean bean = new NewsBean();
+//            mlist.add(bean);
+//        }
         newsPictureAdapter = new NewsPictureAdapter(mlist);
 //        newsSystemAdapter.setOnItemClickListener(this);
 //        discoverAdapter.addHeaderView(videoHeaderView);

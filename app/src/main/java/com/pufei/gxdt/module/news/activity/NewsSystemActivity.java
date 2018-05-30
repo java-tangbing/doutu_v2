@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
@@ -47,6 +48,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         newsSystemAdapter = new NewsSystemAdapter(mlist);
 //        newsSystemAdapter.setOnItemClickListener(this);
         if (App.userBean.getPhone().length() < 5) {
+            viewHeader = getLayoutInflater().inflate(R.layout.activity_news_item_unlanded, (ViewGroup) recyclerView.getParent(), false);
             newsSystemAdapter.addHeaderView(viewHeader);
         }
 
@@ -76,11 +78,6 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     @Override
     public void getsNoticeContent(NewsBean bean) {
         if (bean.getResult().size() > 0) {
-            if (App.userBean.getPhone().length() > 0) {
-
-            } else {
-
-            }
             mlist.addAll(bean.getResult());
             newsSystemAdapter.notifyDataSetChanged();
         }
