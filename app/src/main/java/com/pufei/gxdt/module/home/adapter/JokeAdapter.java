@@ -14,6 +14,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.utils.AddHeader;
 import com.pufei.gxdt.utils.LogUtils;
+import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.MyFrontTextView;
 
 import java.util.List;
@@ -66,43 +67,15 @@ public class JokeAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler) holder).titletv.setText(list.get(position).getTitle());
-            Glide.with(mcontext)
-                    .load(list.get(position).getImages().get(0))
-                    .into(((MyHodler) holder).iv1);
-//            glide.load(list.get(position).getImages().get(0)).
-//                    placeholder(R.mipmap.loading).fitCenter()
-//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-//                   crossFade().into(((MyHodler) holder).iv1);
-//            glide.load(list.get(position).getImages().get(1)).
-//                    placeholder(R.mipmap.loading).fitCenter()
-//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-//                   crossFade().into(((MyHodler) holder).iv2);
-//            glide.load(list.get(position).getImages().get(2)).
-//                    placeholder(R.mipmap.loading).fitCenter()
-//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-//                    crossFade().into(((MyHodler) holder).iv3);
-            Glide.with(mcontext)
-                    .load(list.get(position).getImages().get(1))
-                    .into(((MyHodler) holder).iv2);
-            Glide.with(mcontext)
-                    .load(list.get(position).getImages().get(2))
-                    .into(((MyHodler) holder).iv3);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv1);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(1)).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv2);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(2)).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv3);
         }else if(holder instanceof OneHolder){
             ((OneHolder) holder).tv2.setText(list.get(position).getTitle());
-//            glide.load(list.get(position).getImages().get(0)).
-//                    placeholder(R.mipmap.loading).fitCenter()
-//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-//                   crossFade().into(((OneHolder) holder).iv11);
-            Glide.with(mcontext)
-                    .load(list.get(position).getImages().get(0))
-                    .into(((OneHolder) holder).iv11);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.newloding).into(((OneHolder) holder).iv11);
         }else if (holder instanceof AdvertHodler){
             Log.e("SecondFragment",list.get(position).getAdvert_image_url());
             ((AdvertHodler) holder).title.setText(list.get(position).getTitle());
-//            glide.load(AddHeader.buildGlideUrl(list.get(position).getAdvert_image_url())).
-//                    placeholder(R.mipmap.newloding).centerCrop()
-//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).
-//                    crossFade().into(((JokeAdapter.AdvertHodler)holder).image);
             Glide.with(mcontext)
                     .load(AddHeader.buildGlideUrl(list.get(position).getAdvert_image_url()))
                     .into(((JokeAdapter.AdvertHodler) holder).image);

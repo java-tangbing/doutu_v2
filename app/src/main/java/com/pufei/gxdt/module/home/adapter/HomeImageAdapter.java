@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.widgets.GlideApp;
@@ -19,11 +21,11 @@ import java.util.List;
 /**
  * Created by wangwenzhang on 2016/11/9.
  */
-public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
+public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHodler> {
     private List<PictureResultBean.ResultBean>list;
     private Context mcontext;
 
-    public HotAdapter(Context context, List<PictureResultBean.ResultBean> list){//获取数据源
+    public HomeImageAdapter(Context context, List<PictureResultBean.ResultBean> list){//获取数据源
         this.mcontext=context;
         this.list=list;
     }
@@ -39,8 +41,12 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     }
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
+       // holder.iv2.setTag(position);
         holder.itemView.setTag(position);
-        GlideApp.with(mcontext).load(list.get(position).getUrl()).override(100,80).into(holder.iv1);
+        Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
+//        glide.load(AddHeader.buildGlideUrl()).crossFade().placeholder(R.mipmap.newloding).override(100,80)
+//                .diskCacheStrategy(DiskCacheStrategy.RESULT).fitCenter().dontAnimate()
+//                .into(holder.iv1);
 
     }
     @Override

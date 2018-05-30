@@ -4,11 +4,10 @@ import java.util.List;
 
 public class DiscoverEditImageBean {
 
-
     /**
      * code : 0
      * msg : success
-     * result : {"orgin_url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg","data":[{"id":"4","uid":"339839","hot":"","orginid":"30","orgintable":"amuse_images1","height":"200","width":"300","title":"标题","dateline":"1527215999","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg","view":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"ab33333","uid":"339839"}}],"count":"1","orginid":"30","orgintable":"amuse_images1"}
+     * result : {"orgin_url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg","data":[{"id":"4","uid":"339839","hot":"","orginid":"30","orgintable":"amuse_images1","height":"200","width":"300","title":"标题","dateline":"1527215999","url":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"abdcddd","uid":"339839"}}],"count":"1"}
      */
 
     private String code;
@@ -42,16 +41,12 @@ public class DiscoverEditImageBean {
     public static class ResultBean {
         /**
          * orgin_url : http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg
-         * data : [{"id":"4","uid":"339839","hot":"","orginid":"30","orgintable":"amuse_images1","height":"200","width":"300","title":"标题","dateline":"1527215999","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg","view":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"ab33333","uid":"339839"}}]
+         * data : [{"id":"4","uid":"339839","hot":"","orginid":"30","orgintable":"amuse_images1","height":"200","width":"300","title":"标题","dateline":"1527215999","url":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"abdcddd","uid":"339839"}}]
          * count : 1
-         * orginid : 30
-         * orgintable : amuse_images1
          */
 
         private String orgin_url;
         private String count;
-        private String orginid;
-        private String orgintable;
         private List<DataBean> data;
 
         public String getOrgin_url() {
@@ -68,22 +63,6 @@ public class DiscoverEditImageBean {
 
         public void setCount(String count) {
             this.count = count;
-        }
-
-        public String getOrginid() {
-            return orginid;
-        }
-
-        public void setOrginid(String orginid) {
-            this.orginid = orginid;
-        }
-
-        public String getOrgintable() {
-            return orgintable;
-        }
-
-        public void setOrgintable(String orgintable) {
-            this.orgintable = orgintable;
         }
 
         public List<DataBean> getData() {
@@ -105,9 +84,8 @@ public class DiscoverEditImageBean {
              * width : 300
              * title : 标题
              * dateline : 1527215999
-             * url : http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg
-             * view :
-             * user : {"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"ab33333","uid":"339839"}
+             * url :
+             * user : {"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"abdcddd","uid":"339839"}
              */
 
             private String id;
@@ -120,7 +98,6 @@ public class DiscoverEditImageBean {
             private String title;
             private String dateline;
             private String url;
-            private String view;
             private UserBean user;
 
             public String getId() {
@@ -203,14 +180,6 @@ public class DiscoverEditImageBean {
                 this.url = url;
             }
 
-            public String getView() {
-                return view;
-            }
-
-            public void setView(String view) {
-                this.view = view;
-            }
-
             public UserBean getUser() {
                 return user;
             }
@@ -222,7 +191,7 @@ public class DiscoverEditImageBean {
             public static class UserBean {
                 /**
                  * header : http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg
-                 * username : ab33333
+                 * username : abdcddd
                  * uid : 339839
                  */
 

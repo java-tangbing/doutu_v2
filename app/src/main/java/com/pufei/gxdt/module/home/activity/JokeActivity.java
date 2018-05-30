@@ -116,14 +116,8 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
                     }
                 }else {
                     if (!TextUtils.isEmpty(jokeList.get(postion).getAdvert_url())) {
-//                        Intent intent = new Intent(activity, WebAdvertActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("URL", jokeList.get(postion).getAdvert_url());
-//                        bundle.putString("source", "start");
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
+
                     } else if (!TextUtils.isEmpty(jokeList.get(postion).getDown_url())){
-                       // AgentUtils.getAgentUtils().getAgent(requestFailed, activity, jokeList.get(postion).getDown_url());
 
                     }
                 }

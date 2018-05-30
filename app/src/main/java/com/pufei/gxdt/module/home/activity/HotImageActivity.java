@@ -1,8 +1,10 @@
 package com.pufei.gxdt.module.home.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -59,6 +62,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         title.setText("热门表情");
         ll_left.setVisibility(View.VISIBLE);
         hotXryv.setLayoutManager(new GridLayoutManager(HotImageActivity.this, 3));
+        hotXryv.addItemDecoration(new SpaceItemDecoration(dp2px(HotImageActivity.this, 10)));
         adapter = new HotAdapter(HotImageActivity.this, picturelist);
         hotXryv.setAdapter(adapter);
 
@@ -154,8 +158,13 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
        }
 
     }
+    private  int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
+    }
     @OnClick(R.id.ll_title_left)
     public  void finishActivity(){
         AppManager.getAppManager().finishActivity();
     }
+
 }

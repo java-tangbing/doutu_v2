@@ -36,15 +36,18 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/srl_theme_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:layout_marginTop="27dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:focusableInTouchMode="true"
                 android:id="@+id/rl_theme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         <include layout="@layout/internet_fail"/>
     </FrameLayout>
 

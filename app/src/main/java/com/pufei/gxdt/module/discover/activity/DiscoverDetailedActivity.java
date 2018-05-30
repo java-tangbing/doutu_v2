@@ -49,7 +49,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         boolean includeEdge = true;
         //间距
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        //边框线
+        //边框�
         recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
     }
 
@@ -78,9 +78,9 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("id", "");//id 图id
+
             jsonObject.put("orginid", "");//orginid 原始图id
-            jsonObject.put("orgintable", "");//orgintable 数据表
+            jsonObject.put("orgintable", "");//orgintable 数据�
         } catch (JSONException e) {
             e.printStackTrace();
         }

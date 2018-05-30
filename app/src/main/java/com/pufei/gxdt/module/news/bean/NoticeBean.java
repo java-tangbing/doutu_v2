@@ -3,11 +3,10 @@ package com.pufei.gxdt.module.news.bean;
 import java.util.List;
 
 public class NoticeBean {
-
     /**
      * code : 0
      * msg : success
-     * result : [{"id":"4","uid":"339839","type":"1","dateline":"2018-05-29 10:59","os":"ios","content":"ceshi4","url":"","orgin":"0","title":"系统消息"},{"id":"7","uid":"339839","type":"2","dateline":"2018-05-29 10:59","os":"android","content":"ceshi454","url":"","orgin":"0","title":"斗图小助手"},{"id":"8","uid":"339839","type":"3","dateline":"2018-05-29 17:35","os":"","content":"技术测试意见","url":"","orgin":"0","title":"意见反馈"}]
+     * result : [{"id":"4","uid":"339839","type":"1","dateline":"2018-05-29 10:59","os":"ios","content":"ceshi4","title":"系统消息"},{"id":"7","uid":"339839","type":"2","dateline":"2018-05-29 10:59","os":"android","content":"ceshi454","title":"斗图小助},{"id":"3","uid":"339839","type":"3","dateline":"2018-05-29 10:59","os":"ios","content":"ceshi2","title":"意见反馈"}]
      */
 
     private String code;
@@ -46,8 +45,6 @@ public class NoticeBean {
          * dateline : 2018-05-29 10:59
          * os : ios
          * content : ceshi4
-         * url :
-         * orgin : 0
          * title : 系统消息
          */
 
@@ -57,8 +54,6 @@ public class NoticeBean {
         private String dateline;
         private String os;
         private String content;
-        private String url;
-        private String orgin;
         private String title;
 
         public String getId() {
@@ -107,22 +102,6 @@ public class NoticeBean {
 
         public void setContent(String content) {
             this.content = content;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getOrgin() {
-            return orgin;
-        }
-
-        public void setOrgin(String orgin) {
-            this.orgin = orgin;
         }
 
         public String getTitle() {
