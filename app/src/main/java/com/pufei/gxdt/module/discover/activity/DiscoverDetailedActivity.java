@@ -78,7 +78,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-
+            jsonObject.put("id", "");//id 图id
             jsonObject.put("orginid", "");//orginid 原始图id
             jsonObject.put("orgintable", "");//orgintable 数据表
         } catch (JSONException e) {

@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.news.adapter.NewsAdapter;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
@@ -17,6 +18,7 @@ import com.pufei.gxdt.module.news.view.NewsView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -62,10 +64,11 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     }
 
     public void setMyadapter() {
+        String auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("id", "");
-            jsonObject.put("auth", "");
+//            jsonObject.put("id", "");
+            jsonObject.put("auth", auth);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -111,10 +114,10 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
 
     @Override
     public void getNoticeList(NoticeBean bean) {
-        if (bean.getMsg() == "success") {
+//        if (bean.getMsg() == "success") {
             mlist.addAll(bean.getResult());
             newsAdapter.notifyDataSetChanged();
-        }
+//        }
     }
 
 
