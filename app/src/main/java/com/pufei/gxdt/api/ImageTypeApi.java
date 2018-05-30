@@ -1,8 +1,8 @@
 package com.pufei.gxdt.api;
 
 
-import com.pufei.gxdt.module.home.model.HomeDetailBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
+import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
 import io.reactivex.Observable;
@@ -13,8 +13,10 @@ import retrofit2.http.POST;
 public interface ImageTypeApi {
     @POST("IndexList/getList")
     Observable<HomeResultBean> getHomeList(@Body RequestBody body);
+    @POST("Category/getCateIndex")
+    Observable<HomeTypeBean> getHomeType(@Body RequestBody body);
     @POST("AmuseImages/getList")
-    Observable<HomeDetailBean> getHomeDetailList(@Body RequestBody body);
+    Observable<PictureResultBean> getHomeDetailList(@Body RequestBody body);
     @POST("AmuseImages/getNewList")
     Observable<PictureResultBean> getHotList(@Body RequestBody body);
     @POST("Category/getThemeList")

@@ -117,20 +117,21 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
 
     @Override
     public void getData() {
+        requestTheme(page);
+    }
+    private void requestTheme(int page){
         if (NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
-            requestTheme(page);
+            try{
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                jsonObject.put("page",page+"");
+                presenter.getThemeImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
         }else{
             request_failed.setVisibility(View.VISIBLE);
         }
-    }
-    private void requestTheme(int page){
-        try{
-           JSONObject jsonObject = KeyUtil.getJson(this);
-           jsonObject.put("page",page+"");
-           presenter.getThemeImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
+
 
     }
 

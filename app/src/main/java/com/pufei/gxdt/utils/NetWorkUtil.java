@@ -56,4 +56,19 @@ public class NetWorkUtil {
         }
         return false;
     }
+    /**
+     * 判断MOBILE网络类型
+     */
+    public  static  String netType (Context context){
+        String  net = null;
+        if(isWifiConnected(context)){
+            net = "1";
+        }else if(isMobileConnected(context)){
+            net = "4";
+        }else{
+            net = "0";
+        }
+        return  net;
+    }
+
 }

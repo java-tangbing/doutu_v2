@@ -3,11 +3,10 @@ package com.pufei.gxdt.module.home.presenter;
 
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
-import com.pufei.gxdt.module.home.model.HomeDetailBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
+import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.view.HomeListView;
-import com.pufei.gxdt.module.home.view.ImageTypeView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -33,10 +32,22 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
         Disposable disposable = ApiService.getImageTypeAoi().getHomeDetailList(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<HomeDetailBean>() {
+                .subscribe(new Consumer<PictureResultBean>() {
                     @Override
-                    public void accept(HomeDetailBean result) throws Exception {
+                    public void accept(PictureResultBean result) throws Exception {
                         baseview.resultHomeDetailList(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
+    public void getHomeTypeList(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getHomeType(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<HomeTypeBean>() {
+                    @Override
+                    public void accept(HomeTypeBean result) throws Exception {
+                        baseview.resultHomeTypeList(result);
                     }
                 });
         addSubscription(disposable);

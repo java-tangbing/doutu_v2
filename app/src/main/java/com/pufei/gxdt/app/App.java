@@ -19,6 +19,7 @@ public class App extends Application {
     public static Context AppContext;
     public static int KEMU = 1;
     public static int TEXT = 1;
+    public static String typeId;
     public static UserBean userBean;
     public static String path1 = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
 

@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.home.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
@@ -15,7 +16,16 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.base.MyPagerAdapder;
 import com.pufei.gxdt.module.home.fragment.DouTuFragment;
+import com.pufei.gxdt.module.home.model.HomeTypeBean;
+import com.pufei.gxdt.module.home.model.PictureResultBean;
+import com.pufei.gxdt.utils.EvenMsg;
+import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +44,9 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
     MyViewPager homeVpDriver;
     private List<Fragment> fragmentList;
     private List<String> titleList;
-    private String[] titleArray = {"斗图", "搞笑", "萌娃", "宠物", "明星", "影视", "美食", "其他"};
+    private String[] titleArray = new String[8];
+    private List<HomeTypeBean.ResultBean> titleLists = new ArrayList<>();
+    private int index;
     @Override
     public void setPresenter(BasePresenter presenter) {
 
@@ -42,9 +54,16 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
 
     @Override
     public void initView() {
+        Bundle bundle = this.getIntent().getExtras();
+        titleLists = (List<HomeTypeBean.ResultBean>) bundle.getSerializable("title_list");
+        index = bundle.getInt("index");
+        for (int i = 0;i<8;i++){
+            titleArray[i] = titleLists.get(i).getCategory_name();
+        }
         addfragment();
         fragmentHomeTb.setTabMode(TabLayout.MODE_SCROLLABLE);
         homeVpDriver.setAdapter(new MyPagerAdapder(getSupportFragmentManager(), fragmentList, titleList));
+        homeVpDriver.setCurrentItem(index);
         fragmentHomeTb.addOnTabSelectedListener(this);
         fragmentHomeTb.setupWithViewPager(homeVpDriver);
         setIndicator(fragmentHomeTb,5,5);
@@ -60,19 +79,16 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
     }
     private void addfragment() {
         fragmentList = new ArrayList<Fragment>();
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
-        fragmentList.add(new DouTuFragment());
+        for (int i = 0;i<titleArray.length;i++){
+            fragmentList.add(DouTuFragment.newInstence(titleLists.get(i).getId()));
+        }
         titleList = new ArrayList<String>();
         Collections.addAll(titleList, titleArray);
     }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        if(titleLists!=null){
+        }
 
     }
 
@@ -115,11 +131,6 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
             child.setLayoutParams(params);
             child.invalidate();
         }
-    }
-    public int dip2px(Context context, float dipValue) {
-
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale + 0.5f);
     }
 
 }

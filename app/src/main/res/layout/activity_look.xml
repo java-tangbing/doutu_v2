@@ -115,13 +115,14 @@
 
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:layout_width="wrap_content"
+            android:id="@+id/tv_change_img"
             android:layout_marginLeft="21dp"
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
             android:drawableLeft="@mipmap/con_ic_change"
             android:textColor="@color/color_text_normal"
             android:textSize="12sp"
-            android:text="120张改图" />
+            android:text="0" />
 
 </LinearLayout>
             <LinearLayout
