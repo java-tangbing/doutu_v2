@@ -3,11 +3,11 @@ package com.pufei.gxdt.module.news.adapter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.module.news.bean.NewsSystemBean;
+import com.pufei.gxdt.module.news.bean.NewsBean;
 
 import java.util.List;
 
-public class NewsPictureAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean, BaseViewHolder> {
+public class NewsPictureAdapter extends BaseMultiItemQuickAdapter<NewsBean, BaseViewHolder> {
 
 
     /**
@@ -24,7 +24,7 @@ public class NewsPictureAdapter extends BaseMultiItemQuickAdapter<NewsSystemBean
 
 
     @Override
-    protected void convert(BaseViewHolder helper, NewsSystemBean item) {
+    protected void convert(BaseViewHolder helper, NewsBean item) {
         switch (helper.getItemViewType()) {
             case 1101:
                 helper.addOnClickListener(R.id.news_picture_item);

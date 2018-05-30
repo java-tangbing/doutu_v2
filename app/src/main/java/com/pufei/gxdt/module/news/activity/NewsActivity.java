@@ -1,6 +1,7 @@
 package com.pufei.gxdt.module.news.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.news.adapter.NewsAdapter;
+import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
 import com.pufei.gxdt.module.news.view.NewsView;
@@ -45,11 +47,19 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private List<NoticeBean.ResultBean> mlist;
+    private String auth = "";
 
     @Override
     public void initView() {
-        textViewtitle.setText("消息");
-        backlinearLayout.setVisibility(View.VISIBLE);
+        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
+        if (auth.length() > 0) {
+            textViewtitle.setText("消息");
+            backlinearLayout.setVisibility(View.VISIBLE);
+            LinearLayoutManager layoutManage = new LinearLayoutManager(this);
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            recyclerView.setLayoutManager(layoutManage);
+        }
+
     }
 
     @Override
@@ -62,6 +72,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     }
 
     public void setMyadapter() {
+
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("id", "");
@@ -72,7 +83,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.newsNoticeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            ToastUtils.showShort(this, "请检查网络设�);
         }
     }
 
@@ -117,12 +128,21 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
         }
     }
 
+    @Override
+    public void getsNoticeContent(NewsBean bean) {
+
+    }
+
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (mlist.get(position).getType()) {
             case "1":
                 Intent intent = new Intent(this, NewsSystemActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("auth", auth);
+                bundle.putString("type", "1");
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case "2":
