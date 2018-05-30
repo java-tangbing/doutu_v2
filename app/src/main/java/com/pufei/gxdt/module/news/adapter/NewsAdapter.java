@@ -11,6 +11,8 @@ import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class NewsAdapter extends BaseQuickAdapter<NoticeBean.ResultBean, BaseViewHolder> {
     public NewsAdapter(@Nullable List<NoticeBean.ResultBean> data) {
         super(R.layout.activity_news_item, data);
@@ -22,7 +24,7 @@ public class NewsAdapter extends BaseQuickAdapter<NoticeBean.ResultBean, BaseVie
                 .setText(R.id.news_item_dateline_tv, item.getDateline())
                 .setText(R.id.news_item_title_tv, item.getTitle())
                 .setText(R.id.news_item_content_tv, item.getContent());
-        GlideApp.with(mContext).load(R.mipmap.ic_launcher).into((ImageView) helper.getView(R.id.news_item_icon_cv));
+        GlideApp.with(mContext).load(R.mipmap.ic_launcher).into((CircleImageView) helper.getView(R.id.news_item_icon_cv));
 
     }
 }

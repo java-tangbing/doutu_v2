@@ -1,6 +1,8 @@
 package com.pufei.gxdt.module.news.activity;
 
 import android.content.Intent;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -52,6 +54,10 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     public void initView() {
         textViewtitle.setText("消息");
         backlinearLayout.setVisibility(View.VISIBLE);
+        LinearLayoutManager layoutManage = new LinearLayoutManager(this);
+//        layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(layoutManage);
     }
 
     @Override
@@ -114,10 +120,11 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
 
     @Override
     public void getNoticeList(NoticeBean bean) {
-//        if (bean.getMsg() == "success") {
+        if (bean.getResult().size() > 0) {
             mlist.addAll(bean.getResult());
+//            newsAdapter.addData(mlist);
             newsAdapter.notifyDataSetChanged();
-//        }
+        }
     }
 
 
