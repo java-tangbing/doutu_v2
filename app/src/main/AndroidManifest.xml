@@ -104,6 +104,12 @@
             android:name=".module.home.activity.HomeImageActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.home.activity.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.activity.SearchDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.pufei.gxdt.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
