@@ -107,19 +107,20 @@ public class ImageStickerFragment extends BaseFragment  {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CAMERA_REQUEST:
+                    String path = getRealFilePath(activity,data.getData());
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    callback.showBitmap(photo);
+                    callback.showBitmap(photo,path);
                     break;
                 case PICK_REQUEST:
                     try {
                         Uri uri = data.getData();
-                        String path = getRealFilePath(activity,uri);
-                        if(path != null) {
-                            if(path.contains(".gif") || path.contains(".GIF")) {
-                                gifCallback.showGif(new File(path));
+                        String path1 = getRealFilePath(activity,uri);
+                        if(path1 != null) {
+                            if(path1.contains(".gif") || path1.contains(".GIF")) {
+                                gifCallback.showGif(new File(path1),path1);
                             }else {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-                                callback.showBitmap(bitmap);
+                                callback.showBitmap(bitmap,path1);
                             }
                         }
                     } catch (IOException e) {
@@ -154,11 +155,11 @@ public class ImageStickerFragment extends BaseFragment  {
     }
 
     public interface ShowGifCallback {
-        void showGif(File gif);
+        void showGif(File gif,String path);
     }
 
     public interface ShowBitmapCallback {
-        void showBitmap(Bitmap bitmap);
+        void showBitmap(Bitmap bitmap,String path);
     }
 
 }

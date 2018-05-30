@@ -1,5 +1,6 @@
 package com.pufei.gxdt;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
 import com.pufei.gxdt.module.discover.fragment.DiscoverFragment;
 import com.pufei.gxdt.module.home.fragment.HomeFragment;
+import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.module.maker.fragment.MakerFragment;
 import com.pufei.gxdt.module.user.fragment.UserFragment;
 import com.pufei.gxdt.utils.AppManager;
@@ -54,7 +56,10 @@ public class MainActivity extends BaseActivity {
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
                 ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setSelected(true);
                 homeVp.setCurrentItem(tab.getPosition());
-
+                if(tab.getPosition() == 2) {
+                    Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
+                    startActivity(intent);
+                }
             }
 
             @Override

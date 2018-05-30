@@ -5,14 +5,14 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import java.util.UUID;
-
 @Table(database = AppDatabase.class)
-public class DraftInfo extends BaseModel{
+public class BrushingDraft extends BaseModel {
     @PrimaryKey(autoincrement = true)
     long id;
     @Column
-    public String imagePath;
-    @Column
     public String imageId;
+    @Column
+    public int brushColor;
+    @Column
+    public int brushSize;
 }

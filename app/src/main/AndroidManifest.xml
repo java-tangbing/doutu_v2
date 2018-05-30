@@ -35,6 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".module.user.activity.DraftActivity"/>
         <activity android:name=".module.maker.activity.MakerFinishActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".module.maker.activity.EditImageActivity"

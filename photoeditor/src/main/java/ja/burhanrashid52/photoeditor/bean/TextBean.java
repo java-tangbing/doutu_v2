@@ -1,4 +1,4 @@
-package ja.burhanrashid52.photoeditor;
+package ja.burhanrashid52.photoeditor.bean;
 
 import android.graphics.Bitmap;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TextBean {
-    private View addEditText;
+    private View frameLayout;
     private TextView textView;
     private ImageView addImageClose;
     private FrameLayout addFrameLayout;
@@ -47,12 +47,12 @@ public class TextBean {
         this.addFrameLayout = addFrameLayout;
     }
 
-    public View getAddEditText() {
-        return addEditText;
+    public View getFrameLayout() {
+        return frameLayout;
     }
 
-    public void setAddEditText(View addEditText) {
-        this.addEditText = addEditText;
+    public void setFrameLayout(View frameLayout) {
+        this.frameLayout = frameLayout;
     }
 
     public boolean isVisibleBorder() {

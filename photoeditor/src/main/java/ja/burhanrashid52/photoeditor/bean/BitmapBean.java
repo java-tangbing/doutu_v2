@@ -1,4 +1,4 @@
-package ja.burhanrashid52.photoeditor;
+package ja.burhanrashid52.photoeditor.bean;
 
 import android.graphics.Bitmap;
 

@@ -13,6 +13,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -280,5 +281,9 @@ public class BrushDrawingView extends View {
             mBrushViewChangeListener.onStopDrawing();
             mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
         }
+    }
+
+    public void generateBimap(int left,int right,int top,int bottom) {
+        Log.e("fdsf",left + "  " + right + "  " + top + "  " + bottom);
     }
 }

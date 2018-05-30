@@ -13,6 +13,7 @@ import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.user.activity.AboutProductActivity;
+import com.pufei.gxdt.module.user.activity.DraftActivity;
 import com.pufei.gxdt.module.user.activity.SettingActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -105,7 +106,7 @@ public class UserFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), AboutProductActivity.class));
                 break;
             case R.id.tv_user_draft:
-                startActivity(new Intent(getActivity(), SettingActivity.class));
+                startActivity(new Intent(getActivity(), DraftActivity.class));
                 break;
             default:
                 break;

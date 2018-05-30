@@ -6,24 +6,8 @@
 
     <include layout="@layout/common_title" />
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_draft"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/fragment_draft_smart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.jcodecraeer.xrecyclerview.XRecyclerView
-                android:id="@+id/draft_xryv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="18dp"
-                android:focusableInTouchMode="true" />
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-        <include layout="@layout/internet_fail" />
-    </FrameLayout>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

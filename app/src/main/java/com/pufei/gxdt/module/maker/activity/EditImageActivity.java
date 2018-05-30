@@ -10,9 +10,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -24,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,39 +33,42 @@ import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
+import com.pufei.gxdt.db.BrushingDraft;
+import com.pufei.gxdt.db.BrushingDraft_Table;
 import com.pufei.gxdt.db.DraftInfo;
 import com.pufei.gxdt.db.DraftInfo_Table;
+import com.pufei.gxdt.db.ImageDraft;
+import com.pufei.gxdt.db.ImageDraft_Table;
+import com.pufei.gxdt.db.TextDraft;
+import com.pufei.gxdt.db.TextDraft_Table;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.module.maker.fragment.ImageBlushFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageStickerFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageTextEditFragment;
-import com.pufei.gxdt.utils.BitmapMergerTask;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import ja.burhanrashid52.photoeditor.AddViewBean;
-import ja.burhanrashid52.photoeditor.BitmapBean;
-import ja.burhanrashid52.photoeditor.DraftBean;
+import ja.burhanrashid52.photoeditor.BrushDrawingView;
+import ja.burhanrashid52.photoeditor.bean.AddViewBean;
+import ja.burhanrashid52.photoeditor.bean.BitmapBean;
+import ja.burhanrashid52.photoeditor.bean.DraftImageBean;
+import ja.burhanrashid52.photoeditor.bean.DraftTextBean;
 import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
-import ja.burhanrashid52.photoeditor.TextBean;
 import ja.burhanrashid52.photoeditor.ViewType;
 
 public class EditImageActivity extends BaseActivity implements OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback,
@@ -94,6 +96,8 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     @BindView(R.id.mode_content)
     FrameLayout modeContent;
 
+    public static String IMAGE_ID = "IMAGE_ID";
+    public static String IMAGE_PATH = "IMAGE_PATH";
     private PhotoEditor mPhotoEditor;
     private List<Fragment> fragmentList;
     private int previousIndex;
@@ -103,6 +107,10 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     private ProgressDialog mProgressDialog;
     private File gifFile;
     private boolean isGifBg = false; //背景图片是否为gif图
+    private String imageId;//默认的图片id,草稿箱使用
+    private String imagePath;
+    private List<ImageDraft> imageDrafts;
+    private List<TextDraft> textDrafts;
 
     @Override
     public void initView() {
@@ -115,12 +123,65 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 .build(); // build photo editor sdk
 
         mPhotoEditor.setOnPhotoEditorListener(this);
-
+        imageDrafts = new ArrayList<>();
+        textDrafts = new ArrayList<>();
     }
 
     @Override
     public void getData() {
+        Intent intent = getIntent();
+        if(intent.getStringExtra(IMAGE_ID) == null) {
+            imageId = System.currentTimeMillis()+"";
+        }else {
+            imageId = intent.getStringExtra(IMAGE_ID);
+            imagePath = intent.getStringExtra(IMAGE_PATH);
 
+            if(imagePath.contains("http:") || imagePath.contains("https:")) {
+                GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
+            }else {
+                GlideApp.with(this).load(new File(imagePath)).into(photoEditorView.getSource());
+            }
+
+            imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).queryList();
+            textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).queryList();
+            initImageStatus(imageDrafts);
+            initTextStatus(textDrafts);
+        }
+    }
+
+    private void initTextStatus(List<TextDraft> textDrafts) {
+        for (int i = 0; i < textDrafts.size(); i++) {
+            final TextDraft draft = textDrafts.get(i);
+            final DraftTextBean bean = new DraftTextBean();
+            bean.setTranslationX(draft.translationX);
+            bean.setTranslationY(draft.translationY);
+            bean.setScaleX(draft.scaleX);
+            bean.setScaleY(draft.scaleY);
+            bean.setRotation(draft.rotation);
+            bean.setText(draft.text);
+            bean.setTextColor(draft.textColor);
+            bean.setTextSize(draft.textSize);
+            mPhotoEditor.reAddText(bean);
+        }
+    }
+
+    private void initImageStatus(List<ImageDraft> imageDrafts) {//重新编辑图片
+        for (int i = 0; i < imageDrafts.size(); i++) {
+            final ImageDraft draft = imageDrafts.get(i);
+            final DraftImageBean bean = new DraftImageBean();
+            bean.setTranslationX(draft.translationX);
+            bean.setTranslationY(draft.translationY);
+            bean.setScaleX(draft.scaleX);
+            bean.setScaleY(draft.scaleY);
+            bean.setRotation(draft.rotation);
+            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(draft.imageWidth, draft.imageHeight) {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                    mPhotoEditor.reAddImage(bean,resource,draft.stickerImagePath);
+                }
+            };
+            GlideApp.with(this).asBitmap().load(draft.stickerImagePath).into(simpleTarget);
+        }
     }
 
 
@@ -129,33 +190,59 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         return R.layout.activity_image_edit;
     }
 
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_redo, R.id.tv_undo, R.id.tv_delete, R.id.tv_pic_mode, R.id.tv_text_mode, R.id.tv_blush_mode})
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(final MakerEventMsg msg) {
+        if (msg.getType() == 0) {//替换背景图
+            mPhotoEditor.clearAllViews();
+            if (msg.getUrl().contains(".gif") || msg.getUrl().contains("GIF")) {
+                isGifBg = true;
+            } else {
+                isGifBg = false;
+            }
+            imagePath = msg.getUrl();
+            GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
+        } else if (msg.getType() == 1) {//贴图
+            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(240, 240) {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                    mPhotoEditor.addImage(resource,msg.getUrl());
+                }
+            };
+            GlideApp.with(this).asBitmap().load(msg.getUrl()).into(simpleTarget);
+        } else if (msg.getType() == 2) {//更改文本颜色
+            mPhotoEditor.editText(rootView, text, msg.getColor());
+        }
+    }
+
+
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_redo, R.id.tv_undo, R.id.tv_delete, R.id.tv_pic_mode, R.id.tv_text_mode, R.id.tv_blush_mode,R.id.ll_title_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_title_back:
+                AppManager.getAppManager().finishActivity();
+                break;
             case R.id.btn_next:
-                if (isGifBg) {
+                if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                    gifFile = new File(imagePath);
                     saveGif();
                 } else {
                     saveImage();
                 }
                 break;
             case R.id.tv_save_draft:
-                for (int i = 0; i < mPhotoEditor.getAddViews().size(); i++) {
-                    TextBean bean = mPhotoEditor.getAddViews().get(i);
-                    TextView view1 = (TextView) bean.getTextView();
-                    DraftInfo draft = new DraftInfo();
-                    draft.viewId = 2;
-                    draft.color = view1.getCurrentTextColor();
-                    draft.type = view1.getGravity();
-                    draft.height = view1.getMeasuredHeight();
-                    draft.width = view1.getMeasuredWidth();
-                    draft.rotation = view1.getRotation();
-                    draft.xPos = view1.getX();
-                    draft.yPos = view1.getY();
-                    draft.text = view1.getText().toString();
-                    draft.insert();
-                }
-
+                saveToDraft();
                 break;
             case R.id.tv_redo:
                 mPhotoEditor.redo();
@@ -187,39 +274,65 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
+    private void saveToDraft() {
+        showLoading("saving");
+        SQLite.delete().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).execute();
+        SQLite.delete().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).execute();
+        SQLite.delete().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).execute();
+        SQLite.delete().from(BrushingDraft.class).where(BrushingDraft_Table.imageId.is(imageId)).execute();
+        List<AddViewBean> beans = mPhotoEditor.getAddedViews();
+        DraftInfo info = new DraftInfo();
+        info.imageId = imageId;
+        info.imagePath = imagePath;
+        info.insert();
+        if(beans.size() != 0) {
+            for (int i = 0; i < beans.size(); i++) {
+                AddViewBean bean = beans.get(i);
+                switch (bean.getType()) {
+                    case TEXT:
+                        TextDraft textDraft = new TextDraft();
+                        TextView tv = (TextView) bean.getAddView();
+                        FrameLayout textRoot = (FrameLayout)bean.getView();
+                        textDraft.text = tv.getText().toString();
+                        textDraft.textColor = tv.getCurrentTextColor();
+                        textDraft.textSize = tv.getTextSize();
+                        textDraft.translationX = textRoot.getTranslationX();
+                        textDraft.translationY = textRoot.getTranslationY();
+                        textDraft.scaleX = textRoot.getScaleX();
+                        textDraft.scaleY = textRoot.getScaleY();
+                        textDraft.rotation = textRoot.getRotation();
+                        textDraft.imageId = imageId;
+                        textDraft.insert();
+                        Log.e("x",textRoot.getWidth()+"");
+                        Log.e("y",textRoot.getHeight()+"");
+                        break;
+                    case IMAGE:
+                        ImageDraft imageDraft = new ImageDraft();
+                        ImageView iv = (ImageView)bean.getAddView();
+                        FrameLayout rootview = (FrameLayout)bean.getView();
+                        imageDraft.translationX = rootview.getTranslationX();
+                        imageDraft.translationY = rootview.getTranslationY();
+                        imageDraft.scaleX = rootview.getScaleX();
+                        imageDraft.scaleY = rootview.getScaleY();
+                        imageDraft.rotation = rootview.getRotation();
+                        imageDraft.imageHeight = iv.getHeight();
+                        imageDraft.imageWidth = iv.getWidth();
+                        imageDraft.stickerImagePath = bean.getChildImagePath() ;
+                        imageDraft.imageId = imageId;
+                        imageDraft.insert();
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(MakerEventMsg msg) {
-        if (msg.getType() == 0) {//替换背景图
-            mPhotoEditor.clearAllViews();
-            if (msg.getUrl().contains(".gif") || msg.getUrl().contains("GIF")) {
-                isGifBg = true;
-            } else {
-                isGifBg = false;
-            }
-            GlideApp.with(this).load(msg.getUrl()).into(photoEditorView.getSource());
-        } else if (msg.getType() == 1) {//贴图
-            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(240, 240) {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-                    mPhotoEditor.addImage(resource);
+                        break;
+                    case BRUSH_DRAWING:
+                        BrushDrawingView view = (BrushDrawingView)bean.getView();
+                        if (view != null)
+                            view.generateBimap(view.getLeft(),view.getRight(),view.getTop(),view.getBottom());
+                        break;
                 }
-            };
-            GlideApp.with(this).asBitmap().load(msg.getUrl()).into(simpleTarget);
-        } else if (msg.getType() == 2) {//更改文本颜色
-            mPhotoEditor.editText(rootView, text, msg.getColor());
+            }
         }
+
+        hideLoading();
+        ToastUtils.showShort(this,"保存成功");
     }
 
     private void saveGif() {
@@ -425,10 +538,18 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     }
 
     @Override
-    public void showBitmap(Bitmap bitmap) {
+    public void showBitmap(Bitmap bitmap,String path) {
         isGifBg = false;
+        imagePath = path;
         mPhotoEditor.clearAllViews();
         photoEditorView.getSource().setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void showGif(File gif,String path) {
+        isGifBg = true;
+        imagePath = path;
+        GlideApp.with(this).load(gif).into(photoEditorView.getSource());
     }
 
     @Override
@@ -495,11 +616,4 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         mPhotoEditor.brushEraser();
     }
 
-
-    @Override
-    public void showGif(File gif) {
-        isGifBg = true;
-        GlideApp.with(this).load(gif).into(photoEditorView.getSource());
-        gifFile = gif;
-    }
 }
