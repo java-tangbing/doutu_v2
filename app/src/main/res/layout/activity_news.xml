@@ -6,6 +6,11 @@
 
     <include layout="@layout/common_title"></include>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"></View>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/news_item_rv"
         android:layout_width="match_parent"
@@ -13,203 +18,199 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/hint_color"></View>-->
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/news_system_message"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:background="@color/white"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:id="@+id/news_system_message"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:background="@color/white"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="horizontal">-->
 
-        <!--<de.hdodenhof.circleimageview.CircleImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
 
-            <!--android:src="@mipmap/ic_launcher" />-->
+    <!--android:src="@mipmap/ic_launcher" />-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_weight="2"-->
-            <!--android:orientation="vertical">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_weight="2"-->
+    <!--android:orientation="vertical">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="系统消息"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:textSize="18sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="系统消息"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="18sp" />-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="测试一下" />-->
-        <!--</LinearLayout>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="测试一下" />-->
+    <!--</LinearLayout>-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="top|center_horizontal"-->
-            <!--android:orientation="horizontal">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="top|center_horizontal"-->
+    <!--android:orientation="horizontal">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="日期" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="日期" />-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:text="时间" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="时间" />-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 
     <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/hint_color"></View>-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:background="@color/hint_color"></View>-->
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/news_picture_message"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:background="@color/white"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:id="@+id/news_picture_message"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:background="@color/white"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="horizontal">-->
 
-        <!--<de.hdodenhof.circleimageview.CircleImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
 
-            <!--android:src="@mipmap/ic_launcher" />-->
+    <!--android:src="@mipmap/ic_launcher" />-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_weight="2"-->
-            <!--android:orientation="vertical">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_weight="2"-->
+    <!--android:orientation="vertical">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="斗图小助手"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:textSize="18sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="斗图小助手"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="18sp" />-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="测试一下" />-->
-        <!--</LinearLayout>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="测试一下" />-->
+    <!--</LinearLayout>-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="top|center_horizontal"-->
-            <!--android:orientation="horizontal">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="top|center_horizontal"-->
+    <!--android:orientation="horizontal">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="日期" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="日期" />-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:text="时间" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="时间" />-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 
     <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/hint_color"></View>-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:background="@color/hint_color"></View>-->
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/news_feedback_message"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:background="@color/white"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:id="@+id/news_feedback_message"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:background="@color/white"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="horizontal">-->
 
-        <!--<de.hdodenhof.circleimageview.CircleImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
 
-            <!--android:src="@mipmap/ic_launcher" />-->
+    <!--android:src="@mipmap/ic_launcher" />-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_weight="2"-->
-            <!--android:orientation="vertical">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_weight="2"-->
+    <!--android:orientation="vertical">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="意见反馈"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:textSize="18sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="意见反馈"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="18sp" />-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="测试一下" />-->
-        <!--</LinearLayout>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="测试一下" />-->
+    <!--</LinearLayout>-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="top|center_horizontal"-->
-            <!--android:orientation="horizontal">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="top|center_horizontal"-->
+    <!--android:orientation="horizontal">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="日期" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="日期" />-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:text="时间" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="时间" />-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 
     <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/hint_color"></View>-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:background="@color/hint_color"></View>-->
 </LinearLayout>
