@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
@@ -27,6 +29,12 @@ public class PictureDetailActivity extends BaseMvpActivity{
     ImageView iv_picture;
     @BindView(R.id.rl_picture)
     RecyclerView rl_picture;
+    @BindView(R.id.tv_eyes)
+    TextView tv_eyes;
+    @BindView(R.id.tv_hot)
+    TextView tv_hot;
+    @BindView(R.id.tv_change_img)
+    TextView tv_change_img;
     private int index;
     private String URL;
     private String path = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
@@ -52,6 +60,7 @@ public class PictureDetailActivity extends BaseMvpActivity{
                 picture_update_list.clear();
                 picture_update_list.addAll(pictureList);
                 adapter.notifyDataSetChanged();
+                setUserData(postion);
             }
         });
 
@@ -69,6 +78,12 @@ public class PictureDetailActivity extends BaseMvpActivity{
             joinPicture();
         }
         URL = pictureList.get(index).getUrl();
+        setUserData(index);
+    }
+    private void setUserData(int index){
+        tv_eyes.setText(pictureList.get(index).getView());
+        tv_hot.setText(pictureList.get(index).getHot());
+       // tv_change_img.setText(pictureList.get(index).getOrgintable());
     }
     private void joinPicture(){
         GlideApp.with(this).load(pictureList.get(index).getUrl()).placeholder(R.mipmap.loading).into(iv_picture);

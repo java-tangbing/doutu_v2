@@ -117,7 +117,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendCode(SendCodeBean sendCodeBean) {
-        if (sendCodeBean.getCode() == 0) {
+        if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
             isSendingCode = true;
             myCountDown.start();
             loginSendcode.setTextColor(getResources().getColor(R.color.circle_color));
@@ -130,13 +130,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendRusult(LoginResultBean resultBean) {
-        if (resultBean.getCode() == 0) {
-            LoginResultBean.UserinfoBean bean = resultBean.getUserinfo();
+        if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
+            LoginResultBean.ResultBean bean = resultBean.getResult();
             String name = "";
             String header = "";
             String gender = "";
             String address = "";
-//            if (!TextUtils.isEmpty(bean.getNickname())) {
+//            if (!TextUtils.isEmpty(bean.get())) {
 //                name = bean.getNickname();
 //            } else {
 //                name = "萌新上路";
@@ -144,21 +144,19 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 //            if (!TextUtils.isEmpty(bean.getAvatar())) {
 //                header = bean.getAvatar();
 //            }
-//            if (bean.getSex() == 1) {
-//                gender = "男";
-//            } else if (bean.getSex() == 2) {
-//                gender = "女";
-//            } else {
-//                gender = "保密";
-//            }
-//            if (!TextUtils.isEmpty(bean.getCity())) {
-//                address = bean.getCity();
-//            } else {
-//                address = "未知";
-//            }
-//            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.isPwd_set());
-            App.userBean = new UserBean(name, header, gender, address, "", "", true);
-            App.userBean.setPwd(bean.isPwd_set());
+            if (!TextUtils.isEmpty(bean.getGender())) {
+                gender = bean.getGender();
+            } else {
+                gender = "保密";
+            }
+            if (!TextUtils.isEmpty(bean.getCity())) {
+                address = bean.getCity();
+            } else {
+                address = "未知";
+            }
+            SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), "");
+//            App.userBean.setPwd(bean.isPwd_set());
             Log.e("LoginActivity", App.userBean.isPwd() + "");
             EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
@@ -167,7 +165,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             AppManager.getAppManager().finishActivity();
             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
-        } else if (resultBean.getCode() == 1) {
+        } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
             //ToastUtils.showShort(this, resultBean.getMsg());
             Intent intent = new Intent(this, BindPhoneActivity.class);
             intent.putExtra("openId", openid);

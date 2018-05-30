@@ -21,8 +21,11 @@ import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,8 +45,12 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
     LinearLayout request_failed;
     @BindView(R.id.rl_theme)
     XRecyclerView rl_theme;
+    @BindView(R.id.srl_theme_detail)
+    SmartRefreshLayout srl_theme_detail;
     @BindView(R.id.tv_theme_name)
     TextView tv_theme_name;
+    @BindView(R.id.tv_content)
+    TextView tv_content;
     private HotAdapter adapter;
     private List<PictureResultBean.ResultBean> list = new ArrayList<>();
     private int page = 1;
@@ -54,12 +61,50 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
         title = bundle.getString("title");
-        timeString = bundle.getString("time");
+        timeString = bundle.getString("desc");
         rl_theme.setLayoutManager(new GridLayoutManager(PictureActivity.this, 3));
         adapter = new HotAdapter(PictureActivity.this, list);
         rl_theme.setPullRefreshEnabled(false);
         rl_theme.addItemDecoration(new SpaceItemDecoration(dp2px(PictureActivity.this, 10)));
         rl_theme.setAdapter(adapter);
+        srl_theme_detail.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
+        srl_theme_detail.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
+        srl_theme_detail.setEnableLoadmore(true);
+        srl_theme_detail.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
+            @Override
+            public void onLoadmore(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        page++;
+                        requestThemeDetail(page);
+                        try {
+                            refreshlayout.finishLoadmore();
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, 2000);
+            }
+
+            @Override
+            public void onRefresh(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        page = 1;
+                        requestThemeDetail(page);
+                        try {
+                            refreshlayout.finishRefresh();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 2000);
+            }
+        });
+
         adapter.setOnItemClickListener(new HotAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
@@ -87,13 +132,14 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
     @Override
     public void getData() {
         tv_theme_name.setText(title);
+        tv_content.setText(timeString);
         if (NetWorkUtil.isNetworkConnected(PictureActivity.this)) {
-            requestThemeDetail();
+            requestThemeDetail(page);
         }else{
             request_failed.setVisibility(View.VISIBLE);
         }
     }
-    private void requestThemeDetail(){
+    private void requestThemeDetail(int page){
         JSONObject jsonObject = KeyUtil.getJson(this);
         try{
             jsonObject.put("category_id", id);
@@ -125,7 +171,9 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
     @Override
     public void resultThemeImageDetail(PictureResultBean bean) {
         if(bean!=null){
-            list.clear();
+            if(page == 1){
+                list.clear();
+            }
             list.addAll(bean.getResult());
             adapter.notifyDataSetChanged();
         }

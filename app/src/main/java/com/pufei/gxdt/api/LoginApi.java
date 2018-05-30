@@ -10,7 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 /**
- * 创建者： wangwenzhang 时间： 2018/3/9.
+ * 创建者： wangwenzhang 时间2018/3/9.
  */
 
 public interface LoginApi {
@@ -18,15 +18,15 @@ public interface LoginApi {
     Observable<SendCodeBean> getTestContent(@Body RequestBody body);
     @POST("User/loignMobile")
     Observable<LoginResultBean> getCodeResult(@Body RequestBody body);
-    @POST("v2/login/qq")
+    @POST("login/qq")
     Observable<LoginResultBean> loginWithQQ(@Body RequestBody body);
-    @POST("v2/login/wx")
+    @POST("login/wx")
     Observable<LoginResultBean> loginWithWX(@Body RequestBody body);
     @POST("User/mobileBind")
     Observable<LoginResultBean> bindPhone(@Body RequestBody body);
-    @POST("v2/login/pwd")
+    @POST("login/pwd")
     Observable<LoginResultBean> loginWithPwd(@Body RequestBody request);
-    @POST("v2/login/retrieve_password")
+    @POST("login/retrieve_password")
     Observable<ModifyResultBean> retrievePwd(@Body RequestBody body);
 
 }

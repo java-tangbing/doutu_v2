@@ -13,7 +13,7 @@ public class UserBean {
     private String phone;
     private boolean pwd;
 
-    public UserBean(String name, String head, String gender, String address, String auth, String phone, boolean pwd) {
+    public UserBean(String name, String head, String gender, String address, String auth, String phone) {
         this.name = name;
         this.head = head;
         this.gender = gender;

@@ -26,20 +26,14 @@ public class ThemeImageAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewH
     }
     @Override
     public XRecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        if (viewType==0){
             View view= LayoutInflater.from(mcontext).inflate(R.layout.item_theme_image,parent,false);
             MyHodler hodler=new MyHodler(view,mListener);
             return hodler;
-//        }else {
-//            View view=LayoutInflater.from(mcontext).inflate(R.layout.fragment_pager_advert,parent,false);
-//            AdvertHodler hodler=new AdvertHodler(view,mListener);
-//            return hodler;
-//        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return list.get(position).getType();
+        return 0;
     }
 
     @Override
@@ -51,6 +45,7 @@ public class ThemeImageAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewH
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler)holder).titletv.setText(list.get(position).getCategory_name());
+            ((MyHodler)holder).tv_desc.setText(list.get(position).getDesc());
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler)holder).iv1);
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler)holder).iv2);
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler)holder).iv3);
@@ -60,13 +55,14 @@ public class ThemeImageAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewH
     }
 
     static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView titletv;
+        private TextView titletv,tv_desc;
         private ImageView iv1, iv2, iv3;
         public MyHodler(View itemView, MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener=myItemClickListener;
             itemView.setOnClickListener(this);
             titletv = (TextView) itemView.findViewById(R.id.fragment_pager_itme_title);
+            tv_desc = (TextView) itemView.findViewById(R.id.tv_desc);
             iv1 = (ImageView) itemView.findViewById(R.id.fragment_pager_item_image1);
             iv2 = (ImageView) itemView.findViewById(R.id.fragment_pager_item_image2);
             iv3 = (ImageView) itemView.findViewById(R.id.fragment_pager_item_image3);
