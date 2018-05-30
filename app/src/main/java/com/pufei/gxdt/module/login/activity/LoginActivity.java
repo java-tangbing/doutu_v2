@@ -33,6 +33,7 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
+import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -44,6 +45,8 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,10 +56,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-/**
- * 创建者： wangwenzhang 时间： 2018/3/7.
- */
 
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements LoginView {
     @BindView(R.id.login_iphone)
@@ -118,7 +117,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendCode(SendCodeBean sendCodeBean) {
-        if (sendCodeBean.getCode() == 0) {
+        if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
             isSendingCode = true;
             myCountDown.start();
             loginSendcode.setTextColor(getResources().getColor(R.color.circle_color));
@@ -131,24 +130,22 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendRusult(LoginResultBean resultBean) {
-        if (resultBean.getCode() == 0) {
-            LoginResultBean.UserinfoBean bean = resultBean.getUserinfo();
+        if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
+            LoginResultBean.ResultBean bean = resultBean.getResult();
             String name = "";
             String header = "";
             String gender = "";
             String address = "";
-            if (!TextUtils.isEmpty(bean.getNickname())) {
-                name = bean.getNickname();
-            } else {
-                name = "萌新上路";
-            }
-            if (!TextUtils.isEmpty(bean.getAvatar())) {
-                header = bean.getAvatar();
-            }
-            if (bean.getSex() == 1) {
-                gender = "男";
-            } else if (bean.getSex() == 2) {
-                gender = "女";
+//            if (!TextUtils.isEmpty(bean.get())) {
+//                name = bean.getNickname();
+//            } else {
+//                name = "萌新上路";
+//            }
+//            if (!TextUtils.isEmpty(bean.getAvatar())) {
+//                header = bean.getAvatar();
+//            }
+            if (!TextUtils.isEmpty(bean.getGender())) {
+                gender = bean.getGender();
             } else {
                 gender = "保密";
             }
@@ -157,21 +154,18 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             } else {
                 address = "未知";
             }
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.isPwd_set());
-            App.userBean.setPwd(bean.isPwd_set());
+            SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), "");
+//            App.userBean.setPwd(bean.isPwd_set());
             Log.e("LoginActivity", App.userBean.isPwd() + "");
             EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-//            if (loginFrom != NewsDetail.LOGIN_NEWS_COMMENT) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             AppManager.getAppManager().finishActivity();
             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//            } else {
-//                AppManager.getAppManager().finishActivity();
-//            }
 
-        } else if (resultBean.getCode() == 1) {
+        } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
             //ToastUtils.showShort(this, resultBean.getMsg());
             Intent intent = new Intent(this, BindPhoneActivity.class);
             intent.putExtra("openId", openid);
@@ -195,12 +189,16 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         switch (view.getId()) {
             case R.id.login_sendcode:
                 if (!isSendingCode) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("mobile", loginIphone.getText().toString());
-                    if (NetWorkUtil.isNetworkConnected(this)) {
-                        presenter.sendCode(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
-                    } else {
-                        ToastUtils.showShort(this, "请检查网络设置");
+                    try {
+                        JSONObject jsonObject = KeyUtil.getJson(this);
+                        jsonObject.put("mobile", loginIphone.getText().toString());
+                        if (NetWorkUtil.isNetworkConnected(this)) {
+                            presenter.sendCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                        } else {
+                            ToastUtils.showShort(this, "请检查网络设置");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
                 break;
@@ -208,15 +206,20 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 if (cxAgreement.isChecked()) {
                     if (loginSendcode.getVisibility() == View.VISIBLE) {//验证码登录
                         UmengStatisticsUtil.statisticsEvent(this, "Login", "vcodeLogin", "验证码登录");
-                        Map<String, String> map1 = new HashMap<String, String>();
-                        map1.put("mobile", loginIphone.getText().toString());
-                        map1.put("vcode", loginCode.getText().toString());
-                        if (NetWorkUtil.isNetworkConnected(this)) {
-                            presenter.validationCode(RetrofitFactory.getRequestBody(new Gson().toJson(map1)));
-                        } else {
-                            ToastUtils.showShort(this, "请检查网络设置");
+                        try {
+                            JSONObject jsonObject = KeyUtil.getJson(this);
+                            jsonObject.put("mobile", loginIphone.getText().toString());
+                            jsonObject.put("code", loginCode.getText().toString());
+                            if (NetWorkUtil.isNetworkConnected(this)) {
+                                presenter.validationCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                            } else {
+                                ToastUtils.showShort(this, "请检查网络设置");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     } else {
+                        UmengStatisticsUtil.statisticsEvent(this, "Login", "pwdLogin", "密码登录");
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("mobile", loginIphone.getText().toString());
                         map.put("password", loginCode.getText().toString());
@@ -226,7 +229,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                             ToastUtils.showShort(this, "请检查网络设置");
 
                         }
-                        UmengStatisticsUtil.statisticsEvent(this, "Login", "pwdLogin", "密码登录");
                     }
                 } else {
                     ToastUtils.showShort(this, "请勾选用户协议");

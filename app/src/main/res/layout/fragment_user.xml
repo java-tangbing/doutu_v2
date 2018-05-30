@@ -1,148 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/black">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/btn_checkin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
-            android:text="签到"
-            android:textColor="@color/textColor"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/btn_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:text="设置"
-            android:textColor="@color/textColor" />
-
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none">
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/fm_head"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="170dp"
+            android:background="@mipmap/user_bg">
 
-            <LinearLayout
-                android:id="@+id/fm_head"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:background="@mipmap/user_bg"
+            <TextView
+                android:id="@+id/tv_checkin_state"
+                android:layout_width="59dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rect_rounded_left_arc"
                 android:gravity="center"
+                android:text="签到"
+                android:textColor="@color/about_tv_color"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_checkin_state"
+                android:layout_gravity="left"
+                android:layout_margin="15dp"
                 android:orientation="vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_user_head"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:id="@+id/user_head"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/my_uer_picture" />
 
                 <TextView
-                    android:id="@+id/tv_user_name"
+                    android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="9dp"
+                    android:layout_toRightOf="@id/user_head"
                     android:text="大米粒"
-                    android:textColor="@color/textColor"
+                    android:textColor="@color/white"
                     android:textSize="18sp" />
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_sex"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="11dp"
+                    android:layout_toRightOf="@id/user_name"
+                    android:src="@mipmap/user_ic_woman" />
 
-            <TextView
-                android:id="@+id/tv_user_task"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="40dp"
-                android:drawablePadding="10dp"
-                android:drawableRight="@mipmap/com_bt_next"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="我的任务"
-                android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/user_dec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/user_name"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="9dp"
+                    android:layout_toRightOf="@id/user_head"
+                    android:text="个性签名"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/lineColor" />
+                <TextView
+                    android:id="@+id/user_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="9dp"
+                    android:text="编辑"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/tv_user_favorite"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:drawablePadding="10dp"
-                android:drawableRight="@mipmap/com_bt_next"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="我的收藏"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="7dp"
-                android:background="@color/bgColor" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:drawablePadding="10dp"
-                android:drawableRight="@mipmap/com_bt_next"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="版本检测"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/lineColor" />
-
-            <TextView
-                android:id="@+id/tv_about_product"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:drawablePadding="10dp"
-                android:drawableRight="@mipmap/com_bt_next"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="关于产品"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/lineColor" />
-
-        </LinearLayout>
-    </ScrollView>
+            </RelativeLayout>
+        </RelativeLayout>
 
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_user_publish"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="40dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/com_bt_next"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="我的发布"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor" />
+
+        <TextView
+            android:id="@+id/tv_user_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/com_bt_next"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="我的收藏"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor" />
+
+        <TextView
+            android:id="@+id/tv_user_draft"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/com_bt_next"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="我的草稿箱"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:background="@color/lineColor" />
+
+
+        <TextView
+            android:id="@+id/tv_douqi"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/com_bt_next"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="斗气榜单"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor" />
+
+        <TextView
+            android:id="@+id/tv_about_product"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:drawablePadding="10dp"
+            android:drawableRight="@mipmap/com_bt_next"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="设置中心"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lineColor" />
+
+    </LinearLayout>
+</ScrollView>

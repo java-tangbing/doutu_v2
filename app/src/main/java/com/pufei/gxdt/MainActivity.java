@@ -1,23 +1,19 @@
 package com.pufei.gxdt;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
 import com.pufei.gxdt.module.discover.fragment.DiscoverFragment;
 import com.pufei.gxdt.module.home.fragment.HomeFragment;
 import com.pufei.gxdt.module.maker.fragment.MakerFragment;
+import com.pufei.gxdt.module.user.fragment.UserFragment;
 import com.pufei.gxdt.utils.AppManager;
 
 import java.util.ArrayList;
@@ -91,7 +87,7 @@ public class MainActivity extends BaseActivity {
         fragmentList.add(new HomeFragment());
         fragmentList.add(new DiscoverFragment());
         fragmentList.add(new MakerFragment());
-        fragmentList.add(new HomeFragment());
+        fragmentList.add(new UserFragment());
     }
 
 

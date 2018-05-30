@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/maker_bg">
+
+    <include layout="@layout/common_title"/>
+
+    <ImageView
+        android:id="@+id/iv_face_image"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/btn_publish"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/setting_login_btn"
+        android:text="一键发布"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -139,7 +139,7 @@ public class RetrofitFactory {
                         .readTimeout(15, TimeUnit.SECONDS)
                         .writeTimeout(15, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true);
-//                builder.interceptors().add(logging);
+                builder.interceptors().add(logging);
                 retrofit = new Retrofit.Builder()
                         .baseUrl(Contents.BASE_URL)
                         .client(builder.build())

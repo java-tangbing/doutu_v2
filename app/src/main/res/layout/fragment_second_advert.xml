@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.pufei.gxdt.view.MyFrontTextView
+    <com.pufei.gxdt.widgets.MyFrontTextView
         android:id="@+id/fragment_second_title"
         android:layout_marginTop="10dp"
         android:gravity="left"

@@ -6,11 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
-import com.pufei.gxdt.base.BaseView;
-import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
 import com.pufei.gxdt.module.news.bean.NewsSystemBean;
-import com.pufei.gxdt.module.view.DiscoverView;
 
 import java.util.ArrayList;
 import java.util.List;

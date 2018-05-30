@@ -15,21 +15,20 @@
         android:src="@mipmap/ic_logo" />
 
     <TextView
-        android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="驾考大师 V"
+        android:text="驾考大师"
         android:textColor="@color/about_tv_color"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/tv_agreement"
+        android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:autoLink="all"
-        android:text="查阅用户协议"
+        android:text="v1.0.1"
         android:textColor="@color/about_tv_color"
         android:textSize="14sp" />
 
@@ -45,5 +44,57 @@
         android:textColor="@color/white"
         android:textSize="15sp"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_user_score"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="40dp"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/com_bt_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="去评分"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor" />
+
+    <TextView
+        android:id="@+id/tv_agreement"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/com_bt_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="用户协议"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor" />
+
+    <TextView
+        android:id="@+id/tv_user_manage"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/com_bt_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="管理规则"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor" />
 
 </LinearLayout>

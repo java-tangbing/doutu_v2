@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="TransDialogStyle" parent="@android:style/Theme.Dialog">
@@ -28,5 +29,11 @@
 
     <style name="checkBoxStyle">
         <item name="android:button">@drawable/checkbox_state</item>
+    </style>
+    <style name="switchStyle">
+        <item name="android:button">@drawable/switch_state</item>
+    </style>
+    <style name="DialogNoTitle" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item><!--除去title-->
     </style>
 </resources>

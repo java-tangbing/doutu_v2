@@ -2,12 +2,21 @@ package com.pufei.gxdt.module.maker.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -31,6 +40,7 @@ import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.module.maker.fragment.ImageBlushFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageStickerFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageTextEditFragment;
+import com.pufei.gxdt.utils.BitmapMergerTask;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -39,14 +49,19 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import ja.burhanrashid52.photoeditor.AddViewBean;
+import ja.burhanrashid52.photoeditor.BitmapBean;
 import ja.burhanrashid52.photoeditor.DraftBean;
 import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
@@ -54,7 +69,8 @@ import ja.burhanrashid52.photoeditor.PhotoEditorView;
 import ja.burhanrashid52.photoeditor.TextBean;
 import ja.burhanrashid52.photoeditor.ViewType;
 
-public class EditImageActivity extends BaseActivity implements OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback, ImageBlushFragment.SetBlushPropertiesListener {
+public class EditImageActivity extends BaseActivity implements OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback,
+        ImageStickerFragment.ShowGifCallback, ImageBlushFragment.SetBlushPropertiesListener {
     @BindView(R.id.btn_next)
     TextView btnNext;
     @BindView(R.id.photoEditorView)
@@ -85,7 +101,8 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     private String text;
     private int type = 0;
     private ProgressDialog mProgressDialog;
-
+    private File gifFile;
+    private boolean isGifBg = false; //背景图片是否为gif图
 
     @Override
     public void initView() {
@@ -106,6 +123,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     }
 
+
     @Override
     public int getLayout() {
         return R.layout.activity_image_edit;
@@ -115,7 +133,11 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_next:
-                saveImage();
+                if (isGifBg) {
+                    saveGif();
+                } else {
+                    saveImage();
+                }
                 break;
             case R.id.tv_save_draft:
                 for (int i = 0; i < mPhotoEditor.getAddViews().size(); i++) {
@@ -181,6 +203,11 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     public void onEvent(MakerEventMsg msg) {
         if (msg.getType() == 0) {//替换背景图
             mPhotoEditor.clearAllViews();
+            if (msg.getUrl().contains(".gif") || msg.getUrl().contains("GIF")) {
+                isGifBg = true;
+            } else {
+                isGifBg = false;
+            }
             GlideApp.with(this).load(msg.getUrl()).into(photoEditorView.getSource());
         } else if (msg.getType() == 1) {//贴图
             SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(240, 240) {
@@ -195,43 +222,70 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         }
     }
 
-    private void saveImage() {
+    private void saveGif() {
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
                         new AcpListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onGranted() {
-                                showLoading("Saving...");
-                                File file = new File(Environment.getExternalStorageDirectory()
-                                        + File.separator + ""
-                                        + System.currentTimeMillis() + ".png");
-                                try {
-                                    file.createNewFile();
-                                    if (ActivityCompat.checkSelfPermission(EditImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        // here to request the missing permissions, and then overriding
-                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                        //                                          int[] grantResults)
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                        return;
-                                    }
-                                    mPhotoEditor.saveImage(file.getAbsolutePath(), new PhotoEditor.OnSaveListener() {
-                                        @Override
-                                        public void onSuccess(@NonNull String imagePath) {
-                                            hideLoading();
-                                            photoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
-                                        }
-
-                                        @Override
-                                        public void onFailure(@NonNull Exception exception) {
-                                            hideLoading();
-                                        }
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                if (ActivityCompat.checkSelfPermission(EditImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
                                 }
+                                showLoading("Saving...");
+                                final String gifPath = Environment.getExternalStorageDirectory()
+                                        + File.separator + ""
+                                        + System.currentTimeMillis() + ".gif";
+
+                                photoEditorView.setBackgroundColor(Color.TRANSPARENT);
+                                photoEditorView.getSource().setBackgroundColor(Color.TRANSPARENT);
+                                photoEditorView.getSource().setImageAlpha(0);
+                                final List<BitmapBean> gifEncodeBitmap = new ArrayList<>();
+                                mPhotoEditor.saveGif(gifFile, new PhotoEditor.OnDecodeGifListener() {
+                                    @Override
+                                    public void onDecodeSuccess(List<BitmapBean> frameBitmaps, List<Bitmap> bitmaps) {
+                                        photoEditorView.getSource().setImageAlpha(255);
+                                        photoEditorView.setBackgroundColor(Color.WHITE);
+                                        photoEditorView.getSource().setBackgroundColor(Color.WHITE);
+                                        for (int i = 0; i < frameBitmaps.size(); i++) {
+                                            Bitmap bitmap = mergeBitmap(frameBitmaps.get(i).getBitmap(), bitmaps.get(0));
+                                            BitmapBean bean = new BitmapBean();
+                                            bean.setBitmap(bitmap);
+                                            bean.setDelay(frameBitmaps.get(i).getDelay());
+                                            gifEncodeBitmap.add(bean);
+                                        }
+                                        mPhotoEditor.encodeGif(photoEditorView.getWidth(), photoEditorView.getHeight(), gifPath, gifEncodeBitmap, new PhotoEditor.OnEncodeGifListener() {
+                                            @Override
+                                            public void onEncodeSuccess(String path) {
+                                                hideLoading();
+//                                                mPhotoEditor.clearAllViews();
+                                                Intent intent = new Intent(EditImageActivity.this,MakerFinishActivity.class);
+                                                intent.putExtra(MakerFinishActivity.IMAGE_PATH,path);
+                                                startActivity(intent);
+//                                                GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
+                                            }
+
+                                            @Override
+                                            public void onEncodeFailed(Exception e) {
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onDecodeFailed(Exception e) {
+                                        hideLoading();
+                                    }
+                                });
+
                             }
 
                             @Override
@@ -239,6 +293,81 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                                 ToastUtils.showShort(EditImageActivity.this, "请求权限失败,请手动开启！");
                             }
                         });
+    }
+
+    private void saveImage() {
+        Acp.getInstance(this)
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                        new AcpListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onGranted() {
+                                if (ActivityCompat.checkSelfPermission(EditImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                showLoading("Saving...");
+                                final String path = Environment.getExternalStorageDirectory()
+                                        + File.separator + ""
+                                        + System.currentTimeMillis() + ".png";
+
+                                mPhotoEditor.saveImage(path, new PhotoEditor.OnSaveListener() {
+                                    @Override
+                                    public void onSuccess(@NonNull String imagePath) {
+                                        hideLoading();
+                                        Intent intent = new Intent(EditImageActivity.this,MakerFinishActivity.class);
+                                        intent.putExtra(MakerFinishActivity.IMAGE_PATH,imagePath);
+                                        startActivity(intent);
+//                                        photoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        hideLoading();
+                                    }
+                                });
+
+
+                            }
+
+                            @Override
+                            public void onDenied(List<String> permissions) {
+                                ToastUtils.showShort(EditImageActivity.this, "请求权限失败,请手动开启！");
+                            }
+                        });
+    }
+
+    public Bitmap setImgSize(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return newbm;
+    }
+
+    public Bitmap mergeBitmap(Bitmap backBitmap, Bitmap frontBitmap) {
+        int bgWidth = photoEditorView.getWidth();
+        int bgHeight = photoEditorView.getHeight();
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        Bitmap newbmp = Bitmap.createBitmap(bgWidth, bgHeight, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(newbmp);
+        cv.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
+        backBitmap = setImgSize(backBitmap, bgWidth, bgHeight);
+        cv.drawBitmap(backBitmap, 0, 0, paint);
+        cv.drawBitmap(frontBitmap, 0, 0, paint);
+        cv.save(Canvas.ALL_SAVE_FLAG);
+        cv.restore();
+        return newbmp;
     }
 
     void showLoading(@NonNull String message) {
@@ -297,6 +426,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     @Override
     public void showBitmap(Bitmap bitmap) {
+        isGifBg = false;
         mPhotoEditor.clearAllViews();
         photoEditorView.getSource().setImageBitmap(bitmap);
     }
@@ -366,4 +496,10 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
     }
 
 
+    @Override
+    public void showGif(File gif) {
+        isGifBg = true;
+        GlideApp.with(this).load(gif).into(photoEditorView.getSource());
+        gifFile = gif;
+    }
 }

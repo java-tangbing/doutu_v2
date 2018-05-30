@@ -41,12 +41,10 @@
 
         <ja.burhanrashid52.photoeditor.PhotoEditorView
             android:id="@+id/photoEditorView"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="320dp"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:photo_src="@mipmap/ic_launcher"
+            android:layout_gravity="center"
             android:background="@color/white"/>
 
         <LinearLayout
