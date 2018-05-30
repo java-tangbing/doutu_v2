@@ -9,8 +9,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.news.adapter.NewsFeedBackAdapter;
-import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
-import com.pufei.gxdt.module.news.bean.NewsSystemBean;
+import com.pufei.gxdt.module.news.bean.NewsBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity {
     @BindView(R.id.ll_title_left)
     LinearLayout backlinearLayout;
     NewsFeedBackAdapter newsFeedBackAdapter;
-    private List<NewsSystemBean> mlist;
+    private List<NewsBean> mlist;
 
     @Override
     public void initView() {
@@ -37,7 +36,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity {
     public void getData() {
         mlist = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            NewsSystemBean bean = new NewsSystemBean();
+            NewsBean bean = new NewsBean();
             mlist.add(bean);
         }
         newsFeedBackAdapter = new NewsFeedBackAdapter(mlist);

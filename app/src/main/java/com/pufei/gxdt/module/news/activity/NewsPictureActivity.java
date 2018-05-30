@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
@@ -14,7 +13,7 @@ import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.discover.activity.DiscoverDetailedActivity;
 import com.pufei.gxdt.module.news.adapter.NewsPictureAdapter;
 
-import com.pufei.gxdt.module.news.bean.NewsSystemBean;
+import com.pufei.gxdt.module.news.bean.NewsBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class NewsPictureActivity extends BaseMvpActivity implements BaseQuickAda
     @BindView(R.id.news_picture_rv)
     RecyclerView recyclerView;
     NewsPictureAdapter newsPictureAdapter;
-    private List<NewsSystemBean> mlist;
+    private List<NewsBean> mlist;
 
     @Override
     public void initView() {
@@ -38,7 +37,7 @@ public class NewsPictureActivity extends BaseMvpActivity implements BaseQuickAda
     public void getData() {
         mlist = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            NewsSystemBean bean = new NewsSystemBean();
+            NewsBean bean = new NewsBean();
             mlist.add(bean);
         }
         newsPictureAdapter = new NewsPictureAdapter(mlist);
