@@ -15,6 +15,7 @@ import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.module.user.adapter.FavoriteTabVpAdapter;
 import com.pufei.gxdt.module.user.fragment.FavoriteJokeFragment;
 import com.pufei.gxdt.module.user.fragment.FavoritePkgFragment;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
 
 import java.lang.reflect.Field;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class FavoriteActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
     @BindView(R.id.ll_title_left)
@@ -33,7 +35,7 @@ public class FavoriteActivity extends BaseActivity implements TabLayout.OnTabSel
     TabLayout tabDriver;
     @BindView(R.id.home_vp_driver)
     MyViewPager homeVpDriver;
-//    @BindView(R.id.fake_status_bar)
+    //    @BindView(R.id.fake_status_bar)
 //    View mFakeStatusBar;
     private List<Fragment> fragmentList;
     private List<String> titleList;
@@ -65,6 +67,11 @@ public class FavoriteActivity extends BaseActivity implements TabLayout.OnTabSel
         tabDriver.addOnTabSelectedListener(this);
         tabDriver.setupWithViewPager(homeVpDriver);
         reflexTabIndicatorWidth();
+    }
+
+    @OnClick(R.id.ll_title_left)
+    public void backLastActivity() {
+        AppManager.getAppManager().finishActivity();
     }
 
     private void addfragment() {

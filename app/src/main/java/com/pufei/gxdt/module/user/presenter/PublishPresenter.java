@@ -5,6 +5,7 @@ import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.view.ImageTypeView;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.view.PublishView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -16,12 +17,12 @@ import okhttp3.RequestBody;
 public class PublishPresenter extends BasePresenter<PublishView> {
 
     public void getPublish(RequestBody body) {
-            Disposable disposable = ApiService.getImageTypeAoi().getHotList(body)
+            Disposable disposable = ApiService.getPersonalApi().getMymyDesignImages(body)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<PictureResultBean>() {
+                    .subscribe(new Consumer<MyImagesBean>() {
                     @Override
-                    public void accept(PictureResultBean result) throws Exception {
+                    public void accept(MyImagesBean result) throws Exception {
                         baseview.resultPublish(result);
                     }
                 });
