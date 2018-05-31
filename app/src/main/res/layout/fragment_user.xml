@@ -15,7 +15,7 @@
             android:id="@+id/fm_head"
             android:layout_width="match_parent"
             android:layout_height="170dp"
-            android:background="@mipmap/user_bg">
+            android:background="@mipmap/user_bg_picture">
 
             <FrameLayout
                 android:id="@+id/id_sign"

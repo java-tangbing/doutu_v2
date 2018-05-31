@@ -21,12 +21,16 @@ import com.pufei.gxdt.module.user.bean.SetPersonalResultBean;
 import com.pufei.gxdt.module.user.presenter.SetPersonalPresenter;
 import com.pufei.gxdt.module.user.view.SetPersonalView;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
+import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,21 +83,21 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
             case R.id.tv_right:
                 result = etNickName.getText().toString();
                 if (!TextUtils.isEmpty(result)) {
-                    Map<String, Object> map1 = new HashMap<>();
-                    map1.put("auth", App.userBean.getAuth());
-                    Map<String, String> map2 = new HashMap<>();
-                    map2.put("nickname", etNickName.getText().toString());
-                    map1.put("data", map2);
-                    String resutString = new Gson().toJson(map1);
-                    if (NetWorkUtil.isNetworkConnected(this)) {
-                        RequestBody requestBody =
-                                RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                                        resutString);
-                        presenter.setPersonal(requestBody);
-                    } else {
-                        ToastUtils.showShort(this, "请检查网络设置");
+                    try {
+                        if (NetWorkUtil.isNetworkConnected(this)) {
+                            JSONObject jsonObject = KeyUtil.getJson(this);
+                            jsonObject.put("auth", App.userBean.getAuth());
+                            jsonObject.put("header", "");
+                            jsonObject.put("username", result);
+                            jsonObject.put("gender", "");
+                            jsonObject.put("mind", "");
+                            presenter.setPersonal(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                        } else {
+                            ToastUtils.showShort(this, "请检查网络设置");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
                 } else {
                     ToastUtils.showShort(EditNameActivity.this, "名字不能为空");
                 }
@@ -126,13 +130,13 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
 
     @Override
     public void setPersonalInfo(SetPersonalResultBean bean) {
-        if(bean.getCode() == 0) {
+        if (bean.getCode() == 0) {
             App.userBean.setName(result);
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             EventBus.getDefault().postSticky(new EventMsg(MsgType.UPDATA_USER));
             AppManager.getAppManager().finishActivity();
-        }else {
-            ToastUtils.showShort(this,bean.getMsg()+" ");
+        } else {
+            ToastUtils.showShort(this, bean.getMsg() + " ");
         }
     }
 
@@ -143,7 +147,7 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
 
     @Override
     public void setPresenter(SetPersonalPresenter presenter) {
-        if(presenter == null) {
+        if (presenter == null) {
             this.presenter = new SetPersonalPresenter();
             this.presenter.attachView(this);
         }
