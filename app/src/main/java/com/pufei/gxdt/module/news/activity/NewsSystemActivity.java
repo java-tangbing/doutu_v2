@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -34,10 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implements NewsView, BaseQuickAdapter.OnItemChildClickListener {
+    @BindView(R.id.tv_title)
+    TextView textViewTitle;
+    @BindView(R.id.ll_title_left)
+    LinearLayout linearLayoutBack;
+
     @BindView(R.id.news_system_rv)
     RecyclerView recyclerView;
     private TextView textViewBD;
@@ -54,11 +59,14 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         if (App.userBean.getPhone().length() > 0) {
             isbdphone = true;
         }
+        textViewTitle.setText(getResources().getString(R.string.news_system));
+        linearLayoutBack.setVisibility(View.VISIBLE);
+//        linearLayoutBack.setOnClickListener(this);
 
         auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
-        Intent intent = getIntent();
-//        intent.getStringExtra("auth");
-//        type = intent.getStringExtra("type");
+//        Intent intent = getIntent();
+////        intent.getStringExtra("auth");
+////        type = intent.getStringExtra("type");
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
@@ -142,15 +150,6 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     }
 
 
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.new_item_bd:
-//                ToastUtils.showLong(NewsSystemActivity.this, "请立即绑定手机号");
-//                break;
-//        }
-//    }
-
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
@@ -161,6 +160,15 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
                 intent.putExtras(bundle);
                 startActivity(intent);
                 ToastUtils.showLong(NewsSystemActivity.this, "请立即绑定手机号");
+                break;
+        }
+    }
+
+    @OnClick (R.id.ll_title_left)
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
+            case R.id.ll_title_left:
+                finish();
                 break;
         }
     }

@@ -12,15 +12,16 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/news_feedback_item_user_dateline_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="日期" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="时间" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:text="时间" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -38,6 +39,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/news_feedback_item_user_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left|top"
@@ -46,6 +48,8 @@
         </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/news_feedback_item_user_icon_cv"
+            android:layout_marginLeft="@dimen/dp_10"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"

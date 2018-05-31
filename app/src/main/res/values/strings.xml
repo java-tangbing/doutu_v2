@@ -9,6 +9,8 @@
     <string name="home_yingshi">影视</string>
     <string name="home_meishi">美食</string>
     <string name="home_qita">其他</string>
+    <string name="news_system">系统消息</string>
+    <string name="news_feedback">意见反馈</string>
     <string name="qq">分享QQ</string>
     <string name="weixin">分享微信</string>
     <string name="gaitu">改图</string>
