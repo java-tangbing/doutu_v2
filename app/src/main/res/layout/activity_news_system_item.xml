@@ -12,15 +12,16 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/news_system_item_dateline_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="日期" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="时间" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:text="时间" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -31,6 +32,7 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/news_system_item_cv"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
@@ -44,12 +46,20 @@
             android:gravity="left|center_vertical">
 
             <TextView
+                android:id="@+id/news_system_item_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="收到最新消息的测试时测试" />
 
-
+            <TextView
+                android:id="@+id/new_system_item_bd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/immediately_bind"
+                android:textColor="@color/khaki"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
