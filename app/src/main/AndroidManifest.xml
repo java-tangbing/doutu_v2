@@ -126,6 +126,9 @@
             android:name=".module.user.activity.FavoriteActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.user.activity.EditDeclarationActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".module.sign.ui.CrunchiesActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -153,8 +156,9 @@
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5850b381734be40cef0006f8" />
