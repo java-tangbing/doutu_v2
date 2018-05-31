@@ -46,7 +46,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
-        int spacing = 20; // px
+        int spacing = 30; // px
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.addItemDecoration(new DividerGridItemDecoration(activity));
@@ -141,6 +141,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //            isLoadMore = false;
             discoverAdapter.loadMoreEnd();
         }
+
     }
 
     @Override
