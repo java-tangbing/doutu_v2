@@ -11,9 +11,11 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.news.adapter.NewsAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
@@ -53,16 +55,17 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     private List<NoticeBean.ResultBean> mlist;
     private String auth = "";
 
+
     @Override
     public void initView() {
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
-        if (auth.length() > 0) {
-            textViewtitle.setText("消息");
-            backlinearLayout.setVisibility(View.VISIBLE);
-            LinearLayoutManager layoutManage = new LinearLayoutManager(this);
-            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-            recyclerView.setLayoutManager(layoutManage);
-        }
+
+
+        textViewtitle.setText("消息");
+        backlinearLayout.setVisibility(View.VISIBLE);
+        LinearLayoutManager layoutManage = new LinearLayoutManager(this);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(layoutManage);
+
 
     }
 
@@ -76,19 +79,24 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     }
 
     public void setMyadapter() {
-
-        JSONObject jsonObject = KeyUtil.getJson(this);
-        try {
-            jsonObject.put("id", "");
-            jsonObject.put("auth", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (NetWorkUtil.isNetworkConnected(this)) {
-            presenter.newsNoticeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        if (App.userBean == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
+            JSONObject jsonObject = KeyUtil.getJson(this);
+            try {
+                jsonObject.put("auth", auth);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                presenter.newsNoticeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } else {
+                ToastUtils.showShort(this, "请检查网络设置");
+            }
         }
+
     }
 
     @Override
@@ -126,10 +134,11 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
 
     @Override
     public void getNoticeList(NoticeBean bean) {
-        if (bean.getMsg() == "success") {
+        if (bean.getResult().size()>0) {
             mlist.addAll(bean.getResult());
             newsAdapter.notifyDataSetChanged();
         }
+//        ToastUtils.showShort(this, bean.getMsg());
     }
 
     @Override
