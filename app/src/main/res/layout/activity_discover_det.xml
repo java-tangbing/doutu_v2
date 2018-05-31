@@ -21,7 +21,8 @@
             android:id="@+id/dis_detailed_original_iv"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="@color/colorAccent" />
+            android:background="@color/colorAccent"
+            android:scaleType="fitXY" />
 
         <LinearLayout
             android:layout_width="match_parent"

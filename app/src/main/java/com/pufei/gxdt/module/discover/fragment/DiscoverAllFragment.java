@@ -9,6 +9,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.module.discover.activity.DisPictureDetailActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
@@ -57,10 +58,6 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     @Override
     public void getData() {
         mlist = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            DiscoverListBean.ResultBean bean = new DiscoverListBean.ResultBean();
-//            mlist.add(bean);
-//        }
         discoverAdapter = new DiscoverAdapter(mlist);
         discoverAdapter.setEnableLoadMore(false);
         discoverAdapter.setOnItemClickListener(this);
@@ -103,16 +100,12 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//        Intent intent = new Intent(activity, DiscoverDetailedActivity.class);
-////        intent.putExtra("a", a);
-////        intent.putExtra("b", b);
-//        startActivity(intent);
-        Intent intent = new Intent(activity, PictureDetailActivity.class);
+        Intent intent = new Intent(activity, DisPictureDetailActivity.class);
         Bundle bundle = new Bundle();
-//        bundle.putInt("picture_index", position);
-        bundle.putString("type", "discover");
+        bundle.putString("id", mlist.get(position).getId());
         bundle.putString("orginid", mlist.get(position).getOrginid());
         bundle.putString("orgintable", mlist.get(position).getOrgintable());
+        bundle.putInt("picture_index", position);
         bundle.putSerializable("picture_list", (Serializable) mlist);
         intent.putExtras(bundle);
         startActivity(intent);
