@@ -22,7 +22,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity {
     @BindView(R.id.ll_title_left)
     LinearLayout backlinearLayout;
     NewsFeedBackAdapter newsFeedBackAdapter;
-    private List<NewsBean> mlist;
+    private List<NewsBean.ResultBean> mlist;
 
     @Override
     public void initView() {
@@ -35,10 +35,10 @@ public class NewsFeedBackActivity extends BaseMvpActivity {
     @Override
     public void getData() {
         mlist = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            NewsBean bean = new NewsBean();
-            mlist.add(bean);
-        }
+//        for (int i = 0; i < 5; i++) {
+//            NewsBean bean = new NewsBean();
+//            mlist.add(bean);
+//        }
         newsFeedBackAdapter = new NewsFeedBackAdapter(mlist);
 //        newsSystemAdapter.setOnItemClickListener(this);
 //        discoverAdapter.addHeaderView(videoHeaderView);

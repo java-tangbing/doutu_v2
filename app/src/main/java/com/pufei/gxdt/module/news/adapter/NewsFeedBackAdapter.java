@@ -7,7 +7,7 @@ import com.pufei.gxdt.module.news.bean.NewsBean;
 
 import java.util.List;
 
-public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean, BaseViewHolder> {
+public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.ResultBean, BaseViewHolder> {
 
 
     /**
@@ -16,15 +16,15 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean, Bas
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public NewsFeedBackAdapter(List data) {
+    public NewsFeedBackAdapter(List<NewsBean.ResultBean> data) {
         super(data);
-        addItemType(1101, R.layout.activity_news_feedback_item_user);
-        addItemType(1102, R.layout.activity_news_feedback_item_server);
+        addItemType(0, R.layout.activity_news_feedback_item_user);
+        addItemType(1, R.layout.activity_news_feedback_item_server);
     }
 
 
     @Override
-    protected void convert(BaseViewHolder helper, NewsBean item) {
+    protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
         switch (helper.getItemViewType()) {
             case 1101:
 //                helper.setImageUrl(R.id.tv, item.getContent());

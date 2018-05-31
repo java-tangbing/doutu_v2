@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.util.List;
 
-public class NewsBean  {
+public class NewsBean {
     /**
      * code : 0
      * msg : success
@@ -49,7 +49,9 @@ public class NewsBean  {
         this.result = result;
     }
 
-    public static class ResultBean {
+
+
+    public static class ResultBean implements MultiItemEntity {
         /**
          * id : 7
          * uid : 339839
@@ -132,6 +134,21 @@ public class NewsBean  {
 
         public void setOrgin(String orgin) {
             this.orgin = orgin;
+        }
+
+        @Override
+        public int getItemType() {
+            int itemtype = -1;
+            switch (getOrgin()) {
+                case "0":
+                    itemtype = 0;
+                    break;
+                case "1":
+                    itemtype = 1;
+                    break;
+            }
+            return itemtype;
+
         }
     }
 }
