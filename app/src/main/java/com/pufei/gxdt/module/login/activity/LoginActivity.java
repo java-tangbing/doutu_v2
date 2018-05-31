@@ -169,13 +169,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
         } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
-            //ToastUtils.showShort(this, resultBean.getMsg());
             Intent intent = new Intent(this, BindPhoneActivity.class);
             intent.putExtra("openId", openid);
             intent.putExtra("iconUrl", header);
             intent.putExtra("nickName", nickName);
             intent.putExtra("gender", gender);
             intent.putExtra("type", type);
+            intent.putExtra("orgin", orgin);
             startActivity(intent);
         } else {
             Toast.makeText(LoginActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();

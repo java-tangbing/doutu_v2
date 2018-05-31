@@ -115,43 +115,12 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     @Override
     public void bindResult(SendCodeBean sendCodeBean) {
         if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
-            LoginResultBean.ResultBean bean = resultBean.getResult();
-            String name = "";
-            String header = "";
-            String gender = "";
-            String address = "";
-//            if (!TextUtils.isEmpty(bean.get())) {
-//                name = bean.getNickname();
-//            } else {
-//                name = "萌新上路";
-//            }
-//            if (!TextUtils.isEmpty(bean.getAvatar())) {
-//                header = bean.getAvatar();
-//            }
-            if (!TextUtils.isEmpty(bean.getGender())) {
-                gender = bean.getGender();
-            } else {
-                gender = "保密";
-            }
-            if (!TextUtils.isEmpty(bean.getCity())) {
-                address = bean.getCity();
-            } else {
-                address = "未知";
-            }
-            SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), "");
-            EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
-            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-            Toast.makeText(BindPhoneActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
 
-        } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
-            ToastUtils.showShort(this, resultBean.getMsg());
-        } else {
-            Toast.makeText(BindPhoneActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
     }
 
