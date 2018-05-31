@@ -16,13 +16,16 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewsSystemAdapter extends BaseQuickAdapter<NewsBean.ResultBean, BaseViewHolder> {
-    public NewsSystemAdapter(@Nullable List<NewsBean.ResultBean> data) {
+    private boolean isbdphone;
+
+    public NewsSystemAdapter(@Nullable List<NewsBean.ResultBean> data, boolean isbdphone) {
         super(R.layout.activity_news_system_item, data);
+        this.isbdphone = isbdphone;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
-        if (App.userBean.getPhone().length() > 0) {
+        if (isbdphone) {
             helper.setGone(R.id.new_system_item_bd, true);
         } else {
             helper.setVisible(R.id.new_system_item_bd, true);

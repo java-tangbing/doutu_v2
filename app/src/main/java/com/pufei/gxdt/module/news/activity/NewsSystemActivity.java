@@ -1,6 +1,7 @@
 package com.pufei.gxdt.module.news.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
 import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
@@ -44,12 +46,15 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     private View viewHeader;
     private String auth = "";
     private String type = "";
-
+    private boolean isbdphone = false;
 //    private HeaderViewBind headerViewBind;
 
     @Override
     public void initView() {
-        if (App.userBean.getPhone().length()>0)
+        if (App.userBean.getPhone().length() > 0) {
+            isbdphone = true;
+        }
+
         auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         Intent intent = getIntent();
 //        intent.getStringExtra("auth");
@@ -69,7 +74,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 
 
         mlist = new ArrayList<>();
-        newsSystemAdapter = new NewsSystemAdapter(mlist);
+        newsSystemAdapter = new NewsSystemAdapter(mlist, isbdphone);
 //        newsSystemAdapter.setOnItemClickListener(this);
 //        newsSystemAdapter.addHeaderView(viewHeader);
 //        if (4 < 5) {
@@ -150,6 +155,11 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
             case R.id.new_system_item_bd:
+                Intent intent = new Intent(this, BindPhoneActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("sysMsg", "sysMsg");
+                intent.putExtras(bundle);
+                startActivity(intent);
                 ToastUtils.showLong(NewsSystemActivity.this, "请立即绑定手机号");
                 break;
         }

@@ -62,6 +62,7 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     private int gender;
     private String iconUrl;
     private int type;
+
     @Override
     public void initView() {
         loginIphone.setInputType(EditorInfo.TYPE_CLASS_PHONE);
@@ -72,11 +73,15 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
 
     @Override
     public void getData() {
-        openid = getIntent().getStringExtra("openId");
-        nickName = getIntent().getStringExtra("nickName");
-        gender = getIntent().getIntExtra("gender",0);
-        iconUrl = getIntent().getStringExtra("iconUrl");
-        type = getIntent().getIntExtra("type",1);
+        if (TextUtils.isEmpty(getIntent().getStringExtra("sysMsg"))) {
+
+        } else {
+            openid = getIntent().getStringExtra("openId");
+            nickName = getIntent().getStringExtra("nickName");
+            gender = getIntent().getIntExtra("gender", 0);
+            iconUrl = getIntent().getStringExtra("iconUrl");
+            type = getIntent().getIntExtra("type", 1);
+        }
     }
 
     @Override
@@ -133,8 +138,8 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             finish();
             Toast.makeText(BindPhoneActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
-        }else if(resultBean.getCode().equals(Contents.CODE_ONE)){
-            ToastUtils.showShort(this,resultBean.getMsg());
+        } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
+            ToastUtils.showShort(this, resultBean.getMsg());
         } else {
             Toast.makeText(BindPhoneActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
@@ -163,29 +168,29 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
                 loginIphone.setText("");
                 break;
             case R.id.login_sendcode:
-                if(!isSendingCode) {
-                    Map<String,String> map = new HashMap<>();
-                    map.put("mobile",loginIphone.getText().toString());
-                    if(NetWorkUtil.isNetworkConnected(this)) {
+                if (!isSendingCode) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("mobile", loginIphone.getText().toString());
+                    if (NetWorkUtil.isNetworkConnected(this)) {
                         presenter.sendCode(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
-                    }else {
-                        ToastUtils.showShort(this,"请检查网络设置");
+                    } else {
+                        ToastUtils.showShort(this, "请检查网络设置");
 
                     }
                 }
                 break;
             case R.id.btn_login:
-                Map<String,String> map = new HashMap<>();
-                map.put("openid",openid);
-                map.put("type",type+"");
-                map.put("mobile",loginIphone.getText().toString());
-                map.put("vcode",loginCode.getText().toString());
-                map.put("sex",gender+"");
-                map.put("nickname",nickName);
-                map.put("headimgurl",iconUrl);
-                if(NetWorkUtil.isNetworkConnected(this)) {
+                Map<String, String> map = new HashMap<>();
+                map.put("openid", openid);
+                map.put("type", type + "");
+                map.put("mobile", loginIphone.getText().toString());
+                map.put("vcode", loginCode.getText().toString());
+                map.put("sex", gender + "");
+                map.put("nickname", nickName);
+                map.put("headimgurl", iconUrl);
+                if (NetWorkUtil.isNetworkConnected(this)) {
                     presenter.bindPhone(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
-                }else {
+                } else {
                     ToastUtils.showShort(this, "请检查网络设置");
 
                 }
