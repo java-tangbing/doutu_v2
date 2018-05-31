@@ -19,6 +19,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
+    @BindView(R.id.tv_title)
+    TextView tv_title;
     @BindView(R.id.setting_data_editor)
     LinearLayout settingDataEditor;
     @BindView(R.id.setting_version_checking)
@@ -30,6 +32,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        tv_title.setText("设置");
         if (App.userBean != null) {
             settingLogOut.setText(R.string.log_out);
         }
@@ -42,7 +45,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public int getLayout() {
-        return R.layout.activity_profile;
+        return R.layout.activity_setting;
     }
 
     @OnClick({R.id.ll_title_left, R.id.setting_data_editor, R.id.setting_version_checking, R.id.setting_about_product, R.id.setting_log_out})

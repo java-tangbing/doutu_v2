@@ -2,11 +2,10 @@ package com.pufei.gxdt.module.login.model;
 
 public class LoginResultBean {
 
-
     /**
      * code : 0
      * msg : success
-     * result : {"auth":"2c98Z5cKXcF[c]wF9kZv1z[c]pBdCKBaWaxRr1CPw15QEZsHamc","uid":"345987","mobile":"18652959890","username":"18652959890","province":"","city":"","gender":"","header":"http://erp.xianwan.com/static/images/noimage.png","mind":""}
+     * result : {"auth":"42dbEUNyvhMRB0Xo35O0TWegzToOGg2vd9sI30xw","uid":"339839","mobile":"","username":"aaaa","province":"江苏","city":"南京","gender":"男","header":"www.baidu.com","orgin":"qq","mind":"个性签名"}
      */
 
     private String code;
@@ -39,15 +38,16 @@ public class LoginResultBean {
 
     public static class ResultBean {
         /**
-         * auth : 2c98Z5cKXcF[c]wF9kZv1z[c]pBdCKBaWaxRr1CPw15QEZsHamc
-         * uid : 345987
-         * mobile : 18652959890
-         * username : 18652959890
-         * province :
-         * city :
-         * gender :
-         * header : http://erp.xianwan.com/static/images/noimage.png
-         * mind :
+         * auth : 42dbEUNyvhMRB0Xo35O0TWegzToOGg2vd9sI30xw
+         * uid : 339839
+         * mobile :
+         * username : aaaa
+         * province : 江苏
+         * city : 南京
+         * gender : 男
+         * header : www.baidu.com
+         * orgin : qq
+         * mind : 个性签名
          */
 
         private String auth;
@@ -58,6 +58,7 @@ public class LoginResultBean {
         private String city;
         private String gender;
         private String header;
+        private String orgin;
         private String mind;
 
         public String getAuth() {
@@ -122,6 +123,14 @@ public class LoginResultBean {
 
         public void setHeader(String header) {
             this.header = header;
+        }
+
+        public String getOrgin() {
+            return orgin;
+        }
+
+        public void setOrgin(String orgin) {
+            this.orgin = orgin;
         }
 
         public String getMind() {

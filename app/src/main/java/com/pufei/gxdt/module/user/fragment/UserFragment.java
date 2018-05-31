@@ -122,10 +122,17 @@ public class UserFragment extends BaseFragment {
 
     @OnClick({R.id.tv_checkin_state, R.id.fm_head, R.id.user_edit, R.id.tv_user_favorite, R.id.tv_user_publish, R.id.tv_about_product, R.id.tv_douqi, R.id.tv_user_draft})
     public void onViewClicked(View view) {
+
+        if (App.userBean == null) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
+
         switch (view.getId()) {
             case R.id.tv_checkin_state:
-                if (App.token != null) {
-                    sharedPreferences.edit().putLong(App.token, System.currentTimeMillis()).apply();
+                if (App.userBean != null) {
+                    sharedPreferences.edit().putLong(App.userBean.getAuth(), System.currentTimeMillis()).apply();
                     initSign();
                     EventBus.getDefault().post(new EventBean(Contents.DAY_SIGN, null));
                     Intent intent1 = new Intent(getActivity(), SignActivity.class);
@@ -168,8 +175,8 @@ public class UserFragment extends BaseFragment {
     }
 
     private void initSign() {
-        if (App.token != null) {
-            long tiem = sharedPreferences.getLong(App.token, 0);
+        if (App.userBean.getAuth() != null) {
+            long tiem = sharedPreferences.getLong(App.userBean.getAuth(), 0);
             boolean isSign = IsTodaySign(tiem);
             if (isSign) {
                 fragmentCollectSign.setVisibility(View.GONE);
@@ -183,7 +190,7 @@ public class UserFragment extends BaseFragment {
     }
 
     private void initLoading() {
-        if (App.token != null) {
+        if (App.userBean.getAuth() != null) {
             fragmentCollectLoadingTv.setVisibility(View.GONE);
         } else {
             fragmentCollectLoadingTv.setVisibility(View.VISIBLE);
@@ -225,7 +232,7 @@ public class UserFragment extends BaseFragment {
     private void getScore() {
         JSONObject jsonObject = KeyUtil.getJson(getActivity());
         try {
-            jsonObject.put("auth", App.token);
+            jsonObject.put("auth", App.userBean.getAuth());
             OkhttpUtils.post(UrlString.GETSCORE, jsonObject.toString(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {

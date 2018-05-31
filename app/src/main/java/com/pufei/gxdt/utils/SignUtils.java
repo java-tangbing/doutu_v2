@@ -15,25 +15,25 @@ import java.util.Date;
 public class SignUtils {
     private static SharedPreferences setting;
     private static SignUtils signUtils;
-    public static SignUtils getInstance(Context context){
-        if (signUtils == null)
-        {
-            synchronized (DialogUtil.class)
-            {
-                if (signUtils == null)
-                {
-                    setting=context.getSharedPreferences(UrlString.SHARE_TAG,0);
+
+    public static SignUtils getInstance(Context context) {
+        if (signUtils == null) {
+            synchronized (DialogUtil.class) {
+                if (signUtils == null) {
+                    setting = context.getSharedPreferences(UrlString.SHARE_TAG, 0);
                     signUtils = new SignUtils();
                 }
             }
         }
         return signUtils;
     }
-    public   void setTime(long time){
-        setting.edit().putLong(App.token,time).apply();
+
+    public void setTime(long time) {
+        setting.edit().putLong(App.userBean.getAuth(), time).apply();
     }
-    public   boolean getTime() {
-        long time=setting.getLong(App.token,0);
+
+    public boolean getTime() {
+        long time = setting.getLong(App.userBean.getAuth(), 0);
         Calendar pre = Calendar.getInstance();
         Date predate = new Date(System.currentTimeMillis());
         pre.setTime(predate);
@@ -50,6 +50,7 @@ public class SignUtils {
         }
         return false;
     }
+
     public static boolean IsToday(long day) {
         Calendar pre = Calendar.getInstance();
         Date predate = new Date(System.currentTimeMillis());

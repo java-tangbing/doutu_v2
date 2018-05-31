@@ -21,6 +21,9 @@ public interface LoginApi {
     @POST("User/loignMobile")
     Observable<LoginResultBean> getCodeResult(@Body RequestBody body);
 
+    @POST("User/login")
+    Observable<LoginResultBean> thirdLogin(@Body RequestBody body);
+
     @POST("login/qq")
     Observable<LoginResultBean> loginWithQQ(@Body RequestBody body);
 
@@ -28,7 +31,7 @@ public interface LoginApi {
     Observable<LoginResultBean> loginWithWX(@Body RequestBody body);
 
     @POST("User/mobileBind")
-    Observable<LoginResultBean> bindPhone(@Body RequestBody body);
+    Observable<SendCodeBean> bindPhone(@Body RequestBody body);
 
     @POST("login/pwd")
     Observable<LoginResultBean> loginWithPwd(@Body RequestBody request);
