@@ -2,6 +2,8 @@ package com.pufei.gxdt.module.news.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,6 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.news.adapter.NewsAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
@@ -19,6 +22,7 @@ import com.pufei.gxdt.module.news.view.NewsView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -83,7 +87,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.newsNoticeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设�);
+            ToastUtils.showShort(this, "请检查网络设置");
         }
     }
 
