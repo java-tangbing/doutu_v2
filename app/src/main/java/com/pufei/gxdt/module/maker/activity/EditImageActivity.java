@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -19,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -55,7 +57,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +75,9 @@ import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
 import ja.burhanrashid52.photoeditor.ViewType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class EditImageActivity extends BaseActivity implements OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback,
         ImageStickerFragment.ShowGifCallback, ImageBlushFragment.SetBlushPropertiesListener {
@@ -129,6 +137,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     @Override
     public void getData() {
+
         Intent intent = getIntent();
         if(intent.getStringExtra(IMAGE_ID) == null) {
             imageId = System.currentTimeMillis()+"";
@@ -234,6 +243,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.btn_next:
+                saveToDraft(false);
                 if (imagePath.contains("gif") || imagePath.contains("GIF")) {
                     gifFile = new File(imagePath);
                     saveGif();
@@ -242,7 +252,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 }
                 break;
             case R.id.tv_save_draft:
-                saveToDraft();
+                saveToDraft(true);
                 break;
             case R.id.tv_redo:
                 mPhotoEditor.redo();
@@ -274,7 +284,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         }
     }
 
-    private void saveToDraft() {
+    private void saveToDraft(boolean isDraft) {
         showLoading("saving");
         SQLite.delete().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).execute();
         SQLite.delete().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).execute();
@@ -284,6 +294,8 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         DraftInfo info = new DraftInfo();
         info.imageId = imageId;
         info.imagePath = imagePath;
+        info.width = photoEditorView.getWidth();
+        info.height = photoEditorView.getHeight();
         info.insert();
         if(beans.size() != 0) {
             for (int i = 0; i < beans.size(); i++) {
@@ -302,9 +314,8 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                         textDraft.scaleY = textRoot.getScaleY();
                         textDraft.rotation = textRoot.getRotation();
                         textDraft.imageId = imageId;
+                        textDraft.isDraft = isDraft;
                         textDraft.insert();
-                        Log.e("x",textRoot.getWidth()+"");
-                        Log.e("y",textRoot.getHeight()+"");
                         break;
                     case IMAGE:
                         ImageDraft imageDraft = new ImageDraft();
@@ -319,6 +330,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                         imageDraft.imageWidth = iv.getWidth();
                         imageDraft.stickerImagePath = bean.getChildImagePath() ;
                         imageDraft.imageId = imageId;
+                        imageDraft.isDraft = isDraft;
                         imageDraft.insert();
 
                         break;
@@ -381,6 +393,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 //                                                mPhotoEditor.clearAllViews();
                                                 Intent intent = new Intent(EditImageActivity.this,MakerFinishActivity.class);
                                                 intent.putExtra(MakerFinishActivity.IMAGE_PATH,path);
+                                                intent.putExtra(MakerFinishActivity.IMAGE_ID,imageId);
                                                 startActivity(intent);
 //                                                GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
                                             }
@@ -436,6 +449,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                                         hideLoading();
                                         Intent intent = new Intent(EditImageActivity.this,MakerFinishActivity.class);
                                         intent.putExtra(MakerFinishActivity.IMAGE_PATH,imagePath);
+                                        intent.putExtra(MakerFinishActivity.IMAGE_ID,imageId);
                                         startActivity(intent);
 //                                        photoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
                                     }

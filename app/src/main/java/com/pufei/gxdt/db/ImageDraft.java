@@ -30,4 +30,6 @@ public class ImageDraft extends BaseModel {
     public float scaleY;
     @Column
     public float rotation;
+    @Column
+    public boolean isDraft;
 }

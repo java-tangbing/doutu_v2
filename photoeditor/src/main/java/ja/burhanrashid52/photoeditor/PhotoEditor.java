@@ -254,8 +254,6 @@ public class PhotoEditor implements BrushViewChangeListener {
         final ImageView imgClose = textRootView.findViewById(R.id.imgPhotoEditorClose);
         final FrameLayout frmBorder = textRootView.findViewById(R.id.frmBorder);
         frmBorder.setTag(true);
-        textRootView.setX(481.41235f);
-        textRootView.setY(37.36844f);
         textRootView.setTranslationX(reAdd.getTranslationX());
         textRootView.setTranslationY(reAdd.getTranslationY());
         textRootView.setScaleX(reAdd.getScaleX());
