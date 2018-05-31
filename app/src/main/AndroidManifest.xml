@@ -151,7 +151,10 @@
                 <data android:scheme="tencent1105886594" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5850b381734be40cef0006f8" />

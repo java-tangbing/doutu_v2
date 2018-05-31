@@ -44,8 +44,8 @@ public class App extends Application {
     }
 
     private void initUMConfig() {
-//        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
-//        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         PlatformConfig.setQQZone("1105886594", "CUKkoCW26egFbEL5");
         PlatformConfig.setWeixin("wx8f75dcadece0c95f", "ca3d1f513757b97bbdc313eafff76a8a");
     }
