@@ -9,6 +9,7 @@ import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 
@@ -21,8 +22,8 @@ public class App extends Application {
     public static int TEXT = 1;
     public static String typeId;
     public static UserBean userBean;
-    public static String token=null;
-    public static String Total_score="0";
+    public static String token = null;
+    public static String Total_score = "0";
     public static String path1 = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
 
     @Override
@@ -31,6 +32,7 @@ public class App extends Application {
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
         initPrefs();
+        initUMConfig();
         FlowManager.init(this);
     }
 
@@ -39,5 +41,12 @@ public class App extends Application {
      */
     protected void initPrefs() {
         SharedPreferencesUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
+    }
+
+    private void initUMConfig() {
+//        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
+//        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        PlatformConfig.setQQZone("1105886594", "CUKkoCW26egFbEL5");
+        PlatformConfig.setWeixin("wx8f75dcadece0c95f", "ca3d1f513757b97bbdc313eafff76a8a");
     }
 }
