@@ -74,6 +74,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         try {
             jsonObject.put("order", "");
             jsonObject.put("page", page + "");
+            jsonObject.put("auth", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -113,6 +114,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
+        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
             page = page + 1;
 //            if (isDiscover) {
