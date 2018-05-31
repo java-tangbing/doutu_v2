@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -34,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implements NewsView,View.OnClickListener {
+public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implements NewsView, BaseQuickAdapter.OnItemChildClickListener {
     @BindView(R.id.news_system_rv)
     RecyclerView recyclerView;
     private TextView textViewBD;
@@ -43,46 +44,44 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     private View viewHeader;
     private String auth = "";
     private String type = "";
+
 //    private HeaderViewBind headerViewBind;
 
     @Override
     public void initView() {
-
+        if (App.userBean.getPhone().length()>0)
         auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         Intent intent = getIntent();
 //        intent.getStringExtra("auth");
-        type = intent.getStringExtra("type");
+//        type = intent.getStringExtra("type");
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
-        viewHeader = getLayoutInflater().inflate(R.layout.activity_news_item_unlanded, (ViewGroup) recyclerView.getParent(), false);
-        textViewBD = (TextView) viewHeader.findViewById(R.id.new_item_unlanded_bd);
-        textViewBD.setOnClickListener(this);
+//        viewHeader = getLayoutInflater().inflate(R.layout.activity_news_item_unlanded, (ViewGroup) recyclerView.getParent(), false);
+//        textViewBD = (TextView) viewHeader.findViewById(R.id.new_item_unlanded_bd);
+//        textViewBD.setOnClickListener(this);
 
 //        headerViewBind = new HeaderViewBind(viewHeader);
     }
 
     @Override
     public void getData() {
-//        if (App.userBean == null) return;
+
+
         mlist = new ArrayList<>();
         newsSystemAdapter = new NewsSystemAdapter(mlist);
 //        newsSystemAdapter.setOnItemClickListener(this);
-        newsSystemAdapter.addHeaderView(viewHeader);
-        if (4 < 5) {
-            viewHeader.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(newsSystemAdapter);
-//            setMyAdapter();
-        }else {
-            viewHeader.setVisibility(View.GONE);
-            recyclerView.setAdapter(newsSystemAdapter);
-            setMyAdapter();
-        }
-
-
-
+//        newsSystemAdapter.addHeaderView(viewHeader);
+//        if (4 < 5) {
+//            viewHeader.setVisibility(View.VISIBLE);
+//            recyclerView.setAdapter(newsSystemAdapter);
+////            setMyAdapter();
+//        }else {
+//        viewHeader.setVisibility(View.GONE);
+        newsSystemAdapter.setOnItemChildClickListener(this);
+        recyclerView.setAdapter(newsSystemAdapter);
+        setMyAdapter();
 //        }
-
     }
 
 //    class HeaderViewBind {
@@ -92,13 +91,11 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 //    }
 
 
-
-
     public void setMyAdapter() {
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("auth", auth);
-            jsonObject.put("type", type);
+            jsonObject.put("type", 1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -140,10 +137,19 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     }
 
 
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.new_item_bd:
+//                ToastUtils.showLong(NewsSystemActivity.this, "请立即绑定手机号");
+//                break;
+//        }
+//    }
+
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.new_item_unlanded_bd:
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        switch (view.getId()) {
+            case R.id.new_system_item_bd:
                 ToastUtils.showLong(NewsSystemActivity.this, "请立即绑定手机号");
                 break;
         }

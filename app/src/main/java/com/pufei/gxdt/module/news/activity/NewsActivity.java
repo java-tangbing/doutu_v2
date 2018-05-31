@@ -152,10 +152,10 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
         switch (mlist.get(position).getType()) {
             case "1":
                 Intent intent = new Intent(this, NewsSystemActivity.class);
-                Bundle bundle = new Bundle();
-//                bundle.putString("auth", auth);
-                bundle.putString("type", "1");
-                intent.putExtras(bundle);
+//                Bundle bundle = new Bundle();
+////                bundle.putString("auth", auth);
+//                bundle.putString("type", "1");
+//                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case "2":
