@@ -35,6 +35,8 @@ import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
+import com.pufei.gxdt.contents.EventMsg;
+import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.db.BrushingDraft;
 import com.pufei.gxdt.db.BrushingDraft_Table;
 import com.pufei.gxdt.db.DraftInfo;
@@ -630,4 +632,9 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         mPhotoEditor.brushEraser();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().postSticky(new EventMsg(MsgType.MAKER_IMAGE));
+    }
 }
