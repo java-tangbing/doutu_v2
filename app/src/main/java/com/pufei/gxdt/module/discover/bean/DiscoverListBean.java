@@ -3,7 +3,7 @@ package com.pufei.gxdt.module.discover.bean;
 import java.io.Serializable;
 import java.util.List;
 
-public class DiscoverListBean {
+public class DiscoverListBean implements Serializable {
 
 
     /**
@@ -155,7 +155,7 @@ public class DiscoverListBean {
             this.user = user;
         }
 
-        public static class UserBean {
+        public static class UserBean implements Serializable {
             /**
              * header : http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg
              * username : abdcddd
