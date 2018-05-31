@@ -69,6 +69,7 @@ public class UserFragment extends BaseFragment {
     private String total = "0";
     private String times = "0";
     private boolean isSign = false;
+    private List<String> timeList;
     private String SHARE_APP_USER = "USER";
     private SharedPreferences sharedPreferences;
 
@@ -95,7 +96,7 @@ public class UserFragment extends BaseFragment {
     }
 
     private void initUserInfo() {
-
+        timeList = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences(SHARE_APP_USER, 0);
         if (App.userBean != null) {
             tvUserName.setText(App.userBean.getName());
@@ -108,8 +109,8 @@ public class UserFragment extends BaseFragment {
             tvUserName.setText("未登录");
             ivUserHead.setImageResource(R.mipmap.my_uer_picture);
         }
-
         initSign();
+        getScore();
         initLoading();
     }
 
@@ -184,7 +185,7 @@ public class UserFragment extends BaseFragment {
     private void initLoading() {
         if (App.token != null) {
             fragmentCollectLoadingTv.setVisibility(View.GONE);
-        }else {
+        } else {
             fragmentCollectLoadingTv.setVisibility(View.VISIBLE);
         }
     }
@@ -236,7 +237,6 @@ public class UserFragment extends BaseFragment {
                     String result = response.body().string();
                     try {
                         final GetScoreBean getScoreBean = new Gson().fromJson(result, GetScoreBean.class);
-                        final List<String> timeList = new ArrayList<>();
                         if (getScoreBean.getResult() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -254,9 +254,9 @@ public class UserFragment extends BaseFragment {
                                         try {
                                             if (isSign) {
                                                 fragmentCollectSign.setVisibility(View.GONE);
-                                                fragmentCollectSignBtn.setText("已签");
+//                                                fragmentCollectSignBtn.setText("已签");
                                             } else {
-                                                fragmentCollectSignBtn.setText("未签");
+//                                                fragmentCollectSignBtn.setText("未签");
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();

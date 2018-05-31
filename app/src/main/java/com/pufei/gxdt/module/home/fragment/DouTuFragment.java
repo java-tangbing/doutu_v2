@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.adapter.HotAdapter;
@@ -24,6 +25,7 @@ import com.pufei.gxdt.module.home.view.HomeListView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -133,22 +135,22 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
         requestData(page);
     }
     private void requestData(int page) {
-        if (NetWorkUtil.isNetworkConnected(getActivity())) {
-            try {
-                Bundle arguments = getArguments();
-                String category_id = null;
-                if(arguments != null){
-                    category_id = arguments.getString("id");
-                }
-                JSONObject jsonObject = KeyUtil.getJson(getActivity());
-                jsonObject.put("category_id",category_id);
-                jsonObject.put("page", page + "");
-                jsonObject.put("net", NetWorkUtil.netType(getActivity()));
-                presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (NetWorkUtil.isNetworkConnected(getActivity())) try {
+            Bundle arguments = getArguments();
+            String category_id = null;
+            if (arguments != null) {
+                category_id = arguments.getString("id");
             }
-        } else {
+            JSONObject jsonObject = KeyUtil.getJson(getActivity());
+            jsonObject.put("category_id", category_id);
+            jsonObject.put("page", page + "");
+            jsonObject.put("net", NetWorkUtil.netType(getActivity()));
+            jsonObject.put("net", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+            presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        else {
             request_failed.setVisibility(View.VISIBLE);
         }
     }
