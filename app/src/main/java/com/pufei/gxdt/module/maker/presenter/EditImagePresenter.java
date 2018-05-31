@@ -40,7 +40,7 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
         addSubscription(disposable);
     }
 
-    public void downloadImage(String url) {
+    public void downloadImage(String url, final int type) {
         Call<ResponseBody> call = ApiService.getEditImageApi().getImage(url);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -50,7 +50,7 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                     try {
                         byte[] inputData = getBytes(stream);
                         String base64 = Base64.encodeToString(inputData,Base64.NO_WRAP);
-                        baseview.downloadImageResult(base64);
+                        baseview.downloadImageResult(base64,type);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

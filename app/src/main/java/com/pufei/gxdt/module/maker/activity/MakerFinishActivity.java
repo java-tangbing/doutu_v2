@@ -66,11 +66,14 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     public static final String IMAGE_PATH = "image_path";
     public static final String IMAGE_ID = "IMAGE_ID";
     public static final String ORGINTABLE = "orgintable";
+    public static final String TYPE = "TYPE";
     private String path;
     private String imageId;
     private String imageBase64;
+    private String bgImageBase64;
     private DraftInfo info;
     private String orgintable;
+    private int type;
 
     @Override
     public void initView() {
@@ -83,11 +86,13 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         Intent intent = getIntent();
         path = intent.getStringExtra(IMAGE_PATH);
         imageId = intent.getStringExtra(IMAGE_ID);
+        type = intent.getIntExtra(TYPE,0);
         info = new Select().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).querySingle();
-        if(info != null) {
-            if(path.contains("http:") || path.contains("https:")) {
+        if (info != null) {
+            if (path.contains("http:") || path.contains("https:")) {//合成图
                 GlideApp.with(this).load(path).into(ivFaceImage);
-            }else {
+                presenter.downloadImage(path,0);
+            } else {
                 SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(info.width, info.height) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
@@ -97,6 +102,19 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 };
                 GlideApp.with(this).asBitmap().load(new File(path)).into(simpleTarget);
             }
+
+            if (!info.imagePath.contains("http:") || !info.imagePath.contains("https:")) {//背景图
+                SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(info.width, info.height) {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                        bgImageBase64 = ImageUtils.bitmapToBase64(resource);
+                    }
+                };
+                GlideApp.with(this).asBitmap().load(new File(info.imagePath)).into(simpleTarget);
+            }else {
+                presenter.downloadImage(info.imagePath,1);
+            }
+
         }
 
     }
@@ -113,7 +131,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.btn_publish:
-                if(info != null) {
+                if (info != null) {
                     String request = setRequestData();
                     presenter.upLoadImage(RetrofitFactory.getRequestBody(request));
                 }
@@ -124,22 +142,31 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     private String setRequestData() {
         List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).queryList();
         List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).queryList();
-
         Map<String, Object> map = new HashMap<>();
-        final List<Map<String,String>> mapList = new ArrayList<>();
+        final List<Map<String, String>> mapList = new ArrayList<>();
         map.put("deviceid", deviced());
         map.put("version", versionName());
         map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
         map.put("os", "1");
-        map.put("orginid", "");
+        if(type == 0 || type == 2) {
+            map.put("orginid", "");
+        }else {
+            map.put("orginid",imageId);
+        }
         map.put("orgintable", "design_images");
         map.put("height", info.height);
         map.put("width", info.width);
         map.put("title", "");
-        map.put("url", imageBase64);
-        map.put("sign","sign");
-        map.put("key","");
+        map.put("make_url", imageBase64);
+        map.put("url", bgImageBase64);
+        map.put("sign", "sign");
+        map.put("key", "");
         map.put("auth", App.userBean.getAuth());
+        if (path.contains(".gif") || path.contains(".GIF")) {
+            map.put("image_type", "gif");
+        } else {
+            map.put("image_type", "png");
+        }
         for (int i = 0; i < imageDrafts.size(); i++) {
             final ImageDraft draft = imageDrafts.get(i);
             final Map<String, String> map1 = new HashMap<>();
@@ -148,16 +175,16 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
                     map1.put("url", ImageUtils.bitmapToBase64(resource));
-                    map1.put("index", finalI +"");
+                    map1.put("index", finalI + "");
                     map1.put("textName", "");
-                    map1.put("centerX", draft.translationX+"");
-                    map1.put("centerY", draft.translationY+"");
-                    map1.put("height", draft.imageHeight+"");
-                    map1.put("width", draft.imageWidth+"");
+                    map1.put("centerX", draft.translationX + "");
+                    map1.put("centerY", draft.translationY + "");
+                    map1.put("height", draft.imageHeight + "");
+                    map1.put("width", draft.imageWidth + "");
                     map1.put("textFontSize", "");
                     map1.put("textFontColor", "");
-                    map1.put("zoom", draft.scaleX+"");
-                    map1.put("rolling", draft.rotation+"");
+                    map1.put("zoom", draft.scaleX + "");
+                    map1.put("rolling", draft.rotation + "");
                     mapList.add(map1);
                 }
             };
@@ -166,28 +193,28 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         }
         int index = imageDrafts.size();
         for (int i = 0; i < textDrafts.size(); i++) {
-            TextDraft  draft = textDrafts.get(i);
+            TextDraft draft = textDrafts.get(i);
             Map<String, String> map1 = new HashMap<>();
             map1.put("url", "");
-            map1.put("index", index+"");
+            map1.put("index", index + "");
             map1.put("textName", draft.text);
-            map1.put("centerX", draft.translationX+"");
-            map1.put("centerY", draft.translationY+"");
+            map1.put("centerX", draft.translationX + "");
+            map1.put("centerY", draft.translationY + "");
             map1.put("height", "");
             map1.put("width", "");
             map1.put("textFontSize", "");
-            map1.put("textFontColor", draft.textColor+"");
-            map1.put("zoom", draft.scaleX+"");
-            map1.put("rolling", draft.rotation+"");
+            map1.put("textFontColor", draft.textColor + "");
+            map1.put("zoom", draft.scaleX + "");
+            map1.put("rolling", draft.rotation + "");
             mapList.add(map1);
             index++;
         }
-        map.put("attachment",mapList);
+        map.put("attachment", mapList);
         return new Gson().toJson(map);
     }
 
     private String versionName() {
-        TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         PackageManager packageManager = getPackageManager();
         String packageName = getPackageName();
@@ -221,8 +248,12 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     }
 
     @Override
-    public void downloadImageResult(String base64) {
-        imageBase64 = base64;
+    public void downloadImageResult(String base64,int type) {
+        if (type == 0) {
+            imageBase64 = base64;
+        }else {
+            bgImageBase64 = base64;
+        }
     }
 
     @Override
