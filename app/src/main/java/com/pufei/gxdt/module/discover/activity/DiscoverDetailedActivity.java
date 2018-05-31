@@ -1,12 +1,15 @@
 package com.pufei.gxdt.module.discover.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverDetailedAdapter;
@@ -25,20 +28,26 @@ import com.pufei.gxdt.widgets.viewpager.GridSpacingItemDecoration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter> implements DiscoverView {
+public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter> implements DiscoverView, BaseQuickAdapter.OnItemClickListener {
     @BindView((R.id.dis_detailed_original_iv))
     ImageView originalImageView;
-
+    @BindView((R.id.dis_det_back_iv))
+    ImageView imageViewBack;
     @BindView((R.id.dis_detailed_count_iv))
     TextView countTextView;
+    @BindView((R.id.dis_det_username_tv))
+    TextView tv_username;
+
     @BindView(R.id.dis_det_ry)
     RecyclerView recyclerView;
-    private List<DiscoverEditImageBean.ResultBean> mlist;
+    private List<DiscoverEditImageBean.ResultBean.DataBean> mlist;
     private DiscoverDetailedAdapter discoverDetailedAdapter;
     private String orginid, orgintable, id, uid;
 
@@ -70,10 +79,6 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     @Override
     public void getData() {
         mlist = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            DiscoverEditImageBean.ResultBean bean = new DiscoverEditImageBean().ResultBean();
-//            mlist.add(bean);
-//        }
         discoverDetailedAdapter = new DiscoverDetailedAdapter(mlist);
 //        discoverAdapter.setOnItemClickListener(this);
 //        discoverAdapter.addHeaderView(videoHeaderView);
@@ -85,8 +90,8 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("id", id);
-            jsonObject.put("orginid", "");//orginid 原始图id
-            jsonObject.put("orgintable", "");//orgintable 数据�
+            jsonObject.put("orginid", orginid);//orginid 原始图id
+            jsonObject.put("orgintable", orgintable);//orgintable 数据�
             jsonObject.put("uid", uid);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -119,9 +124,36 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
     @Override
     public void getDiscoverDetailed(DiscoverEditImageBean bean) {
-        if (bean.getMsg() == "success") {
-            GlideApp.with(this).load(bean.getResult().getOrgin_url()).into(originalImageView);
-            countTextView.setText(bean.getResult().getCount());
+        if (bean.getResult() == null) return;
+        GlideApp.with(this).load(bean.getResult().getOrgin_url())
+                .placeholder(R.mipmap.ic_default_picture).into(originalImageView);
+        countTextView.setText(bean.getResult().getCount());
+        tv_username.setText(bean.getResult().getUsername());
+        if (bean.getResult().getData().size() > 0) {
+            mlist.addAll(bean.getResult().getData());
+            discoverDetailedAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Intent intent = new Intent(this, DisPictureDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", mlist.get(position).getId());
+        bundle.putString("orginid", mlist.get(position).getOrginid());
+        bundle.putString("orgintable", mlist.get(position).getOrgintable());
+        bundle.putSerializable("pictureList", (Serializable) mlist);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+    }
+
+    @OnClick(R.id.dis_det_back_iv)
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
+            case R.id.dis_det_back_iv:
+                finish();
+                break;
         }
     }
 }

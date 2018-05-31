@@ -47,7 +47,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     @BindView(R.id.iv_now_picture)
     ImageView iv_picture;
     @BindView(R.id.look_edit_image_iv)
-    ImageView iv_editimage;
+    TextView iv_editimage;
     @BindView(R.id.activity_home1_cancel)
     LinearLayout linearLayout_cancel;
     @BindView(R.id.rl_picture)
@@ -174,7 +174,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 bundle.putString("uid", uid);
                 intent.putExtras(bundle);
                 startActivity(intent);
-                finish();
+//                finish();
                 break;
         }
     }
