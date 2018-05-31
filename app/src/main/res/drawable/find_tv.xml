@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/log_divider_tab_selector"/>
+    <corners android:radius="360px"/>
+    <stroke android:color="@color/log_divider_tab_selector"
+        android:width="2px"
+        />
+</shape>

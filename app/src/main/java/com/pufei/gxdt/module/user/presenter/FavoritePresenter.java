@@ -5,6 +5,7 @@ import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.view.FavoriteView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,25 +16,39 @@ import okhttp3.RequestBody;
 
 public class FavoritePresenter extends BasePresenter<FavoriteView> {
 
-    public void getJokeList(RequestBody body) {
-            Disposable disposable = ApiService.getJokeApi().getJokelist(body)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<JokeResultBean>() {
+    public void getFavoritePkgList(RequestBody body) {
+        Disposable disposable = ApiService.getPersonalApi().getMyImages(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MyImagesBean>() {
                     @Override
-                    public void accept(JokeResultBean result) throws Exception {
+                    public void accept(MyImagesBean result) throws Exception {
                         baseview.resultJokeList(result);
                     }
                 });
         addSubscription(disposable);
     }
-    public void getJokDetail(RequestBody body) {
-        Disposable disposable = ApiService.getJokeApi().getJokeDetail(body)
+
+    public void getFavoriteJokeList(RequestBody body) {
+        Disposable disposable = ApiService.getPersonalApi().getMyImages(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<JokeDetailBean>() {
+                .subscribe(new Consumer<MyImagesBean>() {
                     @Override
-                    public void accept(JokeDetailBean result) throws Exception {
+                    public void accept(MyImagesBean result) throws Exception {
+                        baseview.resultJokeList(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
+
+    public void getJokDetail(RequestBody body) {
+        Disposable disposable = ApiService.getPersonalApi().getMyImages(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MyImagesBean>() {
+                    @Override
+                    public void accept(MyImagesBean result) throws Exception {
                         baseview.resultJokeDetail(result);
                     }
                 });

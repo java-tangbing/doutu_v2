@@ -94,4 +94,12 @@ public class ApiService {
         return newsApi;
     }
 
+    public static PersonalApi getPersonalApi() {
+        if (personalApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            personalApi = retrofit.create(PersonalApi.class);
+        }
+        return personalApi;
+    }
+
 }

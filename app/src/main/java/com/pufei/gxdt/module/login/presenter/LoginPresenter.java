@@ -6,6 +6,7 @@ import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
 import com.pufei.gxdt.module.login.view.LoginView;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

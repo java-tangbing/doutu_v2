@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
@@ -23,7 +24,7 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.setting_version_checking)
     LinearLayout settingVersionChecking;
     @BindView(R.id.setting_about_product)
-    LinearLayout settingAboutProduct;
+    TextView settingAboutProduct;
     @BindView(R.id.setting_log_out)
     Button settingLogOut;
 
@@ -61,6 +62,8 @@ public class SettingActivity extends BaseActivity {
                 DialogUtil.getInstance().showVersionDialog(this);
                 break;
             case R.id.setting_about_product:
+                startActivity(new Intent(SettingActivity.this, AboutProductActivity.class));
+
                 break;
             case R.id.setting_log_out:
                 if (App.userBean != null) {

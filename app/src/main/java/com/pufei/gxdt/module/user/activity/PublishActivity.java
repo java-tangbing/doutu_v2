@@ -57,7 +57,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
     @Override
     public void initView() {
-        tv_title.setText("笑话段子");
+        tv_title.setText("我的发布");
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdapter(PublishActivity.this,jokeList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器

@@ -155,7 +155,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 address = "未知";
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), "");
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile());
 //            App.userBean.setPwd(bean.isPwd_set());
             Log.e("LoginActivity", App.userBean.isPwd() + "");
             EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));

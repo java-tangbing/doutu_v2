@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
@@ -24,19 +25,24 @@ import java.util.List;
 import butterknife.BindView;
 
 public class FavoriteActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
-
+    @BindView(R.id.ll_title_left)
+    LinearLayout ll_left;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
     @BindView(R.id.tab_driver)
     TabLayout tabDriver;
     @BindView(R.id.home_vp_driver)
     MyViewPager homeVpDriver;
-    @BindView(R.id.fake_status_bar)
-    View mFakeStatusBar;
+//    @BindView(R.id.fake_status_bar)
+//    View mFakeStatusBar;
     private List<Fragment> fragmentList;
     private List<String> titleList;
     private String[] titleArray = {"表情包", "表情"};
 
     @Override
     public void initView() {
+        tv_title.setText("我的收藏");
+        ll_left.setVisibility(View.VISIBLE);
         setTvTitleBackgroundColor();
         addfragment();
         init();
@@ -101,7 +107,7 @@ public class FavoriteActivity extends BaseActivity implements TabLayout.OnTabSel
     }
 
     public void setTvTitleBackgroundColor() {
-        mFakeStatusBar.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+//        mFakeStatusBar.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
     }
 
     @Override

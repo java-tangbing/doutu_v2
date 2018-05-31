@@ -35,11 +35,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.user.activity.DraftActivity"/>
-        <activity android:name=".module.maker.activity.MakerFinishActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.maker.activity.EditImageActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".module.user.activity.DraftActivity" />
+        <activity
+            android:name=".module.maker.activity.MakerFinishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.maker.activity.EditImageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.discover.activity.DiscoverDetailedActivity"
             android:screenOrientation="portrait" />
@@ -52,7 +54,7 @@
         <activity
             android:name=".module.news.activity.NewsFeedBackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Design.Light.NoActionBar"/>
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
             android:name=".module.news.activity.NewsPictureActivity"
             android:screenOrientation="portrait" />
@@ -138,6 +140,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name=".module.user.activity.PublishActivity" />
+        <activity android:name=".module.user.activity.FavoriteActivity" />
+        <activity android:name=".module.sign.ui.CrunchiesActivity" />
+        <activity android:name=".module.sign.ui.SignActivity" />
         <!--<meta-data-->
         <!--android:name="UMENG_APPKEY"-->
         <!--android:value="5850b381734be40cef0006f8" />-->

@@ -20,4 +20,5 @@ public class Contents {
     public static final String USER_DETAIL = "USER_DETAIL";
     public static final String USER_EXERCISE_FRIST = "USER_EXERCISE_FRIST";
     public static final String USER_EXERCISE_FOUR = "USER_EXERCISE_FOUR";
+    public static final String DAY_SIGN="DAY_SIGN";
 }
