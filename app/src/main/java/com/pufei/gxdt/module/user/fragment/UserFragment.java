@@ -109,8 +109,11 @@ public class UserFragment extends BaseFragment {
             tvUserName.setText("未登录");
             ivUserHead.setImageResource(R.mipmap.my_uer_picture);
         }
+
         initSign();
-        getScore();
+        if(App.userBean != null) {
+            getScore();
+        }
         initLoading();
     }
 
@@ -175,7 +178,7 @@ public class UserFragment extends BaseFragment {
     }
 
     private void initSign() {
-        if (App.userBean.getAuth() != null) {
+        if (App.userBean != null) {
             long tiem = sharedPreferences.getLong(App.userBean.getAuth(), 0);
             boolean isSign = IsTodaySign(tiem);
             if (isSign) {
@@ -190,7 +193,7 @@ public class UserFragment extends BaseFragment {
     }
 
     private void initLoading() {
-        if (App.userBean.getAuth() != null) {
+        if (App.userBean != null) {
             fragmentCollectLoadingTv.setVisibility(View.GONE);
         } else {
             fragmentCollectLoadingTv.setVisibility(View.VISIBLE);

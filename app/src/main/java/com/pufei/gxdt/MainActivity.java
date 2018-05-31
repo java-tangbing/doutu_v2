@@ -10,16 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.discover.fragment.DiscoverFragment;
 import com.pufei.gxdt.module.home.fragment.HomeFragment;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.module.maker.fragment.MakerFragment;
+import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.module.user.fragment.UserFragment;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +48,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
+        if (user_detail != null) {
+            App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+        }
         addFragment();
         tabAdapter = new TabVpAdapter(this, getSupportFragmentManager(), fragmentList);
         homeVp.setAdapter(tabAdapter);
