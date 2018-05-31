@@ -12,11 +12,17 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.db.DraftInfo;
+import com.pufei.gxdt.db.DraftInfo_Table;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
+import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.module.user.adapter.DraftAdapter;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.raizlabs.android.dbflow.sql.language.Select;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.List;
@@ -35,17 +41,38 @@ public class DraftActivity extends BaseActivity implements BaseQuickAdapter.OnIt
     RecyclerView rvDraft;
     private DraftAdapter draftAdapter;
     private List<DraftInfo> datas;
+    private int position;
 
     @Override
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
-        tvTitle.setText("我的草稿箱子");
+        tvTitle.setText("我的草稿箱");
         rvDraft.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void onEvent(MakerEventMsg msg) {
+        if(msg.getType() == 5) {
+            DraftInfo info = datas.get(position);
+            info.imagePath = msg.getUrl();
+            draftAdapter.notifyItemChanged(position);
+        }
+    }
+    @Override
     public void getData() {
-        datas = new Select().from(DraftInfo.class).queryList();
+        datas = new Select().from(DraftInfo.class).where(DraftInfo_Table.isDraft.is(true)).queryList();
         for (int i = 0; i < datas.size(); i++) {
             DraftInfo info = datas.get(i);
             if(!info.imagePath.contains("http:") || !info.imagePath.contains("https:")) {
@@ -74,10 +101,11 @@ public class DraftActivity extends BaseActivity implements BaseQuickAdapter.OnIt
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
             case R.id.iv_edit:
-
+                this.position = position;
                 Intent intent = new Intent(this, EditImageActivity.class);
                 intent.putExtra(EditImageActivity.IMAGE_ID,datas.get(position).imageId);
                 intent.putExtra(EditImageActivity.IMAGE_PATH,datas.get(position).imagePath);
+                intent.putExtra(EditImageActivity.EDIT_TYPE,EditImageActivity.EDIT_TYPE_DRAFT);
                 startActivity(intent);
                 break;
             case R.id.tv_publish:
