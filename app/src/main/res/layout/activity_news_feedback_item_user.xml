@@ -42,6 +42,7 @@
                 android:id="@+id/news_feedback_item_user_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="70dp"
                 android:gravity="left|top"
                 android:padding="8dp"
                 android:text="测试用双行测试用测试用双行测试用测试用双行测试用测试用双行测试用测试用双行测试用" />

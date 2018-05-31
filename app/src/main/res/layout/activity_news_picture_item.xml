@@ -33,16 +33,14 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:id="@+id/news_picture_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
-
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -51,9 +49,9 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_marginBottom="10dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/hint_color" />
@@ -65,30 +63,30 @@
                     android:layout_marginTop="12dp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="【"
-                        android:textSize="16sp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="【"-->
+                        <!--android:textSize="16sp" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/news_picture_item_user"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="大米粒"-->
+                        <!--android:textSize="16sp" />-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="】"-->
+                        <!--android:textSize="16sp" />-->
 
                     <TextView
-                        android:id="@+id/news_picture_item_user"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="大米粒"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="】"
-                        android:textSize="16sp" />
-
-                    <TextView
+                        android:id="@+id/news_picture_item_content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-
                         android:text="引用了您的表情"
                         android:textSize="16sp" />
                 </LinearLayout>
