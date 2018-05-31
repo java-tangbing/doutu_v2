@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/activity_searchdetail_cancel"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/back0"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:gravity="center"
+            android:layout_marginRight="60dp"
+            android:text="熊猫人"
+            android:id="@+id/activity_searchdetail_title"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:background="@drawable/search"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <ImageView
+                android:visibility="gone"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/navbar_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/request_failed"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@mipmap/defeated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.pufei.gxdt.widgets.MyFrontTextView
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:textColor="#333"
+                android:textSize="25sp"
+                android:text="没有搜到结果"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.pufei.gxdt.widgets.MyFrontTextView
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="请返回重新输入关键字搜索"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:id="@+id/activity_searchdetail_rc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
+</LinearLayout>

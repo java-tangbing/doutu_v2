@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/search"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="32dp">
+            <ImageView
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/navbar_search"
+                android:id="@+id/search_iv_delete"
+                android:layout_gravity="right|center_vertical"
+                android:layout_width="13dp"
+                android:layout_height="match_parent"/>
+            <EditText
+                android:singleLine="true"
+                android:background="@null"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/search_et_input"
+                android:layout_gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:hint="请输入关键字"/>
+
+        </LinearLayout>
+
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:id="@+id/tv_search_cancel"
+            android:layout_gravity="center"
+            android:textSize="13sp"
+            android:text="取消"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="26dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginBottom="26dp"
+        android:textSize="12sp"
+        android:text="最近搜索"
+        android:textColor="#b2b2b2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="18dp"
+            android:id="@+id/rv_search"
+            android:divider="#00000000"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/search_animimage"
+            android:layout_gravity="center"
+            android:src="@mipmap/green_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_search_result"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="32dp" />
+        <TextView
+            android:id="@+id/tv_search_result"
+            android:layout_centerInParent="true"
+            android:text=""
+            android:textColor="@color/color_text_normal"
+            android:textSize="@dimen/activity_vertical_margin"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+</LinearLayout>

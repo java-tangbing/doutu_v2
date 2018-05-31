@@ -16,32 +16,28 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
-        <TextView
+        <ImageView
             android:id="@+id/tv_hot_face"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:background="#eeeeee"
-            android:text="热门表情"
-            android:gravity="center"
-            android:layout_height="50dp" />
-        <TextView
+            android:background="@mipmap/hone_bt_hotexpression"
+            android:layout_height="wrap_content" />
+        <ImageView
             android:id="@+id/tv_theme_face"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:background="#eeeeee"
-            android:text="主题表情"
-            android:gravity="center"
+            android:background="@mipmap/hone_bt_theme"
             android:layout_marginLeft="5dp"
-            android:layout_height="50dp" />
-        <TextView
+            android:layout_height="wrap_content"
+            />
+        <ImageView
             android:id="@+id/tv_joke"
             android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:background="#eeeeee"
-            android:text="笑话段子"
-            android:gravity="center"
+            android:background="@mipmap/hone_bt_joke"
             android:layout_marginLeft="5dp"
-            android:layout_height="50dp" />
+            android:layout_height="wrap_content"
+           />
 
     </LinearLayout>
 

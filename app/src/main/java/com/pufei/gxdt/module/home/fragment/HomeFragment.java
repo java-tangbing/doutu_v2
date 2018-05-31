@@ -21,6 +21,7 @@ import com.pufei.gxdt.module.home.activity.FaceTypeActivity;
 import com.pufei.gxdt.module.home.activity.HomeImageActivity;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeActivity;
+import com.pufei.gxdt.module.home.activity.SearchActivity;
 import com.pufei.gxdt.module.home.activity.ThemeImageActivity;
 import com.pufei.gxdt.module.home.adapter.HomeListAdapter;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
@@ -28,12 +29,12 @@ import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
+import com.pufei.gxdt.module.news.activity.NewsActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
-import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -49,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements HomeListView {
     @BindView(R.id.request_failed)
@@ -173,24 +175,17 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     public int getLayout() {
         return R.layout.fragment_home;
     }
-//    @OnClick({R.id.tv_hot_face,R.id.tv_joke,R.id.tv_theme_face,R.id.iv_user_shoucang})
-//    public  void onViewClicked(View view){
-//        switch (view.getId()){
-//            case R.id.tv_hot_face:
-//                startActivity(new Intent(getActivity(), HotImageActivity.class));
-//                break;
-//            case R.id.tv_joke:
-//                startActivity(new Intent(getActivity(), JokeActivity.class));
-//                break;
-//            case R.id.tv_theme_face:
-//                startActivity(new Intent(getActivity(), ThemeImageActivity.class));
-//                     break;
-////            case R.id.iv_user_shoucang:
-////                startActivity(new Intent(getActivity(), ThemeImageActivity.class));
-////                break;
-//
-//        }
-//    }
+    @OnClick({R.id.iv_news,R.id.activity_main_search})
+    public  void onViewClicked(View view){
+        switch (view.getId()){
+            case R.id.iv_news:
+                startActivity(new Intent(getActivity(), NewsActivity.class));
+                break;
+            case R.id.activity_main_search:
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+        }
+
+    }
 
 
     @Override

@@ -38,7 +38,7 @@
                 android:background="@mipmap/home_search"
                 android:layout_width="25dp"
                 android:layout_height="25dp" />
-            <EditText
+            <TextView
                 android:id="@+id/activity_main_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content">
         <ImageView
             android:layout_marginRight="19dp"
-            android:id="@+id/iv_user_shoucang"
+            android:id="@+id/iv_news"
             android:layout_gravity="center_vertical"
             android:background="@drawable/home_my_image"
             android:layout_width="40dp"
