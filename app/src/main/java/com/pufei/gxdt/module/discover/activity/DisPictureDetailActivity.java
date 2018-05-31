@@ -122,9 +122,15 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     public void getImageDetail(DisPicDetBean bean) {
         GlideApp.with(this).load(bean.getResult().getUrl()).placeholder(R.mipmap.ic_default_picture)
                 .into(iv_picture);
-        tv_eyes.setText(bean.getResult().getView());
-        tv_hot.setText(bean.getResult().getHot());
-        tv_change_img.setText(bean.getResult().getCount());
+        if (bean.getResult().getView().length() > 0) {
+            tv_eyes.setText(bean.getResult().getView());
+        }
+        if (bean.getResult().getHot().length() > 0) {
+            tv_hot.setText(bean.getResult().getHot());
+        }
+        if (bean.getResult().getCount().length() > 0) {
+            tv_change_img.setText(bean.getResult().getCount());
+        }
         uid = bean.getResult().getUid();
         mcount = bean.getResult().getCount();
     }
