@@ -1,5 +1,6 @@
 package com.pufei.gxdt.module.discover.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -39,9 +40,15 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     RecyclerView recyclerView;
     private List<DiscoverEditImageBean.ResultBean> mlist;
     private DiscoverDetailedAdapter discoverDetailedAdapter;
+    private String orginid, orgintable, id, uid;
 
     @Override
     public void initView() {
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
+        orginid = intent.getStringExtra("orginid");
+        orgintable = intent.getStringExtra("orgintable");
+        uid = intent.getStringExtra("uid");
         GridLayoutManager layoutManage = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
@@ -49,7 +56,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         boolean includeEdge = true;
         //间距
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        //边框�
+        //边框
         recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
     }
 
@@ -75,12 +82,12 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     }
 
     private void setAdapter() {
-
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-
+            jsonObject.put("id", id);
             jsonObject.put("orginid", "");//orginid 原始图id
             jsonObject.put("orgintable", "");//orgintable 数据�
+            jsonObject.put("uid", uid);
         } catch (JSONException e) {
             e.printStackTrace();
         }

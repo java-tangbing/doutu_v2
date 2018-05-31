@@ -64,7 +64,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     @BindView(R.id.tv_change_img)
     TextView tv_change_img;
     private int index;
-    private String orginid, orgintable, id;
+    private String orginid, orgintable, id,uid;
     private List<DiscoverListBean.ResultBean> pictureList = new ArrayList<>();
     private List<DiscoverListBean.ResultBean> mlist = new ArrayList<>();
     private DisOtherPictureAdapter adapter;
@@ -125,6 +125,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         tv_eyes.setText(bean.getResult().getView());
         tv_hot.setText(bean.getResult().getHot());
         tv_change_img.setText(bean.getResult().getCount());
+        uid=bean.getResult().getUid();
     }
 
 
@@ -155,7 +156,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     }
 
 
-    @OnClick({R.id.look_edit_image_iv, R.id.activity_home1_cancel,R.id.tv_change_img})
+    @OnClick({R.id.look_edit_image_iv, R.id.activity_home1_cancel, R.id.tv_change_img})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.activity_home1_cancel:
@@ -165,6 +166,14 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 finish();
                 break;
             case R.id.tv_change_img:
+                Intent intent = new Intent(this, DiscoverDetailedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                bundle.putString("orginid", orginid);
+                bundle.putString("orgintable", orgintable);
+                bundle.putString("uid", uid);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 finish();
                 break;
         }
