@@ -4,8 +4,11 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.ResultBean, BaseViewHolder> {
 
@@ -26,12 +29,21 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.Resu
     @Override
     protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
         switch (helper.getItemViewType()) {
-            case 1101:
-//                helper.setImageUrl(R.id.tv, item.getContent());
+            case 0:
+                helper.setText(R.id.news_feedback_item_user_dateline_tv, item.getDateline())
+                        .setText(R.id.news_feedback_item_user_content_tv, item.getContent());
+                GlideApp.with(mContext).load(item.getUrl())
+                        .placeholder(R.mipmap.my_uer_picture)
+                        .into((CircleImageView) helper.getView(R.id.news_feedback_item_user_icon_cv));
                 break;
-            case 1102:
-//                helper.setImageUrl(R.id.iv, item.getContent());
+            case 1:
+                helper.setText(R.id.news_feedback_item_server_dateline_tv, item.getDateline())
+                        .setText(R.id.news_feedback_item_server_content_tv, item.getContent());
+                GlideApp.with(mContext).load(item.getUrl())
+                        .placeholder(R.mipmap.my_uer_picture)
+                        .into((CircleImageView) helper.getView(R.id.news_feedback_item_server_icon_cv));
                 break;
         }
+
     }
 }
