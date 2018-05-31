@@ -21,7 +21,7 @@ public interface DiscoverApi {
     @POST("User/getFindList")
     Observable<DiscoverListBean> getFindList(@Body RequestBody body);
 
-    @POST("User/getEditImage")
+    @POST("AmuseImages/getEditList")
     Observable<DiscoverEditImageBean> getEditImage(@Body RequestBody body);
 
 
