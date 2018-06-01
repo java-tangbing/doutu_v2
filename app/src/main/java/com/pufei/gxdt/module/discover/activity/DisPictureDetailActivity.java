@@ -163,7 +163,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         if (bean.getResult() != null) {
             Intent intent = new Intent(this, EditImageActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("picture_bean", bean.getResult());
+            bundle.putSerializable("picture_bean",(Serializable) bean.getResult());
             intent.putExtras(bundle);
             intent.putExtra(EditImageActivity.EDIT_TYPE, EditImageActivity.EDIT_TYPE_EDIT);
             startActivity(intent);

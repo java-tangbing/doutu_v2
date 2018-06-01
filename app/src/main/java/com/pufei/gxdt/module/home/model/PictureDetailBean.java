@@ -138,7 +138,7 @@ public class PictureDetailBean {
             this.data = data;
         }
 
-        public static class DataBean {
+        public static class DataBean implements Serializable {
             /**
              * did : 4
              * index : 0
