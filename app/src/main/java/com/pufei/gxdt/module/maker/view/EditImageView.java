@@ -7,4 +7,5 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 public interface EditImageView extends BaseView<EditImagePresenter> {
     void upLoadImageResult(ModifyResultBean response);
     void downloadImageResult(String base64,int type);
+    void downloadGifResult(String path);
 }

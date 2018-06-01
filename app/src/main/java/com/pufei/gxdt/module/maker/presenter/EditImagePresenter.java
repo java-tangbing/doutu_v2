@@ -77,15 +77,35 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
         return byteBuffer.toByteArray();
     }
 
+
+    public void downloadGif(String url, final String path) {
+        Call<ResponseBody> call = ApiService.getEditImageApi().getImage(url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    writeFileToSDCard(response.body(),path);
+                    baseview.downloadGifResult(path);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
     /**
      *将下载的图片写入file
      * @param body
      * @return
      */
-    private boolean writeFileToSDCard(ResponseBody body) {
+    private String writeFileToSDCard(ResponseBody body,String path) {
         try {
+
             // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(Environment.getExternalStorageDirectory() + File.separator + "ssss.gif");
+            File futureStudioIconFile = new File(path);
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
@@ -103,9 +123,9 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                     fileSizeDownloaded += read;
                 }
                 outputStream.flush();
-                return true;
+                return path;
             } catch (IOException e) {
-                return false;
+                return " ";
             } finally {
                 if (inputStream != null) {
                     inputStream.close();
@@ -115,7 +135,7 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                 }
             }
         } catch (IOException e) {
-            return false;
+            return " ";
         }
     }
 }

@@ -86,6 +86,9 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     private String bgImageBase64;
     private DraftInfo info;
     private String orgintable;
+    private String id;
+    private String uid;
+    private String originTable;
     private int type;
 
     @Override
@@ -100,8 +103,13 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         path = intent.getStringExtra(IMAGE_PATH);
         imageId = intent.getStringExtra(IMAGE_ID);
         type = intent.getIntExtra(TYPE, 0);
+        id = intent.getStringExtra("Id");
+        uid = intent.getStringExtra("uid");
+        originTable = intent.getStringExtra("originTable");
+
         info = new Select().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(false)).querySingle();
         if (info != null) {
+//            Log.e("pathhhhhhh",path);
             if (path.contains("http:") || path.contains("https:")) {//合成图
                 GlideApp.with(this).load(path).into(ivFaceImage);
                 presenter.downloadImage(path, 0);
@@ -110,7 +118,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                     GlideApp.with(this).load(path).into(ivFaceImage);
                     InputStream inputStream = null;
                     try {
-                        inputStream = new FileInputStream(new File(info.imagePath));
+                        inputStream = new FileInputStream(new File(path));
                         byte[] inputData = getBytes(inputStream);
                         imageBase64 = Base64.encodeToString(inputData, Base64.NO_WRAP);
                     } catch (FileNotFoundException e) {
@@ -229,10 +237,16 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         map.put("os", "1");
         if (type == 0 || type == 2) {
             map.put("orginid", "");
+            map.put("orgintable", "design_images");
+            map.put("uid", "");
+            map.put("id", "");
         } else {
             map.put("orginid", imageId);
+            map.put("uid", uid);
+            map.put("id", id);
+            map.put("orgintable", originTable);
+
         }
-        map.put("orgintable", "design_images");
         map.put("height", info.height);
         map.put("width", info.width);
         map.put("title", "");
@@ -240,8 +254,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         map.put("url", bgImageBase64);
         map.put("sign", "sign");
         map.put("key", "");
-        map.put("uid", "");
-        map.put("id", "");
+        Log.e("base",imageBase64+"  ");
         map.put("auth", App.userBean.getAuth());
 
         if (path.contains(".gif") || path.contains(".GIF")) {
@@ -369,6 +382,11 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         } else {
             bgImageBase64 = base64;
         }
+    }
+
+    @Override
+    public void downloadGifResult(String path) {
+
     }
 
     @Override
