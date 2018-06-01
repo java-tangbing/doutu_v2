@@ -53,7 +53,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
-    private boolean isRefreshing = false;
+    private boolean isRefreshing = true;
     private String auth;
 
     @Override
@@ -73,11 +73,11 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     public void getData() {
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
-        discoverAdapter.setEnableLoadMore(false);
+//        discoverAdapter.setEnableLoadMore(false);
         discoverAdapter.setOnItemClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
-        discoverAdapter.disableLoadMoreIfNotFullPage();
+//        discoverAdapter.disableLoadMoreIfNotFullPage();
         recyclerView.setAdapter(discoverAdapter);
 
         page = 1;
@@ -159,11 +159,12 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 discoverAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
-            } else {
-                page = page + 1;
-                mlist.addAll(bean.getResult());
-                discoverAdapter.notifyDataSetChanged();
             }
+//            else {
+//                page = page + 1;
+//                mlist.addAll(bean.getResult());
+//                discoverAdapter.notifyDataSetChanged();
+//            }
         } else {
             discoverAdapter.loadMoreEnd();
         }

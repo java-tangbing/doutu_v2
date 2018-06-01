@@ -143,7 +143,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     @Override
     public void getImageDetail(DisPicDetBean bean) {
-        GlideApp.with(this).load(bean.getResult().getUrl()).placeholder(R.mipmap.ic_default_picture)
+        GlideApp.with(this).load(bean.getResult().getMake_url()).placeholder(R.mipmap.ic_default_picture)
                 .into(iv_picture);
         if (bean.getResult().getView().length() > 0) {
             tv_eyes.setText(bean.getResult().getView());
@@ -167,7 +167,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             intent.putExtras(bundle);
             intent.putExtra(EditImageActivity.EDIT_TYPE, EditImageActivity.EDIT_TYPE_EDIT);
             startActivity(intent);
-        }else {
+        } else {
             ToastUtils.showShort(this, "value is none");
         }
 
@@ -206,18 +206,18 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 setImageDetail();
                 break;
             case R.id.tv_change_img:
-                if (Integer.parseInt(mcount) > 0) {
-                    Intent intent01 = new Intent(this, DiscoverDetailedActivity.class);
-                    Bundle bundle01 = new Bundle();
-                    bundle01.putString("id", id);
-                    bundle01.putString("orginid", orginid);
-                    bundle01.putString("orgintable", orgintable);
-                    bundle01.putString("uid", uid);
-                    intent01.putExtras(bundle01);
-                    startActivity(intent01);
-                } else {
-                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
-                }
+//                if (Integer.parseInt(mcount) > 0) {
+                Intent intent01 = new Intent(this, DiscoverDetailedActivity.class);
+                Bundle bundle01 = new Bundle();
+                bundle01.putString("id", id);
+                bundle01.putString("orginid", orginid);
+                bundle01.putString("orgintable", orgintable);
+                bundle01.putString("uid", uid);
+                intent01.putExtras(bundle01);
+                startActivity(intent01);
+//                } else {
+//                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
+//                }
 
                 break;
         }

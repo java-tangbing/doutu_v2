@@ -47,7 +47,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
-    private boolean isRefreshing = false;
+    private boolean isRefreshing = true;
     private String auth;
 
     @Override
@@ -150,11 +150,12 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 discoverAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
-            } else {
-                page = page + 1;
-                mlist.addAll(bean.getResult());
-                discoverAdapter.notifyDataSetChanged();
             }
+//            else {
+//                page = page + 1;
+//                mlist.addAll(bean.getResult());
+//                discoverAdapter.notifyDataSetChanged();
+//            }
         } else {
             discoverAdapter.loadMoreEnd();
         }

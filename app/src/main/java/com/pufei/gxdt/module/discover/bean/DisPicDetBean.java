@@ -58,6 +58,16 @@ public class DisPicDetBean  {
         private String hot;
         private String view;
         private String count;
+
+        public String getMake_url() {
+            return make_url;
+        }
+
+        public void setMake_url(String make_url) {
+            this.make_url = make_url;
+        }
+
+        private String make_url;
         private List<DataBean> data;
 
         public String getId() {
