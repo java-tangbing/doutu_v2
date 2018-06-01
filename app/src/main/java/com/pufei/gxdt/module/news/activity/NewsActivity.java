@@ -18,6 +18,7 @@ import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.news.adapter.NewsAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
+import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
 import com.pufei.gxdt.module.news.view.NewsView;
 import com.pufei.gxdt.utils.AppManager;
@@ -122,6 +123,11 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
 
     @Override
     public void getsNoticeContent(NewsBean bean) {
+
+    }
+
+    @Override
+    public void getAdviceResult(SendBean bean) {
 
     }
 

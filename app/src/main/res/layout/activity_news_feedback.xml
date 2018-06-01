@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <include layout="@layout/common_title"></include>
@@ -23,6 +24,7 @@
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/news_feedback_user_message_et"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
@@ -31,6 +33,7 @@
             android:background="@color/white" />
 
         <Button
+            android:id="@+id/news_feedback_send_message_bt"
             android:layout_width="50dp"
             android:layout_height="40dp"
             android:layout_marginRight="10dp"
