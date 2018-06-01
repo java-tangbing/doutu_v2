@@ -132,6 +132,7 @@
                 android:layout_marginTop="40dp"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/tv_share_qq"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -146,6 +147,7 @@
                     android:background="@drawable/share_border"
                     android:drawableLeft="@mipmap/bt_ic_logo_qq"/>
                 <TextView
+                    android:id="@+id/tv_share_wx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"

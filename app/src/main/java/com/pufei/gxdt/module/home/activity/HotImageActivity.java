@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.HotAdapter;
+import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.ImageTypePresenter;
 import com.pufei.gxdt.module.home.view.ImageTypeView;
@@ -20,6 +22,7 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -128,6 +131,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         try {
             JSONObject jsonObject = KeyUtil.getJson(this);
             jsonObject.put("page", page + "");
+            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
             presenter.getHotImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -158,6 +162,12 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
        }
 
     }
+
+    @Override
+    public void resultImageDetail(PictureDetailBean bean) {
+
+    }
+
     private  int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
