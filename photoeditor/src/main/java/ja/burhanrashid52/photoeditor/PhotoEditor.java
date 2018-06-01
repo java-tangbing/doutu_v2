@@ -874,6 +874,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 
                 GifDecoder gifDecoder = new GifDecoder();
                 final GifImageIterator iterator = gifDecoder.loadUsingIterator(file.getPath());
+                Log.e("path",file.getPath()+"F");
                 while (iterator.hasNext()) {
                     GifImage next = iterator.next();
                     if (null != next) {
