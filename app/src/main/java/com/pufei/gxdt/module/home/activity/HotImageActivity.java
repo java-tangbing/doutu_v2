@@ -14,6 +14,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.HotAdapter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.ImageTypePresenter;
@@ -165,6 +166,11 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
 
     @Override
     public void resultImageDetail(PictureDetailBean bean) {
+
+    }
+
+    @Override
+    public void resultAddFavorite(FavoriteBean bean) {
 
     }
 
