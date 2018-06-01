@@ -11,7 +11,9 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.activity.DisPictureDetailActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
@@ -19,9 +21,11 @@ import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 
 import com.pufei.gxdt.module.discover.view.DiscoverView;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.viewpager.DividerGridItemDecoration;
 import com.pufei.gxdt.widgets.viewpager.GridSpacingItemDecoration;
@@ -50,11 +54,10 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     private int page;
     private boolean isLoadMore = false;
     private boolean isRefreshing = false;
-
+    private String auth;
 
     @Override
     public void initView() {
-
         GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
@@ -83,19 +86,24 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     }
 
     private void setMyadapter() {
-        JSONObject jsonObject = KeyUtil.getJson(getContext());
-        try {
-            jsonObject.put("order", "");
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (NetWorkUtil.isNetworkConnected(getActivity())) {
-            presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } else {
-            ToastUtils.showShort(getActivity(), "请检查网络设置");
-        }
+//        if (App.userBean == null) {
+//            startActivity(new Intent(activity, LoginActivity.class));
+//        } else {
+            auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
+            JSONObject jsonObject = KeyUtil.getJson(getContext());
+            try {
+                jsonObject.put("order", "");
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", auth);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (NetWorkUtil.isNetworkConnected(getActivity())) {
+                presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } else {
+                ToastUtils.showShort(getActivity(), "请检查网络设置");
+            }
+//        }
     }
 
 
