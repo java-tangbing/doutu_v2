@@ -3,6 +3,7 @@ package com.pufei.gxdt.api;
 
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
+import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
 import io.reactivex.Observable;
@@ -23,4 +24,6 @@ public interface ImageTypeApi {
     Observable<ThemeResultBean> getThemeImageList(@Body RequestBody body);
     @POST("AmuseImages/getTheme")
     Observable<PictureResultBean> getThemeImageDetailList(@Body RequestBody body);
+    @POST("AmuseImages/getImageDetail")
+    Observable<PictureDetailBean> getImageDetailList(@Body RequestBody body);
 }

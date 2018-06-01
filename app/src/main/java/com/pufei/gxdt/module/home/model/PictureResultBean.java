@@ -12,12 +12,14 @@ public class PictureResultBean{
     /**
      * code : 0
      * msg : success
-     * result : [{"id":"187","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/1f61d786c5368b40e84020a450abd91c.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"186","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/ea78690de2de8dbd8e552c4094f21a41.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"185","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/7910249e3c76a57aa823d747be275308.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"184","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/554029a59ab84acbe9c5d43fa20d73af.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"183","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/1d59952ed154c49fd2e5e1a3a807b0b7.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"182","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/9c89be40e7d96476372cb532ddaf9e1e.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"181","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/a89e755cfd6339adf7c405b17ae59d14.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"},{"id":"180","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/09ae2e72728f2f75b0fe064ea48e4c7d.gif","category_id":"21","dateline":"1497582436","view":"","hot":"","orgintable":"amuse_images1"}]
+     * result : [{"id":"5392","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/052231000259621.gif","category_id":"1","dateline":"1527717608","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"},{"id":"4675","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/092533000217985.png","category_id":"1","dateline":"1527652808","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"},{"id":"4674","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/181002000259621.gif","category_id":"1","dateline":"1527652808","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"},{"id":"4673","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/181706000262057.gif","category_id":"1","dateline":"1527652807","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"},{"id":"4671","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/180753000259621.gif","category_id":"1","dateline":"1527652807","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"},{"id":"4670","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/000747000262057.gif","category_id":"1","dateline":"1527652806","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"},{"id":"4669","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/093021000217985.png","category_id":"1","dateline":"1527652806","view":"","hot":"","orgintable":"amuse_images3","orginid":"","isSaveImg":"0"}]
+     * isSave : 0
      */
 
     private String code;
     private String msg;
-    private List<PictureResultBean.ResultBean> result;
+    private String isSave;
+    private List<ResultBean> result;
 
     public String getCode() {
         return code;
@@ -35,23 +37,33 @@ public class PictureResultBean{
         this.msg = msg;
     }
 
-    public List<PictureResultBean.ResultBean> getResult() {
+    public String getIsSave() {
+        return isSave;
+    }
+
+    public void setIsSave(String isSave) {
+        this.isSave = isSave;
+    }
+
+    public List<ResultBean> getResult() {
         return result;
     }
 
-    public void setResult(List<PictureResultBean.ResultBean> result) {
+    public void setResult(List<ResultBean> result) {
         this.result = result;
     }
 
-    public static class ResultBean  implements Serializable{
+    public static class ResultBean implements Serializable {
         /**
-         * id : 187
-         * url : http://dtds.oss-cn-hangzhou.aliyuncs.com/1f61d786c5368b40e84020a450abd91c.gif
-         * category_id : 21
-         * dateline : 1497582436
+         * id : 5392
+         * url : http://dtds.oss-cn-hangzhou.aliyuncs.com/052231000259621.gif
+         * category_id : 1
+         * dateline : 1527717608
          * view :
          * hot :
-         * orgintable : amuse_images1
+         * orgintable : amuse_images3
+         * orginid :
+         * isSaveImg : 0
          */
 
         private String id;
@@ -61,6 +73,8 @@ public class PictureResultBean{
         private String view;
         private String hot;
         private String orgintable;
+        private String orginid;
+        private String isSaveImg;
 
         public String getId() {
             return id;
@@ -116,6 +130,22 @@ public class PictureResultBean{
 
         public void setOrgintable(String orgintable) {
             this.orgintable = orgintable;
+        }
+
+        public String getOrginid() {
+            return orginid;
+        }
+
+        public void setOrginid(String orginid) {
+            this.orginid = orginid;
+        }
+
+        public String getIsSaveImg() {
+            return isSaveImg;
+        }
+
+        public void setIsSaveImg(String isSaveImg) {
+            this.isSaveImg = isSaveImg;
         }
     }
 }
