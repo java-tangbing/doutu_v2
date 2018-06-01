@@ -22,6 +22,7 @@ import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
 import com.pufei.gxdt.module.home.adapter.OtherPictureAdapter;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
+import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -66,7 +67,11 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     private int index;
     private String orginid, orgintable, id, uid, mcount;
     private List<DiscoverListBean.ResultBean> pictureList = new ArrayList<>();
+    private List<DiscoverListBean.ResultBean> sendpictureList = new ArrayList<>();
     private List<DiscoverListBean.ResultBean> mlist = new ArrayList<>();
+
+    private List<DiscoverListBean.ResultBean> pictureList01 = new ArrayList<>();
+    private List<DiscoverListBean.ResultBean> mlist01 = new ArrayList<>();
     private DisOtherPictureAdapter adapter;
 
     @Override
@@ -77,7 +82,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         orgintable = intent.getStringExtra("orgintable");
         index = intent.getIntExtra("picture_index", 0);
         pictureList = (List<DiscoverListBean.ResultBean>) intent.getSerializableExtra("picture_list");
-
+//        sendpictureList=(List<DiscoverListBean.ResultBean>) intent.getSerializableExtra("picture_list");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         rl_picture.setLayoutManager(linearLayoutManager);
@@ -88,6 +93,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
 
         adapter = new DisOtherPictureAdapter(mlist);
+        adapter.setOnItemClickListener(this);
         rl_picture.setAdapter(adapter);
         setMyAdapter();
         getImageDetailList();
@@ -151,15 +157,10 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Intent intent = new Intent(this, DisPictureDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("id", mlist.get(position).getId());
-        bundle.putString("orginid", mlist.get(position).getOrginid());
-        bundle.putString("orgintable", mlist.get(position).getOrgintable());
-        bundle.putSerializable("pictureList", (Serializable) pictureList);
-        intent.putExtras(bundle);
-        startActivity(intent);
-        finish();
+        id = mlist.get(position).getId();
+        orginid = mlist.get(position).getOrginid();
+        orgintable = mlist.get(position).getOrgintable();
+        setMyAdapter();
     }
 
 
@@ -170,18 +171,24 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 finish();
                 break;
             case R.id.look_edit_image_iv:
-                finish();
+//
+//                Intent intent = new Intent(this, EditImageActivity.class);
+//                Bundle bundle =  new Bundle();
+//                bundle.putSerializable("picture_bean",bean.getResult());
+//                intent.putExtras(bundle);
+//                intent.putExtra(EditImageActivity.EDIT_TYPE, EditImageActivity.EDIT_TYPE_EDIT);
+//                startActivity(intent);
                 break;
             case R.id.tv_change_img:
                 if (Integer.parseInt(mcount) > 0) {
-                    Intent intent = new Intent(this, DiscoverDetailedActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("id", id);
-                    bundle.putString("orginid", orginid);
-                    bundle.putString("orgintable", orgintable);
-                    bundle.putString("uid", uid);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    Intent intent01 = new Intent(this, DiscoverDetailedActivity.class);
+                    Bundle bundle01 = new Bundle();
+                    bundle01.putString("id", id);
+                    bundle01.putString("orginid", orginid);
+                    bundle01.putString("orgintable", orgintable);
+                    bundle01.putString("uid", uid);
+                    intent01.putExtras(bundle01);
+                    startActivity(intent01);
                 } else {
                     ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
                 }
