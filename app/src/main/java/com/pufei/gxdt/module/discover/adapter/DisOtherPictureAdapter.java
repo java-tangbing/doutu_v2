@@ -35,7 +35,7 @@ public class DisOtherPictureAdapter extends BaseQuickAdapter<DiscoverListBean.Re
     protected void convert(BaseViewHolder helper, DiscoverListBean.ResultBean item) {
 //        activity_picture_item_image
 
-        GlideApp.with(mContext).load(item.getUrl()).placeholder(R.mipmap.ic_default_picture)
+        GlideApp.with(mContext).load(item.getMake_url()).placeholder(R.mipmap.ic_default_picture)
                 .into((ImageView) helper.getView(R.id.activity_picture_item_image));
     }
 }

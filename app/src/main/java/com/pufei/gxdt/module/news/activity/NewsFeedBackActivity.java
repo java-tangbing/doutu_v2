@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.news.activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.news.adapter.NewsFeedBackAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
+import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
 import com.pufei.gxdt.module.news.view.NewsView;
 import com.pufei.gxdt.utils.KeyUtil;
@@ -27,6 +29,7 @@ import com.pufei.gxdt.utils.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,17 +45,19 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
     LinearLayout backlinearLayout;
     @BindView(R.id.tv_title)
     TextView textViewTitle;
+    @BindView(R.id.news_feedback_user_message_et)
+    EditText editTextMessage;
 
     NewsFeedBackAdapter newsFeedBackAdapter;
     private List<NewsBean.ResultBean> mlist;
     private String auth = "";
+    private String advice = "";
 
     @Override
     public void initView() {
+        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         textViewTitle.setText(getResources().getString(R.string.news_feedback));
         backlinearLayout.setVisibility(View.VISIBLE);
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
-
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
@@ -63,21 +68,22 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         mlist = new ArrayList<>();
         newsFeedBackAdapter = new NewsFeedBackAdapter(mlist);
         recyclerView.setAdapter(newsFeedBackAdapter);
-        setMyAdapter();
+        if (App.userBean != null) {
+            setMyAdapter();
+        }
     }
 
     public void setMyAdapter() {
-        Map<String, String> map = new HashMap<>();
-        map.put("auth", App.userBean.getAuth());
-        map.put("sign", "sign");
-        map.put("key", "key");
-        map.put("deviceid", SystemInfoUtils.deviced(this));
-        map.put("version", SystemInfoUtils.versionName(this));
-        map.put("os", "1");
-        map.put("timestamp", System.currentTimeMillis() / 1000 + "");
-        map.put("type", "3");
+
+        JSONObject jsonObject = KeyUtil.getJson(this);
+        try {
+            jsonObject.put("auth", auth);
+            jsonObject.put("type", 3);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         if (NetWorkUtil.isNetworkConnected(this)) {
-            presenter.newsNoticeContent(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
+            presenter.newsNoticeContent(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
             ToastUtils.showShort(this, "请检查网络设置");
         }
@@ -89,12 +95,31 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
     }
 
 
-    @OnClick(R.id.ll_title_left)
+    @OnClick({R.id.ll_title_left, R.id.news_feedback_send_message_bt})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.ll_title_left:
                 finish();
                 break;
+            case R.id.news_feedback_send_message_bt:
+                sendMessage();
+                break;
+        }
+    }
+
+    public void sendMessage() {
+        advice = editTextMessage.getText().toString();
+        JSONObject jsonObject = KeyUtil.getJson(this);
+        try {
+            jsonObject.put("auth", auth);
+            jsonObject.put("advice", advice);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (NetWorkUtil.isNetworkConnected(this)) {
+            presenter.sendAdvice(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        } else {
+            ToastUtils.showShort(this, "请检查网络设置");
         }
     }
 
@@ -117,5 +142,25 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
             mlist.addAll(bean.getResult());
             newsFeedBackAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void getAdviceResult(SendBean bean) {
+        if (bean != null) {
+//            if (bean.getCode() == "0") {
+                NewsBean.ResultBean resultBean = new NewsBean.ResultBean();
+                resultBean.setContent(advice);
+                SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                String date = sDateFormat.format(new java.util.Date());
+                resultBean.setDateline(date);
+                resultBean.setUrl(App.userBean.getHead());
+                resultBean.setOrgin("1");
+                mlist.add(resultBean);
+                newsFeedBackAdapter.notifyDataSetChanged();
+//            }else {
+//                ToastUtils.showShort(this, "发送失败");
+//            }
+        }
+
     }
 }

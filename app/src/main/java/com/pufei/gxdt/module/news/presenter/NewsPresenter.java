@@ -5,6 +5,7 @@ import com.pufei.gxdt.base.BasePresenter;
 
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
+import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.view.NewsView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -35,6 +36,19 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                     @Override
                     public void accept(NewsBean newsBean) throws Exception {
                         baseview.getsNoticeContent(newsBean);
+                    }
+                });
+        addSubscription(disposable);
+    }
+
+    public void sendAdvice(RequestBody body) {
+        Disposable disposable = ApiService.getNewsApi().getAdvice(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<SendBean>() {
+                    @Override
+                    public void accept(SendBean sendBean) throws Exception {
+                        baseview.getAdviceResult(sendBean);
                     }
                 });
         addSubscription(disposable);
