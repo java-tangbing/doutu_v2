@@ -78,6 +78,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
     @Override
     public void getData() {
+        setOrginImagedet();
         mlist = new ArrayList<>();
         discoverDetailedAdapter = new DiscoverDetailedAdapter(mlist);
         discoverDetailedAdapter.setOnItemClickListener(this);
@@ -126,18 +127,20 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     public void getDiscoverDetailed(DiscoverEditImageBean bean) {
 
         if (bean.getResult() == null) return;
-        if (bean.getMsg() == "success") {
-            GlideApp.with(this).load(bean.getResult().getOrgin_url())
-                    .placeholder(R.mipmap.ic_default_picture).into(originalImageView);
-            countTextView.setText(bean.getResult().getCount());
-            tv_username.setText(bean.getResult().getUsername());
-            if (bean.getResult().getData().size() > 0) {
-                mlist.addAll(bean.getResult().getData());
-                discoverDetailedAdapter.notifyDataSetChanged();
-            }
+
+        GlideApp.with(this).load(bean.getResult().getOrgin_url())
+                .placeholder(R.mipmap.ic_default_picture).into(originalImageView);
+        countTextView.setText(bean.getResult().getCount());
+        tv_username.setText(bean.getResult().getUsername());
+        if (bean.getResult().getData().size() > 0) {
+            mlist.addAll(bean.getResult().getData());
+            discoverDetailedAdapter.notifyDataSetChanged();
+
         }
 
     }
+
+  public  void   setOrginImagedet(){}
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

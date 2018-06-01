@@ -21,22 +21,22 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.Resu
      */
     public NewsFeedBackAdapter(List<NewsBean.ResultBean> data) {
         super(data);
-        addItemType(0, R.layout.activity_news_feedback_item_user);
-        addItemType(1, R.layout.activity_news_feedback_item_server);
+        addItemType(1, R.layout.activity_news_feedback_item_user);
+        addItemType(0, R.layout.activity_news_feedback_item_server);
     }
 
 
     @Override
     protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
         switch (helper.getItemViewType()) {
-            case 0:
+            case 1:
                 helper.setText(R.id.news_feedback_item_user_dateline_tv, item.getDateline())
                         .setText(R.id.news_feedback_item_user_content_tv, item.getContent());
                 GlideApp.with(mContext).load(item.getUrl())
                         .placeholder(R.mipmap.my_uer_picture)
                         .into((CircleImageView) helper.getView(R.id.news_feedback_item_user_icon_cv));
                 break;
-            case 1:
+            case 0:
                 helper.setText(R.id.news_feedback_item_server_dateline_tv, item.getDateline())
                         .setText(R.id.news_feedback_item_server_content_tv, item.getContent());
                 GlideApp.with(mContext).load(item.getUrl())

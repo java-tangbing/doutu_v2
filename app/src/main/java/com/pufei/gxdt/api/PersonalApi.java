@@ -1,9 +1,9 @@
 package com.pufei.gxdt.api;
 
-import com.pufei.gxdt.base.BaseBean;
 import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.bean.SetAvatarResultBean;
 import com.pufei.gxdt.module.user.bean.SetPersonalResultBean;
+import com.pufei.gxdt.module.user.bean.SetsBean;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -25,5 +25,8 @@ public interface PersonalApi {
 
     @POST("User/changeProfile")
     Observable<SetPersonalResultBean> setProfile(@Body RequestBody body);
+
+    @POST("User/getSets")
+    Observable<SetsBean> getSets(@Body RequestBody body);
 
 }

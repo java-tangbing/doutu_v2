@@ -129,7 +129,7 @@ public class UserFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_checkin_state, R.id.fm_head, R.id.user_edit, R.id.tv_user_favorite, R.id.tv_user_publish, R.id.tv_about_product, R.id.tv_douqi, R.id.tv_user_draft})
+    @OnClick({R.id.tv_checkin_state, R.id.fm_head, R.id.user_edit, R.id.tv_user_favorite, R.id.tv_user_publish, R.id.tv_setting, R.id.tv_douqi, R.id.tv_user_draft})
     public void onViewClicked(View view) {
 
         if (App.userBean == null) {
@@ -174,7 +174,7 @@ public class UserFragment extends BaseFragment {
             case R.id.tv_douqi:
                 startActivity(new Intent(getActivity(), CrunchiesActivity.class));
                 break;
-            case R.id.tv_about_product:
+            case R.id.tv_setting:
                 startActivity(new Intent(getActivity(), SettingActivity.class));
                 break;
 

@@ -20,6 +20,7 @@ import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
 import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
+import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
 import com.pufei.gxdt.module.news.view.NewsView;
 import com.pufei.gxdt.utils.KeyUtil;
@@ -62,7 +63,6 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         textViewTitle.setText(getResources().getString(R.string.news_system));
         linearLayoutBack.setVisibility(View.VISIBLE);
 
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
@@ -76,12 +76,14 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         newsSystemAdapter = new NewsSystemAdapter(mlist, isbdphone);
         newsSystemAdapter.setOnItemChildClickListener(this);
         recyclerView.setAdapter(newsSystemAdapter);
-        setMyAdapter();
+        if (App.userBean != null) {
+            setMyAdapter();
+        }
     }
 
 
-
     public void setMyAdapter() {
+        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("auth", auth);
@@ -126,6 +128,11 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 
     }
 
+    @Override
+    public void getAdviceResult(SendBean bean) {
+
+    }
+
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -141,7 +148,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         }
     }
 
-    @OnClick (R.id.ll_title_left)
+    @OnClick(R.id.ll_title_left)
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.ll_title_left:

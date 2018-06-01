@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/userdata_head_ll"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="170dp"
         android:background="@color/background_gray"
         android:orientation="horizontal">
 

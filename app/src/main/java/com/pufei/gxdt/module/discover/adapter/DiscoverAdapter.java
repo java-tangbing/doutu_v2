@@ -22,7 +22,7 @@ public class DiscoverAdapter extends BaseQuickAdapter<DiscoverListBean.ResultBea
     @Override
     protected void convert(BaseViewHolder helper, DiscoverListBean.ResultBean item) {
 //        helper.setText(R.id.dis_item_iv);
-        GlideApp.with(mContext).load(item.getUrl())
+        GlideApp.with(mContext).load(item.getMake_url())
                 .placeholder(R.mipmap.newloding)
                 .error(R.mipmap.ic_default_picture)
                 .fallback(R.mipmap.ic_default_picture)
