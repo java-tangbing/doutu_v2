@@ -80,7 +80,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     public void getData() {
         mlist = new ArrayList<>();
         discoverDetailedAdapter = new DiscoverDetailedAdapter(mlist);
-//        discoverAdapter.setOnItemClickListener(this);
+        discoverDetailedAdapter.setOnItemClickListener(this);
 //        discoverAdapter.addHeaderView(videoHeaderView);
         recyclerView.setAdapter(discoverDetailedAdapter);
         setAdapter();
@@ -124,15 +124,19 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
     @Override
     public void getDiscoverDetailed(DiscoverEditImageBean bean) {
+
         if (bean.getResult() == null) return;
-        GlideApp.with(this).load(bean.getResult().getOrgin_url())
-                .placeholder(R.mipmap.ic_default_picture).into(originalImageView);
-        countTextView.setText(bean.getResult().getCount());
-        tv_username.setText(bean.getResult().getUsername());
-        if (bean.getResult().getData().size() > 0) {
-            mlist.addAll(bean.getResult().getData());
-            discoverDetailedAdapter.notifyDataSetChanged();
+        if (bean.getMsg() == "success") {
+            GlideApp.with(this).load(bean.getResult().getOrgin_url())
+                    .placeholder(R.mipmap.ic_default_picture).into(originalImageView);
+            countTextView.setText(bean.getResult().getCount());
+            tv_username.setText(bean.getResult().getUsername());
+            if (bean.getResult().getData().size() > 0) {
+                mlist.addAll(bean.getResult().getData());
+                discoverDetailedAdapter.notifyDataSetChanged();
+            }
         }
+
     }
 
     @Override

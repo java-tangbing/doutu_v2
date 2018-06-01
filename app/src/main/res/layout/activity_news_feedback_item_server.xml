@@ -51,6 +51,7 @@
                 android:id="@+id/news_feedback_item_server_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="70dp"
                 android:padding="8dp"
                 android:text="收到最新消息的测试时测试收到最新消息的测试时测试收到最新消息的测试时测试收到最新消息的测试时测试收到最新消息的测试时测试收到最新消息的测试时测试" />
 
