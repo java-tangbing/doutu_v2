@@ -7,6 +7,7 @@ import android.util.Log;
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.maker.view.EditImageView;
+import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,9 +32,9 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
         Disposable disposable = ApiService.getEditImageApi().upLoad(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
+                .subscribe(new Consumer<ModifyResultBean>() {
                     @Override
-                    public void accept(String result) throws Exception {
+                    public void accept(ModifyResultBean result) throws Exception {
                         baseview.upLoadImageResult(result);
                     }
                 });

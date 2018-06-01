@@ -23,6 +23,7 @@ public class NewsPictureAdapter extends BaseQuickAdapter<NewsBean.ResultBean, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
+        helper.setText(R.id.news_picture_item_content, item.getContent())
 //
         helper.setText(R.id.news_picture_item_content, item.getContent());
         GlideApp.with(mContext).load(item.getUrl())

@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -45,6 +46,7 @@ import com.pufei.gxdt.db.ImageDraft;
 import com.pufei.gxdt.db.ImageDraft_Table;
 import com.pufei.gxdt.db.TextDraft;
 import com.pufei.gxdt.db.TextDraft_Table;
+import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.module.maker.fragment.ImageBlushFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageStickerFragment;
@@ -148,6 +150,11 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
             imageId = System.currentTimeMillis() + "";
         } else if (intent.getStringExtra(EDIT_TYPE).equals(EDIT_TYPE_EDIT)) {
             editType = 1;
+            Bundle bundle = intent.getExtras();
+            if(bundle != null) {
+                PictureDetailBean.ResultBean bean = (PictureDetailBean.ResultBean) bundle.getSerializable("picture_bean");
+                Log.e("imageId",bean.getUrl()+"");
+            }
         } else if (intent.getStringExtra(EDIT_TYPE).equals(EDIT_TYPE_DRAFT)) {
             editType = 2;
             imageId = intent.getStringExtra(IMAGE_ID);
@@ -592,7 +599,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     @Override
     public void onRemoveViewListener(int numberOfAddedViews) {
-
+        type = 0;
     }
 
     @Override

@@ -213,7 +213,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                     if (!isBackgroundVisible) {
                         mOnPhotoEditorListener.onEditTextChangeListener(textRootView, textInput, currentTextColor);
                     } else {
-                        mOnPhotoEditorListener.onEditTextChangeListener(null, text, currentTextColor);
+                        mOnPhotoEditorListener.onEditTextChangeListener(null, textInput, currentTextColor);
                     }
                 }
             }
