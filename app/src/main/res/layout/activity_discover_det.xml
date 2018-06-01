@@ -9,6 +9,7 @@
         android:id="@+id/dis_det_back_iv"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginBottom="10dp"
         android:src="@mipmap/com_bt_ttab_return_2" />
 
     <LinearLayout
