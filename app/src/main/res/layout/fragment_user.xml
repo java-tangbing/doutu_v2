@@ -191,7 +191,7 @@
             android:background="@color/lineColor" />
 
         <TextView
-            android:id="@+id/tv_about_product"
+            android:id="@+id/tv_setting"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:drawablePadding="10dp"

@@ -19,7 +19,7 @@
     <string name="user_name">昵称</string>
     <string name="support_language">仅支持中英文及数字</string>
     <string name="save">保存</string>
-    <string name="log_out">注销登录</string>
+    <string name="log_out">退出登录</string>
     <string name="vip1">确定退出吗</string>
     <string name="kaitong">取消</string>
     <string name="bind_phone">绑定手机</string>
