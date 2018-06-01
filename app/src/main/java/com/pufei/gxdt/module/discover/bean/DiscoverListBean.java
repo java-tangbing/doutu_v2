@@ -65,7 +65,16 @@ public class DiscoverListBean implements Serializable {
         private String title;
         private String dateline;
         private String url;
+        private String make_url;
         private UserBean user;
+
+        public String getMake_url() {
+            return make_url;
+        }
+
+        public void setMake_url(String make_url) {
+            this.make_url = make_url;
+        }
 
         public String getId() {
             return id;

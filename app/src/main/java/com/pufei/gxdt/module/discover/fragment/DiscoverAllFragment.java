@@ -2,9 +2,12 @@ package com.pufei.gxdt.module.discover.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
@@ -29,17 +32,24 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 
-public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView, BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
+        , SwipeRefreshLayout.OnRefreshListener
+        , BaseQuickAdapter.OnItemClickListener
+        , BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.rv_all_dis)
     RecyclerView recyclerView;
+    @BindView(R.id.dis_all_refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     private List<DiscoverListBean.ResultBean> mlist;
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
     private boolean isDiscover = false;
+
 
     @Override
     public void initView() {
@@ -67,6 +77,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         discoverAdapter.disableLoadMoreIfNotFullPage();
         page = 1;
         setMyadapter();
+        initRefreshLayout();
     }
 
     private void setMyadapter() {
@@ -147,5 +158,30 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     @Override
     public void onLoadMoreRequested() {
         setMyadapter();
+    }
+
+
+    private void initRefreshLayout() {
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+                android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        refreshLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+//        final Random random = new Random();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setMyadapter();
+//                mList.add(0, "我是天才" + random.nextInt(100) + "号");
+                discoverAdapter.notifyDataSetChanged();
+                Toast.makeText(activity, "刷新了一条数据", Toast.LENGTH_SHORT).show();
+                // 加载完数据设置为不刷新状态，将下拉进度收起来
+                refreshLayout.setRefreshing(false);
+            }
+        }, 1200);
+
+
     }
 }
