@@ -4,6 +4,7 @@ import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.discover.bean.DisPicDetBean;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
+import com.pufei.gxdt.module.home.model.PictureDetailBean;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -20,6 +21,19 @@ public class DisPicDetPresenter extends BasePresenter<DisPicDetView> {
                     @Override
                     public void accept(DisPicDetBean noticeBean) throws Exception {
                         baseview.getImageDetail(noticeBean);
+                    }
+                });
+        addSubscription(disposable);
+    }
+
+    public void getImageDetail(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getImageDetailList(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<PictureDetailBean>() {
+                    @Override
+                    public void accept(PictureDetailBean result) throws Exception {
+                        baseview.resultImageDetail(result);
                     }
                 });
         addSubscription(disposable);

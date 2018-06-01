@@ -21,6 +21,7 @@ import com.pufei.gxdt.module.discover.presenter.DisPicDetPresenter;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
 import com.pufei.gxdt.module.home.adapter.OtherPictureAdapter;
+import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.KeyUtil;
@@ -123,6 +124,22 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
     }
 
+    public void setImageDetail() {
+        JSONObject jsonObject = KeyUtil.getJson(this);
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("orginid", orginid);
+            jsonObject.put("orgintable", orgintable);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (NetWorkUtil.isNetworkConnected(this)) {
+            presenter.getImageDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        } else {
+            ToastUtils.showShort(this, "请检查网络设置");
+        }
+    }
+
 
     @Override
     public void getImageDetail(DisPicDetBean bean) {
@@ -139,6 +156,21 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
         uid = bean.getResult().getUid();
         mcount = bean.getResult().getCount();
+    }
+
+    @Override
+    public void resultImageDetail(PictureDetailBean bean) {
+        if (bean.getResult() != null) {
+            Intent intent = new Intent(this, EditImageActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("picture_bean", bean.getResult());
+            intent.putExtras(bundle);
+            intent.putExtra(EditImageActivity.EDIT_TYPE, EditImageActivity.EDIT_TYPE_EDIT);
+            startActivity(intent);
+        }else {
+            ToastUtils.showShort(this, "value is none");
+        }
+
     }
 
 
@@ -171,13 +203,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 finish();
                 break;
             case R.id.look_edit_image_iv:
-//
-//                Intent intent = new Intent(this, EditImageActivity.class);
-//                Bundle bundle =  new Bundle();
-//                bundle.putSerializable("picture_bean",bean.getResult());
-//                intent.putExtras(bundle);
-//                intent.putExtra(EditImageActivity.EDIT_TYPE, EditImageActivity.EDIT_TYPE_EDIT);
-//                startActivity(intent);
+                setImageDetail();
                 break;
             case R.id.tv_change_img:
                 if (Integer.parseInt(mcount) > 0) {
