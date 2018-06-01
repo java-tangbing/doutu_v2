@@ -2,12 +2,12 @@ package com.pufei.gxdt.module.discover.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
+
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
@@ -17,7 +17,7 @@ import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
-import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
+
 import com.pufei.gxdt.module.discover.view.DiscoverView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
@@ -26,13 +26,14 @@ import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.viewpager.DividerGridItemDecoration;
 import com.pufei.gxdt.widgets.viewpager.GridSpacingItemDecoration;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 import butterknife.BindView;
 
@@ -43,12 +44,12 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     @BindView(R.id.rv_all_dis)
     RecyclerView recyclerView;
     @BindView(R.id.dis_all_refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    SwipeRefreshLayout swipeRefreshLayout;
     private List<DiscoverListBean.ResultBean> mlist;
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
-    private boolean isDiscover = false;
+    private boolean isRefreshing = false;
 
 
     @Override
@@ -73,8 +74,9 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         discoverAdapter.setOnItemClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
-        recyclerView.setAdapter(discoverAdapter);
         discoverAdapter.disableLoadMoreIfNotFullPage();
+        recyclerView.setAdapter(discoverAdapter);
+
         page = 1;
         setMyadapter();
         initRefreshLayout();
@@ -125,26 +127,36 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
-        if (bean.getResult() == null) return;
+//        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
-            page = page + 1;
-//            if (isDiscover) {
-//                isDiscover = false;
-//                mlist.clear();
-//                mlist.addAll(bean.getResult());
+            if (isLoadMore) {
+//                if (bean.getResult().size() > 0) {
+                page = page + 1;
+                mlist.addAll(bean.getResult());
+//            discoverAdapter.addData(mlist);
 //                discoverAdapter.setNewData(mlist);
-//            } else {
-//                mlist.addAll(bean.getResult());
-//                discoverAdapter.loadMoreComplete();
-//            }
+                discoverAdapter.notifyDataSetChanged();
+                isLoadMore = false;
+                discoverAdapter.loadMoreComplete();
 
-            mlist.addAll(bean.getResult());
-            discoverAdapter.setNewData(mlist);
-            discoverAdapter.loadMoreComplete();
-            discoverAdapter.notifyDataSetChanged();
-//            isLoadMore = false;
+//                }else {
+//                    discoverAdapter.loadMoreEnd();
+//                }
+            } else if (isRefreshing) {
+                page = page + 1;
+                mlist = new ArrayList<>();
+                mlist.addAll(bean.getResult());
+                discoverAdapter.setNewData(mlist);
+//                discoverAdapter.loadMoreComplete();
+                discoverAdapter.notifyDataSetChanged();
+                isRefreshing = false;
+                swipeRefreshLayout.setRefreshing(false);
+            } else {
+                page = page + 1;
+                mlist.addAll(bean.getResult());
+                discoverAdapter.notifyDataSetChanged();
+            }
         } else {
-//            isLoadMore = false;
             discoverAdapter.loadMoreEnd();
         }
 
@@ -155,33 +167,30 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     }
 
-    @Override
-    public void onLoadMoreRequested() {
-        setMyadapter();
-    }
-
-
+    //下拉刷新
     private void initRefreshLayout() {
-        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
                 android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        refreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
+
+    //下拉刷新
     @Override
     public void onRefresh() {
-//        final Random random = new Random();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setMyadapter();
-//                mList.add(0, "我是天才" + random.nextInt(100) + "号");
-                discoverAdapter.notifyDataSetChanged();
-                Toast.makeText(activity, "刷新了一条数据", Toast.LENGTH_SHORT).show();
-                // 加载完数据设置为不刷新状态，将下拉进度收起来
-                refreshLayout.setRefreshing(false);
-            }
-        }, 1200);
+        page = 1;
+        isRefreshing = true;
+        isLoadMore = false;
+        setMyadapter();
 
+//        swipeRefreshView.setRefreshing(false);
+    }
 
+    //上拉加载跟多
+    @Override
+    public void onLoadMoreRequested() {
+        isLoadMore = true;
+        isRefreshing = false;
+        setMyadapter();
     }
 }
