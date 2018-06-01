@@ -8,13 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.sign.model.PictureBeanRe;
 
-import java.io.File;
 import java.util.List;
 
 /**

@@ -48,7 +48,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> implements SetPersonalView, View.OnClickListener {
-
     @BindView(R.id.ll_title_left)
     LinearLayout llTitleLeft;
     @BindView(R.id.tv_title)
@@ -61,7 +60,6 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     TextView tvSex;
     @BindView(R.id.login_state)
     TextView loginstate;
-
     @BindView(R.id.userdata_head)
     CircleImageView userdataHead;
     @BindView(R.id.userdata_dec)
@@ -176,6 +174,8 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                     ToastUtils.showLong(this, "请先登录");
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -186,7 +186,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             ArrayList<String> images = data.getStringArrayListExtra(
                     ImageSelectorUtils.SELECT_RESULT);
             String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(images.get(0)));
-            requestSetAvatar("pic", base64);
+            requestSetAvatar("", base64);
             App.userBean.setHead(images.get(0));
         }
     }
@@ -243,9 +243,9 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             } else {
                 ToastUtils.showShort(this, "请检查网络设置");
             }
-         } catch (org.json.JSONException e) {
+        } catch (org.json.JSONException e) {
             e.printStackTrace();
-         }
+        }
     }
 
     @Override
