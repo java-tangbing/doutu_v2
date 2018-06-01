@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.contents.Contents;
@@ -19,13 +21,16 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -62,15 +67,17 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
     }
 
     public void setMyAdapter() {
-        JSONObject jsonObject = KeyUtil.getJson(this);
-        try {
-            jsonObject.put("auth", auth);
-            jsonObject.put("type", 2);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Map<String, String> map = new HashMap<>();
+        map.put("auth", App.userBean.getAuth());
+        map.put("sign", "sign");
+        map.put("key", "key");
+        map.put("deviceid", SystemInfoUtils.deviced(this));
+        map.put("version", SystemInfoUtils.versionName(this));
+        map.put("os", "1");
+        map.put("timestamp", System.currentTimeMillis() / 1000 + "");
+        map.put("type", "3");
         if (NetWorkUtil.isNetworkConnected(this)) {
-            presenter.newsNoticeContent(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            presenter.newsNoticeContent(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
         } else {
             ToastUtils.showShort(this, "请检查网络设置");
         }
@@ -106,7 +113,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
 
     @Override
     public void getsNoticeContent(NewsBean bean) {
-        if (bean.getResult().size() > 0) {
+        if (bean.getResult() != null) {
             mlist.addAll(bean.getResult());
             newsFeedBackAdapter.notifyDataSetChanged();
         }

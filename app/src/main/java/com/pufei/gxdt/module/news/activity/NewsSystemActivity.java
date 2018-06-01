@@ -61,20 +61,11 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         }
         textViewTitle.setText(getResources().getString(R.string.news_system));
         linearLayoutBack.setVisibility(View.VISIBLE);
-//        linearLayoutBack.setOnClickListener(this);
 
         auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
-//        Intent intent = getIntent();
-////        intent.getStringExtra("auth");
-////        type = intent.getStringExtra("type");
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
-//        viewHeader = getLayoutInflater().inflate(R.layout.activity_news_item_unlanded, (ViewGroup) recyclerView.getParent(), false);
-//        textViewBD = (TextView) viewHeader.findViewById(R.id.new_item_unlanded_bd);
-//        textViewBD.setOnClickListener(this);
-
-//        headerViewBind = new HeaderViewBind(viewHeader);
     }
 
     @Override
@@ -83,25 +74,11 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 
         mlist = new ArrayList<>();
         newsSystemAdapter = new NewsSystemAdapter(mlist, isbdphone);
-//        newsSystemAdapter.setOnItemClickListener(this);
-//        newsSystemAdapter.addHeaderView(viewHeader);
-//        if (4 < 5) {
-//            viewHeader.setVisibility(View.VISIBLE);
-//            recyclerView.setAdapter(newsSystemAdapter);
-////            setMyAdapter();
-//        }else {
-//        viewHeader.setVisibility(View.GONE);
         newsSystemAdapter.setOnItemChildClickListener(this);
         recyclerView.setAdapter(newsSystemAdapter);
         setMyAdapter();
-//        }
     }
 
-//    class HeaderViewBind {
-//        public HeaderViewBind(View headerView) {
-//            ButterKnife.bind(this, headerView);
-//        }
-//    }
 
 
     public void setMyAdapter() {

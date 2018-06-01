@@ -17,35 +17,25 @@
             android:layout_height="wrap_content"
             android:text="日期" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:text="时间" />-->
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|right|top"
-        android:minHeight="56dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="right|center_vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="116dp"
-            android:background="@color/white"
+            android:background="@drawable/news_dialogue_right_normal"
             android:gravity="center">
 
             <TextView
                 android:id="@+id/news_feedback_item_user_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="70dp"
-                android:gravity="left|top"
-                android:padding="8dp"
-                android:text="测试用双行测试用测试用双行测试用测试用双行测试用测试用双行测试用测试用双行测试用" />
+                android:text="sfd" />
         </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView

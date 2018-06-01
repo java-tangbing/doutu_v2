@@ -7,7 +7,7 @@ import java.util.List;
  * Created by tb on 2018/6/1.
  */
 
-public class PictureDetailBean {
+public class PictureDetailBean implements Serializable {
 
     /**
      * code : 0
@@ -138,7 +138,7 @@ public class PictureDetailBean {
             this.data = data;
         }
 
-        public static class DataBean {
+        public static class DataBean implements Serializable{
             /**
              * did : 4
              * index : 0
