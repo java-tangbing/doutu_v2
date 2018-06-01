@@ -284,6 +284,7 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 previousIndex = 0;
                 break;
             case R.id.tv_text_mode:
+
                 setSelectedItemState(tvTextMode);
                 setUnSelectedItemState(tvPicMode, tvBlushMode);
                 showFragment(1, previousIndex);
