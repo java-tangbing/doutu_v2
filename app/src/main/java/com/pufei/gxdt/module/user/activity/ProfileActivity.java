@@ -119,11 +119,11 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
 
     public void initListener() {
         userdataname.setText(App.userBean.getName());
+        userdata_dec.setText(App.userBean.getMind());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void eventData(EventMsg type) {
-        //  Log.e(TAG, "eventData");
         if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
             initListener();
         } else if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
@@ -144,6 +144,9 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 break;
             case R.id.userdata_name_ll:
                 startActivity(new Intent(this, EditNameActivity.class));
+                break;
+            case R.id.userdata_declaration_ll:
+                startActivity(new Intent(this, EditDeclarationActivity.class));
                 break;
             case R.id.userdata_gender_ll:
                 popupWindow = new CommonPopupWindow.Builder(this)
@@ -189,19 +192,21 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     }
 
     private void requestSetAvatar(String type, String value) {
-        Map<String, String> map = new HashMap<>();
-        map.put("auth", App.userBean.getAuth());
-        map.put(type, value);
-        String requestString = new Gson().toJson(map);
-        if (NetWorkUtil.isNetworkConnected(this)) {
-            RequestBody requestBody =
-                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                            requestString);
-            presenter.setPersonalAvatar(requestBody);
-        } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+        try {
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
+                jsonObject.put("auth", App.userBean.getAuth());
+                jsonObject.put("header", "");
+                jsonObject.put("username", value);
+                jsonObject.put("gender", "");
+                jsonObject.put("mind", "");
+                presenter.setPersonal(com.pufei.gxdt.utils.RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } else {
+                ToastUtils.showShort(this, "请检查网络设置");
+            }
+        } catch (org.json.JSONException e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override
@@ -226,21 +231,21 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     }
 
     private void requestSetSex(String sex) {
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("auth", App.userBean.getAuth());
-        Map<String, String> map2 = new HashMap<>();
-        map2.put("sex", sex);
-        map1.put("data", map2);
-        String resutString = new Gson().toJson(map1);
-        if (NetWorkUtil.isNetworkConnected(this)) {
-            RequestBody requestBody =
-                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                            resutString);
-            presenter.setPersonal(requestBody);
-        } else {
-            ToastUtils.showShort(this, "请检查网络设置");
-        }
-
+        try {
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
+                jsonObject.put("auth", App.userBean.getAuth());
+                jsonObject.put("header", "");
+                jsonObject.put("username", "");
+                jsonObject.put("gender", sex);
+                jsonObject.put("mind", "");
+                presenter.setPersonal(com.pufei.gxdt.utils.RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } else {
+                ToastUtils.showShort(this, "请检查网络设置");
+            }
+         } catch (org.json.JSONException e) {
+            e.printStackTrace();
+         }
     }
 
     @Override

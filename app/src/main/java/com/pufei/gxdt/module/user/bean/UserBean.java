@@ -12,6 +12,7 @@ public class UserBean {
     private String auth;
     private String phone;
     private boolean pwd;
+    private String mind;
 
     public UserBean(String name, String head, String gender, String address, String auth, String phone) {
         this.name = name;
@@ -93,5 +94,12 @@ public class UserBean {
         this.address = address;
     }
 
-}
+    public String getMind() {
+            return mind;
+        }
 
+    public void setMind(String mind) {
+            this.mind = mind;
+        }
+
+}
