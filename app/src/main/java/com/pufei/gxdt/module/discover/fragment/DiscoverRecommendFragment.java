@@ -47,7 +47,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
-    private boolean isRefreshing = true;
+    private boolean isRefreshing = false;
+    private boolean isfirst = true;
     private String auth;
 
     @Override
@@ -129,35 +130,35 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 //        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
             if (isLoadMore) {
-//                if (bean.getResult().size() > 0) {
                 page = page + 1;
                 mlist.addAll(bean.getResult());
-//            discoverAdapter.addData(mlist);
-//                discoverAdapter.setNewData(mlist);
                 discoverAdapter.notifyDataSetChanged();
                 isLoadMore = false;
                 discoverAdapter.loadMoreComplete();
-
-//                }else {
-//                    discoverAdapter.loadMoreEnd();
-//                }
-            } else if (isRefreshing) {
+            }
+            if (isRefreshing) {
                 page = page + 1;
                 mlist = new ArrayList<>();
                 mlist.addAll(bean.getResult());
                 discoverAdapter.setNewData(mlist);
-//                discoverAdapter.loadMoreComplete();
                 discoverAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
+                ToastUtils.showShort(getActivity(), "刷新完毕");
             }
-//            else {
-//                page = page + 1;
-//                mlist.addAll(bean.getResult());
-//                discoverAdapter.notifyDataSetChanged();
-//            }
-        } else {
+            if (isfirst) {
+                isfirst=false;
+                isLoadMore = true;
+                isRefreshing = true;
+                mlist.addAll(bean.getResult());
+                discoverAdapter.notifyDataSetChanged();
+            }
+        }
+        else {
+            swipeRefreshLayout.setRefreshing(false);
+            discoverAdapter.loadMoreComplete();
             discoverAdapter.loadMoreEnd();
+//            ToastUtils.showShort(getActivity(), "刷新完毕");
         }
 
     }
