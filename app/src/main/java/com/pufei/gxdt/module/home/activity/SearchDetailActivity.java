@@ -58,7 +58,7 @@ public class SearchDetailActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 try {
                     bundle.putString("category_id", classiList.get(postion).getId());
-                    //bundle.putString("hot", classiList.get(postion).getImgs().get(0).getDateline());
+                    bundle.putString("hot","");
                     bundle.putString("title", classiList.get(postion).getCategory_name());
                     intent.putExtras(bundle);
                     startActivity(intent);

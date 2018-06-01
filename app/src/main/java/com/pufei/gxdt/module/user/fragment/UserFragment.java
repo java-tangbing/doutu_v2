@@ -100,6 +100,12 @@ public class UserFragment extends BaseFragment {
         sharedPreferences = getActivity().getSharedPreferences(SHARE_APP_USER, 0);
         if (App.userBean != null) {
             tvUserName.setText(App.userBean.getName());
+            user_dec.setText(App.userBean.getMind());
+            if (App.userBean.getGender().equals("男")) {
+                iv_sex.setImageResource(R.mipmap.user_ic_man);
+            } else {
+                iv_sex.setImageResource(R.mipmap.user_ic_woman);
+            }
             if (!App.userBean.getHead().isEmpty()) {
                 Glide.with(this).load(App.userBean.getHead()).into(ivUserHead);
             } else {
@@ -111,7 +117,7 @@ public class UserFragment extends BaseFragment {
         }
 
         initSign();
-        if(App.userBean != null) {
+        if (App.userBean != null) {
             getScore();
         }
         initLoading();

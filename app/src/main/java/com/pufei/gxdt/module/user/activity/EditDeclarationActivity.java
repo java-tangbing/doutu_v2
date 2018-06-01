@@ -131,7 +131,7 @@ public class EditDeclarationActivity extends BaseMvpActivity<SetPersonalPresente
     @Override
     public void setPersonalInfo(SetPersonalResultBean bean) {
         if (bean.getCode() == 0) {
-            App.userBean.setName(result);
+            App.userBean.setMind(result);
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             EventBus.getDefault().postSticky(new EventMsg(MsgType.UPDATA_USER));
             AppManager.getAppManager().finishActivity();

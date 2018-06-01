@@ -2,26 +2,34 @@ package com.pufei.gxdt.module.discover.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.activity.DisPictureDetailActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
-import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
+
 import com.pufei.gxdt.module.discover.view.DiscoverView;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.viewpager.DividerGridItemDecoration;
 import com.pufei.gxdt.widgets.viewpager.GridSpacingItemDecoration;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,20 +38,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import butterknife.BindView;
 
-public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView, BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
+        , SwipeRefreshLayout.OnRefreshListener
+        , BaseQuickAdapter.OnItemClickListener
+        , BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.rv_all_dis)
     RecyclerView recyclerView;
+    @BindView(R.id.dis_all_refreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     private List<DiscoverListBean.ResultBean> mlist;
     private DiscoverAdapter discoverAdapter;
     private int page;
     private boolean isLoadMore = false;
-    private boolean isDiscover = false;
+    private boolean isRefreshing = false;
+    private String auth;
 
     @Override
     public void initView() {
-
         GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
@@ -63,26 +77,33 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         discoverAdapter.setOnItemClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
-        recyclerView.setAdapter(discoverAdapter);
         discoverAdapter.disableLoadMoreIfNotFullPage();
+        recyclerView.setAdapter(discoverAdapter);
+
         page = 1;
         setMyadapter();
+        initRefreshLayout();
     }
 
     private void setMyadapter() {
-        JSONObject jsonObject = KeyUtil.getJson(getContext());
-        try {
-            jsonObject.put("order", "");
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (NetWorkUtil.isNetworkConnected(getActivity())) {
-            presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } else {
-            ToastUtils.showShort(getActivity(), "请检查网络设置");
-        }
+//        if (App.userBean == null) {
+//            startActivity(new Intent(activity, LoginActivity.class));
+//        } else {
+            auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
+            JSONObject jsonObject = KeyUtil.getJson(getContext());
+            try {
+                jsonObject.put("order", "");
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", auth);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (NetWorkUtil.isNetworkConnected(getActivity())) {
+                presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } else {
+                ToastUtils.showShort(getActivity(), "请检查网络设置");
+            }
+//        }
     }
 
 
@@ -114,26 +135,36 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
-        if (bean.getResult() == null) return;
+//        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
-            page = page + 1;
-//            if (isDiscover) {
-//                isDiscover = false;
-//                mlist.clear();
-//                mlist.addAll(bean.getResult());
+            if (isLoadMore) {
+//                if (bean.getResult().size() > 0) {
+                page = page + 1;
+                mlist.addAll(bean.getResult());
+//            discoverAdapter.addData(mlist);
 //                discoverAdapter.setNewData(mlist);
-//            } else {
-//                mlist.addAll(bean.getResult());
-//                discoverAdapter.loadMoreComplete();
-//            }
+                discoverAdapter.notifyDataSetChanged();
+                isLoadMore = false;
+                discoverAdapter.loadMoreComplete();
 
-            mlist.addAll(bean.getResult());
-            discoverAdapter.setNewData(mlist);
-            discoverAdapter.loadMoreComplete();
-            discoverAdapter.notifyDataSetChanged();
-//            isLoadMore = false;
+//                }else {
+//                    discoverAdapter.loadMoreEnd();
+//                }
+            } else if (isRefreshing) {
+                page = page + 1;
+                mlist = new ArrayList<>();
+                mlist.addAll(bean.getResult());
+                discoverAdapter.setNewData(mlist);
+//                discoverAdapter.loadMoreComplete();
+                discoverAdapter.notifyDataSetChanged();
+                isRefreshing = false;
+                swipeRefreshLayout.setRefreshing(false);
+            } else {
+                page = page + 1;
+                mlist.addAll(bean.getResult());
+                discoverAdapter.notifyDataSetChanged();
+            }
         } else {
-//            isLoadMore = false;
             discoverAdapter.loadMoreEnd();
         }
 
@@ -144,8 +175,30 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     }
 
+    //下拉刷新
+    private void initRefreshLayout() {
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+                android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+
+    //下拉刷新
+    @Override
+    public void onRefresh() {
+        page = 1;
+        isRefreshing = true;
+        isLoadMore = false;
+        setMyadapter();
+
+//        swipeRefreshView.setRefreshing(false);
+    }
+
+    //上拉加载跟多
     @Override
     public void onLoadMoreRequested() {
+        isLoadMore = true;
+        isRefreshing = false;
         setMyadapter();
     }
 }
