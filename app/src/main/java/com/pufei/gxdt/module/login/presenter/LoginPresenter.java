@@ -6,6 +6,7 @@ import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
 import com.pufei.gxdt.module.login.view.LoginView;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -57,6 +58,19 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
 
     public void thirdLogin(RequestBody body) {
+        Disposable disposable = ApiService.loginQQApi().thirdLogin(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<LoginResultBean>() {
+                    @Override
+                    public void accept(LoginResultBean resultBean) throws Exception {
+                        baseview.sendRusult(resultBean);
+                    }
+                });
+        addSubscription(disposable);
+    }
+
+    public void thirdLoginQQ(RequestBody body) {
         Disposable disposable = ApiService.loginQQApi().loginWithQQ(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -87,10 +101,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         Disposable disposable = ApiService.bindPhone().bindPhone(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<LoginResultBean>() {
+                .subscribe(new Consumer<SendCodeBean>() {
                     @Override
-                    public void accept(LoginResultBean resultBean) throws Exception {
-                        baseview.sendRusult(resultBean);
+                    public void accept(SendCodeBean resultBean) throws Exception {
+                        baseview.bindResult(resultBean);
                     }
                 });
         addSubscription(disposable);

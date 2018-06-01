@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
@@ -22,6 +23,7 @@ import com.pufei.gxdt.module.home.view.HomeListView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -182,6 +184,7 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
                 jsonObject.put("category_id", getIntent().getExtras().getString("category_id"));
                 jsonObject.put("page", page + "");
                 jsonObject.put("net", NetWorkUtil.netType(HomeImageActivity.this));
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();

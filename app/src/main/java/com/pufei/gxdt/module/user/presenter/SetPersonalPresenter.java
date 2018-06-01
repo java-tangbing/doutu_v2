@@ -14,7 +14,7 @@ import okhttp3.RequestBody;
 
 public class SetPersonalPresenter extends BasePresenter<SetPersonalView> {
     public void setPersonal(RequestBody value) {
-        Disposable disposable = ApiService.setPersonal().setPresonal(value)
+        Disposable disposable = ApiService.setPersonal().setProfile(value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<SetPersonalResultBean>() {

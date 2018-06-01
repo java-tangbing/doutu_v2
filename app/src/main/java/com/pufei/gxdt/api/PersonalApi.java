@@ -1,5 +1,7 @@
 package com.pufei.gxdt.api;
 
+import com.pufei.gxdt.base.BaseBean;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.bean.SetAvatarResultBean;
 import com.pufei.gxdt.module.user.bean.SetPersonalResultBean;
 
@@ -14,6 +16,14 @@ public interface PersonalApi {
 
     @POST("member/set_avatar")
     Observable<SetAvatarResultBean> setAvatar(@Body RequestBody body);
-//    @POST("v2/member/ischeck")
-//    Observable<CheckinBean> isCheckin(@Body RequestBody body);
+
+    @POST("User/myImages")
+    Observable<MyImagesBean> getMyImages(@Body RequestBody body);
+
+    @POST("User/myDesignImages")
+    Observable<MyImagesBean> getMymyDesignImages(@Body RequestBody body);
+
+    @POST("User/changeProfile")
+    Observable<SetPersonalResultBean> setProfile(@Body RequestBody body);
+
 }

@@ -17,6 +17,7 @@ public class ApiService {
     private static ImageTypeApi imageTypeApi;
     private static DiscoverApi discoverApi;
     private static NewsApi newsApi;
+    private static EditImageApi editImageApi;
 
     public static JokeApi getJokeApi() {
         if (jokeApi == null) {
@@ -92,6 +93,22 @@ public class ApiService {
             newsApi = retrofit.create(NewsApi.class);
         }
         return newsApi;
+    }
+
+    public static PersonalApi getPersonalApi() {
+        if (personalApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            personalApi = retrofit.create(PersonalApi.class);
+        }
+        return personalApi;
+    }
+
+    public static EditImageApi getEditImageApi() {
+        if(editImageApi == null) {
+            Retrofit retrofit = RetrofitFactory.getRetrofit();
+            editImageApi = retrofit.create(EditImageApi.class);
+        }
+        return editImageApi;
     }
 
 }

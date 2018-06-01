@@ -23,7 +23,7 @@
     <application
         android:name=".app.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -35,11 +35,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.user.activity.DraftActivity"/>
-        <activity android:name=".module.maker.activity.MakerFinishActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".module.maker.activity.EditImageActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".module.user.activity.DraftActivity" />
+        <activity
+            android:name=".module.maker.activity.MakerFinishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.maker.activity.EditImageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.discover.activity.DiscoverDetailedActivity"
             android:screenOrientation="portrait" />
@@ -55,7 +57,7 @@
         <activity
             android:name=".module.news.activity.NewsFeedBackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Design.Light.NoActionBar"/>
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
             android:name=".module.news.activity.NewsPictureActivity"
             android:screenOrientation="portrait" />
@@ -117,6 +119,25 @@
             android:name=".module.home.activity.SearchDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.pufei.gxdt.module.start.ui.FristActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.PublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.FavoriteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.EditDeclarationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.sign.ui.CrunchiesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.sign.ui.SignActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.pufei.gxdt.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
@@ -137,19 +158,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pufei.gxdt.module.start.ui.FristActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity android:name=".module.user.activity.PublishActivity" />
-        <!--<meta-data-->
-        <!--android:name="UMENG_APPKEY"-->
-        <!--android:value="5850b381734be40cef0006f8" />-->
-        <!--<meta-data-->
-        <!--android:name="UMENG_APPKEY"-->
-        <!--android:value="5aa64afe8f4a9d11ab0000e4" />-->
-        <!--<meta-data-->
-        <!--android:name="UMENG_CHANNEL"-->
-        <!--android:value="${UMENG_CHANNEL_VALUE}" />-->
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5850b381734be40cef0006f8" />
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="15e428095c58c39185c63271d439ba98" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
 
         <service android:name="com.pufei.gxdt.module.floating.FloatWindowService" />
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />

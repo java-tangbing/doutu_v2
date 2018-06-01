@@ -26,6 +26,7 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
+import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -33,6 +34,8 @@ import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +61,7 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     private boolean isSendingCode = false;
     private MyCountDown myCountDown;
     private String openid;
+    private String orgin;
     private String nickName;
     private int gender;
     private String iconUrl;
@@ -77,6 +81,7 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
 
         } else {
             openid = getIntent().getStringExtra("openId");
+            orgin = getIntent().getStringExtra("orgin");
             nickName = getIntent().getStringExtra("nickName");
             gender = getIntent().getIntExtra("gender", 0);
             iconUrl = getIntent().getStringExtra("iconUrl");
@@ -103,45 +108,19 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     }
 
     @Override
-    public void sendRusult(LoginResultBean resultBean) {
-        if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
-            LoginResultBean.ResultBean bean = resultBean.getResult();
-            String name = "";
-            String header = "";
-            String gender = "";
-            String address = "";
-//            if (!TextUtils.isEmpty(bean.get())) {
-//                name = bean.getNickname();
-//            } else {
-//                name = "萌新上路";
-//            }
-//            if (!TextUtils.isEmpty(bean.getAvatar())) {
-//                header = bean.getAvatar();
-//            }
-            if (!TextUtils.isEmpty(bean.getGender())) {
-                gender = bean.getGender();
-            } else {
-                gender = "保密";
-            }
-            if (!TextUtils.isEmpty(bean.getCity())) {
-                address = bean.getCity();
-            } else {
-                address = "未知";
-            }
-            SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), "");
-            EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
-            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+    public void sendRusult(LoginResultBean sendCodeBean) {
+
+    }
+
+    @Override
+    public void bindResult(SendCodeBean sendCodeBean) {
+        if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
             Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-            Toast.makeText(BindPhoneActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
 
-        } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
-            ToastUtils.showShort(this, resultBean.getMsg());
-        } else {
-            Toast.makeText(BindPhoneActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -169,30 +148,34 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
                 break;
             case R.id.login_sendcode:
                 if (!isSendingCode) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("mobile", loginIphone.getText().toString());
-                    if (NetWorkUtil.isNetworkConnected(this)) {
-                        presenter.sendCode(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
-                    } else {
-                        ToastUtils.showShort(this, "请检查网络设置");
-
+                    try {
+                        if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
+                            JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
+                            jsonObject.put("mobile", loginIphone.getText().toString());
+                            presenter.sendCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                        } else {
+                            ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
                 break;
             case R.id.btn_login:
-                Map<String, String> map = new HashMap<>();
-                map.put("openid", openid);
-                map.put("type", type + "");
-                map.put("mobile", loginIphone.getText().toString());
-                map.put("vcode", loginCode.getText().toString());
-                map.put("sex", gender + "");
-                map.put("nickname", nickName);
-                map.put("headimgurl", iconUrl);
-                if (NetWorkUtil.isNetworkConnected(this)) {
-                    presenter.bindPhone(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
-                } else {
-                    ToastUtils.showShort(this, "请检查网络设置");
+                try {
+                    if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
+                        JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
+                        jsonObject.put("mobile", loginIphone.getText().toString());
+                        jsonObject.put("openid", openid);
+                        jsonObject.put("code", loginCode.getText().toString());
+                        jsonObject.put("orgin", orgin);
+                        presenter.bindPhone(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                    } else {
+                        ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");
+                    }
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 break;
         }

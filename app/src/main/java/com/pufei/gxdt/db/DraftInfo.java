@@ -15,4 +15,10 @@ public class DraftInfo extends BaseModel{
     public String imagePath;
     @Column
     public String imageId;
+    @Column
+    public int width;
+    @Column
+    public int height;
+    @Column
+    public boolean isDraft;
 }

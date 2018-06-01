@@ -9,15 +9,55 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        flavorDimensions "versionCode"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     buildToolsVersion '27.0.3'
+
+    productFlavors {
+        oppo {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "OPPO"]
+        }
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Xiaomi"]
+        }
+        qh360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Qh360"]
+        }
+        baidu {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Baidu"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Wandoujia"]
+        }
+        lianxiang {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Lianxiang"]
+        }
+        huawei {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Huawei"]
+        }
+        yingyongbao {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Yingyongbao"]
+        }
+        meizu {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Meizu"]
+        }
+        gengxin {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Gengxin"]
+        }
+        vivo {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Vivo"]
+        }
+    }
 }
 
 dependencies { 
@@ -44,11 +84,11 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     implementation 'org.greenrobot:eventbus:3.0.0'
-    implementation 'com.umeng.sdk:share-core:latest.integration'
-    implementation 'com.umeng.sdk:share-wechat:latest.integration'
-    implementation 'com.umeng.sdk:common:1.5.0'
     implementation 'com.umeng.sdk:analytics:7.5.0'
+    implementation 'com.umeng.sdk:common:1.5.0'
     implementation 'com.umeng.sdk:share-core:6.9.1'
+    //   implementation 'com.umeng.sdk:share-qq:latest.integration'
+    implementation 'com.umeng.sdk:share-wechat:6.9.1'
     implementation files('libs/umeng-share-QQ-simplify-6.9.1.jar')
     implementation('com.github.hotchemi:permissionsdispatcher:2.4.0') {
         exclude module: 'support-v13'

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
@@ -18,17 +19,20 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
+    @BindView(R.id.tv_title)
+    TextView tv_title;
     @BindView(R.id.setting_data_editor)
     LinearLayout settingDataEditor;
     @BindView(R.id.setting_version_checking)
     LinearLayout settingVersionChecking;
     @BindView(R.id.setting_about_product)
-    LinearLayout settingAboutProduct;
+    TextView settingAboutProduct;
     @BindView(R.id.setting_log_out)
     Button settingLogOut;
 
     @Override
     public void initView() {
+        tv_title.setText("设置");
         if (App.userBean != null) {
             settingLogOut.setText(R.string.log_out);
         }
@@ -41,7 +45,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public int getLayout() {
-        return R.layout.activity_profile;
+        return R.layout.activity_setting;
     }
 
     @OnClick({R.id.ll_title_left, R.id.setting_data_editor, R.id.setting_version_checking, R.id.setting_about_product, R.id.setting_log_out})
@@ -61,6 +65,8 @@ public class SettingActivity extends BaseActivity {
                 DialogUtil.getInstance().showVersionDialog(this);
                 break;
             case R.id.setting_about_product:
+                startActivity(new Intent(SettingActivity.this, AboutProductActivity.class));
+
                 break;
             case R.id.setting_log_out:
                 if (App.userBean != null) {

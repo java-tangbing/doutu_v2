@@ -22,7 +22,7 @@
                     android:src="@mipmap/back0"
                     android:layout_width="20dp"
                     android:layout_height="match_parent" />
-                <com.pufei.widgets.view.MyFrontTextView
+                <com.pufei.gxdt.widgets.MyFrontTextView
                     android:textSize="18sp"
                     android:textColor="#333"
                     android:gravity="center"

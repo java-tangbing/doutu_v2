@@ -77,10 +77,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     private List<String> list = new ArrayList<>();
     private MyCountDown myCountDown;
     private boolean isSendingCode = false;
-    private String openid;
     private String nickName;
-    private int gender;
-    private String iconUrl;
+    private String openid;
+    private String province;
+    private String city;
+    private String gender;
+    private String header;
+    private String orgin;
     private int type;
     private int loginFrom = -1;//判断是否为资讯详情跳转
 
@@ -155,7 +158,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 address = "未知";
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), "");
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile());
 //            App.userBean.setPwd(bean.isPwd_set());
             Log.e("LoginActivity", App.userBean.isPwd() + "");
             EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
@@ -166,17 +169,22 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
         } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
-            //ToastUtils.showShort(this, resultBean.getMsg());
             Intent intent = new Intent(this, BindPhoneActivity.class);
             intent.putExtra("openId", openid);
-            intent.putExtra("iconUrl", iconUrl);
+            intent.putExtra("iconUrl", header);
             intent.putExtra("nickName", nickName);
             intent.putExtra("gender", gender);
             intent.putExtra("type", type);
+            intent.putExtra("orgin", orgin);
             startActivity(intent);
         } else {
             Toast.makeText(LoginActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void bindResult(SendCodeBean sendCodeBean) {
+
     }
 
     @Override
@@ -282,31 +290,34 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
                 Log.e("LoginActivity", "昵称: " + map.get("uid"));
-                openid = map.get("uid");
                 nickName = map.get("name");
-                iconUrl = map.get("iconurl");
-                if (map.get("gender").equals("男")) {
-                    gender = 1;
-                } else {
-                    gender = 2;
-                }
-                //  ToastUtils.showLong(LoginActivity.this,map.get("uid") + " fasdf");
-                Map<String, String> request = new HashMap<>();
-                request.put("openid", openid);
+                openid = map.get("uid");
+                province = map.get("uid");
+                city = map.get("uid");
+                gender = map.get("gender");
+                header = map.get("iconurl");
                 if (type == 1) {
-                    if (NetWorkUtil.isNetworkConnected(LoginActivity.this)) {
-                        presenter.thirdLoginWX(RetrofitFactory.getRequestBody(new Gson().toJson(request)));
-                    } else {
-                        ToastUtils.showShort(LoginActivity.this, "请检查网络设置");
-
-                    }
+                    orgin = "wechat";
                 } else {
+                    orgin = "qq";
+                }
+                try {
                     if (NetWorkUtil.isNetworkConnected(LoginActivity.this)) {
-                        presenter.thirdLogin(RetrofitFactory.getRequestBody(new Gson().toJson(request)));
+                        JSONObject jsonObject = KeyUtil.getJson(LoginActivity.this);
+                        jsonObject.put("username", nickName);
+                        jsonObject.put("openid", openid);
+                        jsonObject.put("province", province);
+                        jsonObject.put("city", city);
+                        jsonObject.put("gender", gender);
+                        jsonObject.put("header", header);
+                        jsonObject.put("orgin", orgin);
+                        presenter.thirdLogin(RetrofitFactory.getRequestBody(jsonObject.toString()));
                     } else {
                         ToastUtils.showShort(LoginActivity.this, "请检查网络设置");
-
                     }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 

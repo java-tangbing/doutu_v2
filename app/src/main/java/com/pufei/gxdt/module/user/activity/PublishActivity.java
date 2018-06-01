@@ -11,17 +11,20 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
 import com.pufei.gxdt.module.home.adapter.JokeAdapter;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.JokePresenter;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.presenter.PublishPresenter;
 import com.pufei.gxdt.module.user.view.PublishView;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -57,7 +60,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
     @Override
     public void initView() {
-        tv_title.setText("笑话段子");
+        tv_title.setText("我的发布");
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdapter(PublishActivity.this,jokeList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
@@ -157,6 +160,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         try {
             JSONObject jsonObject = KeyUtil.getJson(this);
             jsonObject.put("page", page + "");
+            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
             presenter.getPublish(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -175,7 +179,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     }
 
     @Override
-    public void resultPublish(PictureResultBean bean) {
+    public void resultPublish(MyImagesBean bean) {
         if(page == 1){
             jokeList.clear();
         }

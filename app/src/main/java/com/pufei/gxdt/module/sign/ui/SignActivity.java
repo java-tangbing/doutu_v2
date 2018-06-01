@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.module.sign.model.GetScoreBean;
 import com.pufei.gxdt.module.sign.model.SignInBean;
@@ -28,6 +29,7 @@ import com.pufei.gxdt.module.sign.model.SignEntity;
 import com.pufei.gxdt.module.sign.adapter.SignAdapter;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.SignUtils;
 import com.pufei.gxdt.utils.UrlString;
 import com.pufei.gxdt.widgets.MyFrontTextView;
@@ -301,7 +303,7 @@ public class SignActivity extends AppCompatActivity {
     private void signIn() {
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", App.token);
+            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
             jsonObject.put("type", "1");
             OkhttpUtils.post(UrlString.SIGN_IN, jsonObject.toString(), new Callback() {
                 @Override
@@ -347,7 +349,7 @@ public class SignActivity extends AppCompatActivity {
         timeList.clear();
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", App.token);
+            jsonObject.put("auth", App.userBean.getAuth());
             OkhttpUtils.post(UrlString.GETSCORE, jsonObject.toString(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {

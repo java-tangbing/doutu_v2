@@ -40,7 +40,7 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> implements SetPersonalView, TextWatcher {
+public class EditDeclarationActivity extends BaseMvpActivity<SetPersonalPresenter> implements SetPersonalView, TextWatcher {
     @BindView(R.id.et_nick_name)
     EditText etNickName;
     @BindView(R.id.iv_delete)
@@ -58,7 +58,7 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
         tvRight.setVisibility(View.VISIBLE);
-        tvTitle.setText("修改昵称");
+        tvTitle.setText("修改签名");
         tvRight.setText("保存");
         etNickName.addTextChangedListener(this);
     }
@@ -70,7 +70,7 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
 
     @Override
     public int getLayout() {
-        return R.layout.activity_editname;
+        return R.layout.activity_editdeclaration;
     }
 
 
@@ -88,9 +88,9 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
                             JSONObject jsonObject = KeyUtil.getJson(this);
                             jsonObject.put("auth", App.userBean.getAuth());
                             jsonObject.put("header", "");
-                            jsonObject.put("username", result);
+                            jsonObject.put("username", "");
                             jsonObject.put("gender", "");
-                            jsonObject.put("mind", "");
+                            jsonObject.put("mind", result);
                             presenter.setPersonal(RetrofitFactory.getRequestBody(jsonObject.toString()));
                         } else {
                             ToastUtils.showShort(this, "请检查网络设置");
@@ -99,7 +99,7 @@ public class EditNameActivity extends BaseMvpActivity<SetPersonalPresenter> impl
                         e.printStackTrace();
                     }
                 } else {
-                    ToastUtils.showShort(EditNameActivity.this, "名字不能为空");
+                    ToastUtils.showShort(EditDeclarationActivity.this, "名字不能为空");
                 }
                 break;
             case R.id.iv_delete:

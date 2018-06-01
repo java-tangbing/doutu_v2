@@ -15,23 +15,48 @@
             android:id="@+id/fm_head"
             android:layout_width="match_parent"
             android:layout_height="170dp"
-            android:background="@mipmap/user_bg">
+            android:background="@mipmap/user_bg_picture">
 
-            <TextView
-                android:id="@+id/tv_checkin_state"
-                android:layout_width="59dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/rect_rounded_left_arc"
-                android:gravity="center"
-                android:text="签到"
-                android:textColor="@color/about_tv_color"
-                android:textSize="12sp" />
+            <FrameLayout
+                android:id="@+id/id_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_checkin_state"
+                    android:layout_width="59dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/rect_rounded_left_arc"
+                    android:gravity="center"
+                    android:text="签到"
+                    android:textColor="@color/about_tv_color"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/fragment_collect_sign_tv"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/find_tv" />
+
+                <TextView
+                    android:id="@+id/fragment_collect_loading_tv"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/find_tv" />
+            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_checkin_state"
+                android:layout_below="@id/id_sign"
                 android:layout_gravity="left"
                 android:layout_margin="15dp"
                 android:orientation="vertical">

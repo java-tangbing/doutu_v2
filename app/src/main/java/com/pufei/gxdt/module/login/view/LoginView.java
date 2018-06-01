@@ -11,5 +11,7 @@ public interface LoginView extends BaseView<LoginPresenter> {
 
     void sendRusult(LoginResultBean sendCodeBean);
 
+    void bindResult(SendCodeBean sendCodeBean);
+
     void retrievePwdResult(ModifyResultBean bean);
 }

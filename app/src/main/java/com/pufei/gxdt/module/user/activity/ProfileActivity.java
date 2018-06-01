@@ -73,7 +73,8 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     @Override
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
-        tvTitle.setText("资料设置");
+        tvRight.setVisibility(View.VISIBLE);
+        tvTitle.setText("资料编辑");
         tvRight.setText("保存");
         if (App.userBean != null) {
 
@@ -96,7 +97,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
 
     @Override
     public int getLayout() {
-        return R.layout.activity_setting;
+        return R.layout.activity_profile;
     }
 
     @Override
@@ -132,7 +133,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         }
     }
 
-    @OnClick({R.id.ll_title_left, R.id.userdata_head_ll, R.id.userdata_name_ll, R.id.userdata_gender_ll, R.id.userdata_safe_ll, R.id.login_state, R.id.userdata_alipay_ll})
+    @OnClick({R.id.ll_title_left, R.id.userdata_head_ll, R.id.userdata_name_ll, R.id.userdata_gender_ll, R.id.userdata_safe_ll, R.id.login_state, R.id.userdata_declaration_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_left:

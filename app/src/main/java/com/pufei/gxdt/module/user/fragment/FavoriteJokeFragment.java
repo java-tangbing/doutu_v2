@@ -11,16 +11,19 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
 import com.pufei.gxdt.module.home.adapter.JokeAdapter;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
+import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.presenter.FavoritePresenter;
 import com.pufei.gxdt.module.user.view.FavoriteView;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -153,7 +156,9 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
         try {
             JSONObject jsonObject = KeyUtil.getJson(getActivity());
             jsonObject.put("page", page + "");
-            presenter.getJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+            jsonObject.put("type", 1);
+            presenter.getFavoriteJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -171,24 +176,24 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
     }
 
     @Override
-    public void resultJokeList(JokeResultBean bean) {
-        if (page == 1) {
-            jokeList.clear();
-        }
-        jokeList.addAll(bean.getResult());
-        jokeAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void resultJokeDetail(JokeDetailBean bean) {
-
-    }
-
-    @Override
     public void setPresenter(FavoritePresenter presenter) {
         if (presenter == null) {
             this.presenter = new FavoritePresenter();
             this.presenter.attachView(this);
         }
+    }
+
+    @Override
+    public void resultJokeList(MyImagesBean bean) {
+        if (page == 1) {
+            jokeList.clear();
+        }
+//        jokeList.addAll(bean.getResult());
+        jokeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void resultJokeDetail(MyImagesBean bean) {
+
     }
 }
