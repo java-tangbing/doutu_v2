@@ -60,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
             <ImageButton
+                android:id="@+id/ib_dowm_load"
                 android:background="@drawable/download_select"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"

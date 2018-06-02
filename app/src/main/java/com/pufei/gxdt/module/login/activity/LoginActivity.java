@@ -133,20 +133,21 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendRusult(LoginResultBean resultBean) {
+        Toast.makeText(LoginActivity.this, "resultcode = "+resultBean.getCode(), Toast.LENGTH_SHORT).show();
         if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
             LoginResultBean.ResultBean bean = resultBean.getResult();
             String name = "";
             String header = "";
             String gender = "";
             String address = "";
-//            if (!TextUtils.isEmpty(bean.get())) {
-//                name = bean.getNickname();
-//            } else {
-//                name = "萌新上路";
-//            }
-//            if (!TextUtils.isEmpty(bean.getAvatar())) {
-//                header = bean.getAvatar();
-//            }
+            if (!TextUtils.isEmpty(bean.getUsername())) {
+                name = bean.getUsername();
+            } else {
+                name = "萌新上路";
+            }
+            if (!TextUtils.isEmpty(bean.getHeader())) {
+                header = bean.getHeader();
+            }
             if (!TextUtils.isEmpty(bean.getGender())) {
                 gender = bean.getGender();
             } else {
@@ -287,7 +288,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                Log.e("LoginActivity", "昵称: " + map.get("uid"));
+                for (Map.Entry<String,String> entry : map.entrySet()){
+                    Log.e("LoginActivity", "key:"+entry.getKey()+"; value:"+entry.getValue());
+                }
+
                 nickName = map.get("name");
                 openid = map.get("uid");
                 province = map.get("uid");

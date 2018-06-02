@@ -1,23 +1,16 @@
 package com.pufei.gxdt.module.home.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpDouTuFragment;
-import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
-import com.pufei.gxdt.module.home.activity.HotImageActivity;
-import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
-import com.pufei.gxdt.module.home.adapter.HotAdapter;
 import com.pufei.gxdt.module.home.adapter.ImageTypeAdapter;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
@@ -28,7 +21,6 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
-import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -40,16 +32,16 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 
 /**
  * Created by tb on 2018/5/23.
  */
 
-public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> implements HomeListView {
+public class ZongYiFragment extends BaseMvpDouTuFragment<HomeListPresenter> implements HomeListView {
     @BindView(R.id.srl_doutu)
     SmartRefreshLayout srl_doutu;
     @BindView(R.id.xrl_doutu)
@@ -59,8 +51,8 @@ public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> imple
     private ImageTypeAdapter adapter;
     private List<PictureResultBean.ResultBean> picturelist = new ArrayList<>();
     private int page = 1;
-    public  static DouTuFragment newInstence(String id){
-        DouTuFragment fragment = new DouTuFragment();
+    public  static ZongYiFragment newInstence(String id){
+        ZongYiFragment fragment = new ZongYiFragment();
         Bundle bundle = new Bundle();
         bundle.putString("id",id);
         fragment.setArguments(bundle);
@@ -72,7 +64,7 @@ public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> imple
         super.onFragmentVisibleChange(isVisible);
         if (isVisible) {
             requestData(page);
-        }
+        } 
 }
     @Override
     public void initView() {

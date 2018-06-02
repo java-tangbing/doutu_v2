@@ -1,6 +1,7 @@
 package com.pufei.gxdt.api;
 
 
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
@@ -26,4 +27,6 @@ public interface ImageTypeApi {
     Observable<PictureResultBean> getThemeImageDetailList(@Body RequestBody body);
     @POST("AmuseImages/getImageDetail")
     Observable<PictureDetailBean> getImageDetailList(@Body RequestBody body);
+    @POST("User/addImages")
+    Observable<FavoriteBean> addFavarite(@Body RequestBody body);
 }

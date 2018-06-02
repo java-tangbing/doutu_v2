@@ -44,7 +44,6 @@ public class ImageTypeAdapter extends RecyclerView.Adapter<ImageTypeAdapter.MyHo
     }
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
-        holder.itemView.setTag(position);
         GlideApp.with(mcontext).load(list.get(position).getUrl()).override(100,80).into(holder.iv1);
         holder.iv1.setOnClickListener(new View.OnClickListener() {
             @Override

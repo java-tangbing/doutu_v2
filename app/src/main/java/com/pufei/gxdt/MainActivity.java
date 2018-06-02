@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity {
         addFragment();
         tabAdapter = new TabVpAdapter(this, getSupportFragmentManager(), fragmentList);
         homeVp.setAdapter(tabAdapter);
+        homeVp.setOffscreenPageLimit(4);
         homeTab.setupWithViewPager(homeVp);
         for (int i = 0; i < fragmentList.size(); i++) {
             TabLayout.Tab tab = homeTab.getTabAt(i);
