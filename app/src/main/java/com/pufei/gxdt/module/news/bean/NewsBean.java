@@ -71,6 +71,26 @@ public class NewsBean {
         private String content;
         private String url;
         private String orgin;
+        private String orgintable;
+
+        public String getOrgintable() {
+            return orgintable;
+        }
+
+        public void setOrgintable(String orgintable) {
+            this.orgintable = orgintable;
+        }
+
+        public String getOrginid() {
+            return orginid;
+        }
+
+        public void setOrginid(String orginid) {
+            this.orginid = orginid;
+        }
+
+        private String orginid;
+
 
         public String getId() {
             return id;

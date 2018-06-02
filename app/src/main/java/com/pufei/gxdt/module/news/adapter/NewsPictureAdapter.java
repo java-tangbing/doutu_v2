@@ -22,5 +22,6 @@ public class NewsPictureAdapter extends BaseQuickAdapter<NewsBean.ResultBean, Ba
     protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
         helper.setText(R.id.news_picture_item_content, item.getContent())
                 .setText(R.id.tv_dateLine,item.getDateline());
+        helper.addOnClickListener(R.id.news_picture_item);
     }
 }

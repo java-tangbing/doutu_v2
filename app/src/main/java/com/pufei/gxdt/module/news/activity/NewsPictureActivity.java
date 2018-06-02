@@ -113,10 +113,10 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
             case R.id.news_picture_item:
                 Intent intent01 = new Intent(this, DiscoverDetailedActivity.class);
                 Bundle bundle01 = new Bundle();
-                bundle01.putString("id", id);
-                bundle01.putString("orginid", orginid);
-                bundle01.putString("orgintable", orgintable);
-                bundle01.putString("uid", uid);
+                bundle01.putString("id", mlist.get(position).getId());
+                bundle01.putString("orginid", mlist.get(position).getOrginid());
+                bundle01.putString("orgintable", mlist.get(position).getOrgintable());
+                bundle01.putString("uid", mlist.get(position).getUid());
                 intent01.putExtras(bundle01);
                 startActivity(intent01);
                 break;
