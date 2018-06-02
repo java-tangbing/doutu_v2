@@ -51,7 +51,7 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
     TextView tvTitle;
     private List<NewsBean.ResultBean> mlist;
     private String auth;
-
+    private String orginid, orgintable, id, uid, mcount;
     @Override
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
@@ -111,15 +111,14 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
             case R.id.news_picture_item:
-//                LinearLayout linearLayout = (LinearLayout) view.getParent();
-//                LinearLayout itemLinearLayout = linearLayout.findViewById(R.id.news_picture_item);
-//                adapter.getViewByPosition( recyclerView, position, R.id.news_picture_item_user);//获取其他子控件
-                Intent intent = new Intent(this, DiscoverDetailedActivity.class);
-                Bundle bundle = new Bundle();   //得到一个 bundle对象
-                bundle.putInt("account", mlist.get(position).getItemType());
-//                bundle.putCharSequence("password", pwd);
-                intent.putExtras(bundle);  //将 bundle对象的值放入 intent , 以便下一个页面的 intent 接收
-                startActivity(intent);
+                Intent intent01 = new Intent(this, DiscoverDetailedActivity.class);
+                Bundle bundle01 = new Bundle();
+                bundle01.putString("id", id);
+                bundle01.putString("orginid", orginid);
+                bundle01.putString("orgintable", orgintable);
+                bundle01.putString("uid", uid);
+                intent01.putExtras(bundle01);
+                startActivity(intent01);
                 break;
         }
     }
