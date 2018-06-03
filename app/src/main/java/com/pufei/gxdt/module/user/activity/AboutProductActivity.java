@@ -55,7 +55,7 @@ public class AboutProductActivity extends BaseActivity {
         return R.layout.activity_about_product;
     }
 
-    @OnClick({R.id.ll_title_left, R.id.login_about, R.id.tv_agreement})
+    @OnClick({R.id.ll_title_left, R.id.login_about, R.id.tv_agreement, R.id.tv_user_feedback})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_left:
@@ -65,6 +65,11 @@ public class AboutProductActivity extends BaseActivity {
                 break;
             case R.id.tv_agreement:
                 startActivity(new Intent(this, AgreeementActivity.class));
+                break;
+            case R.id.tv_user_feedback:
+                startActivity(new Intent(this, AgreeementActivity.class));
+                break;
+            default:
                 break;
         }
     }

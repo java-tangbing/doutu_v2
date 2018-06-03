@@ -118,6 +118,8 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     public void initListener() {
         userdataname.setText(App.userBean.getName());
         userdata_dec.setText(App.userBean.getMind());
+        tvSex.setText(App.userBean.getGender());
+        Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -131,10 +133,13 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         }
     }
 
-    @OnClick({R.id.ll_title_left, R.id.userdata_head_ll, R.id.userdata_name_ll, R.id.userdata_gender_ll, R.id.userdata_safe_ll, R.id.login_state, R.id.userdata_declaration_ll})
+    @OnClick({R.id.ll_title_left, R.id.tv_right, R.id.userdata_head_ll, R.id.userdata_name_ll, R.id.userdata_gender_ll, R.id.userdata_safe_ll, R.id.login_state, R.id.userdata_declaration_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_left:
+                AppManager.getAppManager().finishActivity();
+                break;
+            case R.id.tv_right:
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.userdata_head_ll:
@@ -214,20 +219,17 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         switch (view.getId()) {
             case R.id.tv_sex_man:
                 sex = "男";
-                requestSetSex("1");
-                popupWindow.dismiss();
                 break;
             case R.id.tv_sex_woman:
                 sex = "女";
-                requestSetSex("2");
-                popupWindow.dismiss();
                 break;
             case R.id.tv_sex_safety:
                 sex = "保密";
-                requestSetSex("0");
-                popupWindow.dismiss();
                 break;
         }
+
+        requestSetSex(sex);
+        popupWindow.dismiss();
     }
 
     private void requestSetSex(String sex) {
@@ -259,8 +261,9 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     @Override
     public void setPersonalInfo(SetPersonalResultBean bean) {
         if (bean.getCode() == 0) {
-            tvSex.setText(sex);
             App.userBean.setGender(sex);
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            EventBus.getDefault().postSticky(new EventMsg(MsgType.UPDATA_USER));
         }
         ToastUtils.showShort(this, bean.getMsg());
     }

@@ -18,6 +18,7 @@ public class UserUtils {
                 jsonObject.put("name", user.getName());
                 jsonObject.put("gender", user.getGender());
                 jsonObject.put("head", user.getHead());
+                jsonObject.put("mind", user.getMind());
                 jsonObject.put("address", user.getAddress());
                 jsonObject.put("auth", user.getAuth());
                 jsonObject.put("phone", user.getPhone());

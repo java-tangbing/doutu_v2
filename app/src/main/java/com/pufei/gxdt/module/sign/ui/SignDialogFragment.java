@@ -78,6 +78,7 @@ public class SignDialogFragment extends AppCompatDialogFragment {
         MobclickAgent.onPageEnd(getClass().getSimpleName());
     }
 
+    @SuppressLint("RestrictedApi")
     private void initView(View root) {
         TextView tvMessage = (TextView) root.findViewById(R.id.dialog_sign_tv_message);
         TextView tvScoreNumber = (TextView) root.findViewById(R.id.dialog_sign_tv_score_number);

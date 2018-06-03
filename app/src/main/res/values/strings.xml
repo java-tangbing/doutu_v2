@@ -37,12 +37,18 @@
         <item>推荐</item>
         <item>全部</item>
     </string-array>
+    <string name="determine">确定</string>
+    <string name="cancel">取消</string>
     <string name="sign">签到</string>
     <string name="sign_succeed_today">今日签到成功，增加斗气</string>
     <string name="sure">确定</string>
     <string name="have_signed">已签到</string>
     <string name="much_score_int">%1$d 斗气</string>
     <string name="you_have_sign"><Data><![CDATA[<font color="%1$s">您已连续签到 </font><font color="%2$s">%3$d</font> <font color="%1$s">天，累计获得斗气</font>]]></Data></string>
+    <string name="feedback">反馈</string>
+    <string name="qsrndbgyj">请输入您的宝贵意见</string>
+    <string name="lxqq">请留下您的QQ</string>
+    <string name="fasong">发现</string>
     <string-array name="month_array">
         <item>一</item>
         <item>二月</item>

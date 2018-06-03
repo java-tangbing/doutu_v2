@@ -33,7 +33,7 @@
             android:id="@+id/userdata_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center" android:textColor="@color/khaki"
             android:text="未绑定"
             android:textSize="16sp" />
 
@@ -74,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="大米粒"
+            android:textColor="@color/khaki"
             android:textSize="16sp" />
 
         <ImageView
@@ -117,7 +118,7 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="13dp"
+            android:layout_marginLeft="13dp" style="@style/switchStyle"
             android:layout_marginRight="15dp"
             android:background="@drawable/switch_setting_selector" />
         <!---->

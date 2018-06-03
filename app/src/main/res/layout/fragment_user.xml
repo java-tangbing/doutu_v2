@@ -32,6 +32,7 @@
                     android:text="签到"
                     android:textColor="@color/about_tv_color"
                     android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/fragment_collect_sign_tv"
                     android:layout_width="8dp"
@@ -73,6 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="9dp"
                     android:layout_toRightOf="@id/user_head"
                     android:text="大米粒"
@@ -84,6 +86,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="11dp"
                     android:layout_toRightOf="@id/user_name"
                     android:src="@mipmap/user_ic_woman" />
@@ -94,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/user_name"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="9dp"
                     android:layout_toRightOf="@id/user_head"
                     android:text="个性签名"
@@ -105,11 +109,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_gravity="center"
                     android:layout_marginTop="9dp"
+                    android:background="@drawable/rect_rounded_edit"
+                    android:drawableLeft="@mipmap/bt_ic_logo_change"
+                    android:drawablePadding="4dp"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="编辑"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
         </RelativeLayout>

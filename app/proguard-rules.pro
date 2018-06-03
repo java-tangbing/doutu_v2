@@ -1,20 +1,38 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in C:\Users\wangwenzhang\AppData\Local\Android\Sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+#############################################
 #
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# 对于一些基本指令的添加
+#
+#############################################
+# 代码混淆压缩比，在0~7之间，默认为5，一般不做修改
+# 混合时不使用大小写混合，混合后的类名为小写
+-dontusemixedcaseclassnames
 
-# Add any project specific keep options here:
+# 指定不去忽略非公共库的类
+-dontskipnonpubliclibraryclasses
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# 这句话能够使我们的项目混淆后产生映射文件
+# 包含有类名->混淆后类名的映射关系
+-verbose
+
+# 指定不去忽略非公共库的类成员
+-dontskipnonpubliclibraryclassmembers
+
+# 不做预校验，preverify是proguard的四个步骤之一，Android不需要preverify，去掉这一步能够加快混淆速度。
+-dontpreverify
+
+# 保留Annotation不混淆
+-keepattributes *Annotation*,InnerClasses
+
+# 避免混淆泛型
+-keepattributes Signature
+
+# 抛出异常时保留代码行号
+-keepattributes SourceFile,LineNumberTable
+
+# 指定混淆是采用的算法，后面的参数是一个过滤器
+# 这个过滤器是谷歌推荐的算法，一般不做更改
+-optimizations !code/simplification/cast,!field/*,!class/merging/*
+
 -keep public class * extends android.app.Activity{
     public void *(android.view.View);
 }
@@ -25,16 +43,18 @@
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference#基本配置
--ignorewarnings
+
+# 保留我们自定义控件（继承自View）不被混淆
+-keep public class * extends android.view.View{
+    *** get*();
+    void set*(***);
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
 -keepclassmembers,includedescriptorclasses class ** { public void onEvent*(**); }
-#-keep class com.alipay.android.app.IAlixPay{*;}
-#-keep class com.json.alipay.**{*;}
-#-keep class com.alipay.android.app.IAlixPay$Stub{*;}
-#-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
-#-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
-#-keep class com.alipay.sdk.app.PayTask{ public *;}
-#-keep class com.alipay.sdk.app.AuthTask{ public *;}#支付宝
--dontwarn
+
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);#友盟
@@ -86,11 +106,20 @@
     public void set*(...);
     public void onClick(...);
 }
- #-libraryjars libs/ormlite-android-5.0.jar
- #-libraryjars libs/ormlite-core-5.0.jar
- -dontwarn com.j256.ormlite.**
- -keep class com.j256.ormlite.** { *;}
- #Gson相关的不混淆配置
+
+-keep class com.pufei.association.module.discover.**{*;}
+-keep class com.pufei.association.module.floating.**{*;}
+-keep class com.pufei.association.module.home.**{*;}
+-keep class com.pufei.association.module.login.**{*;}
+-keep class com.pufei.association.module.maker.**{*;}
+-keep class com.pufei.association.module.news.**{*;}
+-keep class com.pufei.association.module.sign.**{*;}
+-keep class com.pufei.association.module.start.**{*;}
+-keep class com.pufei.association.module.update.**{*;}
+-keep class com.pufei.association.module.user.**{*;}
+
+-keepattributes *Annotation*
+-keep @**annotation** class * {*;}
  -keepattributes Signature
  -keepattributes *Annotation*
  -keep class com.google.gson.** { *; }
@@ -166,7 +195,7 @@
 
  -keep public class com.umeng.socialize.* {*;}
 
- -dontwarn com.umeng.socialize.**
+
  -keep class com.facebook.**
  -keep class com.facebook.** { *; }
  -keep class com.umeng.scrshot.**
@@ -268,3 +297,93 @@
    public static *** i(...);
    public static *** w(...);
  }
+# 对于带有回调函数的onXXEvent、**On*Listener的，不能被混淆
+-keepclassmembers class * {
+    void *(**On*Event);
+    void *(**On*Listener);
+    void *(**eventData);
+}
+
+
+# ButterKnife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+# EventBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
+# Gson
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+# 使用Gson时需要配置Gson的解析对象及变量都不混淆。不然Gson会找不到变量。
+# 将下面替换成自己的实体类
+-keep class com.example.bean.** { *; }
+
+# OkHttp3
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.** { *; }
+-keep interface com.squareup.okhttp3.** { *; }
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn org.conscrypt.**
+# Okio
+-dontwarn com.squareup.**
+-dontwarn okio.**
+-keep public class org.codehaus.* { *; }
+-keep public class java.nio.* { *; }
+
+# Retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# RxJava RxAndroid
+-dontwarn sun.misc.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+
+-keep class com.raizlabs.android.dbflow.** { *; }
+
+# umeng
+-keep class com.umeng.** {*;}
+
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-dontwarn com.umeng.socialize.**
+-dontwarn com.umeng.**

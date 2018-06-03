@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
+import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.module.sign.model.GetScoreBean;
@@ -87,8 +88,6 @@ public class SignActivity extends AppCompatActivity {
     private void initView() {
         timeList = new ArrayList<>();
         Intent intent = getIntent();
-        //Bundle bundle=intent.getExtras();
-        //getScore();
         tvbang = (MyFrontTextView) findViewById(R.id.activity_sign_bangdan);
         imageView = (ImageView) findViewById(R.id.activity_sign_cance);
         tvSignDay = (TextView) findViewById(R.id.activity_main_tv_main_day);
@@ -303,7 +302,7 @@ public class SignActivity extends AppCompatActivity {
     private void signIn() {
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+            jsonObject.put("auth", App.userBean.getAuth());
             jsonObject.put("type", "1");
             OkhttpUtils.post(UrlString.SIGN_IN, jsonObject.toString(), new Callback() {
                 @Override

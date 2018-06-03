@@ -75,5 +75,6 @@
     <color name="submit_btn_normal">@color/hex_1b89cd</color>
     <color name="submit_btn_pressed">#166EA5</color>
     <color name="submit_btn_disabled">@color/hex_bcbcbc</color>
+    <color name="white_pressed">#e5e5e5</color>
 
 </resources>

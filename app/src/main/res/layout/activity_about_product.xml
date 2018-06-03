@@ -97,4 +97,21 @@
         android:layout_height="1dp"
         android:background="@color/lineColor" />
 
+    <TextView
+        android:id="@+id/tv_user_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/com_bt_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="意见反馈"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor" />
+
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.pufei.gxdt.module.user.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,7 +26,9 @@ import com.pufei.gxdt.module.user.presenter.SettingPresenter;
 import com.pufei.gxdt.module.user.view.PublishView;
 import com.pufei.gxdt.module.user.view.SettingView;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.DataCleanManager;
 import com.pufei.gxdt.utils.DialogUtil;
+import com.pufei.gxdt.utils.FileUtil;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -61,11 +65,13 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     String mobile = "";
     String qq = "";
     String wechat = "";
+    private String filepath;
 
     @Override
     public void initView() {
         tv_title.setText("设置");
         ll_left.setVisibility(View.VISIBLE);
+        filepath = FileUtil.getCachePath(getApplicationContext());
         if (App.userBean != null) {
             settingLogOut.setText(R.string.log_out);
         }
@@ -85,7 +91,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         return R.layout.activity_setting;
     }
 
-    @OnClick({R.id.ll_title_left, R.id.setting_data_editor, R.id.setting_update_version, R.id.setting_about_product, R.id.setting_log_out})
+    @OnClick({R.id.ll_title_left, R.id.setting_data_editor, R.id.setting_update_version, R.id.setting_about_product, R.id.setting_log_out, R.id.setting_clear_cache, R.id.change_notify, R.id.userdata_name_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_left:
@@ -108,6 +114,13 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 } else {
                     ToastUtils.showLong(this, "请先登录");
                 }
+                break;
+            case R.id.setting_clear_cache:
+                dialog();
+                break;
+            case R.id.change_notify:
+                break;
+            case R.id.userdata_name_ll:
                 break;
             default:
                 break;
@@ -162,5 +175,20 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             this.presenter = new SettingPresenter();
             this.presenter.attachView(this);
         }
+    }
+
+    private void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+        builder.setMessage("确定清除缓存数据？");
+        builder.setPositiveButton(getString(R.string.determine), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DataCleanManager.cleanCustomCache(filepath);
+                ToastUtils.showShort(SettingActivity.this, "清理成功");
+                //activitySettingCleartext.setText("0M");
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), null);
+        builder.create().show();
     }
 }

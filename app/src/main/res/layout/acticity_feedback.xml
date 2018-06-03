@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/activity_feedback_return"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/back0" />
+
+            <com.pufei.gxdt.view.MyFrontTextView
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#333"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:gravity="center"
+            android:text="@string/feedback"
+            android:textColor="#333"
+            android:textSize="20sp" />
+
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:id="@+id/activity_feedback_ok"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="@string/fasong"
+            android:textColor="#333"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white_pressed" />
+
+    <EditText
+        android:id="@+id/activity_feedback_respose"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape"
+        android:gravity="top"
+        android:hint="@string/qsrndbgyj"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/activity_feedback_qq"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape"
+        android:digits="1234567890"
+        android:hint="@string/lxqq"
+        android:padding="5dp"
+        android:textSize="15sp" />
+</LinearLayout>

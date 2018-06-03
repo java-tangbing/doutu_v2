@@ -227,7 +227,6 @@ public class UserFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void eventData(EventMsg type) {
-        //   Log.e(TAG, "eventData");
         if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
             initUserInfo();
         } else if (type.getTYPE() == MsgType.LOGIN_OUT) {

@@ -1,7 +1,6 @@
 package com.pufei.gxdt.module.login.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,7 +53,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements LoginView {
