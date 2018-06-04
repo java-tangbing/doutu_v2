@@ -35,6 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
 public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter> implements DiscoverView, BaseQuickAdapter.OnItemClickListener {
     @BindView((R.id.dis_detailed_original_iv))
     ImageView originalImageView;
