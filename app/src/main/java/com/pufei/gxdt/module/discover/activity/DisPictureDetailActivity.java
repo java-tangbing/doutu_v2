@@ -24,6 +24,7 @@ import com.pufei.gxdt.module.home.adapter.OtherPictureAdapter;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -50,8 +51,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     ImageView iv_picture;
     @BindView(R.id.look_edit_image_iv)
     TextView iv_editimage;
-    @BindView(R.id.activity_home1_cancel)
-    LinearLayout linearLayout_cancel;
+//    @BindView(R.id.activity_home1_cancel)
+//    LinearLayout linearLayout_cancel;
     @BindView(R.id.rl_picture)
     RecyclerView rl_picture;
 
@@ -196,12 +197,9 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     }
 
 
-    @OnClick({R.id.look_edit_image_iv, R.id.activity_home1_cancel, R.id.tv_change_img})
+    @OnClick({R.id.look_edit_image_iv, R.id.tv_change_img, R.id.activity_finish})
     public void onViewClicked(View v) {
         switch (v.getId()) {
-            case R.id.activity_home1_cancel:
-                finish();
-                break;
             case R.id.look_edit_image_iv:
                 setImageDetail();
                 break;
@@ -219,6 +217,9 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 //                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
 //                }
 
+                break;
+            case R.id.activity_finish:
+                AppManager.getAppManager().finishActivity();
                 break;
         }
     }
