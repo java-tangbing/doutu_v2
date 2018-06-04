@@ -25,7 +25,7 @@
             android:scaleType="fitXY"
             android:id="@+id/activity_jokedetail_item_iv"
             android:layout_width="match_parent"
-            android:layout_height="120dp" />
+            android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/activity_jokedetail_item_gif"
             android:layout_gravity="center"

@@ -203,7 +203,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                                 JSONObject jsonObject = KeyUtil.getJson(this);
                                 jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                                 jsonObject.put("type", 1 + "");
-                                jsonObject.put("id", pictureList.get(index).getId());
+                                jsonObject.put("id", URL);
                                 presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
                             } catch (JSONException e) {
                                 e.printStackTrace();

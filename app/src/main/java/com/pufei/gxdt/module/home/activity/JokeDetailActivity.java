@@ -1,6 +1,8 @@
 package com.pufei.gxdt.module.home.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -18,6 +21,7 @@ import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.presenter.JokePresenter;
 import com.pufei.gxdt.module.home.view.JokeView;
+import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.LogUtils;
@@ -50,7 +54,7 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
     private List<String> list = new ArrayList<>();
     private List<String> imagelist = new ArrayList<>();
     private TextView title,time,advert_title,advert_describe;
-    private ImageView advertImage;
+    JSONArray jsonObject ;
     @Override
     public void initView() {
         tv_title.setText("笑话详情");
@@ -59,10 +63,9 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         View headerView = lif.inflate(R.layout.title_time_joke, null);
         title = (TextView) headerView.findViewById(R.id.title_time_title);
         time = (TextView) headerView.findViewById(R.id.title_time_time);
-        View  footView = lif.inflate(R.layout.joke_advert,null);
-        advertImage = (ImageView) footView.findViewById(R.id.joke_advert_image);
-        advert_title = (TextView) footView.findViewById(R.id.joke_advert_title);
-        advert_describe = (TextView) footView.findViewById(R.id.joke_advert_describe);
+        View  footView = lif.inflate(R.layout.adver_layout,null);
+        RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
+        AdvUtil.getAdvHttp(this,relativeLayout,4);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT );
         headerView.setLayoutParams(layoutParams);
         footView.setLayoutParams(layoutParams);
@@ -75,6 +78,22 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         activityJokedetailRy.setPullRefreshEnabled(false);
         adpater = new JokeDetalAdpater(this, list, imagelist);
         activityJokedetailRy.setAdapter(adpater);
+        adpater.setOnItemClickListener(new JokeDetalAdpater.MyItemOnclick() {
+            @Override
+            public void OnImage(int position) {
+                Intent intent = new Intent(JokeDetailActivity.this, ImageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", jsonObject.toString());
+                bundle.putInt("position", position);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnlongImage(int position) {
+
+            }
+        });
     }
 
     @Override
@@ -132,7 +151,7 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
 
     }
     private void toJson(List<String> content){
-        JSONArray jsonObject = new JSONArray();
+        jsonObject = new JSONArray();
         for (int i = 0; i < content.size(); i++) {
             String name = content.get(i);
             if (name.length() > 3) {

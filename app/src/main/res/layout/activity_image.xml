@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:background="@color/black"
+        android:id="@+id/activity_image_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+<LinearLayout
+    android:background="@color/black"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+    <ImageView
+        android:id="@+id/activity_iamge_back"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:src="@mipmap/back1"
+        android:layout_width="30dp"
+        android:layout_height="20dp" />
+    <View
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </View>
+    <ImageView
+        android:id="@+id/activity_image_menu"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/abc_ic_menu_share_mtrl_alpha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.ViewPager
+            android:background="@color/black"
+            android:id="@+id/activity_iamge_vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v4.view.ViewPager>
+        <TextView
+            android:id="@+id/fragment_image_tv1"
+            android:layout_marginBottom="8dp"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="bottom"
+            android:text="2"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/fragment_image_tv2"
+            android:text="/6"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/activity_image_down"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="bottom|right"
+            android:src="@mipmap/bendi0"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+    </FrameLayout>
+
+</LinearLayout>

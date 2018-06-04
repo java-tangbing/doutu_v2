@@ -104,7 +104,6 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }, 2000);
             }

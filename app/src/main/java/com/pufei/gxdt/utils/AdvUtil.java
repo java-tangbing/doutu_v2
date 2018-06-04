@@ -47,26 +47,26 @@ public class AdvUtil {
 
             public void onAdShow(JSONObject info) {
                 // 广告已经渲染出来
-                Log.w("", "onAdShow " + info.toString());
+                Log.w("tb", "onAdShow " + info.toString());
             }
 
             public void onAdReady(AdView adView) {
                 // 资源已经缓存完毕，还没有渲染出来
-                Log.w("", "onAdReady " + adView);
+                Log.w("tb", "onAdReady " + adView);
             }
 
             public void onAdFailed(String reason) {
-                Log.w("", "onAdFailed " + reason);
+                Log.w("tb", "onAdFailed " + reason);
             }
 
             public void onAdClick(JSONObject info) {
-                // Log.w("", "onAdClick " + info.toString());
+                // Log.w("tb", "onAdClick " + info.toString());
 
             }
 
             @Override
             public void onAdClose(JSONObject arg0) {
-                Log.w("", "onAdClose");
+                Log.w("tb", "onAdClose");
             }
         });
         DisplayMetrics dm = new DisplayMetrics();

@@ -190,7 +190,6 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
                 JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("category_id", getIntent().getExtras().getString("category_id"));
                 jsonObject.put("page", page + "");
-                jsonObject.put("net", NetWorkUtil.netType(HomeImageActivity.this));
                 jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {

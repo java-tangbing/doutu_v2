@@ -40,7 +40,6 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
 
     @Override
     public void onBindViewHolder(final MyHolder holder, int position) {
-        SharedPreferences setting = mcontext.getSharedPreferences(SHARE_APP_TAG, 0);
         final String value=list.get(position);
         for (int i=0;i<imagelist.size();i++){
             if (value.equals(imagelist.get(i))){
