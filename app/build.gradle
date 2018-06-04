@@ -115,7 +115,7 @@ dependencies {
 //    implementation 'com.umeng.sdk:utdid:1.1.5.3'
    // implementation 'com.umeng.sdk:push:4.2.0'
     implementation files('libs/umeng-share-QQ-simplify-6.9.1.jar')
-    implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
+//    implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
     implementation('com.github.hotchemi:permissionsdispatcher:2.4.0') {
         exclude module: 'support-v13'
     }
