@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+#腾讯广告
+-keep class com.qq.e.** {
+    public protected *;
+}
+-keep class android.support.v4.**{
+    public *;
+}
+-keep class android.support.v7.**{
+    public *;
+}
+
+#百度广告
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class com.baidu.mobads.*.** { *; }

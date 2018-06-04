@@ -51,4 +51,16 @@ public class ImageTypePresenter extends BasePresenter<ImageTypeView> {
                 });
         addSubscription(disposable);
     }
+    public void cancleFavorite(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().cancleFavarite(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<FavoriteBean>() {
+                    @Override
+                    public void accept(FavoriteBean result) throws Exception {
+                        baseview.resultCancleFavorite(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
 }

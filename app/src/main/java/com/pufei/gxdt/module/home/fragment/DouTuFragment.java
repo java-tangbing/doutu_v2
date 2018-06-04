@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BaseMvpDouTuFragment;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
@@ -49,7 +50,7 @@ import butterknife.BindView;
  * Created by tb on 2018/5/23.
  */
 
-public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> implements HomeListView {
+public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements HomeListView {
     @BindView(R.id.srl_doutu)
     SmartRefreshLayout srl_doutu;
     @BindView(R.id.xrl_doutu)
@@ -68,13 +69,6 @@ public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> imple
 
     }
     @Override
-    protected void onFragmentVisibleChange(boolean isVisible) {
-        super.onFragmentVisibleChange(isVisible);
-        if (isVisible) {
-            requestData(page);
-        }
-}
-    @Override
     public void initView() {
         xrl_doutu.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         xrl_doutu.addItemDecoration(new SpaceItemDecoration(dp2px(getActivity(), 10)));
@@ -91,7 +85,11 @@ public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> imple
                     public void run() {
                         page++;
                         requestData(page);
-                        refreshlayout.finishLoadmore();
+                        try {
+                            refreshlayout.finishLoadmore();
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, 2000);
             }
@@ -102,7 +100,6 @@ public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> imple
                     @Override
                     public void run() {
                         page = 1;
-                        adapter.notifyDataSetChanged();
                         requestData(page);
                         refreshlayout.finishRefresh();
                     }
@@ -113,7 +110,7 @@ public class DouTuFragment extends BaseMvpDouTuFragment<HomeListPresenter> imple
 
     @Override
     public void getData() {
-
+        requestData(page);
     }
     private void requestData(int page) {
         if (NetWorkUtil.isNetworkConnected(getActivity())) try {

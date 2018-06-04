@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -16,6 +17,7 @@ import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.presenter.JokePresenter;
 import com.pufei.gxdt.module.home.view.JokeView;
+import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
@@ -49,12 +51,15 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.your_original_layout)
+    RelativeLayout your_original_layout;
     private JokeAdapter jokeAdapter;
     private List<JokeResultBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
     @Override
     public void initView() {
         tv_title.setText("笑话段子");
+        AdvUtil.getAdvHttp(this,your_original_layout,4);
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdapter(JokeActivity.this,jokeList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器

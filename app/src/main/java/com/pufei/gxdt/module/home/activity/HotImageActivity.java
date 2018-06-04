@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -19,6 +20,7 @@ import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.ImageTypePresenter;
 import com.pufei.gxdt.module.home.view.ImageTypeView;
+import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
@@ -46,7 +48,7 @@ import butterknife.OnClick;
  * Created by tb on 2018/5/24.
  */
 
-public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implements ImageTypeView {
+public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implements ImageTypeView{
     @BindView(R.id.hot_xryv)
     XRecyclerView hotXryv;
     @BindView(R.id.fragment_hot_smart)
@@ -57,12 +59,15 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     TextView title;
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
+    @BindView(R.id.your_original_layout)
+    RelativeLayout your_original_layout;
     private List<PictureResultBean.ResultBean> picturelist = new ArrayList<>();
     private HotAdapter adapter;
     private  int page = 1;
 
     @Override
     public void initView() {
+        AdvUtil.getAdvHttp(this,your_original_layout,5);
         title.setText("热门表情");
         ll_left.setVisibility(View.VISIBLE);
         hotXryv.setLayoutManager(new GridLayoutManager(HotImageActivity.this, 3));
@@ -171,6 +176,11 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
 
     @Override
     public void resultAddFavorite(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void resultCancleFavorite(FavoriteBean bean) {
 
     }
 

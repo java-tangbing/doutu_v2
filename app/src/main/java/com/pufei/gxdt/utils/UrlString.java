@@ -9,6 +9,7 @@ public class UrlString {
     public static final String TRADE_RECORD__URL = " https://jiakao.xianwan.com/task/member/bill";
     public static final String GET_CODE_URL="https://jiakao.xianwan.com/task/login/get_vcode";
     private static final String TAG="http://erp.xianwan.com";
+    public  static final String GET_ADV = "http://erp.xianwan.com/api/v5/android/Piece/advertList";
     //private static final String TAG="http://test.xianwan.com";
     public static final String DO_TASK=TAG+"/api/v4/Task/doTask";
     public static final String SPECIAL_MISSION=TAG+"/api/v4/Task/getSpecial";

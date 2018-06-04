@@ -40,7 +40,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
-        GlideApp.with(mcontext).load(list.get(position).getUrl()).override(100,80).into(holder.iv1);
+        GlideApp.with(mcontext).load(list.get(position).getUrl()).placeholder(R.mipmap.ic_default_picture).override(100,80).into(holder.iv1);
 
     }
     @Override

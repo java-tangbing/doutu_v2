@@ -12,4 +12,5 @@ public interface ImageTypeView extends BaseView<ImageTypePresenter> {
     void resultHotImage(PictureResultBean bean);
     void resultImageDetail(PictureDetailBean bean);
     void resultAddFavorite(FavoriteBean bean);
+    void resultCancleFavorite(FavoriteBean bean);
 }

@@ -62,6 +62,7 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
         }
         addfragment();
         fragmentHomeTb.setTabMode(TabLayout.MODE_SCROLLABLE);
+        homeVpDriver.setOffscreenPageLimit(1);
         homeVpDriver.setAdapter(new MyPagerAdapder(getSupportFragmentManager(), fragmentList, titleList));
         homeVpDriver.setCurrentItem(index);
         fragmentHomeTb.addOnTabSelectedListener(this);

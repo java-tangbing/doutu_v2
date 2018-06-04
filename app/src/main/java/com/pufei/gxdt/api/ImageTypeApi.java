@@ -29,4 +29,6 @@ public interface ImageTypeApi {
     Observable<PictureDetailBean> getImageDetailList(@Body RequestBody body);
     @POST("User/addImages")
     Observable<FavoriteBean> addFavarite(@Body RequestBody body);
+    @POST("User/deleteImages")
+    Observable<FavoriteBean> cancleFavarite(@Body RequestBody body);
 }

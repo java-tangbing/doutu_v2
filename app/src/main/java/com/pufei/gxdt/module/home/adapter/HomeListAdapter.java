@@ -62,14 +62,14 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
             ((MyHodler) holder).titletv.setText(list.get(position).getCategory_name());
             ((MyHodler) holder).tv_eyes.setText(list.get(position).getView());
             ((MyHodler) holder).tv_hot.setText(list.get(position).getHot());
-            GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv1);
-            GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv2);
-            GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl() ).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv3);
+            GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv1);
+            GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv2);
+            GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl() ).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv3);
         }else if(holder instanceof OneHolder){
             ((OneHolder) holder).tv2.setText(list.get(position).getTitle());
             ((OneHolder) holder).tv_eyes.setText(list.get(position).getView());
             ((OneHolder) holder).tv_hot.setText(list.get(position).getHot());
-            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.newloding).into(((OneHolder) holder).iv11);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.ic_default_picture).into(((OneHolder) holder).iv11);
         }
     }
 

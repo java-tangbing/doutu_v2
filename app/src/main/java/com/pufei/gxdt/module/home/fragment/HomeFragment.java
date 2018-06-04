@@ -6,14 +6,21 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mobads.AdSettings;
+import com.baidu.mobads.AdView;
+import com.baidu.mobads.AdViewListener;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
@@ -30,6 +37,7 @@ import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
 import com.pufei.gxdt.module.news.activity.NewsActivity;
+import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -59,17 +67,18 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     SmartRefreshLayout srf_home_lisyt;
     @BindView(R.id.rl_home_list)
     XRecyclerView rl_home_list;
-    @BindView(R.id.iv_adver)
-    ImageView iv_adver;
+    @BindView(R.id.your_original_layout)
+    RelativeLayout your_original_layout;
     private HomeListAdapter adapter;
     private int page = 1;
     private List<HomeResultBean.ResultBean> homeList = new ArrayList<>();
     private List<HomeTypeBean.ResultBean> homeTypeList = new ArrayList<>();
     private View headView;
 
+
     @Override
     public void initView() {
-        iv_adver.setVisibility(View.GONE);
+        AdvUtil.getAdvHttp(getActivity(),your_original_layout,1);
         LayoutInflater lif = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
