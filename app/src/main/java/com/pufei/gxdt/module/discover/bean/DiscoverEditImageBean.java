@@ -131,7 +131,26 @@ public class DiscoverEditImageBean {
             private String dateline;
             private String url;
             private String view;
+
+            public String getIsSaveImg() {
+                return isSaveImg;
+            }
+
+            public void setIsSaveImg(String isSaveImg) {
+                this.isSaveImg = isSaveImg;
+            }
+
+            private String isSaveImg;
             private UserBean user;
+            private String make_url;
+
+            public String getMake_url() {
+                return make_url;
+            }
+
+            public void setMake_url(String make_url) {
+                this.make_url = make_url;
+            }
 
             public String getId() {
                 return id;

@@ -189,6 +189,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
             case R.id.dis_item_iv:
                 Intent intent = new Intent(activity, DisPictureDetailActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("isSaveImg", mlist.get(position).getIsSaveImg());
                 bundle.putString("id", mlist.get(position).getId());
                 bundle.putString("orginid", mlist.get(position).getOrginid());
                 bundle.putString("orgintable", mlist.get(position).getOrgintable());

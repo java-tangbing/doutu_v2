@@ -67,6 +67,15 @@ public class DiscoverListBean implements Serializable {
         private String url;
         private String make_url;
         private UserBean user;
+        private String isSaveImg;
+
+        public String getIsSaveImg() {
+            return isSaveImg;
+        }
+
+        public void setIsSaveImg(String isSaveImg) {
+            this.isSaveImg = isSaveImg;
+        }
 
         public String getMake_url() {
             return make_url;

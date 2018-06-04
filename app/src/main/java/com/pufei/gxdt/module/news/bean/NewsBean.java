@@ -5,25 +5,16 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import java.util.List;
 
 public class NewsBean {
+
     /**
      * code : 0
      * msg : success
-     * result : [{"id":"7","uid":"339839","type":"2","dateline":"2018-05-29 10:59","os":"android","content":"ceshi454","url":"","orgin":"0"},{"id":"2","uid":"339839","type":"2","dateline":"2018-05-29 10:59","os":"ios","content":"cehsi1","url":"","orgin":"0"},{"id":"5","uid":"339839","type":"2","dateline":"2018-05-29 10:59","os":"ios","content":"ceshi45","url":"","orgin":"0"}]
+     * result : [{"id":"1","uid":"339839","type":"2","dateline":"2018-06-04 16:17","os":"ios","content":"【17712906965】引用了您的表情","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/3b9e1dc7.gif","images":{"orgintable":"amuse_images1","orginid":"28","id":"28","uid":"346979"},"orgin":"0"}]
      */
 
     private String code;
     private String msg;
     private List<ResultBean> result;
-//    private int itemType;//1101 or 1102
-
-//    @Override
-//    public int getItemType() {
-//        return itemType;
-//    }
-//
-//    public void setItemType(int itemType) {
-//        this.itemType = itemType;
-//    }
 
     public String getCode() {
         return code;
@@ -49,17 +40,16 @@ public class NewsBean {
         this.result = result;
     }
 
-
-
     public static class ResultBean implements MultiItemEntity {
         /**
-         * id : 7
+         * id : 1
          * uid : 339839
          * type : 2
-         * dateline : 2018-05-29 10:59
-         * os : android
-         * content : ceshi454
-         * url :
+         * dateline : 2018-06-04 16:17
+         * os : ios
+         * content : 【17712906965】引用了您的表情
+         * url : http://dtds.oss-cn-hangzhou.aliyuncs.com/3b9e1dc7.gif
+         * images : {"orgintable":"amuse_images1","orginid":"28","id":"28","uid":"346979"}
          * orgin : 0
          */
 
@@ -70,27 +60,8 @@ public class NewsBean {
         private String os;
         private String content;
         private String url;
+        private ImagesBean images;
         private String orgin;
-        private String orgintable;
-
-        public String getOrgintable() {
-            return orgintable;
-        }
-
-        public void setOrgintable(String orgintable) {
-            this.orgintable = orgintable;
-        }
-
-        public String getOrginid() {
-            return orginid;
-        }
-
-        public void setOrginid(String orginid) {
-            this.orginid = orginid;
-        }
-
-        private String orginid;
-
 
         public String getId() {
             return id;
@@ -148,6 +119,14 @@ public class NewsBean {
             this.url = url;
         }
 
+        public ImagesBean getImages() {
+            return images;
+        }
+
+        public void setImages(ImagesBean images) {
+            this.images = images;
+        }
+
         public String getOrgin() {
             return orgin;
         }
@@ -158,17 +137,76 @@ public class NewsBean {
 
         @Override
         public int getItemType() {
-            int itemtype = -1;
-            switch (getOrgin()) {
-                case "0":
-                    itemtype = 0;
-                    break;
-                case "1":
-                    itemtype = 1;
-                    break;
-            }
-            return itemtype;
+        int itemtype = -1;
+        switch (getOrgin()) {
+            case "0":
+                itemtype = 0;
+                break;
+            case "1":
+                itemtype = 1;
+                break;
+        }
+        return itemtype;
+        }
 
+        public static class ImagesBean {
+            /**
+             * orgintable : amuse_images1
+             * orginid : 28
+             * id : 28
+             * uid : 346979
+             */
+
+            private String orgintable;
+            private String orginid;
+            private String id;
+            private String uid;
+
+            public String getOrgintable() {
+                return orgintable;
+            }
+
+            public void setOrgintable(String orgintable) {
+                this.orgintable = orgintable;
+            }
+
+            public String getOrginid() {
+                return orginid;
+            }
+
+            public void setOrginid(String orginid) {
+                this.orginid = orginid;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getUid() {
+                return uid;
+            }
+
+            public void setUid(String uid) {
+                this.uid = uid;
+            }
         }
     }
 }
+//    @Override
+//    public int getItemType() {
+//        int itemtype = -1;
+//        switch (getOrgin()) {
+//            case "0":
+//                itemtype = 0;
+//                break;
+//            case "1":
+//                itemtype = 1;
+//                break;
+//        }
+//        return itemtype;
+//
+//    }

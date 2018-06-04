@@ -91,6 +91,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     private void setAdapter() {
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
+            if (id == null || orginid == null || orgintable == null || uid == null) return;
             jsonObject.put("id", id);
             jsonObject.put("orginid", orginid);//orginid 原始图id
             jsonObject.put("orgintable", orgintable);//orgintable 数据�
@@ -141,7 +142,8 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
     }
 
-  public  void   setOrginImagedet(){}
+    public void setOrginImagedet() {
+    }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -151,6 +153,10 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         bundle.putString("orginid", mlist.get(position).getOrginid());
         bundle.putString("orgintable", mlist.get(position).getOrgintable());
         bundle.putSerializable("pictureList", (Serializable) mlist);
+        bundle.putInt("picture_index", position);
+        bundle.putString("type", "disdet");
+//        bundle.putString("isSaveImg", mlist.get(position).getIsSaveImg());
+        bundle.putString("isSaveImg", "1");
         intent.putExtras(bundle);
         startActivity(intent);
 
