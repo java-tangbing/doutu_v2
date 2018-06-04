@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
@@ -17,7 +19,7 @@ import com.umeng.socialize.PlatformConfig;
 
 
 public class App extends Application {
-
+    private static final String TAG = App.class.getName();
     public static Typeface TEXT_TYPE;
     public static Context AppContext;
     public static int KEMU = 1;
@@ -33,8 +35,24 @@ public class App extends Application {
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
         initPrefs();
-        initUMConfig();
         FlowManager.init(this);
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                Log.i(TAG, "device token: " + deviceToken);
+
+                Toast.makeText(App.AppContext, mPushAgent.getRegistrationId(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });
+        initUMConfig();
     }
 
     /**
@@ -49,6 +67,6 @@ public class App extends Application {
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         PlatformConfig.setQQZone("1105886594", "CUKkoCW26egFbEL5");
         PlatformConfig.setWeixin("wx8f75dcadece0c95f", "ca3d1f513757b97bbdc313eafff76a8a");
-
     }
+
 }
