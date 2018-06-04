@@ -35,6 +35,11 @@ public class DiscoverPresenter extends BasePresenter<DiscoverView> {
                     public void accept(DiscoverEditImageBean discoverEditImageBean) throws Exception {
                         baseview.getDiscoverDetailed(discoverEditImageBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        return;
+                    }
                 });
         addSubscription(disposable);
     }

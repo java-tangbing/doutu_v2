@@ -14,6 +14,7 @@
         android:scaleType="fitXY" />
 
     <LinearLayout
+        android:id="@+id/dis_item_user_img_list"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="10dp"

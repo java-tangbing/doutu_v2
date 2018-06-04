@@ -15,6 +15,7 @@ import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.activity.DisPictureDetailActivity;
+import com.pufei.gxdt.module.discover.activity.DisWorksActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
@@ -43,7 +44,7 @@ import butterknife.BindView;
 
 public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
         , SwipeRefreshLayout.OnRefreshListener
-        , BaseQuickAdapter.OnItemClickListener
+        , BaseQuickAdapter.OnItemChildClickListener
         , BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.rv_all_dis)
     RecyclerView recyclerView;
@@ -75,7 +76,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
         discoverAdapter.setEnableLoadMore(false);
-        discoverAdapter.setOnItemClickListener(this);
+        discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
         discoverAdapter.disableLoadMoreIfNotFullPage();
@@ -121,18 +122,6 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         }
     }
 
-    @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Intent intent = new Intent(activity, DisPictureDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("id", mlist.get(position).getId());
-        bundle.putString("orginid", mlist.get(position).getOrginid());
-        bundle.putString("orgintable", mlist.get(position).getOrgintable());
-        bundle.putInt("picture_index", position);
-        bundle.putSerializable("picture_list", (Serializable) mlist);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
@@ -202,5 +191,26 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         isLoadMore = true;
         isRefreshing = false;
         setMyadapter();
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        switch (view.getId()){
+            case R.id.dis_item_iv:
+                Intent intent = new Intent(activity, DisPictureDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", mlist.get(position).getId());
+                bundle.putString("orginid", mlist.get(position).getOrginid());
+                bundle.putString("orgintable", mlist.get(position).getOrgintable());
+                bundle.putInt("picture_index", position);
+                bundle.putSerializable("picture_list", (Serializable) mlist);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case R.id.dis_item_user_img_list:
+                Intent intent01 = new Intent(activity, DisWorksActivity.class);
+                startActivity(intent01);
+                break;
+        }
     }
 }
