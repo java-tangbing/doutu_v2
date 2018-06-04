@@ -36,7 +36,7 @@ public class App extends Application {
         AppContext = getApplicationContext();
         initPrefs();
         FlowManager.init(this);
-        final PushAgent mPushAgent = PushAgent.getInstance(this);
+        PushAgent mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(new IUmengRegisterCallback() {
 
             @Override
@@ -44,7 +44,6 @@ public class App extends Application {
                 //注册成功会返回device token
                 Log.i(TAG, "device token: " + deviceToken);
 
-                Toast.makeText(App.AppContext, mPushAgent.getRegistrationId(), Toast.LENGTH_LONG).show();
             }
 
             @Override

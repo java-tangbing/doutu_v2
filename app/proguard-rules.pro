@@ -274,12 +274,24 @@
 
 -keepattributes *Annotation*
 
+-dontwarn com.taobao.**
+-dontwarn anet.channel.**
+-dontwarn anetwork.channel.**
+-dontwarn org.android.**
+-dontwarn org.apache.thrift.**
+-dontwarn com.xiaomi.**
+-dontwarn com.huawei.**
+-dontwarn com.meizu.**
+
+-keepattributes *Annotation*
+
 -keep class com.taobao.** {*;}
 -keep class org.android.** {*;}
 -keep class anet.channel.** {*;}
 -keep class com.umeng.** {*;}
 -keep class com.xiaomi.** {*;}
 -keep class com.huawei.** {*;}
+-keep class com.meizu.** {*;}
 -keep class org.apache.thrift.** {*;}
 
 -keep class com.alibaba.sdk.android.**{*;}
@@ -323,7 +335,28 @@
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
+#腾讯广告
+-keep class com.qq.e.** {
+    public protected *;
+}
+-keep class android.support.v4.**{
+    public *;
+}
+-keep class android.support.v7.**{
+    public *;
+}
 
+#百度广告
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class com.baidu.mobads.*.** { *; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
