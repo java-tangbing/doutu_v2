@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AppManager;
+import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
 

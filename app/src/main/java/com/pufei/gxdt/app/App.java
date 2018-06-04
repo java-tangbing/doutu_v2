@@ -36,7 +36,7 @@ public class App extends Application {
         AppContext = getApplicationContext();
         initPrefs();
         FlowManager.init(this);
-        PushAgent mPushAgent = PushAgent.getInstance(this);
+        final PushAgent mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(new IUmengRegisterCallback() {
 
             @Override
