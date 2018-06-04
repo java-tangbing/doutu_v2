@@ -2,10 +2,12 @@
 <resources>
     <color name="black">#000000</color>
     <color name="grey">#808080</color>
+    <color name="text_grey">#686868</color>
     <color name="background_gray">#F0F0F0</color>
     <color name="background_gray_white">#F8F8F8</color>
     <color name="line_gray">#DDDDDD</color>
     <color name="yellow">#FFEA5C</color>
+    <color name="yellow_view">#EBCC00</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
