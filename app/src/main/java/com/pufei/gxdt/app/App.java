@@ -36,22 +36,23 @@ public class App extends Application {
         AppContext = getApplicationContext();
         initPrefs();
         FlowManager.init(this);
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.register(new IUmengRegisterCallback() {
-
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回device token
-                Log.i(TAG, "device token: " + deviceToken);
-
-            }
-
-            @Override
-            public void onFailure(String s, String s1) {
-
-            }
-        });
         initUMConfig();
+//        PushAgent mPushAgent = PushAgent.getInstance(this);
+//        mPushAgent.register(new IUmengRegisterCallback() {
+//
+//            @Override
+//            public void onSuccess(String deviceToken) {
+//                //注册成功会返回device token
+//                Log.i(TAG, "device token: " + deviceToken);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(String s, String s1) {
+//
+//            }
+//        });
+
     }
 
     /**
@@ -62,6 +63,7 @@ public class App extends Application {
     }
 
     private void initUMConfig() {
+        UMConfigure.setLogEnabled(true);
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         PlatformConfig.setQQZone("1105886594", "CUKkoCW26egFbEL5");
