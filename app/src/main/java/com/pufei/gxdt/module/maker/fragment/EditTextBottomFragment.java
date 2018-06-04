@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.maker.adapter.HotTextAdapter;
+import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
+import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -33,7 +36,7 @@ import java.util.TimerTask;
 /**
  * 添加文字
  */
-public class EditTextBottomFragment extends BottomSheetDialogFragment implements View.OnClickListener,BaseQuickAdapter.OnItemClickListener {
+public class EditTextBottomFragment extends BottomSheetDialogFragment implements View.OnClickListener, BaseQuickAdapter.OnItemClickListener {
 
     private EditText etInput;
     private TextView tvConfirm;
@@ -45,6 +48,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private List<String> hotTextList;
     private HotTextAdapter hotTextAdapter;
     private InputMethodManager inputManager;
+    private EditImagePresenter imagePresenter;
 
 
     @Override
@@ -67,15 +71,15 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
             public void run() {
                 inputManager.showSoftInput(etInput, 0);
             }
-        },300);
+        }, 300);
 
         KeyboardVisibilityEvent.setEventListener(
                 getActivity(),
                 new KeyboardVisibilityEventListener() {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
-                        if(!isOpen) {
-                            if(rvHotText.getVisibility() != View.VISIBLE) {
+                        if (!isOpen) {
+                            if (rvHotText.getVisibility() != View.VISIBLE) {
                                 dismiss();
                             }
                         }
@@ -92,7 +96,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
                 public void onStateChanged(@NonNull View bottomSheet, int newState) {
                     if (newState == BottomSheetBehavior.STATE_DRAGGING) {
                         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    }else if(newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                         dismiss();
                     }
                 }
@@ -122,20 +126,20 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_confirm:
-                if(!etInput.getText().toString().isEmpty()){
-                    inputTextListener.inputText(type,etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                if (!etInput.getText().toString().isEmpty()) {
+                    inputTextListener.inputText(type, etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     etInput.setText("");
                 }
                 dismiss();
                 break;
             case R.id.tv_recommend:
-                if(rvHotText.getVisibility() == View.VISIBLE) {
-                    tvRecommend.setTextColor(ContextCompat.getColor(getActivity(),R.color.hint_color));
+                if (rvHotText.getVisibility() == View.VISIBLE) {
+                    tvRecommend.setTextColor(ContextCompat.getColor(getActivity(), R.color.hint_color));
                     tvRecommend.setBackgroundResource(R.drawable.circle_stroke_grey);
                     rvHotText.setVisibility(View.INVISIBLE);
                     inputManager.showSoftInput(etInput, 0);
-                }else {
-                    tvRecommend.setTextColor(ContextCompat.getColor(getActivity(),R.color.recommed_color));
+                } else {
+                    tvRecommend.setTextColor(ContextCompat.getColor(getActivity(), R.color.recommed_color));
                     tvRecommend.setBackgroundResource(R.drawable.circle_stroke_yellow);
                     rvHotText.setVisibility(View.VISIBLE);
                     inputManager.hideSoftInputFromWindow(etInput.getWindowToken(), 0);
@@ -145,13 +149,13 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     }
 
     private void initData() {
-        hotTextList = new ArrayList<String>();
-        for (int i = 0; i < 15; i++) {
-            hotTextList.add("这是第" + i + "个热词");
+        ImageTextEditFragment fragment = (ImageTextEditFragment) getParentFragment();
+        if(fragment != null) {
+            hotTextList = fragment.getBean().getResult();
+            hotTextAdapter = new HotTextAdapter(hotTextList);
+            rvHotText.setAdapter(hotTextAdapter);
+            hotTextAdapter.setOnItemClickListener(this);
         }
-        hotTextAdapter = new HotTextAdapter(hotTextList);
-        rvHotText.setAdapter(hotTextAdapter);
-        hotTextAdapter.setOnItemClickListener(this);
     }
 
     public void setInputTextListener(InputTextListener listener) {
@@ -163,7 +167,10 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
         etInput.setText(hotTextList.get(position));
     }
 
+
     public interface InputTextListener {
-        void inputText(int type,String text, int color);
+        void inputText(int type, String text, int color);
     }
+
+
 }

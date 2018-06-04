@@ -10,5 +10,13 @@
         android:background="@drawable/circle_grey"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"/>
-    
+
+    <ImageView
+        android:id="@+id/iv_earser"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@mipmap/bt_made_tool_eraser"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"/>
 </FrameLayout>

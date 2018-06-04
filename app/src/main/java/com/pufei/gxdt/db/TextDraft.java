@@ -14,7 +14,7 @@ public class TextDraft extends BaseModel {
     @Column
     public String text;
     @Column
-    public int textColor;
+    public String textColor;
     @Column
     public float textSize;
     @Column
