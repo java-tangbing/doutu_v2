@@ -13,6 +13,8 @@ import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 
 
@@ -34,7 +36,8 @@ public class App extends Application {
         AppContext = getApplicationContext();
         initPrefs();
         FlowManager.init(this);
-//        final PushAgent mPushAgent = PushAgent.getInstance(this);
+        initUMConfig();
+//        PushAgent mPushAgent = PushAgent.getInstance(this);
 //        mPushAgent.register(new IUmengRegisterCallback() {
 //
 //            @Override
@@ -42,7 +45,6 @@ public class App extends Application {
 //                //注册成功会返回device token
 //                Log.i(TAG, "device token: " + deviceToken);
 //
-//                Toast.makeText(App.AppContext, mPushAgent.getRegistrationId(), Toast.LENGTH_LONG).show();
 //            }
 //
 //            @Override
@@ -50,7 +52,7 @@ public class App extends Application {
 //
 //            }
 //        });
-        initUMConfig();
+
     }
 
     /**
@@ -61,6 +63,7 @@ public class App extends Application {
     }
 
     private void initUMConfig() {
+        UMConfigure.setLogEnabled(true);
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         PlatformConfig.setQQZone("1105886594", "CUKkoCW26egFbEL5");

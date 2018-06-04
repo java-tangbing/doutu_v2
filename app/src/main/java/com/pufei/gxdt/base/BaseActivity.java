@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AppManager;
+import com.umeng.message.PushAgent;
+
 import butterknife.ButterKnife;
 
 
@@ -21,7 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayout());
         StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.black));
         AppManager.getAppManager().addActivity(this);
-        //PushAgent.getInstance(this).onAppStart();
+//        PushAgent.getInstance(this).onAppStart();
         ButterKnife.bind(this);
         initView();
         getData();

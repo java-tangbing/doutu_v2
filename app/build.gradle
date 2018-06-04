@@ -44,6 +44,10 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            lintOptions {
+                checkReleaseBuilds false
+                abortOnError false
+            }
         }
     }
 
@@ -110,18 +114,21 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.umeng.sdk:share-core:6.9.1'
     implementation 'com.umeng.sdk:share-wechat:6.9.1'
-    implementation 'com.umeng.sdk:common:1.5.1'
+    implementation 'com.umeng.sdk:common:1.5.0'
+    implementation 'com.umeng.sdk:utdid:1.1.5.3'
     implementation 'com.umeng.analytics:analytics:6.1.4'
-//    implementation 'com.umeng.sdk:utdid:1.1.5.3'
-   // implementation 'com.umeng.sdk:push:4.2.0'
+    implementation 'com.umeng.sdk:push:4.2.0'
+    implementation 'top.zibin:Luban:1.1.5'
     implementation files('libs/umeng-share-QQ-simplify-6.9.1.jar')
-//    implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
+    //    implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
+    implementation files('libs/Baidu_MobAds_SDK.jar')
+    implementation files('libs/GDTUnionSDK.4.17.568.min.jar')
+    implementation project(':photoeditor')
+    implementation project(':PushSDK')
     implementation('com.github.hotchemi:permissionsdispatcher:2.4.0') {
         exclude module: 'support-v13'
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-    implementation project(':photoeditor')
-   // implementation project(':PushSDK')
     implementation 'com.mylhyl:acp:1.2.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation 'com.github.donkingliang:ImageSelector:1.5.0'
@@ -130,6 +137,4 @@ dependencies {
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
-    implementation files('libs/Baidu_MobAds_SDK.jar')
-    implementation files('libs/GDTUnionSDK.4.17.568.min.jar')
 }
