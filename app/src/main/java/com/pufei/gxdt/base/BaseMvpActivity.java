@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.utils.AppManager;
-import com.umeng.message.PushAgent;
+
 
 import butterknife.ButterKnife;
 
@@ -25,7 +25,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
         setContentView(getLayout());
         AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
-        PushAgent.getInstance(this).onAppStart();
+        //PushAgent.getInstance(this).onAppStart();
 //        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 //        UMConfigure.setLogEnabled(true);
 //        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE, "");

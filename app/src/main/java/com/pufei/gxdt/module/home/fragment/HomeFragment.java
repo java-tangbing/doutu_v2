@@ -28,6 +28,7 @@ import com.pufei.gxdt.module.home.activity.FaceTypeActivity;
 import com.pufei.gxdt.module.home.activity.HomeImageActivity;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeActivity;
+import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
 import com.pufei.gxdt.module.home.activity.SearchActivity;
 import com.pufei.gxdt.module.home.activity.ThemeImageActivity;
 import com.pufei.gxdt.module.home.adapter.HomeListAdapter;
@@ -127,12 +128,32 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         adapter.setOnItemClickListener(new HomeListAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
-                if (homeList.get(postion).getImages() == null) {
+                if ("3".equals(homeList.get(postion).getCat())) {
                     Intent intent = new Intent(getActivity(), HomeImageActivity.class);
                     intent.putExtra("category_id", homeList.get(postion).getImgs().get(0).getCategory_id());
                     intent.putExtra("title", homeList.get(postion).getCategory_name());
                     intent.putExtra("eyes", homeList.get(postion).getView());
                     intent.putExtra("hot", homeList.get(postion).getHot());
+                    startActivity(intent);
+                }else if("1".equals(homeList.get(postion).getCat())){
+                    int position = 0;
+                    for(int  i = 0;i<homeTypeList.size();i++){
+                        if(homeList.get(postion).getId().equals(homeTypeList.get(i).getId()) ){
+                            position = i;
+                            break;
+                        }
+                    }
+                    Intent intent = new Intent(getActivity(), FaceTypeActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("title_list", (Serializable) homeTypeList);
+                    bundle.putInt("index",position);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
+                    intent.putExtra("id",homeList.get(postion).getId());
+                    intent.putExtra("title",homeList.get(postion).getTitle());
+                    intent.putExtra("time",homeList.get(postion).getDateline());
                     startActivity(intent);
                 }
 
