@@ -67,12 +67,12 @@ public class JokeAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler) holder).titletv.setText(list.get(position).getTitle());
-            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv1);
-            GlideApp.with(mcontext).load(list.get(position).getImages().get(1)).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv2);
-            GlideApp.with(mcontext).load(list.get(position).getImages().get(2)).placeholder(R.mipmap.newloding).into(((MyHodler) holder).iv3);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv1);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(1)).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv2);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(2)).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv3);
         }else if(holder instanceof OneHolder){
             ((OneHolder) holder).tv2.setText(list.get(position).getTitle());
-            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.newloding).into(((OneHolder) holder).iv11);
+            GlideApp.with(mcontext).load(list.get(position).getImages().get(0)).placeholder(R.mipmap.ic_default_picture).into(((OneHolder) holder).iv11);
         }else if (holder instanceof AdvertHodler){
             Log.e("SecondFragment",list.get(position).getAdvert_image_url());
             ((AdvertHodler) holder).title.setText(list.get(position).getTitle());

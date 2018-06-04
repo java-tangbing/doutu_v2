@@ -53,7 +53,7 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
                 holder.ll.setVisibility(View.VISIBLE);
                 holder.ivgif.setVisibility(View.GONE);
                 GlideApp.with(mcontext)
-                      .load(value).placeholder(R.mipmap.newloding)
+                      .load(value).placeholder(R.mipmap.ic_default_picture)
                       .into(holder.iv);
 
             }else {

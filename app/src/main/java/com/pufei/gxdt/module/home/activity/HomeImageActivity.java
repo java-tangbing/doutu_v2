@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -20,6 +21,8 @@ import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
+import com.pufei.gxdt.utils.AdvUtil;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by tb on 2018/5/28.
@@ -68,6 +72,8 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
     private HomeImageAdapter adapter;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.your_original_layout)
+    RelativeLayout your_original_layout;
     List<PictureResultBean.ResultBean> list = new ArrayList<>();
     private int page = 1;
     @Override
@@ -103,6 +109,7 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
     @Override
     public void initView() {
         tv_title.setText("");
+        AdvUtil.getAdvHttp(this,your_original_layout,2);
         tv_top_title.setText(getIntent().getExtras().getString("title"));
         tv_hot.setText(getIntent().getExtras().getString("hot"));
         tv_eyes.setText(getIntent().getExtras().getString("eyes"));
@@ -196,6 +203,10 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
     private  int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
+    }
+    @OnClick(R.id.ll_title_left)
+    public  void viewClicked(){
+        AppManager.getAppManager().finishActivity();
     }
 
     @Override

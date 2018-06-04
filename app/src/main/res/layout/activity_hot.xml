@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/common_title"/>
+    <include layout="@layout/adver_layout"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -11,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.jcodecraeer.xrecyclerview.XRecyclerView
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:focusableInTouchMode="true"
             android:id="@+id/hot_xryv"
             android:layout_width="match_parent"

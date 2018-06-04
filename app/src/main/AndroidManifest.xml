@@ -28,10 +28,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -176,7 +176,6 @@
         <activity
             android:name="com.donkingliang.imageselector.ClipImageActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5850b381734be40cef0006f8" />
@@ -191,6 +190,26 @@
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />
 
         <provider
+            android:name="com.baidu.mobads.openad.FileProvider"
+            android:authorities="${packageName}.bd.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/bd_file_paths" />
+        </provider>
+
+        <provider
+        android:name=".base.TencentProvider"
+        android:authorities="${applicationId}.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/gdt_file_path" />
+    </provider>
+
+    <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.pufei.gxdt.fileProvider"
             android:exported="false"

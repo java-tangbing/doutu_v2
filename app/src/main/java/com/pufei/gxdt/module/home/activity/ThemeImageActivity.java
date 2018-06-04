@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pufei.gxdt.R;
@@ -15,6 +16,7 @@ import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
 import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
 import com.pufei.gxdt.module.home.view.ThemeImageView;
+import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
@@ -50,12 +52,15 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     RecyclerView recyclerView;
     @BindView(R.id.refresh_theme)
     SmartRefreshLayout refresh_theme;
+    @BindView(R.id.your_original_layout)
+    RelativeLayout your_original_layout;
     private ThemeImageAdpater adpater;
     private List<ThemeResultBean.ResultBean> list = new ArrayList<>();
     private int page = 1;
     @Override
     public void initView() {
         tv_title.setText("主题表情");
+        AdvUtil.getAdvHttp(this,your_original_layout,6);
         ll_left.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adpater = new ThemeImageAdpater(ThemeImageActivity.this,list);

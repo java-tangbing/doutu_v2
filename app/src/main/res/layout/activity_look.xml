@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp">
         <LinearLayout
-            android:id="@+id/activity_home1_cancel"
+            android:id="@+id/activity_finish"
             android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="60dp"

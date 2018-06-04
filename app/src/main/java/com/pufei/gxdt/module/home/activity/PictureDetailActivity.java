@@ -1,16 +1,34 @@
 package com.pufei.gxdt.module.home.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mylhyl.acp.Acp;
+import com.mylhyl.acp.AcpListener;
+import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -24,12 +42,20 @@ import com.pufei.gxdt.module.home.presenter.ImageTypePresenter;
 import com.pufei.gxdt.module.home.view.ImageTypeView;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
+import com.pufei.gxdt.utils.AdvUtil;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
+import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +72,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import ja.burhanrashid52.photoeditor.PhotoEditor;
 
 /**表情操作
  * Created by tb on 2018/5/23.
@@ -62,14 +89,20 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     TextView tv_hot;
     @BindView(R.id.tv_change_img)
     TextView tv_change_img;
+    @BindView(R.id.activity_home1_shoucang)
+    ImageButton activity_home1_shoucang;
+    @BindView(R.id.your_original_layout)
+    RelativeLayout your_original_layout;
     private int index;
     private String URL;
     private String path = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
     private List<PictureResultBean.ResultBean> pictureList = new ArrayList<>();
     private PictureDetailBean.ResultBean pictureDetailBean;
     private OtherPictureAdapter adapter;
+    private static AlertDialog sharedialog;
     @Override
     public void initView() {
+        AdvUtil.getAdvHttp(this,your_original_layout,3);
         Bundle bundle = this.getIntent().getExtras();
         index = bundle.getInt("picture_index");
         pictureList = (List<PictureResultBean.ResultBean>) bundle.getSerializable("picture_list");
@@ -107,9 +140,14 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         GlideApp.with(this).load(pictureList.get(index).getUrl()).placeholder(R.mipmap.loading).into(iv_picture);
     }
     private void refreshPictureData(){
+        if("0".equals(pictureList.get(index).getIsSaveImg())){
+            activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+        }else{
+            activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+        }
         getImageDetail();
     }
-    @OnClick({R.id.look_edit_image_iv,R.id.ib_dowm_load,R.id.activity_home1_shoucang,R.id.tv_share_qq,R.id.tv_share_wx})
+    @OnClick({R.id.look_edit_image_iv,R.id.ib_dowm_load,R.id.activity_home1_shoucang,R.id.tv_share_qq,R.id.tv_share_wx,R.id.activity_finish})
     public void viewClick(View view){
         switch (view.getId()){
             case R.id.look_edit_image_iv:
@@ -121,8 +159,18 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 startActivity(intent);
                 break;
             case R.id.tv_share_qq:
+                if (ActivityCompat.checkSelfPermission(PictureDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    openPermissin();
+                }else {
+                    QQshowShare(URL, SHARE_MEDIA.QQ);
+                }
                 break;
             case R.id.tv_share_wx:
+                if (ActivityCompat.checkSelfPermission(PictureDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    openPermissin();
+                }else {
+                    WXshowShare(URL, SHARE_MEDIA.WEIXIN);
+                }
                 break;
             case  R.id.ib_dowm_load:
                 new Thread(new Runnable() {
@@ -134,23 +182,42 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 break;
             case R.id.activity_home1_shoucang:
                 if(App.userBean!=null){
-                    if (NetWorkUtil.isNetworkConnected(PictureDetailActivity.this)) {
-                        try {
-                            JSONObject jsonObject = KeyUtil.getJson(this);
-                            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-                            jsonObject.put("type", 1 + "");
-                            jsonObject.put("url", URL);
-                            presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    if("0".equals(pictureList.get(index).getIsSaveImg())){//加收藏
+                        if (NetWorkUtil.isNetworkConnected(PictureDetailActivity.this)) {
+                            try {
+                                JSONObject jsonObject = KeyUtil.getJson(this);
+                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                                jsonObject.put("type", 1 + "");
+                                jsonObject.put("url", URL);
+                                presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            ToastUtils.showShort(PictureDetailActivity.this,"无网络连接");
                         }
-                    }else{
-                        ToastUtils.showShort(PictureDetailActivity.this,"无网络连接");
+
+                    }else{//取消收藏
+                        if (NetWorkUtil.isNetworkConnected(PictureDetailActivity.this)) {
+                            try {
+                                JSONObject jsonObject = KeyUtil.getJson(this);
+                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                                jsonObject.put("type", 1 + "");
+                                jsonObject.put("id", pictureList.get(index).getId());
+                                presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            ToastUtils.showShort(PictureDetailActivity.this,"无网络连接");
+                        }
                     }
                 }else{
                     startActivity(new Intent(this, LoginActivity.class));
                 }
-
+                break;
+            case R.id.activity_finish:
+                AppManager.getAppManager().finishActivity();
                 break;
         }
     }
@@ -202,12 +269,30 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     public void resultAddFavorite(FavoriteBean bean) {
         if(bean!=null){
             if("0".equals(bean.getCode())){
+                pictureList.get(index).setIsSaveImg("1");
+                activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
                 ToastUtils.showShort(this,"收藏成功");
             }else {
+                pictureList.get(index).setIsSaveImg("0");
                 ToastUtils.showShort(this,bean.getMsg());
             }
 
         }
+    }
+
+    @Override
+    public void resultCancleFavorite(FavoriteBean bean) {
+        if(bean!=null){
+            if("0".equals(bean.getCode())){
+                pictureList.get(index).setIsSaveImg("0");
+                activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                ToastUtils.showShort(this,"取消收藏成功");
+            }else {
+                pictureList.get(index).setIsSaveImg("1");
+                ToastUtils.showShort(this,bean.getMsg());
+            }
+        }
+
     }
 
     public void GetImageInputStream(String imageurl) {//下载图片
@@ -267,5 +352,101 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 ToastUtils.showShort(PictureDetailActivity.this, "图片已保存到" + path+"/"+fileName);
             }
         });
+    }
+    private void openPermissin(){
+        Acp.getInstance(this)
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                        new AcpListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onGranted() {
+
+                            }
+
+                            @Override
+                            public void onDenied(List<String> permissions) {
+                                ToastUtils.showShort(PictureDetailActivity.this, "请求权限失败,请手动开启！");
+                            }
+                        });
+    }
+    private void QQshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (URL != null) {
+            UMImage image = null;
+            if (URL.contains("http")) {
+                image = new UMImage(this, URL);
+            } else {
+                image = new UMImage(this, BitmapFactory.decodeFile(URL));
+            }
+            try {
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } catch (NullPointerException e) {
+                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重试");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void WXshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (URL != null) {
+            UMImage image = null;
+            if (URL.contains("http")) {
+                image = new UMImage(this, URL);
+            } else {
+                image = new UMImage(this, BitmapFactory.decodeFile(URL));
+            }
+            try {
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } catch (NullPointerException e) {
+                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重试");
+                e.printStackTrace();
+            }
+        }
+
+    }
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            shareDialog(PictureDetailActivity.this);
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
+            sharedialog.dismiss();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            sharedialog.dismiss();
+            ToastUtils.showShort(PictureDetailActivity.this, "分享失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            sharedialog.dismiss();
+            ToastUtils.showShort(PictureDetailActivity.this, "分享取消");
+        }
+    };
+    public  void shareDialog(Activity activity){
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.img_animation);
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        animation.setInterpolator(lin);
+        sharedialog=new AlertDialog.Builder(activity,R.style.TransDialogStyle).create();
+        if (!activity.isFinishing()){
+            sharedialog.show();
+        }
+        Window window=sharedialog.getWindow();
+        window.setContentView(R.layout.share_dialog);
+        ImageView imageView= (ImageView) window.findViewById(R.id.share_dialog_image);
+        imageView.setAnimation(animation);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

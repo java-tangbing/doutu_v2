@@ -6,12 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-
-import com.bumptech.glide.Glide;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
+import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +40,7 @@ public class OtherPictureAdapter extends RecyclerView.Adapter<OtherPictureAdapte
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
-        Glide.with(mcontext).load(list.get(position).getUrl()).into( holder.activity_picture_item_image);
+        GlideApp.with(mcontext).load(list.get(position).getUrl()).placeholder(R.mipmap.ic_default_picture).into( holder.activity_picture_item_image);
     }
 
     class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener {
