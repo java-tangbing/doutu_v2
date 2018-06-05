@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/circle_grey"/>
+            android:background="@mipmap/bt_made_operation_character"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/circle_grey"/>
+            android:background="@mipmap/bt_made_operation_colour"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/circle_grey"/>
+            android:background="@mipmap/bt_made_operation_style"/>
 
         <TextView
             android:layout_width="wrap_content"

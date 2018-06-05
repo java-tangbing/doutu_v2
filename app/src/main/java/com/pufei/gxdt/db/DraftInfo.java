@@ -21,4 +21,16 @@ public class DraftInfo extends BaseModel{
     public int height;
     @Column
     public boolean isDraft;
+    @Column
+    public String uid;
+    @Column
+    public String originTable;
+    @Column
+    public String originId;
+    @Column
+    public String originImageId;
+    @Column
+    public String make_url;
+
+
 }

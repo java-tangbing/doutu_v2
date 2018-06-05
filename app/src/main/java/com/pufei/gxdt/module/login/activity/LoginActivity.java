@@ -131,7 +131,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendRusult(LoginResultBean resultBean) {
-        Toast.makeText(LoginActivity.this, "resultcode = "+resultBean.getCode(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "resultcode = " + resultBean.getCode(), Toast.LENGTH_SHORT).show();
         if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
             LoginResultBean.ResultBean bean = resultBean.getResult();
             String name = "";
@@ -159,12 +159,18 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
             App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile());
             EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
+            Log.e(TAG, "name: " + App.userBean.getName());
+            Log.e(TAG, "header: " + App.userBean.getHead());
+            Log.e(TAG, "gender: " + App.userBean.getGender());
+            Log.e(TAG, "address: " + App.userBean.getAddress());
+            Log.e(TAG, "Auth: " + App.userBean.getAuth());
+            Log.e(TAG, "Mind: " + App.userBean.getMind());
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             AppManager.getAppManager().finishActivity();
             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-
+            Log.e(TAG, SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL));
         } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
             Intent intent = new Intent(this, BindPhoneActivity.class);
             intent.putExtra("openId", openid);
@@ -280,14 +286,14 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         api.getPlatformInfo(this, share_media, new UMAuthListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                //      ToastUtils.showLong(LoginActivity.this, "开始");
+//                ToastUtils.showLong(LoginActivity.this, "开始");
 
             }
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                for (Map.Entry<String,String> entry : map.entrySet()){
-                    Log.e("LoginActivity", "key:"+entry.getKey()+"; value:"+entry.getValue());
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    Log.e("LoginActivity", "key:" + entry.getKey() + "; value:" + entry.getValue());
                 }
 
                 nickName = map.get("name");

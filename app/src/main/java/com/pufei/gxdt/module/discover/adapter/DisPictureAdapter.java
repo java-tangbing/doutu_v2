@@ -7,7 +7,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
-import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.List;

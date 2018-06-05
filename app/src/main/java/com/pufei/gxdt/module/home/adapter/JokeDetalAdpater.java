@@ -40,15 +40,16 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
 
     @Override
     public void onBindViewHolder(final MyHolder holder, int position) {
-        SharedPreferences setting = mcontext.getSharedPreferences(SHARE_APP_TAG, 0);
         final String value=list.get(position);
-        Log.e("笑话的图片资源",value);
         for (int i=0;i<imagelist.size();i++){
             if (value.equals(imagelist.get(i))){
                 holder.ll.setTag(i);
             }
         }
         if (value.contains("jpg")&&value.contains("http")){
+            if (holder.iv.getScaleType() != ImageView.ScaleType.FIT_XY) {
+                holder.iv.setScaleType(ImageView.ScaleType.FIT_XY);
+            }
                 holder.tv.setVisibility(View.GONE);
                 holder.ll.setVisibility(View.VISIBLE);
                 holder.ivgif.setVisibility(View.GONE);

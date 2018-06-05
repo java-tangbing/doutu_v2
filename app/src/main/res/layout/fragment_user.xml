@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -104,18 +103,15 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/user_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="9dp"
-                    android:background="@drawable/rect_rounded_edit"
-                    android:drawableLeft="@mipmap/bt_ic_logo_change"
-                    android:drawablePadding="4dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="编辑"
+                    android:src="@drawable/user_edit_selector"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 

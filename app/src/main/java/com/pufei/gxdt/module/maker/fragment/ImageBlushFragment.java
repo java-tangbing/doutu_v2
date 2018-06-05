@@ -2,6 +2,10 @@ package com.pufei.gxdt.module.maker.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatSeekBar;
@@ -58,6 +62,21 @@ public class ImageBlushFragment extends BaseFragment implements BaseQuickAdapter
     public void initView() {
         rvColor.setLayoutManager(new GridLayoutManager(getActivity(), 8));
         seekbarBrushSize.setOnSeekBarChangeListener(this);
+        //获取seerbar层次drawable对象
+        LayerDrawable layerDrawable = (LayerDrawable) seekbarBrushSize.getProgressDrawable();
+        int layers = layerDrawable.getNumberOfLayers();
+        for (int i = 0; i < layers; i++) {
+            if(layerDrawable.getId(i) == android.R.id.background) {
+                Drawable drawable = layerDrawable.getDrawable(i);
+                drawable.setColorFilter(Color.parseColor("#DEDEDE"), PorterDuff.Mode.SRC);
+            }else {
+                Drawable drawable = layerDrawable.getDrawable(i);
+                drawable.setColorFilter(Color.parseColor("#6A6A6A"), PorterDuff.Mode.SRC);
+            }
+
+        }
+        seekbarBrushSize.getThumb().setColorFilter(Color.parseColor("#6A6A6A"), PorterDuff.Mode.SRC_ATOP);
+
     }
 
     @Override

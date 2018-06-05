@@ -1,23 +1,14 @@
 package com.pufei.gxdt.module.discover.adapter;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.module.discover.bean.DisPicDetBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
-import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.widgets.GlideApp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

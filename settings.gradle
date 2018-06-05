@@ -1,1 +1,1 @@
-include ':app', ':photoeditor', ':PushSDK'
+include ':app', ':photoeditor'

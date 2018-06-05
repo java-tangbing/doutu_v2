@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.multidex.MultiDex;
 
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
@@ -13,8 +12,6 @@ import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 
 
@@ -36,23 +33,23 @@ public class App extends Application {
         AppContext = getApplicationContext();
         initPrefs();
         FlowManager.init(this);
-        final PushAgent mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.register(new IUmengRegisterCallback() {
-
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回device token
-                Log.i(TAG, "device token: " + deviceToken);
-
-                Toast.makeText(App.AppContext, mPushAgent.getRegistrationId(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(String s, String s1) {
-
-            }
-        });
         initUMConfig();
+//        PushAgent mPushAgent = PushAgent.getInstance(this);
+//        mPushAgent.register(new IUmengRegisterCallback() {
+//
+//            @Override
+//            public void onSuccess(String deviceToken) {
+//                //注册成功会返回device token
+//                Log.i(TAG, "device token: " + deviceToken);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(String s, String s1) {
+//
+//            }
+//        });
+
     }
 
     /**
@@ -61,8 +58,14 @@ public class App extends Application {
     protected void initPrefs() {
         SharedPreferencesUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
     }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     private void initUMConfig() {
+        UMConfigure.setLogEnabled(true);
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         PlatformConfig.setQQZone("1105886594", "CUKkoCW26egFbEL5");

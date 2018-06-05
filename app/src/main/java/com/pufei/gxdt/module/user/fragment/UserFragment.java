@@ -2,6 +2,8 @@ package com.pufei.gxdt.module.user.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -99,14 +101,21 @@ public class UserFragment extends BaseFragment {
         timeList = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences(SHARE_APP_USER, 0);
         if (App.userBean != null) {
+            Log.e(TAG, "name: " + App.userBean.getName());
+            Log.e(TAG, "header: " + App.userBean.getHead());
+            Log.e(TAG, "gender: " + App.userBean.getGender());
+            Log.e(TAG, "address: " + App.userBean.getAddress());
+            Log.e(TAG, "Auth: " + App.userBean.getAuth());
+            Log.e(TAG, "Mind: " + App.userBean.getMind());
+
             tvUserName.setText(App.userBean.getName());
             user_dec.setText(App.userBean.getMind());
-            if (App.userBean.getGender().equals("男")) {
+            if (!TextUtils.isEmpty(App.userBean.getGender()) && App.userBean.getGender().equals("男")) {
                 iv_sex.setImageResource(R.mipmap.user_ic_man);
             } else {
                 iv_sex.setImageResource(R.mipmap.user_ic_woman);
             }
-            if (!App.userBean.getHead().isEmpty()) {
+            if (TextUtils.isEmpty(App.userBean.getHead())) {
                 Glide.with(this).load(App.userBean.getHead()).into(ivUserHead);
             } else {
                 Glide.with(this).load(R.mipmap.my_uer_picture).into(ivUserHead);

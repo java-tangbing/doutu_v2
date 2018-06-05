@@ -99,7 +99,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
             if (id == null || orginid == null || orgintable == null || uid == null) return;
             jsonObject.put("id", id);
             jsonObject.put("orginid", orginid);//orginid 原始图id
-            jsonObject.put("orgintable", orgintable);//orgintable 数据�
+            jsonObject.put("orgintable", orgintable);//orgintable 数据
             jsonObject.put("uid", uid);
             jsonObject.put("auth", auth);
         } catch (JSONException e) {

@@ -211,10 +211,22 @@ public class BrushDrawingView extends View {
     private class LinePath {
         private Paint mDrawPaint;
         private Path mDrawPath;
+        private float touchX;
+        private float touchY;
 
-        LinePath(Path drawPath, Paint drawPaints) {
+        LinePath(Path drawPath, Paint drawPaints,float touchX,float touchY) {
             mDrawPaint = new Paint(drawPaints);
             mDrawPath = new Path(drawPath);
+            this.touchX = touchX;
+            this.touchY = touchY;
+        }
+
+        public float getTouchX() {
+            return touchX;
+        }
+
+        public float getTouchY() {
+            return touchY;
         }
 
         Paint getDrawPaint() {
@@ -275,12 +287,13 @@ public class BrushDrawingView extends View {
         // Commit the path to our offscreen
         mDrawCanvas.drawPath(mPath, mDrawPaint);
         // kill this so we don't double draw
-        mLinePaths.add(new LinePath(mPath, mDrawPaint));
+        mLinePaths.add(new LinePath(mPath, mDrawPaint,mTouchX,mTouchY));
         mPath = new Path();
         if (mBrushViewChangeListener != null) {
             mBrushViewChangeListener.onStopDrawing();
             mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
         }
+        Log.e("fdsf",mTouchX +"   " + mTouchY);
     }
 
     public void generateBimap(int left,int right,int top,int bottom) {

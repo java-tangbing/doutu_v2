@@ -1,7 +1,6 @@
 package com.pufei.gxdt.module.discover.adapter;
 
 import android.support.annotation.Nullable;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -11,8 +10,6 @@ import com.pufei.gxdt.module.discover.bean.DisWorksBean;
 import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DisWorksdAdapter extends BaseQuickAdapter<DisWorksBean.ResultBean.ProductBean, BaseViewHolder> {
     public DisWorksdAdapter(@Nullable List<DisWorksBean.ResultBean.ProductBean> data) {

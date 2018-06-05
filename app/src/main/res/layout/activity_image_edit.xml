@@ -56,15 +56,19 @@
 
             <TextView
                 android:id="@+id/tv_save_draft"
-                android:layout_width="92dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:drawableLeft="@mipmap/bt_made_tool_drafts_normal"
+                android:drawablePadding="10dp"
                 android:background="@drawable/text_white_bg"
                 android:textSize="12sp"
                 android:textColor="#9c9c9c"
                 android:gravity="center"
-                android:text="保存到草稿箱"/>
+                android:text="草稿箱"/>
 
             <View
                 android:layout_width="0dp"
@@ -80,31 +84,25 @@
                 android:gravity="center"
                 android:background="@drawable/text_white_bg">
 
-                <TextView
+                <ImageView
                     android:id="@+id/tv_undo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:textSize="12sp"
-                    android:textColor="#9c9c9c"
-                    android:text="撤销"/>
+                    android:src="@mipmap/bt_made_tool_return_normal"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/tv_redo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:textSize="12sp"
-                    android:textColor="#9c9c9c"
-                    android:text="前进"/>
+                    android:src="@mipmap/bt_made_tool_advance_normal"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/tv_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="#9c9c9c"
-                    android:text="删除"/>
+                    android:src="@mipmap/bt_made_tool_delete_normal"/>
 
             </LinearLayout>
 

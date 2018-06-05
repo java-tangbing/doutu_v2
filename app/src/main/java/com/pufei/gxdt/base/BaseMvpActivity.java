@@ -6,13 +6,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jaeger.library.StatusBarUtil;
+import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AppManager;
 import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
 
 /**
- * Activity的基类
+ * Activity的基
  * Created by wangwenzhang on 2017/11/9.
  */
 
@@ -25,7 +26,8 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
         setContentView(getLayout());
         AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
-        PushAgent.getInstance(this).onAppStart();
+        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.white));
+//        PushAgent.getInstance(this).onAppStart();
 //        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 //        UMConfigure.setLogEnabled(true);
 //        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE, "");
@@ -53,7 +55,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
     public abstract int getLayout();
 
     /**
-     * 布局销毁 调用presenter置空view，防止内存溢出
+     * 布局销�调用presenter置空view，防止内存溢�
      */
     @Override
     protected void onDestroy() {

@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -44,6 +45,8 @@ import com.pufei.gxdt.db.ImageDraft_Table;
 import com.pufei.gxdt.db.TextDraft;
 import com.pufei.gxdt.db.TextDraft_Table;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
+import com.pufei.gxdt.module.maker.bean.MaterialBean;
+import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.module.maker.fragment.ImageBlushFragment;
 import com.pufei.gxdt.module.maker.fragment.ImageStickerFragment;
@@ -62,6 +65,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,11 +90,11 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @BindView(R.id.tv_save_draft)
     TextView tvSaveDraft;
     @BindView(R.id.tv_redo)
-    TextView tvUndeo;
+    ImageView tvUndeo;
     @BindView(R.id.tv_undo)
-    TextView tvUndo;
+    ImageView tvUndo;
     @BindView(R.id.tv_delete)
-    TextView tvDelete;
+    ImageView tvDelete;
     @BindView(R.id.ll_guide)
     LinearLayout llGuide;
     @BindView(R.id.tv_pic_mode)
@@ -123,6 +128,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private List<TextDraft> textDrafts;
     private List<PictureDetailBean.ResultBean.DataBean> attachMentList;
     private int editType = 0;
+    private String draftImgPath = "";//制成图的路径
 
     @Override
     public void initView() {
@@ -148,12 +154,15 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         } else if (intent.getStringExtra(EDIT_TYPE).equals(EDIT_TYPE_EDIT)) {
             editType = 1;
             Bundle bundle = intent.getExtras();
-            if(bundle != null) {
+            if (bundle != null) {
                 PictureDetailBean.ResultBean bean = (PictureDetailBean.ResultBean) bundle.getSerializable("picture_bean");
-                if(bean != null) {
+                if (bean != null) {
                     imagePath = bean.getUrl();
-                    Log.e("path",bean.getUrl());
-                    imageId = bean.getOrginid();
+                    if(TextUtils.isEmpty(bean.getOrginid())) {
+                        imageId = System.currentTimeMillis() + "";
+                    }else {
+                        imageId = bean.getOrginid();
+                    }
                     id = bean.getId();
                     uid = bean.getUid();
                     originTable = bean.getOrgintable();
@@ -161,9 +170,9 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     attachMentList = new ArrayList<>();
                     attachMentList.addAll(bean.getData());
                     initEditStatus(attachMentList);
-                    if(imagePath.contains("gif") || imagePath.contains("GIF")) {
-                        String filePath = App.path1 + System.currentTimeMillis() +".gif";
-                        presenter.downloadGif(imagePath,filePath);
+                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                        String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
+                        presenter.downloadGif(imagePath, filePath);
                     }
                 }
 
@@ -174,6 +183,8 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             imagePath = intent.getStringExtra(IMAGE_PATH);
             if (imagePath.contains("http:") || imagePath.contains("https:")) {
                 GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
+                String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
+                presenter.downloadGif(imagePath, filePath);
             } else {
                 GlideApp.with(this).load(new File(imagePath)).into(photoEditorView.getSource());
             }
@@ -193,25 +204,33 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private void initEditStatus(List<PictureDetailBean.ResultBean.DataBean> beans) {
         for (int i = 0; i < beans.size(); i++) {
             final PictureDetailBean.ResultBean.DataBean dataBean = beans.get(i);
-            if(dataBean.getUrl().isEmpty()) {
+            if (dataBean.getUrl().isEmpty()) {
                 DraftTextBean bean = new DraftTextBean();
                 bean.setTranslationX(Float.parseFloat(dataBean.getCenterX()));
                 bean.setTranslationY(Float.parseFloat(dataBean.getCenterY()));
                 bean.setScaleX(Float.parseFloat(dataBean.getZoom()));
                 bean.setScaleY(Float.parseFloat(dataBean.getZoom()));
                 bean.setRotation(Float.parseFloat(dataBean.getRolling()));
-                bean.setText(dataBean.getTextName());
-                bean.setTextColor(Integer.parseInt(dataBean.getTextFontColor()));
+                String text1 = "";
+                try {
+                    text1 = URLDecoder.decode(dataBean.getTextName(), "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("encodeErr", e.getMessage());
+                }
+                bean.setText(text1);
+                bean.setTextColor(Color.parseColor("#" + dataBean.getTextFontColor()));
 //                bean.setTextSize(Integer.parseInt(dataBean.getTextFontSize()));
                 mPhotoEditor.reAddText(bean);
-            }else {
+            } else {
                 final DraftImageBean bean = new DraftImageBean();
                 bean.setTranslationX(Float.parseFloat(dataBean.getCenterX()));
                 bean.setTranslationY(Float.parseFloat(dataBean.getCenterY()));
                 bean.setScaleX(Float.parseFloat(dataBean.getZoom()));
                 bean.setScaleY(Float.parseFloat(dataBean.getZoom()));
                 bean.setRotation(Float.parseFloat(dataBean.getRolling()));
-                SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(Integer.parseInt(dataBean.getWidth()), Integer.parseInt(dataBean.getHeight())) {
+                float width = Float.parseFloat(dataBean.getWidth());
+                float height = Float.parseFloat(dataBean.getHeight());
+                SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>((int)width,(int)height) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
                         mPhotoEditor.reAddImage(bean, resource, dataBean.getUrl());
@@ -224,6 +243,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     /**
      * 初始化草稿箱改图状态
+     *
      * @param textDrafts
      */
     private void initTextStatus(List<TextDraft> textDrafts) {
@@ -236,7 +256,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setScaleY(draft.scaleY);
             bean.setRotation(draft.rotation);
             bean.setText(draft.text);
-            bean.setTextColor(draft.textColor);
+            bean.setTextColor(Color.parseColor("#" + draft.textColor));
             bean.setTextSize(draft.textSize);
             mPhotoEditor.reAddText(bean);
         }
@@ -285,6 +305,10 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             mPhotoEditor.clearAllViews();
             imagePath = msg.getUrl();
             resetOriginId();
+            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
+                presenter.downloadGif(imagePath, filePath);
+            }
             GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
         } else if (msg.getType() == 1) {//贴图
             SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(240, 240) {
@@ -313,23 +337,30 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.btn_next:
-                if(imagePath != null) {
+                if (imagePath != null) {
                     saveToDraft(false);
                     if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                        if(gifFile == null) {
+                        if (gifFile == null) {
                             gifFile = new File(imagePath);
                         }
-                        saveGif();
+                        saveGif(false);
                     } else {
-                        saveImage();
+                        saveImage(false);
                     }
-                }else {
-                    ToastUtils.showShort(this,"请选择背景图");
+                } else {
+                    ToastUtils.showShort(this, "请选择背景图");
                 }
 
                 break;
             case R.id.tv_save_draft:
-                saveToDraft(true);
+                if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                    if (gifFile == null) {
+                        gifFile = new File(imagePath);
+                    }
+                    saveGif(true);
+                } else {
+                    saveImage(true);
+                }
                 break;
             case R.id.tv_redo:
                 mPhotoEditor.redo();
@@ -347,7 +378,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 previousIndex = 0;
                 break;
             case R.id.tv_text_mode:
-
                 setSelectedItemState(tvTextMode);
                 setUnSelectedItemState(tvPicMode, tvBlushMode);
                 showFragment(1, previousIndex);
@@ -363,17 +393,31 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     private void saveToDraft(boolean isDraft) {
-        showLoading("saving");
+        if (!isDraft) {
+            showLoading("saving");
+        }
         SQLite.delete().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(isDraft)).execute();
-//        SQLite.delete().from(BrushingDraft.class).where(BrushingDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(isDraft)).execute();
         List<AddViewBean> beans = mPhotoEditor.getAddedViews();
         DraftInfo info = new DraftInfo();
         info.imageId = imageId;
         info.imagePath = imagePath;
         info.width = photoEditorView.getWidth();
         info.height = photoEditorView.getHeight();
+        if (editType == 1) {
+            info.originId = id;
+            info.uid = uid;
+            info.originImageId = imageId;
+            info.originTable = originTable;
+        } else {
+            info.originId = "";
+            info.uid = "";
+            info.originImageId = "";
+            info.originTable = "design_images";
+        }
+//        info.originImageId = imageId;
+        info.make_url = draftImgPath;
         info.isDraft = isDraft;
         info.insert();
         if (beans.size() != 0) {
@@ -385,7 +429,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         TextView tv = (TextView) bean.getAddView();
                         FrameLayout textRoot = (FrameLayout) bean.getView();
                         textDraft.text = tv.getText().toString();
-                        textDraft.textColor = tv.getCurrentTextColor();
+                        textDraft.textColor = Integer.toHexString(tv.getCurrentTextColor()).substring(2);
                         textDraft.textSize = tv.getTextSize();
                         textDraft.translationX = textRoot.getTranslationX();
                         textDraft.translationY = textRoot.getTranslationY();
@@ -411,7 +455,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         imageDraft.imageId = imageId;
                         imageDraft.isDraft = isDraft;
                         imageDraft.insert();
-
                         break;
                     case BRUSH_DRAWING:
 
@@ -419,8 +462,9 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 }
             }
         }
-
-        hideLoading();
+        if (!isDraft) {
+            hideLoading();
+        }
         if (isDraft) {
             ToastUtils.showShort(this, "保存成功");
         }
@@ -430,14 +474,15 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         Intent intent = new Intent(EditImageActivity.this, MakerFinishActivity.class);
         intent.putExtra(MakerFinishActivity.IMAGE_PATH, path);
         intent.putExtra(MakerFinishActivity.IMAGE_ID, imageId);
-        intent.putExtra(MakerFinishActivity.TYPE,editType);
-        intent.putExtra("Id",id);
-        intent.putExtra("uid",uid);
-        intent.putExtra("originTable",originTable);
+        intent.putExtra(MakerFinishActivity.TYPE, editType);
+        intent.putExtra("Id", id);
+        intent.putExtra("uid", uid);
+        intent.putExtra("originTable", originTable);
         startActivity(intent);
+        Log.e("fdsf",path);
     }
 
-    private void saveGif() {
+    private void saveGif(final boolean isDraft) {
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
                         new AcpListener() {
@@ -455,8 +500,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                     return;
                                 }
                                 showLoading("Saving...");
-                                final String gifPath = Environment.getExternalStorageDirectory()
-                                        + File.separator + ""
+                                final String gifPath = App.path1 + "/"
                                         + System.currentTimeMillis() + ".gif";
 
                                 photoEditorView.setBackgroundColor(Color.TRANSPARENT);
@@ -472,17 +516,22 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                         for (int i = 0; i < frameBitmaps.size(); i++) {
                                             Bitmap bitmap = mergeBitmap(frameBitmaps.get(i).getBitmap(), bitmaps.get(0));
                                             BitmapBean bean = new BitmapBean();
+                                            bean.setPath(App.path1 + "/" + System.currentTimeMillis() + ".png");
                                             bean.setBitmap(bitmap);
                                             bean.setDelay(frameBitmaps.get(i).getDelay());
                                             gifEncodeBitmap.add(bean);
                                         }
+
                                         mPhotoEditor.encodeGif(photoEditorView.getWidth(), photoEditorView.getHeight(), gifPath, gifEncodeBitmap, new PhotoEditor.OnEncodeGifListener() {
                                             @Override
                                             public void onEncodeSuccess(String path) {
                                                 hideLoading();
-//                                                mPhotoEditor.clearAllViews();
-                                                startToMakerFinish(path);
-//                                                GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
+                                                if (!isDraft) {
+                                                    startToMakerFinish(path);
+                                                } else {
+                                                    draftImgPath = path;
+                                                    saveToDraft(true);
+                                                }
                                             }
 
                                             @Override
@@ -508,7 +557,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         });
     }
 
-    private void saveImage() {
+    private void saveImage(final boolean isDraft) {
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
                         new AcpListener() {
@@ -526,15 +575,20 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                     return;
                                 }
                                 showLoading("Saving...");
-                                final String path = Environment.getExternalStorageDirectory()
-                                        + File.separator + ""
+                                final String path1 = App.path1 + "/"
                                         + System.currentTimeMillis() + ".png";
 
-                                mPhotoEditor.saveImage(path, new PhotoEditor.OnSaveListener() {
+                                mPhotoEditor.saveImage(path1, new PhotoEditor.OnSaveListener() {
                                     @Override
                                     public void onSuccess(@NonNull String imagePath) {
                                         hideLoading();
-                                        startToMakerFinish(imagePath);
+                                        if (!isDraft) {
+                                            startToMakerFinish(imagePath);
+                                        } else {
+                                            draftImgPath = imagePath;
+                                            saveToDraft(true);
+                                            Log.e("draftImagepath", imagePath);
+                                        }
 //                                        photoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
                                     }
 
@@ -715,17 +769,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (editType == 2) {
-            EventBus.getDefault().postSticky(new MakerEventMsg(5, imagePath));
-
-        } else {
-            EventBus.getDefault().postSticky(new EventMsg(MsgType.MAKER_IMAGE));
-        }
-    }
-
-    @Override
     public void upLoadImageResult(ModifyResultBean response) {
 
     }
@@ -741,10 +784,37 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     @Override
+    public void recommentTextResult(RecommendTextBean response) {
+
+    }
+
+    @Override
+    public void materialResult(MaterialBean response, int type) {
+
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
+    }
+
+
+    @Override
     public void setPresenter(EditImagePresenter presenter) {
-        if(presenter == null) {
+        if (presenter == null) {
             this.presenter = new EditImagePresenter();
             this.presenter.attachView(this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (editType == 2) {
+//            EventBus.getDefault().postSticky(new MakerEventMsg(5, imagePath));
+
+        } else {
+            EventBus.getDefault().postSticky(new EventMsg(MsgType.MAKER_IMAGE));
         }
     }
 }

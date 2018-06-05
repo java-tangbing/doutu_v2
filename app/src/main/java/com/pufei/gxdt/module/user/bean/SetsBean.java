@@ -2,11 +2,10 @@ package com.pufei.gxdt.module.user.bean;
 
 public class SetsBean {
 
-
     /**
      * code : 0
      * msg : success
-     * result : {"mobile":"","wechat":"","qq":"5F61FE51E22E84987FEC7A288d7C2D7"}
+     * result : {"mobile":"","wechat":"yttrium","qq":""}
      */
 
     private String code;
@@ -40,8 +39,8 @@ public class SetsBean {
     public static class ResultBean {
         /**
          * mobile :
-         * wechat :
-         * qq : 5F61FE51E22E84987FEC7A288d7C2D7
+         * wechat : yttrium
+         * qq :
          */
 
         private String mobile;

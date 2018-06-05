@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -31,8 +32,11 @@ import com.waynejo.androidndkgif.GifEncoder;
 import com.waynejo.androidndkgif.GifImage;
 import com.waynejo.androidndkgif.GifImageIterator;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -754,6 +758,10 @@ public class PhotoEditor implements BrushViewChangeListener {
         void onEncodeFailed(Exception e);
     }
 
+    public interface OnSaveFrameListener {
+        void onSaveFrameSuccess();
+    }
+
     /**
      * Save the edited image on given path
      *
@@ -801,7 +809,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             protected void onPostExecute(Exception e) {
                 super.onPostExecute(e);
                 if (e == null) {
-                    clearAllViews();
+//                    clearAllViews();
                     onSaveListener.onSuccess(imagePath);
                 } else {
                     onSaveListener.onFailure(e);
@@ -824,8 +832,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             protected Exception doInBackground(String... strings) {
                 GifEncoder gifEncoder = new GifEncoder();
                 try {
-                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_STABLE_HIGH_MEMORY);
-
+                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
                     for (int i = 0; i < bitmap.size(); i++) {
                         gifEncoder.setDither(true);
                         gifEncoder.encodeFrame(bitmap.get(i).getBitmap(),bitmap.get(i).getDelay());
@@ -843,6 +850,44 @@ public class PhotoEditor implements BrushViewChangeListener {
                     listener.onEncodeSuccess(path);
                 } else {
                     listener.onEncodeFailed(e);
+                }
+            }
+        }.execute();
+
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void saveFrame( final List<BitmapBean> bitmap, final OnSaveFrameListener listener) {
+        new AsyncTask<String, String, Exception>() {
+            @Override
+            protected void onPreExecute() {
+            }
+
+            @SuppressLint("MissingPermission")
+            @Override
+            protected Exception doInBackground(String... strings) {
+
+                for (int i = 0; i < bitmap.size(); i++) {
+                    File file = new File(bitmap.get(i).getPath());
+                    try {
+                        FileOutputStream stream = new FileOutputStream(file);
+                        bitmap.get(i).getBitmap().compress(Bitmap.CompressFormat.PNG,100,stream);
+                        stream.flush();
+                        stream.close();
+                    } catch (FileNotFoundException e) {
+                        Log.e("exception",e.getMessage());
+                    } catch (IOException e) {
+                        Log.e("exception",e.getMessage());
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Exception e) {
+                if (e == null) {
+                    listener.onSaveFrameSuccess();
                 }
             }
         }.execute();
@@ -874,17 +919,19 @@ public class PhotoEditor implements BrushViewChangeListener {
 
                 GifDecoder gifDecoder = new GifDecoder();
                 final GifImageIterator iterator = gifDecoder.loadUsingIterator(file.getPath());
-                Log.e("path",file.getPath()+"F");
-                while (iterator.hasNext()) {
-                    GifImage next = iterator.next();
-                    if (null != next) {
-                        BitmapBean bean = new BitmapBean();
-                        bean.setBitmap(next.bitmap);
-                        bean.setDelay(next.delayMs);
-                        frameBitmaps.add(bean);
+                if(iterator != null) {
+                    while (iterator.hasNext()) {
+                        GifImage next = iterator.next();
+                        if (null != next) {
+                            BitmapBean bean = new BitmapBean();
+                            bean.setBitmap(next.bitmap);
+                            bean.setDelay(next.delayMs);
+                            frameBitmaps.add(bean);
+                        }
                     }
+                    iterator.close();
                 }
-                iterator.close();
+
                 return null;
             }
 

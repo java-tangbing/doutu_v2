@@ -5,16 +5,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
+import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.module.maker.adapter.StickerImageAdapter;
+import com.pufei.gxdt.module.maker.bean.MaterialBean;
+import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
+import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
+import com.pufei.gxdt.module.maker.view.EditImageView;
+import com.pufei.gxdt.module.user.bean.ModifyResultBean;
+import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SystemInfoUtils;
+import com.pufei.gxdt.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -22,12 +34,12 @@ import butterknife.BindView;
  * 形象
  */
 
-public class FigureFragment extends BaseFragment implements BaseQuickAdapter.OnItemClickListener {
+public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implements EditImageView, BaseQuickAdapter.OnItemClickListener {
 
     @BindView(R.id.rv_sticker)
     RecyclerView rvSticker;
     private StickerImageAdapter stickerImageAdapter;
-    private List<String> imgList;
+    private List<MaterialBean.ResultBean> imgList;
 
     public static FigureFragment newInstance() {
         return new FigureFragment();
@@ -41,22 +53,17 @@ public class FigureFragment extends BaseFragment implements BaseQuickAdapter.OnI
 
     @Override
     public void getData() {
-        String[] img = {"https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3244299404,551733934&fm=27&gp=0.jpg",
-                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3801134091,755836747&fm=27&gp=0.jpg",
-                "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1761354297,1466360338&fm=27&gp=0.jpg",
-                "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3737670875,1541825744&fm=27&gp=0.jpg",
-                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3631692516,2485412998&fm=27&gp=0.jpg",
-                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2907297107,4194518999&fm=27&gp=0.jpg",
-                "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3551247198,4170942931&fm=27&gp=0.jpg",
-                "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1553888207,726435672&fm=27&gp=0.jpg"};
-        imgList = new ArrayList<>();
-        Collections.addAll(imgList, img);
-        Collections.addAll(imgList, img);
-        Collections.addAll(imgList, img);
-        Collections.addAll(imgList, img);
-        stickerImageAdapter = new StickerImageAdapter(imgList);
-        stickerImageAdapter.setOnItemClickListener(this);
-        rvSticker.setAdapter(stickerImageAdapter);
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("deviceid", SystemInfoUtils.deviced(getActivity()));
+        map1.put("version", SystemInfoUtils.versionName(getActivity()));
+        map1.put("timestamp", (System.currentTimeMillis() / 1000) + "");
+        map1.put("os", "1");
+        map1.put("sign", "sign");
+        map1.put("key", "key");
+        map1.put("page", "1");
+        map1.put("type", "2");
+        presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map1)), 2);
+
     }
 
     @Override
@@ -66,6 +73,52 @@ public class FigureFragment extends BaseFragment implements BaseQuickAdapter.OnI
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        EventBus.getDefault().post(new MakerEventMsg(1,imgList.get(position)));
+        EventBus.getDefault().post(new MakerEventMsg(1, imgList.get(position).getImage()));
+    }
+
+    @Override
+    public void upLoadImageResult(ModifyResultBean response) {
+
+    }
+
+    @Override
+    public void downloadImageResult(String base64, int type) {
+
+    }
+
+    @Override
+    public void downloadGifResult(String path) {
+
+    }
+
+    @Override
+    public void recommentTextResult(RecommendTextBean response) {
+
+    }
+
+    @Override
+    public void materialResult(MaterialBean response, int type) {
+        if (response.getCode() == 0) {
+            imgList = new ArrayList<>();
+            imgList.addAll(response.getResult());
+            stickerImageAdapter = new StickerImageAdapter(imgList);
+            stickerImageAdapter.setOnItemClickListener(this);
+            rvSticker.setAdapter(stickerImageAdapter);
+        } else {
+            ToastUtils.showShort(getActivity(), response.getMsg());
+        }
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
+    @Override
+    public void setPresenter(EditImagePresenter presenter) {
+        if (presenter == null) {
+            this.presenter = new EditImagePresenter();
+            this.presenter.attachView(this);
+        }
     }
 }

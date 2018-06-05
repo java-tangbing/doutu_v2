@@ -103,21 +103,14 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
         adpater.setOnItemClickListener(new ThemeImageAdpater.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
-                Intent intent = new Intent(ThemeImageActivity.this, PictureActivity.class);
-                Bundle bundle = new Bundle();
-                try {
-                    bundle.putString("id", list.get(postion).getId());
-                    bundle.putString("desc", list.get(postion).getDesc());
-                    bundle.putString("title", list.get(postion).getCategory_name());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } catch (IndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
+                Intent intent = new Intent(ThemeImageActivity.this, HomeImageActivity.class);
+                intent.putExtra("category_id", list.get(postion).getId());
+                intent.putExtra("title", list.get(postion).getCategory_name());
+                intent.putExtra("eyes",  list.get(postion).getImgs().get(0).getView());
+                intent.putExtra("hot",  list.get(postion).getImgs().get(0).getHot());
+                startActivity(intent);
             }
         });
-
-
     }
 
     @Override
