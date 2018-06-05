@@ -24,6 +24,11 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                     public void accept(NoticeBean noticeBean) throws Exception {
                         baseview.getNoticeList(noticeBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+//                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -37,6 +42,11 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                     public void accept(NewsBean newsBean) throws Exception {
                         baseview.getsNoticeContent(newsBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+//                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -49,6 +59,11 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                     @Override
                     public void accept(SendBean sendBean) throws Exception {
                         baseview.getAdviceResult(sendBean);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+//                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);

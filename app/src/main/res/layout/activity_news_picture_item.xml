@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="日期"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_dateLine"
@@ -47,7 +47,7 @@
             android:background="@drawable/news_dialogue_left_normal"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -56,13 +56,14 @@
                     android:layout_height="40dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/hint_color" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+
                     android:layout_marginTop="12dp"
                     android:orientation="horizontal">
 
@@ -70,12 +71,13 @@
                         android:id="@+id/news_picture_item_content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
                         android:gravity="center_horizontal"
                         android:text="引用了您的表情"
                         android:textSize="16sp" />
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

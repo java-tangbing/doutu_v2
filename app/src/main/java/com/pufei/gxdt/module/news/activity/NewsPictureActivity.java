@@ -52,6 +52,7 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
     private List<NewsBean.ResultBean> mlist;
     private String auth;
     private String orginid, orgintable, id, uid, mcount;
+
     @Override
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
@@ -113,10 +114,10 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
             case R.id.news_picture_item:
                 Intent intent01 = new Intent(this, DiscoverDetailedActivity.class);
                 Bundle bundle01 = new Bundle();
-                bundle01.putString("id", mlist.get(position).getId());
-                bundle01.putString("orginid", mlist.get(position).getOrginid());
-                bundle01.putString("orgintable", mlist.get(position).getOrgintable());
-                bundle01.putString("uid", mlist.get(position).getUid());
+                bundle01.putString("id", mlist.get(position).getImages().getId());
+                bundle01.putString("orginid", mlist.get(position).getImages().getOrginid());
+                bundle01.putString("orgintable", mlist.get(position).getImages().getOrgintable());
+                bundle01.putString("uid", mlist.get(position).getImages().getUid());
                 intent01.putExtras(bundle01);
                 startActivity(intent01);
                 break;

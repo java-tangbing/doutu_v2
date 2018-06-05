@@ -1,6 +1,7 @@
 package com.pufei.gxdt.api;
 
 import com.pufei.gxdt.module.discover.bean.DisPicDetBean;
+import com.pufei.gxdt.module.discover.bean.DisWorksBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
@@ -27,4 +28,8 @@ public interface DiscoverApi {
 
     @POST("AmuseImages/getImageDetail")
     Observable<DisPicDetBean> getImageDetail(@Body RequestBody body);
+
+
+    @POST("User/userProfile")
+    Observable<DisWorksBean> getUserProfile(@Body RequestBody body);
 }

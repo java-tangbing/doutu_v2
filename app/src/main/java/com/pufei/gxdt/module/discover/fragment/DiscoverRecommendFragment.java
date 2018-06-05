@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -13,6 +14,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.activity.DisPictureDetailActivity;
+import com.pufei.gxdt.module.discover.activity.DisWorksActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
@@ -37,7 +39,7 @@ import butterknife.BindView;
 
 public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
         , SwipeRefreshLayout.OnRefreshListener
-        , BaseQuickAdapter.OnItemClickListener
+        , BaseQuickAdapter.OnItemChildClickListener
         , BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.rv_all_dis)
     RecyclerView recyclerView;
@@ -69,8 +71,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     public void getData() {
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
-        discoverAdapter.setEnableLoadMore(false);
-        discoverAdapter.setOnItemClickListener(this);
+//        discoverAdapter.setEnableLoadMore(false);
+        discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
         discoverAdapter.disableLoadMoreIfNotFullPage();
@@ -94,7 +96,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(getActivity(), "请检查网络设置");
+            ToastUtils.showShort(getActivity(), "请检查网络设�);
         }
     }
 
@@ -112,24 +114,14 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         }
     }
 
-    @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Intent intent = new Intent(activity, DisPictureDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("id", mlist.get(position).getId());
-        bundle.putString("orginid", mlist.get(position).getOrginid());
-        bundle.putString("orgintable", mlist.get(position).getOrgintable());
-        bundle.putInt("picture_index", position);
-        bundle.putSerializable("picture_list", (Serializable) mlist);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
 //        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
             if (isLoadMore) {
+
+
                 page = page + 1;
                 mlist.addAll(bean.getResult());
                 discoverAdapter.notifyDataSetChanged();
@@ -137,6 +129,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 discoverAdapter.loadMoreComplete();
             }
             if (isRefreshing) {
+
+
                 page = page + 1;
                 mlist = new ArrayList<>();
                 mlist.addAll(bean.getResult());
@@ -147,14 +141,15 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 ToastUtils.showShort(getActivity(), "刷新完毕");
             }
             if (isfirst) {
-                isfirst=false;
+
+
+                isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
                 mlist.addAll(bean.getResult());
                 discoverAdapter.notifyDataSetChanged();
             }
-        }
-        else {
+        } else {
             swipeRefreshLayout.setRefreshing(false);
             discoverAdapter.loadMoreComplete();
             discoverAdapter.loadMoreEnd();
@@ -165,6 +160,11 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 
     @Override
     public void getDiscoverDetailed(DiscoverEditImageBean bean) {
+
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
 
     }
 
@@ -179,6 +179,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     //下拉刷新
     @Override
     public void onRefresh() {
+
+
         page = 1;
         isRefreshing = true;
         isLoadMore = false;
@@ -190,8 +192,34 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     //上拉加载跟多
     @Override
     public void onLoadMoreRequested() {
+
         isLoadMore = true;
         isRefreshing = false;
         setMyadapter();
+    }
+
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        switch (view.getId()) {
+            case R.id.dis_item_iv:
+                Intent intent = new Intent(activity, DisPictureDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("isSaveImg", mlist.get(position).getIsSaveImg());
+                bundle.putString("id", mlist.get(position).getId());
+                bundle.putString("orginid", mlist.get(position).getOrginid());
+                bundle.putString("orgintable", mlist.get(position).getOrgintable());
+                bundle.putInt("picture_index", position);
+                bundle.putSerializable("picture_list", (Serializable) mlist);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case R.id.dis_item_user_img_list:
+                Intent intent01 = new Intent(activity, DisWorksActivity.class);
+                Bundle bundle01 = new Bundle();
+                bundle01.putString("uid", mlist.get(position).getUser().getUid());
+                intent01.putExtras(bundle01);
+                startActivity(intent01);
+                break;
+        }
     }
 }
