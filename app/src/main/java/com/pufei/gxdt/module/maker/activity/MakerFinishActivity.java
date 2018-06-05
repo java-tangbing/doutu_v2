@@ -289,7 +289,6 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
 
     private void setRequestData() {
         if(imageBase64 != null && bgImageBase64 != null) {
-            showLoading(" 保存中...");
             final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).queryList();
             final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).queryList();
             UploadImageUtil.uploadImage(this,info,path,imageBase64,bgImageBase64,imageDrafts,textDrafts);
