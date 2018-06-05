@@ -96,7 +96,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(getActivity(), "请检查网络设置");
+            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -129,8 +129,6 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 discoverAdapter.loadMoreComplete();
             }
             if (isRefreshing) {
-
-
                 page = page + 1;
                 mlist = new ArrayList<>();
                 mlist.addAll(bean.getResult());
@@ -138,7 +136,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 discoverAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showShort(getActivity(), "刷新完毕");
+                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
             }
             if (isfirst) {
 

@@ -94,7 +94,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.newsNoticeContent(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -143,7 +143,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
                 bundle.putString("sysMsg", "sysMsg");
                 intent.putExtras(bundle);
                 startActivity(intent);
-                ToastUtils.showLong(NewsSystemActivity.this, "请立即绑定手机号");
+                ToastUtils.showLong(NewsSystemActivity.this, getResources().getString(R.string.news_sys_bind_phone));
                 break;
         }
     }
