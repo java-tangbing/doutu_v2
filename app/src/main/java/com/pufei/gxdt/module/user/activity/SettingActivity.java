@@ -145,40 +145,28 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
 
     @Override
     public void resultSets(SetsBean bean) {
-        if (bean != null){
-            ToastUtils.showLong(this,"bean not null");
-        }else {
-            ToastUtils.showLong(this,"bean is null");
-            return;
-        }
-        if (!TextUtils.isEmpty(bean.getCode())){
-            ToastUtils.showLong(this,"Code not null");
-        }else {
-            ToastUtils.showLong(this,"Code is null");
-            return;
-        }
-//        if (bean.getCode().equals(Contents.CODE_ZERO)) {
-//            mobile = bean.getResult().getMobile();
-//            qq = bean.getResult().getQq();
-//            wechat = bean.getResult().getWechat();
-//            if ((TextUtils.isEmpty(mobile))) {
+        if (bean.getCode().equals(Contents.CODE_ZERO)) {
+            mobile = bean.getResult().getMobile();
+            qq = bean.getResult().getQq();
+            wechat = bean.getResult().getWechat();
+            if ((TextUtils.isEmpty(mobile))) {
+                phoneBind.setText("未绑定");
+            } else {
+                phoneBind.setText("已绑定");
+            }
+//            if ((TextUtils.isEmpty(qq))) {
 //                phoneBind.setText("未绑定");
 //            } else {
 //                phoneBind.setText("已绑定");
 //            }
-////            if ((TextUtils.isEmpty(qq))) {
-////                phoneBind.setText("未绑定");
-////            } else {
-////                phoneBind.setText("已绑定");
-////            }
-//            if ((TextUtils.isEmpty(wechat))) {
-//                wechatBind.setText("未绑定");
-//            } else {
-//                wechatBind.setText("已绑定");
-//            }
-//        } else {
-//            ToastUtils.showShort(this, bean.getMsg() + " ");
-//        }
+            if ((TextUtils.isEmpty(wechat))) {
+                wechatBind.setText("未绑定");
+            } else {
+                wechatBind.setText("已绑定");
+            }
+        } else {
+            ToastUtils.showShort(this, bean.getMsg() + " ");
+        }
     }
 
     @Override

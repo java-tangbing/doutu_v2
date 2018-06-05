@@ -9,7 +9,7 @@ public class UrlString {
     public static final String TRADE_RECORD__URL = " https://jiakao.xianwan.com/task/member/bill";
     public static final String GET_CODE_URL = "https://jiakao.xianwan.com/task/login/get_vcode";
     private static final String TAG = "http://erp.xianwan.com";
-    public  static final String GET_ADV = "http://erp.xianwan.com/api/v5/android/Piece/advertList";
+    public static final String GET_ADV = "http://erp.xianwan.com/api/v5/android/Piece/advertList";
     //private static final String TAG="http://test.xianwan.com";
     public static final String DO_TASK = TAG + "/api/v4/Task/doTask";
     public static final String SPECIAL_MISSION = TAG + "/api/v4/Task/getSpecial";
@@ -53,8 +53,8 @@ public class UrlString {
     public static final String BindTel = TAG + "/api/v3/User/mobileBind";
     public static final String BindSuccess = TAG + "/api/v3/User/verifyCode";
     public static final String Content = "搞笑斗图大师是专门为了当代青年群体，研发的一款娱乐实用的软件，里面包含了斗图和下载图片，还有笑话等娱乐功能，各类装逼表情应有尽有，专为千万斗图达人精心准备，我们不生产图，我们只是装逼能量的搬运工";
-    public static final String SIGN_IN = TAG + "/api/v5/User/manageScore";
-    public static final String GETSCORE = TAG + "/api/v5/User/getScore";
+    public static final String SIGN_IN = TAG + "/api/v5/android/User/manageScore";
+    public static final String GETSCORE = TAG + "/api/v5/android/User/getScore";
     public static final String SEND = "";
     public static final String Make_UP = "make__updata";
     public static final String SHARE_TAG = "SIGN";

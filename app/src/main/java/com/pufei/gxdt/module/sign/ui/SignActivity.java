@@ -88,6 +88,8 @@ public class SignActivity extends AppCompatActivity {
     private void initView() {
         timeList = new ArrayList<>();
         Intent intent = getIntent();
+        //Bundle bundle=intent.getExtras();
+        //getScore();
         tvbang = (MyFrontTextView) findViewById(R.id.activity_sign_bangdan);
         imageView = (ImageView) findViewById(R.id.activity_sign_cance);
         tvSignDay = (TextView) findViewById(R.id.activity_main_tv_main_day);

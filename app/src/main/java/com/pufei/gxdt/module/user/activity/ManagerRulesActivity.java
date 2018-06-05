@@ -13,7 +13,7 @@ import com.pufei.gxdt.utils.AppManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AgreeementActivity extends BaseActivity {
+public class ManagerRulesActivity extends BaseActivity {
     @BindView(R.id.ll_title_left)
     LinearLayout llTitleLeft;
     @BindView(R.id.tv_title)
@@ -25,7 +25,7 @@ public class AgreeementActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        tvTitle.setText("用户协议");
+        tvTitle.setText("管理规则");
         llTitleLeft.setVisibility(View.VISIBLE);
         llTitleRight.setVisibility(View.GONE);
         WebSettings webSettings = webAgreement.getSettings();
@@ -45,7 +45,7 @@ public class AgreeementActivity extends BaseActivity {
 
     @Override
     public void getData() {
-        webAgreement.loadUrl("https://jiakao.xianwan.com/driver/index/agreement_dt");
+        webAgreement.loadUrl("http://erp.xianwan.com/apiHtml/index");
     }
 
     @Override
