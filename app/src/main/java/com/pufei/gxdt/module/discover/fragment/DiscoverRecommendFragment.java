@@ -75,7 +75,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
-        discoverAdapter.disableLoadMoreIfNotFullPage();
+//        discoverAdapter.disableLoadMoreIfNotFullPage();
         recyclerView.setAdapter(discoverAdapter);
 
         page = 1;
@@ -89,7 +89,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         try {
             jsonObject.put("order", "hot");
             jsonObject.put("page", page + "");
-            jsonObject.put("auth", "");
+            jsonObject.put("auth", auth);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -179,8 +179,6 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     //下拉刷新
     @Override
     public void onRefresh() {
-
-
         page = 1;
         isRefreshing = true;
         isLoadMore = false;
@@ -211,7 +209,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
@@ -221,5 +219,23 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 startActivity(intent01);
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                this.refresh();
+                break;
+        }
+    }
+
+    public void refresh() {
+        page = 1;
+        isRefreshing = false;
+        isLoadMore = false;
+        isfirst = true;
+        setMyadapter();
     }
 }

@@ -79,7 +79,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
-        discoverAdapter.disableLoadMoreIfNotFullPage();
+//        discoverAdapter.disableLoadMoreIfNotFullPage();
         recyclerView.setAdapter(discoverAdapter);
 
         page = 1;
@@ -210,7 +210,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
@@ -220,5 +220,24 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 startActivity(intent01);
                 break;
         }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                this.refresh();
+                break;
+        }
+    }
+
+    public void refresh() {
+        page = 1;
+        isRefreshing = false;
+        isLoadMore = false;
+        isfirst = true;
+        setMyadapter();
     }
 }

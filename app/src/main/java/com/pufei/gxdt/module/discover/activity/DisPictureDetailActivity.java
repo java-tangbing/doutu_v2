@@ -154,6 +154,12 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onCreate(null);
+    }
+
     public void getImageDetailList() {
         switch (type) {
             case 0:
@@ -206,7 +212,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
         uid = bean.getResult().getUid();
         mcount = bean.getResult().getCount();
-        URL = bean.getResult().getUrl();
+        URL = bean.getResult().getMake_url();
 
         switch (type) {
             case 0:
@@ -363,44 +369,91 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 }).start();
                 break;
             case R.id.activity_finish:
+                Intent intent = new Intent();
+//                intent.putExtra("msg", three);
+                setResult(1,intent);
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.activity_home1_shoucang:
                 if (App.userBean != null) {
-                    if ("0".equals(pictureList.get(index).getIsSaveImg()) || "0".equals(pictureList01.get(index).getIsSaveImg())) {//加收藏
-                        if (NetWorkUtil.isNetworkConnected(this)) {
-                            try {
-                                JSONObject jsonObject = KeyUtil.getJson(this);
-                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-                                jsonObject.put("type", 1 + "");
-                                jsonObject.put("url", URL);
-                                presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            ToastUtils.showShort(this, "无网络连接");
-                        }
-
-                    } else {//取消收藏
-                        if (NetWorkUtil.isNetworkConnected(this)) {
-                            try {
-                                JSONObject jsonObject = KeyUtil.getJson(this);
-                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-                                jsonObject.put("type", 1 + "");
-                                jsonObject.put("id", pictureList.get(index).getId());
-                                presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            ToastUtils.showShort(this, "无网络连接");
-                        }
+                    switch (type) {
+                        case 0:
+                            setAddFavorite0();
+                            break;
+                        case 1:
+                            setAddFavorite1();
+                            break;
                     }
                 } else {
                     startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
+        }
+    }
+
+    public void setAddFavorite0() {
+        if ("0".equals(pictureList.get(index).getIsSaveImg())) {//加收藏
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                try {
+                    JSONObject jsonObject = KeyUtil.getJson(this);
+                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                    jsonObject.put("type", 1 + "");
+                    jsonObject.put("url", URL);
+                    presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ToastUtils.showShort(this, "无网络连接");
+            }
+
+        } else {//取消收藏
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                try {
+                    JSONObject jsonObject = KeyUtil.getJson(this);
+                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                    jsonObject.put("type", 1 + "");
+                    jsonObject.put("id", pictureList.get(index).getId());
+                    presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ToastUtils.showShort(this, "无网络连接");
+            }
+        }
+    }
+
+    public void setAddFavorite1() {
+        if ("0".equals(pictureList01.get(index).getIsSaveImg())) {//加收藏
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                try {
+                    JSONObject jsonObject = KeyUtil.getJson(this);
+                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                    jsonObject.put("type", 1 + "");
+                    jsonObject.put("url", URL);
+                    presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ToastUtils.showShort(this, "无网络连接");
+            }
+
+        } else {//取消收藏
+            if (NetWorkUtil.isNetworkConnected(this)) {
+                try {
+                    JSONObject jsonObject = KeyUtil.getJson(this);
+                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                    jsonObject.put("type", 1 + "");
+                    jsonObject.put("id", pictureList.get(index).getId());
+                    presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ToastUtils.showShort(this, "无网络连接");
+            }
         }
     }
 
