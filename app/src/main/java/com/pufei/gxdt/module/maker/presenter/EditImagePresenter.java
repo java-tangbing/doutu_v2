@@ -1,11 +1,12 @@
 package com.pufei.gxdt.module.maker.presenter;
 
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
+import com.pufei.gxdt.module.maker.bean.MaterialBean;
+import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.view.EditImageView;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 
@@ -28,6 +29,43 @@ import retrofit2.Response;
 
 public class EditImagePresenter extends BasePresenter<EditImageView> {
 
+
+    public void getMaterial(RequestBody body, final int type) {
+        Disposable disposable = ApiService.getEditImageApi().getMaterialList(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MaterialBean>() {
+                    @Override
+                    public void accept(MaterialBean result) throws Exception {
+                        baseview.materialResult(result,type);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
+                });
+        addSubscription(disposable);
+    }
+
+    public void getRecommentText(RequestBody body) {
+        Disposable disposable = ApiService.getEditImageApi().getRecommendText(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<RecommendTextBean>() {
+                    @Override
+                    public void accept(RecommendTextBean result) throws Exception {
+                        baseview.recommentTextResult(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
+                });
+        addSubscription(disposable);
+    }
+
     public void upLoadImage(RequestBody body) {
         Disposable disposable = ApiService.getEditImageApi().upLoad(body)
                 .subscribeOn(Schedulers.io())
@@ -37,11 +75,17 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                     public void accept(ModifyResultBean result) throws Exception {
                         baseview.upLoadImageResult(result);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
 
     public void downloadImage(String url, final int type) {
+
         Call<ResponseBody> call = ApiService.getEditImageApi().getImage(url);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -84,8 +128,11 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    writeFileToSDCard(response.body(),path);
-                    baseview.downloadGifResult(path);
+                    if(response.body() != null) {
+                        writeFileToSDCard(response.body(),path);
+                        baseview.downloadGifResult(path);
+                    }
+
                 }
             }
 
