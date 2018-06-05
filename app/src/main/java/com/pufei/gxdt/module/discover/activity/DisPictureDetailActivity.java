@@ -1,7 +1,10 @@
 package com.pufei.gxdt.module.discover.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,6 +25,7 @@ import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DisPicDetPresenter;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
@@ -37,6 +41,12 @@ import com.pufei.gxdt.widgets.GlideApp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +80,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     TextView tv_hot;
     @BindView(R.id.tv_change_img)
     TextView tv_change_img;
+    private String path = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
+
     private int index;
     private String orginid, orgintable, id, uid, mcount, isSaveImg;
     private List<DiscoverListBean.ResultBean> pictureList = new ArrayList<>();
@@ -322,7 +334,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     }
 
 
-    @OnClick({R.id.look_edit_image_iv, R.id.tv_change_img, R.id.activity_finish, R.id.activity_home1_shoucang})
+    @OnClick({R.id.look_edit_image_iv, R.id.tv_change_img, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.look_edit_image_iv:
@@ -342,12 +354,20 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 //                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
 //                }
                 break;
+            case R.id.ib_dowm_load:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GetImageInputStream(URL);
+                    }
+                }).start();
+                break;
             case R.id.activity_finish:
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.activity_home1_shoucang:
                 if (App.userBean != null) {
-                    if ("0".equals(pictureList.get(index).getIsSaveImg())||"0".equals(pictureList01.get(index).getIsSaveImg())) {//加收藏
+                    if ("0".equals(pictureList.get(index).getIsSaveImg()) || "0".equals(pictureList01.get(index).getIsSaveImg())) {//加收藏
                         if (NetWorkUtil.isNetworkConnected(this)) {
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -382,5 +402,64 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 }
                 break;
         }
+    }
+
+    public void GetImageInputStream(String imageurl) {//下载图片
+        java.net.URL url;
+        HttpURLConnection connection = null;
+        try {
+            url = new URL(imageurl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(4000); //超时设置
+            connection.setDoInput(true);
+            connection.setUseCaches(false); //设置不使用缓存
+            InputStream inputStream = connection.getInputStream();
+            SavaImage(inputStream, path);
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void SavaImage(InputStream inputStream, final String path) {//保存图片
+        File file = new File(path);
+        FileOutputStream fileOutputStream = null;
+        //文件夹不存在，则创建它
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        String[] a = URL.split("/");
+        final String fileName = a[a.length - 1];
+        //final String fileName = System.currentTimeMillis() + ".gif";
+        File filena = new File(file, fileName);
+        try {
+            int i = 0;
+            fileOutputStream = new FileOutputStream(filena);
+            byte[] bytes = new byte[2048];
+            while ((i = inputStream.read(bytes)) != -1) {
+                fileOutputStream.write(bytes, 0, i);
+            }
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            MediaStore.Images.Media.insertImage(this.getContentResolver(),//将图片插入系统图库
+                    file.getAbsolutePath(), fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);//保存成功，通知系统更新相册
+        Uri uri = Uri.fromFile(filena);
+        intent.setData(uri);
+        this.sendBroadcast(intent);
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ToastUtils.showShort(this, "图片已保存到" + path + "/" + fileName);
+            }
+        });
     }
 }
