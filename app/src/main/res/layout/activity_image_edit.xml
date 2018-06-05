@@ -60,13 +60,15 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
-                android:padding="6dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:drawableLeft="@mipmap/bt_made_tool_drafts_normal"
+                android:drawablePadding="10dp"
                 android:background="@drawable/text_white_bg"
                 android:textSize="12sp"
                 android:textColor="#9c9c9c"
                 android:gravity="center"
-                android:text="保存到草稿箱"/>
+                android:text="草稿箱"/>
 
             <View
                 android:layout_width="0dp"
