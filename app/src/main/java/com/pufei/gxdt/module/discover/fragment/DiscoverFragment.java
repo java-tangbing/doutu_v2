@@ -41,14 +41,15 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
     LinearLayout newsLinearLayout;
     private List<Fragment> fragmentList;
     private List<String> titleList;
-    private String[] titleArray = {"推荐", "全部"};
+    private String[] titleArray = getResources().getStringArray(R.array.discover_title);
+    //    {"推荐", "全部"};
 
     @Override
     public void initView() {
 //        if (isAdded()) {
 //            titleArray = getResources().getStringArray(R.array.discover_title);
 //        }
-        titleTextView.setText("发现");
+        titleTextView.setText(getResources().getString(R.string.discover));
         GlideApp.with(getActivity()).load(R.mipmap.com_bt_ttab_news_normal).into(newsImageView);
         newsLinearLayout.setVisibility(View.VISIBLE);
         addfragment();

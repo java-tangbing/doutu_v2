@@ -52,7 +52,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     @Override
     public void initView() {
 
-        textViewtitle.setText("消息");
+        textViewtitle.setText(getResources().getString(R.string.news));
         backlinearLayout.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -84,7 +84,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
             if (NetWorkUtil.isNetworkConnected(this)) {
                 presenter.newsNoticeList(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             } else {
-                ToastUtils.showShort(this, "请检查网络设置");
+                ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
             }
         }
 

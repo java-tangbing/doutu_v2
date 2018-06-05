@@ -56,7 +56,7 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
     @Override
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
-        tvTitle.setText("斗图小助手");
+        tvTitle.setText(getResources().getString(R.string.news_pic));
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
@@ -85,7 +85,7 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.newsNoticeContent(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
 //        Map<String, String> map = new HashMap<>();
 //        map.put("auth", App.userBean.getAuth());

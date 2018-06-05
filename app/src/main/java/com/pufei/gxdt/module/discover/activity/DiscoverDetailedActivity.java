@@ -108,7 +108,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.discoverEditImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
 
     }

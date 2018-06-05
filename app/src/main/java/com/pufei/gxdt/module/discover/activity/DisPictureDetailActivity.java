@@ -80,7 +80,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     TextView tv_hot;
     @BindView(R.id.tv_change_img)
     TextView tv_change_img;
-    private String path = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
+    private String path = Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
 
     private int index;
     private String orginid, orgintable, id, uid, mcount, isSaveImg;
@@ -150,7 +150,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.imageDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -192,7 +192,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.getImageDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设置");
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -258,7 +258,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList.get(index).setIsSaveImg("1");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
-                        ToastUtils.showShort(this, "收藏成功");
+                        ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
                     } else {
                         pictureList.get(index).setIsSaveImg("0");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -269,7 +269,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList01.get(index).setIsSaveImg("1");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
-                        ToastUtils.showShort(this, "收藏成功");
+                        ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
                     } else {
                         pictureList01.get(index).setIsSaveImg("0");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -289,7 +289,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList.get(index).setIsSaveImg("0");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-                        ToastUtils.showShort(this, "取消收藏成功");
+                        ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
                     } else {
                         pictureList.get(index).setIsSaveImg("1");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -299,7 +299,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList01.get(index).setIsSaveImg("0");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-                        ToastUtils.showShort(this, "取消收藏成功");
+                        ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
                     } else {
                         pictureList01.get(index).setIsSaveImg("1");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -371,7 +371,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             case R.id.activity_finish:
                 Intent intent = new Intent();
 //                intent.putExtra("msg", three);
-                setResult(1,intent);
+                setResult(1, intent);
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.activity_home1_shoucang:
@@ -404,7 +404,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     e.printStackTrace();
                 }
             } else {
-                ToastUtils.showShort(this, "无网络连接");
+                ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
             }
 
         } else {//取消收藏
@@ -419,7 +419,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     e.printStackTrace();
                 }
             } else {
-                ToastUtils.showShort(this, "无网络连接");
+                ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
             }
         }
     }
@@ -437,7 +437,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     e.printStackTrace();
                 }
             } else {
-                ToastUtils.showShort(this, "无网络连接");
+                ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
             }
 
         } else {//取消收藏
@@ -452,7 +452,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     e.printStackTrace();
                 }
             } else {
-                ToastUtils.showShort(this, "无网络连接");
+                ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
             }
         }
     }
@@ -511,7 +511,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         DisPictureDetailActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtils.showShort(DisPictureDetailActivity.this, "图片已保存到" + path + "/" + fileName);
+                ToastUtils.showShort(DisPictureDetailActivity.this, getResources().getString(R.string.pic_isSave) + path + "/" + fileName);
             }
         });
     }
