@@ -130,7 +130,9 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                 if (response.isSuccessful()) {
                     if(response.body() != null) {
                         writeFileToSDCard(response.body(),path);
-                        baseview.downloadGifResult(path);
+                        if(baseview != null) {
+                            baseview.downloadGifResult(path);
+                        }
                     }
 
                 }

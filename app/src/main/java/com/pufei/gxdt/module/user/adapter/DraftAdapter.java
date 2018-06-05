@@ -26,7 +26,6 @@ public class DraftAdapter extends BaseQuickAdapter<DraftInfo,BaseViewHolder> {
         }else {
             GlideApp.with(mContext).load(new File(item.make_url)).into((ImageView) helper.getView(R.id.iv_preview));
         }
-
         helper.addOnClickListener(R.id.iv_edit)
                 .addOnClickListener(R.id.tv_publish);
     }

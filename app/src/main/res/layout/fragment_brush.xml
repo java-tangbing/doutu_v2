@@ -56,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:progress="0"
-                android:max="100"/>
+                android:max="100"
+                style="@style/Base.Widget.AppCompat.SeekBar"/>
 
             <View
                 android:layout_width="13dp"

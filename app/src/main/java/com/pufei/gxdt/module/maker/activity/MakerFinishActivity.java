@@ -114,15 +114,15 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         id = intent.getStringExtra("Id");
         uid = intent.getStringExtra("uid");
         originTable = intent.getStringExtra("originTable");
-        GlideApp.with(this).load(path).into(ivFaceImage);
         info = new Select().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(false)).querySingle();
+        Log.e("fdsf",path+" ");
         if (info != null) {
             if (path.contains("http:") || path.contains("https:")) {//合成图
                 GlideApp.with(this).load(path).into(ivFaceImage);
                 presenter.downloadImage(path, 0);
             } else {
                 if (path.contains("gif") || path.contains("GIF")) {
-                    GlideApp.with(this).load(path).into(ivFaceImage);
+                    GlideApp.with(this).load(new File(path)).into(ivFaceImage);
                     InputStream inputStream = null;
                     try {
                         inputStream = new FileInputStream(new File(path));
@@ -289,8 +289,8 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
 
     private void setRequestData() {
         if(imageBase64 != null && bgImageBase64 != null) {
-            final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).queryList();
-            final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).queryList();
+            final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
+            final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
             UploadImageUtil.uploadImage(this,info,path,imageBase64,bgImageBase64,imageDrafts,textDrafts);
         }
 
