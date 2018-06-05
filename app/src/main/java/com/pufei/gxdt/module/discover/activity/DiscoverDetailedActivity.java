@@ -141,11 +141,19 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         countTextView.setText(bean.getResult().getCount());
         tv_username.setText(bean.getResult().getUsername());
         if (bean.getResult().getData().size() > 0) {
+//            mlist = new ArrayList<>();
+            mlist.clear();
             mlist.addAll(bean.getResult().getData());
+//            discoverDetailedAdapter.setNewData(mlist);
             discoverDetailedAdapter.notifyDataSetChanged();
-
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setAdapter();
     }
 
     @Override

@@ -120,8 +120,6 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 //        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
             if (isLoadMore) {
-
-
                 page = page + 1;
                 mlist.addAll(bean.getResult());
                 discoverAdapter.notifyDataSetChanged();
@@ -136,11 +134,9 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 discoverAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
+//                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
             }
             if (isfirst) {
-
-
                 isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
@@ -207,7 +203,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
@@ -219,21 +215,26 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case 1:
-                this.refresh();
-                break;
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        switch (resultCode) {
+//            case 1:
+//                this.refresh();
+//                break;
+//        }
+//    }
 
     public void refresh() {
         page = 1;
-        isRefreshing = false;
+        isRefreshing = true;
         isLoadMore = false;
-        isfirst = true;
         setMyadapter();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
     }
 }

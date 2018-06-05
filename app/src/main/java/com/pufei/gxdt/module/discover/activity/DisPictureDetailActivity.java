@@ -97,7 +97,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     @Override
     public void initView() {
-        path=Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
+        path = Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
         Intent intent = getIntent();
         isSaveImg = intent.getStringExtra("isSaveImg");
         id = intent.getStringExtra("id");
@@ -155,17 +155,25 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setMyAdapter();
+        getImageDetailList();
+    }
 
     public void getImageDetailList() {
         switch (type) {
             case 0:
                 if (pictureList.size() > 0) {
+                    mlist.clear();
                     mlist.addAll(pictureList);
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case 1:
                 if (pictureList01.size() > 0) {
+                    mlist01.clear();
                     mlist01.addAll(pictureList01);
                     adapter01.notifyDataSetChanged();
                 }
@@ -365,9 +373,9 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 }).start();
                 break;
             case R.id.activity_finish:
-                Intent intent = new Intent();
-//                intent.putExtra("msg", three);
-                setResult(1, intent);
+//                Intent intent = new Intent();
+////                intent.putExtra("msg", three);
+//                setResult(1, intent);
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.activity_home1_shoucang:
@@ -409,7 +417,9 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     JSONObject jsonObject = KeyUtil.getJson(this);
                     jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                     jsonObject.put("type", 1 + "");
-                    jsonObject.put("id", pictureList.get(index).getId());
+                    jsonObject.put("id", URL);
+
+//                    jsonObject.put("id", pictureList.get(index).getId());
                     presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -442,7 +452,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     JSONObject jsonObject = KeyUtil.getJson(this);
                     jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                     jsonObject.put("type", 1 + "");
-                    jsonObject.put("id", pictureList.get(index).getId());
+                    jsonObject.put("id", URL);
+//                    jsonObject.put("id", pictureList.get(index).getId());
                     presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
                 } catch (JSONException e) {
                     e.printStackTrace();

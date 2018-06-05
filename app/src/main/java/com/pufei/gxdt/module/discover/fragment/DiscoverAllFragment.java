@@ -142,7 +142,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 discoverAdapter.notifyDataSetChanged();
                 isRefreshing = false;
                 swipeRefreshLayout.setRefreshing(false);
-                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
+//                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
             }
             if (isfirst) {
                 isfirst = false;
@@ -210,7 +210,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
@@ -223,21 +223,26 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case 1:
-                this.refresh();
-                break;
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        switch (resultCode) {
+//            case 1:
+//                this.refresh();
+//                break;
+//        }
+//    }
 
     public void refresh() {
         page = 1;
-        isRefreshing = false;
+        isRefreshing = true;
         isLoadMore = false;
-        isfirst = true;
         setMyadapter();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
     }
 }
