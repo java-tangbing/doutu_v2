@@ -12,7 +12,7 @@ import com.umeng.message.PushAgent;
 import butterknife.ButterKnife;
 
 /**
- * Activity的基�
+ * Activity的基类
  * Created by wangwenzhang on 2017/11/9.
  */
 
@@ -53,7 +53,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
     public abstract int getLayout();
 
     /**
-     * 布局销�调用presenter置空view，防止内存溢�
+     * 布局销毁调用presenter置空view，防止内存溢出
      */
     @Override
     protected void onDestroy() {

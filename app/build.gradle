@@ -90,6 +90,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support:design:27.1.0'
@@ -124,7 +125,7 @@ dependencies {
     implementation files('libs/Baidu_MobAds_SDK.jar')
     implementation files('libs/GDTUnionSDK.4.17.568.min.jar')
     implementation project(':photoeditor')
-    implementation project(':PushSDK')
+   // implementation project(':PushSDK')
     implementation('com.github.hotchemi:permissionsdispatcher:2.4.0') {
         exclude module: 'support-v13'
     }
