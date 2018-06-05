@@ -293,6 +293,11 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
 
     @Override
     public int getLayout() {

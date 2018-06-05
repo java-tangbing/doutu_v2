@@ -22,6 +22,11 @@ public class DiscoverPresenter extends BasePresenter<DiscoverView> {
                     public void accept(DiscoverListBean discoverListBean) throws Exception {
                         baseview.getDiscoverHotList(discoverListBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -38,7 +43,7 @@ public class DiscoverPresenter extends BasePresenter<DiscoverView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        return;
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);

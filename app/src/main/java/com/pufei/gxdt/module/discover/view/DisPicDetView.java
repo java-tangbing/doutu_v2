@@ -12,4 +12,5 @@ public interface DisPicDetView extends BaseView<DisPicDetPresenter> {
     void resultImageDetail(PictureDetailBean bean);
     void resultAddFavorite(FavoriteBean bean);
     void resultCancleFavorite(FavoriteBean bean);
+    void requestErrResult(String msg);
 }

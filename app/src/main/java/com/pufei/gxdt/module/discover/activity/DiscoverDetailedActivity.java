@@ -148,6 +148,11 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     public void setOrginImagedet() {
     }
 

@@ -10,4 +10,5 @@ public interface DiscoverView extends BaseView<DiscoverPresenter> {
 
     void getDiscoverDetailed(DiscoverEditImageBean bean);
 
+    void requestErrResult(String msg);
 }

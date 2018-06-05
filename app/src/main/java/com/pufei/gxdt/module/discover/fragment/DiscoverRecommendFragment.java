@@ -156,6 +156,11 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     //下拉刷新
     private void initRefreshLayout() {
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,

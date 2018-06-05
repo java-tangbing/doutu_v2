@@ -95,4 +95,9 @@ public class DisWorksActivity extends BaseMvpActivity<DisWorksPresenter> impleme
             this.presenter.attachView(this);
         }
     }
+
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
 }
