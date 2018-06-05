@@ -174,7 +174,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 break;
             case R.id.login_state:
                 if (App.userBean != null) {
-                    DialogUtil.getInstance().canceDialog(this);
+                    DialogUtil.getInstance().canceDialog(this,null);
                 } else {
                     ToastUtils.showLong(this, "请先登录");
                 }

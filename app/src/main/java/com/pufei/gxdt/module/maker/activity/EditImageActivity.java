@@ -479,7 +479,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         intent.putExtra("uid", uid);
         intent.putExtra("originTable", originTable);
         startActivity(intent);
-        Log.e("fdsf",path);
     }
 
     private void saveGif(final boolean isDraft) {
@@ -521,6 +520,13 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                             bean.setDelay(frameBitmaps.get(i).getDelay());
                                             gifEncodeBitmap.add(bean);
                                         }
+
+//                                        mPhotoEditor.saveFrame(gifEncodeBitmap, new PhotoEditor.OnSaveFrameListener() {
+//                                            @Override
+//                                            public void onSaveFrameSuccess() {
+//
+//                                            }
+//                                        });
 
                                         mPhotoEditor.encodeGif(photoEditorView.getWidth(), photoEditorView.getHeight(), gifPath, gifEncodeBitmap, new PhotoEditor.OnEncodeGifListener() {
                                             @Override

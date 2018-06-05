@@ -13,8 +13,9 @@ public class UserBean {
     private String phone;
     private boolean pwd;
     private String mind;
+    private String uid;
 
-    public UserBean(String name, String head, String gender, String address, String auth, String phone) {
+    public UserBean(String name, String head, String gender, String address, String auth, String phone,String uid) {
         this.name = name;
         this.head = head;
         this.gender = gender;
@@ -22,6 +23,7 @@ public class UserBean {
         this.auth = auth;
         this.phone = phone;
         this.pwd = pwd;
+        this.uid = uid;
     }
 
     @Override
@@ -34,7 +36,17 @@ public class UserBean {
                 ", auth='" + auth + '\'' +
                 ", phone='" + phone + '\'' +
                 ", pwd=" + pwd +
+                ", mind='" + mind + '\'' +
+                ", uid='" + uid + '\'' +
                 '}';
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public boolean isPwd() {
