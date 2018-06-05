@@ -23,6 +23,7 @@ public class UserUtils {
                 jsonObject.put("auth", user.getAuth());
                 jsonObject.put("phone", user.getPhone());
                 jsonObject.put("pwd", user.isPwd());
+                jsonObject.put("uid",user.getUid());
                 return jsonObject.toString();
             } catch (JSONException e) {
                 e.printStackTrace();

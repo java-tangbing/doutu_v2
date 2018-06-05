@@ -25,6 +25,9 @@ import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.module.user.fragment.UserFragment;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.entity.Alias;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,12 +48,17 @@ public class MainActivity extends BaseActivity {
     private TabVpAdapter tabAdapter;
     private long mExitTime;
     private int previousItem;
+    private PushAgent mPushAgent;
+
 
     @Override
     public void initView() {
+
         String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
         if (user_detail != null) {
             App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+            Log.e("fdsaf",App.userBean.getUid() +" ");
+            initUPush(App.userBean.getUid());
         }
         addFragment();
         tabAdapter = new TabVpAdapter(this, getSupportFragmentManager(), fragmentList);
@@ -96,6 +104,17 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void initUPush(String alias) {
+        mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.onAppStart();
+        mPushAgent.setAlias(alias, "gxdt_msg", new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean isSuccess, String message) {
+                Log.e("push",isSuccess +" " + message);
+            }
+        });
+    }
+
     @Override
     public void getData() {
     }
@@ -115,7 +134,6 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void onEvent(EventMsg type) {
         if(type.getTYPE() == MsgType.MAKER_IMAGE) {
-            Log.e("fsdf",type.getTYPE()+"");
             homeVp.setCurrentItem(previousItem);
         }
     }

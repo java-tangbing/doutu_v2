@@ -217,7 +217,7 @@
 
         <provider
             android:name="com.baidu.mobads.openad.FileProvider"
-            android:authorities="${packageName}.bd.provider"
+            android:authorities="com.pufei.gxdt.bd.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -227,7 +227,7 @@
 
         <provider
             android:name=".base.TencentProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="com.pufei.gxdt.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -335,7 +335,7 @@
             android:exported="true"
             android:process=":channel">
             <intent-filter>
-                <action android:name="${applicationId}.intent.action.COMMAND" />
+                <action android:name="com.pufei.gxdt.intent.action.COMMAND" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
@@ -382,7 +382,7 @@
 
         <provider
             android:name="com.umeng.message.provider.MessageProvider"
-            android:authorities="${applicationId}.umeng.message"
+            android:authorities="com.pufei.gxdt.umeng.message"
             android:exported="false">
             <grant-uri-permission android:pathPattern=".*" />
         </provider>

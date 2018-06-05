@@ -35,6 +35,7 @@ import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
+import com.umeng.message.PushAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -66,6 +67,8 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     String qq = "";
     String wechat = "";
     private String filepath;
+    private PushAgent mPushAgent;
+
 
     @Override
     public void initView() {
@@ -75,6 +78,8 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         if (App.userBean != null) {
             settingLogOut.setText(R.string.log_out);
         }
+        mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.onAppStart();
     }
 
     @Override
@@ -110,7 +115,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.setting_log_out:
                 if (App.userBean != null) {
-                    DialogUtil.getInstance().canceDialog(this);
+                    DialogUtil.getInstance().canceDialog(this,mPushAgent);
                 } else {
                     ToastUtils.showLong(this, "请先登录");
                 }
