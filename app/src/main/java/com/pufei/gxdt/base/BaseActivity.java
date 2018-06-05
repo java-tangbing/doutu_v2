@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.black));
+        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.white));
         AppManager.getAppManager().addActivity(this);
 //        PushAgent.getInstance(this).onAppStart();
         ButterKnife.bind(this);

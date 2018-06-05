@@ -115,7 +115,6 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         uid = intent.getStringExtra("uid");
         originTable = intent.getStringExtra("originTable");
         info = new Select().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(false)).querySingle();
-        Log.e("fdsf",path+" ");
         if (info != null) {
             if (path.contains("http:") || path.contains("https:")) {//合成图
                 GlideApp.with(this).load(path).into(ivFaceImage);
