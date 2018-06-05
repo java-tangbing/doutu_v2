@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.ToastUtils;
@@ -29,7 +30,7 @@ import okhttp3.Response;
 /**
  * Created by wangwenzhang on 2017/4/1.
  */
-public class FeedBackActivity extends Activity {
+public class FeedBackActivity extends BaseActivity {
     /* @InjectView(R.id.activity_feedback_return)
      LinearLayout activityFeedbackReturn;
      @InjectView(R.id.activity_feedback_ok)
@@ -50,11 +51,18 @@ public class FeedBackActivity extends Activity {
     private String qq;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.acticity_feedback);
-        ButterKnife.bind(this);
-        //ButterKnife.inject(this);
-        super.onCreate(savedInstanceState);
+    public void initView() {
+
+    }
+
+    @Override
+    public void getData() {
+
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.acticity_feedback;
     }
 
     @Override

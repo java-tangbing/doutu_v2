@@ -67,7 +67,7 @@ public class AboutProductActivity extends BaseActivity {
                 startActivity(new Intent(this, AgreeementActivity.class));
                 break;
             case R.id.tv_user_feedback:
-                startActivity(new Intent(this, AgreeementActivity.class));
+                startActivity(new Intent(this, FeedBackActivity.class));
                 break;
             default:
                 break;

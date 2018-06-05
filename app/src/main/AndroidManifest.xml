@@ -81,6 +81,12 @@
         <activity
             android:name=".module.user.activity.AgreeementActivity"
             android:screenOrientation="portrait" />
+<activity
+            android:name=".module.user.activity.FeedBackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.user.activity.ManagerRulesActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.user.activity.EditNameActivity"
             android:screenOrientation="portrait" />
@@ -208,6 +214,7 @@
 
         <service android:name="com.pufei.gxdt.module.floating.FloatWindowService" />
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />
+
         <provider
             android:name="com.baidu.mobads.openad.FileProvider"
             android:authorities="${packageName}.bd.provider"
@@ -291,7 +298,7 @@
         <service
             android:name="com.taobao.accs.internal.AccsJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":channel"/>
+            android:process=":channel" />
 
         <service
             android:name="com.taobao.accs.ChannelService$KernelService"
@@ -379,7 +386,7 @@
             android:exported="false">
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
-        
+
     </application>
 
 </manifest>

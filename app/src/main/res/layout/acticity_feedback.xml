@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:src="@mipmap/back0" />
 
-            <com.pufei.gxdt.view.MyFrontTextView
+            <com.pufei.gxdt.widgets.MyFrontTextView
                 android:layout_width="25dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
