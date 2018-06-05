@@ -45,11 +45,14 @@ public class ThemeImageAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewH
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler)holder).titletv.setText(list.get(position).getCategory_name());
-            ((MyHodler)holder).tv_desc.setText(list.get(position).getDesc());
+            if("".equals(list.get(position).getDesc())){
+                ((MyHodler)holder).tv_desc.setVisibility(View.GONE);
+            }else{
+                ((MyHodler)holder).tv_desc.setText(list.get(position).getDesc());
+            }
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler)holder).iv1);
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler)holder).iv2);
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler)holder).iv3);
-        }else if (holder instanceof AdvertHodler){
         }
 
     }

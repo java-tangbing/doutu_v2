@@ -2,6 +2,7 @@ package com.pufei.gxdt.module.home.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,7 +26,9 @@ import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
+import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.KeyUtil;
+import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -38,6 +41,8 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 

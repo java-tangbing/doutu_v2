@@ -13,6 +13,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.HotAdapter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
 import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
@@ -182,6 +183,17 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
         }
 
     }
+
+    @Override
+    public void resultAddFavorite(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void resultCancleFavorite(FavoriteBean bean) {
+
+    }
+
     public static int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());

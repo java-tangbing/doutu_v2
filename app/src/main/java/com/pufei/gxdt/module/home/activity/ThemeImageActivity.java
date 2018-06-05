@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.home.adapter.ThemeImageAdpater;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
 import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
@@ -160,6 +161,16 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
 
     @Override
     public void resultThemeImageDetail(PictureResultBean bean) {
+
+    }
+
+    @Override
+    public void resultAddFavorite(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void resultCancleFavorite(FavoriteBean bean) {
 
     }
 

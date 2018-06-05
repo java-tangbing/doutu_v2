@@ -11,7 +11,18 @@
         android:layout_height="50dp">
         <LinearLayout
             android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@mipmap/subject_ic_topic"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical">
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:ellipsize="end"
