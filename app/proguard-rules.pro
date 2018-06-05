@@ -107,16 +107,16 @@
     public void onClick(...);
 }
 
--keep class com.pufei.association.module.discover.**{*;}
--keep class com.pufei.association.module.floating.**{*;}
--keep class com.pufei.association.module.home.**{*;}
--keep class com.pufei.association.module.login.**{*;}
--keep class com.pufei.association.module.maker.**{*;}
--keep class com.pufei.association.module.news.**{*;}
--keep class com.pufei.association.module.sign.**{*;}
--keep class com.pufei.association.module.start.**{*;}
--keep class com.pufei.association.module.update.**{*;}
--keep class com.pufei.association.module.user.**{*;}
+-keep class com.pufei.gxdt.module.discover.**{*;}
+-keep class com.pufei.gxdt.module.floating.**{*;}
+-keep class com.pufei.gxdt.module.home.**{*;}
+-keep class com.pufei.gxdt.module.login.**{*;}
+-keep class com.pufei.gxdt.module.maker.**{*;}
+-keep class com.pufei.gxdt.module.news.**{*;}
+-keep class com.pufei.gxdt.module.sign.**{*;}
+-keep class com.pufei.gxdt.module.start.**{*;}
+-keep class com.pufei.gxdt.module.update.**{*;}
+-keep class com.pufei.gxdt.module.user.**{*;}
 
 -keepattributes *Annotation*
 -keep @**annotation** class * {*;}
@@ -149,7 +149,6 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(Java.lang.Throwable);
 }
--keep class com.pufei.gxdt.module.**.model.**{*;}
 -keep class com.pufei.gxdt.module.advert.**{*;}
  -keep class com.pufei.gxdt.contents.** { *; }
  -keep class com.gc.flashbiew.**{ *; }

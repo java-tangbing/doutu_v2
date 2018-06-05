@@ -158,13 +158,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
             App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile());
+            EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
             Log.e(TAG, "name: " + App.userBean.getName());
             Log.e(TAG, "header: " + App.userBean.getHead());
             Log.e(TAG, "gender: " + App.userBean.getGender());
             Log.e(TAG, "address: " + App.userBean.getAddress());
             Log.e(TAG, "Auth: " + App.userBean.getAuth());
             Log.e(TAG, "Mind: " + App.userBean.getMind());
-            EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -286,7 +286,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         api.getPlatformInfo(this, share_media, new UMAuthListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                ToastUtils.showLong(LoginActivity.this, "开始");
+//                ToastUtils.showLong(LoginActivity.this, "开始");
 
             }
 
