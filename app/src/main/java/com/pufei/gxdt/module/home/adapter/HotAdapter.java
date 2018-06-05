@@ -22,7 +22,12 @@ import java.util.List;
 public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     private List<PictureResultBean.ResultBean>list;
     private Context mcontext;
-
+    boolean isTop = false;
+    public HotAdapter(Context context, List<PictureResultBean.ResultBean> list,boolean isTop){//获取数据源
+        this.mcontext=context;
+        this.list=list;
+        this.isTop = isTop;
+    }
     public HotAdapter(Context context, List<PictureResultBean.ResultBean> list){//获取数据源
         this.mcontext=context;
         this.list=list;
@@ -40,6 +45,15 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
+        if(isTop){
+//                if(position == 0){
+//                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top1);
+//                }else if(position == 1){
+//                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top2);
+//                }else if(position == 2){
+//                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top3);
+//                }
+        }
         GlideApp.with(mcontext).load(list.get(position).getUrl()).placeholder(R.mipmap.ic_default_picture).override(100,80).into(holder.iv1);
 
     }
@@ -48,13 +62,14 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
         super.onViewDetachedFromWindow(holder);
     }
    static class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private ImageView iv1;
+        private ImageView iv1,hot_top;
         private CheckBox  iv2;
         public MyHodler(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener=myItemClickListener;
             itemView.setOnClickListener(this);//单项
             iv1= (ImageView) itemView.findViewById(R.id.activity_picture_item_image);
+            hot_top = (ImageView) itemView.findViewById(R.id.hot_top);
         }
 
         @Override

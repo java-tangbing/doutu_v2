@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
@@ -24,12 +26,14 @@ import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
 import com.pufei.gxdt.module.home.view.ThemeImageView;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -78,6 +82,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
     List<PictureResultBean.ResultBean> list = new ArrayList<>();
+    private PictureResultBean resultBean;
     private int page = 1;
     @Override
     public void setPresenter(ThemeImagePresenter presenter) {
@@ -97,7 +102,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         tv_eyes.setText(getIntent().getExtras().getString("eyes"));
         ll_left.setVisibility(View.VISIBLE);
         ll_right.setVisibility(View.VISIBLE);
-        iv_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+        ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
         xRecyclerView.setLayoutManager(new GridLayoutManager(HomeImageActivity.this, 3));
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(dp2px(HomeImageActivity.this, 10)));
         adapter = new HomeImageAdapter(HomeImageActivity.this, list);
@@ -185,9 +190,45 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
     }
-    @OnClick(R.id.ll_title_left)
-    public  void viewClicked(){
-        AppManager.getAppManager().finishActivity();
+    @OnClick({R.id.ll_title_left,R.id.ll_title_right})
+    public  void viewClicked(View view){
+        switch (view.getId()){
+            case R.id.ll_title_left:
+                AppManager.getAppManager().finishActivity();
+                break;
+            case R.id.ll_title_right:
+                if(App.userBean!=null){
+                    if (resultBean!=null){
+                        if("0".equals(resultBean.getIsSave())){//加收藏
+                            try {
+                                JSONObject jsonObject = KeyUtil.getJson(this);
+                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                                jsonObject.put("type", 2 + "");
+                                jsonObject.put("url",  getIntent().getExtras().getString("category_id"));
+                                presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{//取消收藏
+                            try {
+                                JSONObject jsonObject = KeyUtil.getJson(this);
+                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                                jsonObject.put("type", 2 + "");
+                                jsonObject.put("id", getIntent().getExtras().getString("category_id"));
+                                presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+
+                }else{
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
+                break;
+        }
+
     }
 
     @Override
@@ -206,9 +247,37 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
             if(page == 1){
                 list.clear();
             }
+            resultBean = bean;
+            if("0".equals(bean.getIsSave())){
+                ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+            }else{
+                ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+            }
             list.addAll(bean.getResult());
             adapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public void resultAddFavorite(FavoriteBean bean) {
+        if("0".equals(bean.getCode())){
+            ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+            resultBean.setIsSave("1");
+            ToastUtils.showShort(this,"收藏成功");
+        }else{
+            ToastUtils.showShort(this,bean.getMsg());
+        }
+    }
+
+    @Override
+    public void resultCancleFavorite(FavoriteBean bean) {
+        if("0".equals(bean.getCode())){
+            ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+            resultBean.setIsSave("0");
+            ToastUtils.showShort(this,"取消收藏成功");
+        }else{
+            ToastUtils.showShort(this,bean.getMsg());
+        }
     }
 }

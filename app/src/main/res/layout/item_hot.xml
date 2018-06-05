@@ -7,12 +7,21 @@
     <!-- <View
          android:layout_width="match_parent"
          android:layout_height="2dp"></View>-->
+     <FrameLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+         <ImageView
+             android:padding="1dp"
+             android:background="@drawable/shape"
+             android:scaleType="fitXY"
+             android:id="@+id/activity_picture_item_image"
+             android:layout_width="100dp"
+             android:layout_height="100dp" />
+         <ImageView
+             android:id="@+id/hot_top"
+             android:layout_width="50dp"
+             android:layout_height="50dp"
+            />
+     </FrameLayout>
 
-    <ImageView
-        android:padding="1dp"
-        android:background="@drawable/shape"
-        android:scaleType="fitXY"
-        android:id="@+id/activity_picture_item_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
 </LinearLayout>

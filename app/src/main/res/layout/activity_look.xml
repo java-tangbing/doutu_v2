@@ -23,8 +23,8 @@
             android:layout_width="60dp"
             android:layout_height="match_parent">
             <ImageView
-                android:src="@mipmap/back0"
-                android:layout_width="20dp"
+                android:src="@mipmap/com_bt_ttab_return_2"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
             <TextView
                 android:visibility="gone"
