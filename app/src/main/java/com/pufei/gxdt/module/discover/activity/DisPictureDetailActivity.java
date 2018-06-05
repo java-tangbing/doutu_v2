@@ -80,7 +80,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     TextView tv_hot;
     @BindView(R.id.tv_change_img)
     TextView tv_change_img;
-    private String path = Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
+    private String path;
 
     private int index;
     private String orginid, orgintable, id, uid, mcount, isSaveImg;
@@ -97,6 +97,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     @Override
     public void initView() {
+        path=Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
         Intent intent = getIntent();
         isSaveImg = intent.getStringExtra("isSaveImg");
         id = intent.getStringExtra("id");
@@ -154,11 +155,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        onCreate(null);
-    }
 
     public void getImageDetailList() {
         switch (type) {
