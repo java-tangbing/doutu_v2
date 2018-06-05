@@ -332,7 +332,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 bundle01.putString("orgintable", orgintable);
                 bundle01.putString("uid", uid);
                 intent01.putExtras(bundle01);
-                startActivityForResult(intent01);
+                startActivity(intent01);
 //                } else {
 //                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
 //                }
