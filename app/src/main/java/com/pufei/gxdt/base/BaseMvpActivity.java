@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jaeger.library.StatusBarUtil;
+import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AppManager;
 import com.umeng.message.PushAgent;
 
@@ -25,6 +26,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
         setContentView(getLayout());
         AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
+        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.white));
 //        PushAgent.getInstance(this).onAppStart();
 //        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 //        UMConfigure.setLogEnabled(true);

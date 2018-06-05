@@ -833,7 +833,6 @@ public class PhotoEditor implements BrushViewChangeListener {
                 GifEncoder gifEncoder = new GifEncoder();
                 try {
                     gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
-
                     for (int i = 0; i < bitmap.size(); i++) {
                         gifEncoder.setDither(true);
                         gifEncoder.encodeFrame(bitmap.get(i).getBitmap(),bitmap.get(i).getDelay());

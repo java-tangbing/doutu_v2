@@ -183,6 +183,8 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             imagePath = intent.getStringExtra(IMAGE_PATH);
             if (imagePath.contains("http:") || imagePath.contains("https:")) {
                 GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
+                String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
+                presenter.downloadGif(imagePath, filePath);
             } else {
                 GlideApp.with(this).load(new File(imagePath)).into(photoEditorView.getSource());
             }
@@ -477,6 +479,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         intent.putExtra("uid", uid);
         intent.putExtra("originTable", originTable);
         startActivity(intent);
+        Log.e("fdsf",path);
     }
 
     private void saveGif(final boolean isDraft) {
@@ -497,8 +500,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                     return;
                                 }
                                 showLoading("Saving...");
-                                final String gifPath = Environment.getExternalStorageDirectory()
-                                        + File.separator + ""
+                                final String gifPath = App.path1 + "/"
                                         + System.currentTimeMillis() + ".gif";
 
                                 photoEditorView.setBackgroundColor(Color.TRANSPARENT);
@@ -809,7 +811,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     protected void onDestroy() {
         super.onDestroy();
         if (editType == 2) {
-            EventBus.getDefault().postSticky(new MakerEventMsg(5, imagePath));
+//            EventBus.getDefault().postSticky(new MakerEventMsg(5, imagePath));
 
         } else {
             EventBus.getDefault().postSticky(new EventMsg(MsgType.MAKER_IMAGE));
