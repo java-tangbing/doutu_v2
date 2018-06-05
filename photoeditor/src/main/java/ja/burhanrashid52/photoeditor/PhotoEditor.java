@@ -809,7 +809,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             protected void onPostExecute(Exception e) {
                 super.onPostExecute(e);
                 if (e == null) {
-                    clearAllViews();
+//                    clearAllViews();
                     onSaveListener.onSuccess(imagePath);
                 } else {
                     onSaveListener.onFailure(e);
@@ -832,7 +832,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             protected Exception doInBackground(String... strings) {
                 GifEncoder gifEncoder = new GifEncoder();
                 try {
-                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_STABLE_HIGH_MEMORY);
+                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
 
                     for (int i = 0; i < bitmap.size(); i++) {
                         gifEncoder.setDither(true);

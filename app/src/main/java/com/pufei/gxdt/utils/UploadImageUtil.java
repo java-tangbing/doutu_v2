@@ -3,6 +3,8 @@ package com.pufei.gxdt.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -35,7 +37,11 @@ public class UploadImageUtil {
         map.put("version", SystemInfoUtils.versionName(context));
         map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
         map.put("os", "1");
-        map.put("orginid", info.originImageId);
+        if(info.originImageId.length() >= 10) {
+            map.put("orginid", "");
+        }else {
+            map.put("orginid", info.originImageId);
+        }
         map.put("uid", info.uid);
         map.put("id", info.originId);
         map.put("orgintable", info.originTable);
@@ -121,6 +127,7 @@ public class UploadImageUtil {
                 map1.put("zoom", draft.scaleX + "");
                 map1.put("rolling", draft.rotation + "");
                 mapList.add(map1);
+                Log.e("text",draft.text);
             }
             if (mapList.size() > 0) {
                 map.put("attachment", mapList);
