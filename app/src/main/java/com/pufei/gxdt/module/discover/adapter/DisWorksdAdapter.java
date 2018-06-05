@@ -14,14 +14,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DisWorksdAdapter extends BaseQuickAdapter<DisWorksBean, BaseViewHolder> {
-    public DisWorksdAdapter(@Nullable List<DisWorksBean> data) {
+public class DisWorksdAdapter extends BaseQuickAdapter<DisWorksBean.ResultBean.ProductBean, BaseViewHolder> {
+    public DisWorksdAdapter(@Nullable List<DisWorksBean.ResultBean.ProductBean> data) {
         super(R.layout.activity_disworks_item, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, DisWorksBean item) {
-        GlideApp.with(mContext).load("")
+    protected void convert(BaseViewHolder helper, DisWorksBean.ResultBean.ProductBean item) {
+        GlideApp.with(mContext).load(item.getUrl())
                 .placeholder(R.mipmap.newloding)
                 .error(R.mipmap.ic_default_picture)
                 .fallback(R.mipmap.ic_default_picture)

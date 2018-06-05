@@ -145,14 +145,13 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 ToastUtils.showShort(getActivity(), "刷新完毕");
             }
             if (isfirst) {
-                isfirst=false;
+                isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
                 mlist.addAll(bean.getResult());
                 discoverAdapter.notifyDataSetChanged();
             }
-        }
-        else {
+        } else {
             swipeRefreshLayout.setRefreshing(false);
             discoverAdapter.loadMoreComplete();
             discoverAdapter.loadMoreEnd();
@@ -200,7 +199,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.dis_item_iv:
                 Intent intent = new Intent(activity, DisPictureDetailActivity.class);
                 Bundle bundle = new Bundle();
@@ -215,6 +214,9 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
+                Bundle bundle01 = new Bundle();
+                bundle01.putString("uid", mlist.get(position).getUser().getUid());
+                intent01.putExtras(bundle01);
                 startActivity(intent01);
                 break;
         }

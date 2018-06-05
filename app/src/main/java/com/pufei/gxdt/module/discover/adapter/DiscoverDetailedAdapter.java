@@ -36,5 +36,7 @@ public class DiscoverDetailedAdapter extends BaseQuickAdapter<DiscoverEditImageB
         if (item.getHot().length() > 0 || !item.getHot().isEmpty()) {
             helper.setText(R.id.dis_item_hot_tv, item.getHot());
         }
+        helper.addOnClickListener(R.id.dis_item_user_img_list)
+                .addOnClickListener(R.id.dis_item_iv);
     }
 }

@@ -205,6 +205,9 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
+                Bundle bundle01 = new Bundle();
+                bundle01.putString("uid", mlist.get(position).getUser().getUid());
+                intent01.putExtras(bundle01);
                 startActivity(intent01);
                 break;
         }
