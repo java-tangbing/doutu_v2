@@ -75,7 +75,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     public void getData() {
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
-        discoverAdapter.setEnableLoadMore(false);
+//        discoverAdapter.setEnableLoadMore(false);
         discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);

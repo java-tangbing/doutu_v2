@@ -446,7 +446,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             e.printStackTrace();
         }
         try {
-            MediaStore.Images.Media.insertImage(this.getContentResolver(),//将图片插入系统图库
+            MediaStore.Images.Media.insertImage(DisPictureDetailActivity.this.getContentResolver(),//将图片插入系统图库
                     file.getAbsolutePath(), fileName, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -454,11 +454,11 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);//保存成功，通知系统更新相册
         Uri uri = Uri.fromFile(filena);
         intent.setData(uri);
-        this.sendBroadcast(intent);
-        this.runOnUiThread(new Runnable() {
+        DisPictureDetailActivity.this.sendBroadcast(intent);
+        DisPictureDetailActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtils.showShort(this, "图片已保存到" + path + "/" + fileName);
+                ToastUtils.showShort(DisPictureDetailActivity.this, "图片已保存到" + path + "/" + fileName);
             }
         });
     }

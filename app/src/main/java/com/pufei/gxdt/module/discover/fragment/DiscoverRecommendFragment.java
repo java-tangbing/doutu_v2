@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -70,7 +71,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     public void getData() {
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
-        discoverAdapter.setEnableLoadMore(false);
+//        discoverAdapter.setEnableLoadMore(false);
         discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
 //        discoverAdapter.addHeaderView(videoHeaderView);
@@ -119,6 +120,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 //        if (bean.getResult() == null) return;
         if (bean.getResult().size() > 0) {
             if (isLoadMore) {
+
+
                 page = page + 1;
                 mlist.addAll(bean.getResult());
                 discoverAdapter.notifyDataSetChanged();
@@ -126,6 +129,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 discoverAdapter.loadMoreComplete();
             }
             if (isRefreshing) {
+
+
                 page = page + 1;
                 mlist = new ArrayList<>();
                 mlist.addAll(bean.getResult());
@@ -136,6 +141,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 ToastUtils.showShort(getActivity(), "刷新完毕");
             }
             if (isfirst) {
+
+
                 isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
@@ -172,6 +179,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     //下拉刷新
     @Override
     public void onRefresh() {
+
+
         page = 1;
         isRefreshing = true;
         isLoadMore = false;
@@ -183,6 +192,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     //上拉加载跟多
     @Override
     public void onLoadMoreRequested() {
+
         isLoadMore = true;
         isRefreshing = false;
         setMyadapter();
