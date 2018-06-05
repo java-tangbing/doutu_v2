@@ -208,7 +208,6 @@
 
         <service android:name="com.pufei.gxdt.module.floating.FloatWindowService" />
         <service android:name="com.pufei.gxdt.module.update.service.UpdateService" />
-
         <provider
             android:name="com.baidu.mobads.openad.FileProvider"
             android:authorities="${packageName}.bd.provider"

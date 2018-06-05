@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.pufei.gxdt.R;
-import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.discover.adapter.DisWorksdAdapter;
 import com.pufei.gxdt.module.discover.bean.DisWorksBean;
@@ -96,7 +94,7 @@ public class DisWorksActivity extends BaseMvpActivity<DisWorksPresenter> impleme
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.worksDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this, "请检查网络设�);
+            ToastUtils.showShort(this, "请检查网络设置");
         }
 
     }
@@ -121,10 +119,10 @@ public class DisWorksActivity extends BaseMvpActivity<DisWorksPresenter> impleme
         GlideApp.with(this).load(bean.getResult().getUser().getHeader())
                 .placeholder(R.mipmap.ic_default_picture).into(cvUserIcon);
         tvUserName.setText(bean.getResult().getUser().getUsername());
-        if ("�.equals(bean.getResult().getUser().getGender())) {
+        if ("女".equals(bean.getResult().getUser().getGender())) {
             GlideApp.with(this).load(R.mipmap.heuser_ic_woman)
                     .into(ivUserSex);
-        } else if ("�.equals(bean.getResult().getUser().getGender())) {
+        } else if ("男".equals(bean.getResult().getUser().getGender())) {
             GlideApp.with(this).load(R.mipmap.heuser_ic_man)
                     .into(ivUserSex);
         }

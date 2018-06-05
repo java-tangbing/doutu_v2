@@ -36,23 +36,22 @@ import okhttp3.Response;
  */
 
 public class AdvUtil {
-    public static void setAdvBaiDu(Context context, RelativeLayout layout) {
+    public static void setAdvBaiDu(final  Context context, final RelativeLayout layout) {
+        final Activity activity  =(Activity) context;
         AdSettings.setKey(new String[]{"baidu", "中国"});
         String adPlaceID = "5831972";//重要：请填上你的代码位 ID,否则无法请求到广告
-        AdView adView = new AdView(context, adPlaceID);
+        final AdView adView = new AdView(context, adPlaceID);
         adView.setListener(new AdViewListener() {
             public void onAdSwitch() {
-                Log.w("", "onAdSwitch");
+
             }
 
             public void onAdShow(JSONObject info) {
                 // 广告已经渲染出来
-                Log.w("tb", "onAdShow " + info.toString());
             }
 
             public void onAdReady(AdView adView) {
                 // 资源已经缓存完毕，还没有渲染出来
-                Log.w("tb", "onAdReady " + adView);
             }
 
             public void onAdFailed(String reason) {
@@ -60,13 +59,17 @@ public class AdvUtil {
             }
 
             public void onAdClick(JSONObject info) {
-                // Log.w("tb", "onAdClick " + info.toString());
 
             }
 
             @Override
             public void onAdClose(JSONObject arg0) {
-                Log.w("tb", "onAdClose");
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                       layout.setVisibility(View.GONE);
+                    }
+                });
             }
         });
         DisplayMetrics dm = new DisplayMetrics();
@@ -76,36 +79,51 @@ public class AdvUtil {
         int width = Math.min(winW, winH);
         int height = width * 3 / 20;
         //将 adView 添加到父控件中（注：该父控件不一定为您的根控件，只要该控件能通过 addView添加广告视图即可）
-        RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width,
+        final RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width,
                 height);
         rllp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layout.addView(adView, rllp);
-
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                layout.addView(adView, rllp);
+            }
+        });
     }
-    public static  void setAdvTecent(Context context , RelativeLayout layout){
-        BannerView bv;
+    public static  void setAdvTecent(final Context context , final RelativeLayout layout){
+        final Activity activity  =(Activity) context;
+        final BannerView bv;
         String posId ="5030634484990442";
         bv = new BannerView((Activity) context, ADSize.BANNER,"1106938548",posId);
-        // 注意：如果开发者的banner不是始终展示在屏幕中的话，请关闭自动刷新，否则将导致曝光率过低。
-        // 并且应该自行处理：当banner广告区域出现在屏幕后，再手动loadAD。
         bv.setRefresh(30);
         bv.setADListener(new AbstractBannerADListener() {
 
             @Override
             public void onNoAD(AdError error) {
-                Log.i(
-                        "tb",
-                        String.format("Banner onNoAD，eCode = %d, eMsg = %s", error.getErrorCode(),
-                                error.getErrorMsg()));
             }
 
             @Override
             public void onADReceiv() {
-                Log.i("tb", "ONBannerReceive");
+            }
+
+            @Override
+            public void onADClosed() {
+                super.onADClosed();
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout.setVisibility(View.GONE);
+                    }
+                });
             }
         });
-        layout.addView(bv);
-        bv.loadAD();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                layout.addView(bv);
+                bv.loadAD();
+            }
+        });
+
     }
     public  static  void  getAdvHttp(final Context context, final  RelativeLayout layout,int position){
         try {

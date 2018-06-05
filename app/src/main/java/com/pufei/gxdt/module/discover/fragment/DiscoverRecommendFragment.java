@@ -96,7 +96,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(getActivity(), "请检查网络设�);
+            ToastUtils.showShort(getActivity(), "请检查网络设置");
         }
     }
 

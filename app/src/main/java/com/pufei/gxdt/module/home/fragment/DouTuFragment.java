@@ -77,6 +77,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
         srl_doutu.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         srl_doutu.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         srl_doutu.setEnableLoadmore(true);
+        srl_doutu.setEnableLoadmoreWhenContentNotFull(true);
         srl_doutu.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {

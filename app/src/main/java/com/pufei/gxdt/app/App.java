@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.multidex.MultiDex;
 
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
@@ -13,8 +12,6 @@ import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 
 
@@ -60,6 +57,11 @@ public class App extends Application {
      */
     protected void initPrefs() {
         SharedPreferencesUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     private void initUMConfig() {

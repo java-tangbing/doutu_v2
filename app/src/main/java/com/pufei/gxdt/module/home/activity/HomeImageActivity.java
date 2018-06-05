@@ -19,8 +19,11 @@ import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
+import com.pufei.gxdt.module.home.model.ThemeResultBean;
 import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
+import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
+import com.pufei.gxdt.module.home.view.ThemeImageView;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
@@ -50,7 +53,7 @@ import butterknife.OnClick;
  * Created by tb on 2018/5/28.
  */
 
-public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implements HomeListView {
+public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> implements ThemeImageView {
     @BindView(R.id.tv_title)
     TextView tv_title;
     @BindView(R.id.ll_title_left)
@@ -77,34 +80,13 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
     List<PictureResultBean.ResultBean> list = new ArrayList<>();
     private int page = 1;
     @Override
-    public void setPresenter(HomeListPresenter presenter) {
+    public void setPresenter(ThemeImagePresenter presenter) {
         if (presenter == null) {
-            this.presenter = new HomeListPresenter();
+            this.presenter = new ThemeImagePresenter();
             this.presenter.attachView(this);
         }
     }
 
-    @Override
-    public void resultHomeList(HomeResultBean bean) {
-
-    }
-
-    @Override
-    public void resultHomeDetailList(PictureResultBean bean) {
-        if(bean!=null){
-            if(page == 1){
-                list.clear();
-            }
-            list.addAll(bean.getResult());
-            adapter.notifyDataSetChanged();
-        }
-
-    }
-
-    @Override
-    public void resultHomeTypeList(HomeTypeBean bean) {
-
-    }
 
     @Override
     public void initView() {
@@ -191,7 +173,7 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
                 jsonObject.put("category_id", getIntent().getExtras().getString("category_id"));
                 jsonObject.put("page", page + "");
                 jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-                presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                presenter.getThemeDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -211,5 +193,22 @@ public class HomeImageActivity extends BaseMvpActivity<HomeListPresenter> implem
     @Override
     public int getLayout() {
         return R.layout.activity_home_image;
+    }
+
+    @Override
+    public void resultThemeImage(ThemeResultBean bean) {
+
+    }
+
+    @Override
+    public void resultThemeImageDetail(PictureResultBean bean) {
+        if(bean!=null){
+            if(page == 1){
+                list.clear();
+            }
+            list.addAll(bean.getResult());
+            adapter.notifyDataSetChanged();
+        }
+
     }
 }

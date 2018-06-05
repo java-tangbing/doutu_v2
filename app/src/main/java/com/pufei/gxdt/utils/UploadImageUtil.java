@@ -3,7 +3,6 @@ package com.pufei.gxdt.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -12,12 +11,9 @@ import com.google.gson.Gson;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.db.DraftInfo;
 import com.pufei.gxdt.db.ImageDraft;
-import com.pufei.gxdt.db.ImageDraft_Table;
 import com.pufei.gxdt.db.TextDraft;
-import com.pufei.gxdt.db.TextDraft_Table;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.widgets.GlideApp;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.greenrobot.eventbus.EventBus;
 

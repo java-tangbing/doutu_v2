@@ -29,6 +29,7 @@ import com.pufei.gxdt.module.home.activity.HomeImageActivity;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeActivity;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
+import com.pufei.gxdt.module.home.activity.PictureActivity;
 import com.pufei.gxdt.module.home.activity.SearchActivity;
 import com.pufei.gxdt.module.home.activity.ThemeImageActivity;
 import com.pufei.gxdt.module.home.adapter.HomeListAdapter;

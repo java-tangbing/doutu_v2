@@ -76,5 +76,7 @@
     <color name="submit_btn_pressed">#166EA5</color>
     <color name="submit_btn_disabled">@color/hex_bcbcbc</color>
     <color name="white_pressed">#e5e5e5</color>
+    <color name="yellow_view">#EBCC00</color>
+    <color name="text_grey">#686868</color>
 
 </resources>
