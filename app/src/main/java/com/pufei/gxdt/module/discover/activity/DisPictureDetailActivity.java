@@ -154,11 +154,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        onCreate(null);
-    }
 
     public void getImageDetailList() {
         switch (type) {
