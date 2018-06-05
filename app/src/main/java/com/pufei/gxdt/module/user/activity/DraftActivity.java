@@ -148,11 +148,13 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
                 break;
             case R.id.tv_publish:
 //                if(imageBase64 != null && bgImageBase64 != null) {
-                    showLoading("上传中...");
                     final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(datas.get(position).imageId)).and(ImageDraft_Table.isDraft.is(true)).queryList();
                     final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(datas.get(position).imageId)).and(TextDraft_Table.isDraft.is(true)).queryList();
                     getBase64(datas.get(position).imagePath,datas.get(position).make_url);
-                    UploadImageUtil.uploadImage(this, datas.get(position), datas.get(position).imagePath, imageBase64, bgImageBase64, imageDrafts, textDrafts);
+                    if(!TextUtils.isEmpty(imageBase64) && !TextUtils.isEmpty(bgImageBase64)) {
+                        showLoading("上传中...");
+                        UploadImageUtil.uploadImage(this, datas.get(position), datas.get(position).imagePath, imageBase64, bgImageBase64, imageDrafts, textDrafts);
+                    }
 //                }
 
                 break;
