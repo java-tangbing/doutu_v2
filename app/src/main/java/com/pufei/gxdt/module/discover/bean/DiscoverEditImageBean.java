@@ -1,8 +1,9 @@
 package com.pufei.gxdt.module.discover.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DiscoverEditImageBean {
+public class DiscoverEditImageBean implements Serializable {
 
 
     /**
@@ -39,7 +40,7 @@ public class DiscoverEditImageBean {
         this.result = result;
     }
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         /**
          * orgin_url : http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg
          * data : [{"id":"4","uid":"339839","hot":"","orginid":"30","orgintable":"amuse_images1","height":"200","width":"300","title":"标题","dateline":"1527215999","url":"http://dtds.oss-cn-hangzhou.aliyuncs.com/2cf01891759faaaa0dfc19846bdce8a4.jpeg","view":"","user":{"header":"http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg","username":"ab33333","uid":"339839"}}]
@@ -104,7 +105,7 @@ public class DiscoverEditImageBean {
             this.data = data;
         }
 
-        public static class DataBean {
+        public static class DataBean implements Serializable {
             /**
              * id : 4
              * uid : 339839
@@ -248,7 +249,7 @@ public class DiscoverEditImageBean {
                 this.user = user;
             }
 
-            public static class UserBean {
+            public static class UserBean implements Serializable{
                 /**
                  * header : http://dtds.oss-cn-hangzhou.aliyuncs.com/f8e8334a.jpg
                  * username : ab33333

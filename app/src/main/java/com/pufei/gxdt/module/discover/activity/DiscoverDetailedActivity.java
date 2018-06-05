@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.adapter.DiscoverDetailedAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
@@ -20,6 +22,7 @@ import com.pufei.gxdt.module.discover.view.DiscoverView;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.viewpager.DividerGridItemDecoration;
@@ -51,6 +54,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     private List<DiscoverEditImageBean.ResultBean.DataBean> mlist;
     private DiscoverDetailedAdapter discoverDetailedAdapter;
     private String orginid, orgintable, id, uid;
+    private String auth = "";
 
     @Override
     public void initView() {
@@ -59,6 +63,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         orginid = intent.getStringExtra("orginid");
         orgintable = intent.getStringExtra("orgintable");
         uid = intent.getStringExtra("uid");
+        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
@@ -96,6 +101,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
             jsonObject.put("orginid", orginid);//orginid 原始图id
             jsonObject.put("orgintable", orgintable);//orgintable 数据�
             jsonObject.put("uid", uid);
+            jsonObject.put("auth", auth);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -152,11 +158,11 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         bundle.putString("id", mlist.get(position).getId());
         bundle.putString("orginid", mlist.get(position).getOrginid());
         bundle.putString("orgintable", mlist.get(position).getOrgintable());
-        bundle.putSerializable("pictureList", (Serializable) mlist);
         bundle.putInt("picture_index", position);
         bundle.putString("type", "disdet");
-//        bundle.putString("isSaveImg", mlist.get(position).getIsSaveImg());
-        bundle.putString("isSaveImg", "1");
+        bundle.putString("isSaveImg", mlist.get(position).getIsSaveImg());
+//        bundle.putString("isSaveImg", "1");
+        bundle.putSerializable("picture_list", (Serializable) mlist);
         intent.putExtras(bundle);
         startActivity(intent);
 

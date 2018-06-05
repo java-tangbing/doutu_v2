@@ -98,6 +98,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             pictureList01 = (List<DiscoverEditImageBean.ResultBean.DataBean>) intent.getSerializableExtra("picture_list");
         }
 
+
 //        sendpictureList=(List<DiscoverListBean.ResultBean>) intent.getSerializableExtra("picture_list");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -195,11 +196,25 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         mcount = bean.getResult().getCount();
         URL = bean.getResult().getUrl();
 
-        if ("0".equals(pictureList.get(index).getIsSaveImg())) {
-            activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-        } else {
-            activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+        switch (type) {
+            case 0:
+                if ("0".equals(pictureList.get(index).getIsSaveImg())) {
+                    activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                } else {
+                    activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+                }
+                break;
+
+            case 1:
+                if ("0".equals(pictureList01.get(index).getIsSaveImg())) {
+                    activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                } else {
+                    activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+                }
+                break;
         }
+
+
     }
 
     @Override
@@ -220,13 +235,29 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     @Override
     public void resultAddFavorite(FavoriteBean bean) {
         if (bean != null) {
-            if ("0".equals(bean.getCode())) {
-                pictureList.get(index).setIsSaveImg("1");
-                activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
-                ToastUtils.showShort(this, "收藏成功");
-            } else {
-                pictureList.get(index).setIsSaveImg("0");
-                ToastUtils.showShort(this, bean.getMsg());
+            switch (type) {
+                case 0:
+                    if ("0".equals(bean.getCode())) {
+                        pictureList.get(index).setIsSaveImg("1");
+                        activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+                        ToastUtils.showShort(this, "收藏成功");
+                    } else {
+                        pictureList.get(index).setIsSaveImg("0");
+                        ToastUtils.showShort(this, bean.getMsg());
+                    }
+
+                    break;
+                case 1:
+                    if ("0".equals(bean.getCode())) {
+                        pictureList01.get(index).setIsSaveImg("1");
+                        activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+                        ToastUtils.showShort(this, "收藏成功");
+                    } else {
+                        pictureList01.get(index).setIsSaveImg("0");
+                        ToastUtils.showShort(this, bean.getMsg());
+                    }
+
+                    break;
             }
 
         }
@@ -235,14 +266,29 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     @Override
     public void resultCancleFavorite(FavoriteBean bean) {
         if (bean != null) {
-            if ("0".equals(bean.getCode())) {
-                pictureList.get(index).setIsSaveImg("0");
-                activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-                ToastUtils.showShort(this, "取消收藏成功");
-            } else {
-                pictureList.get(index).setIsSaveImg("1");
-                ToastUtils.showShort(this, bean.getMsg());
+            switch (type) {
+                case 0:
+                    if ("0".equals(bean.getCode())) {
+                        pictureList.get(index).setIsSaveImg("0");
+                        activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                        ToastUtils.showShort(this, "取消收藏成功");
+                    } else {
+                        pictureList.get(index).setIsSaveImg("1");
+                        ToastUtils.showShort(this, bean.getMsg());
+                    }
+                    break;
+                case 1:
+                    if ("0".equals(bean.getCode())) {
+                        pictureList01.get(index).setIsSaveImg("0");
+                        activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                        ToastUtils.showShort(this, "取消收藏成功");
+                    } else {
+                        pictureList01.get(index).setIsSaveImg("1");
+                        ToastUtils.showShort(this, bean.getMsg());
+                    }
+                    break;
             }
+
         }
 
     }
@@ -286,7 +332,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 bundle01.putString("orgintable", orgintable);
                 bundle01.putString("uid", uid);
                 intent01.putExtras(bundle01);
-                startActivity(intent01);
+                startActivityForResult(intent01);
 //                } else {
 //                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
 //                }
@@ -296,7 +342,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 break;
             case R.id.activity_home1_shoucang:
                 if (App.userBean != null) {
-                    if ("0".equals(pictureList.get(index).getIsSaveImg())) {//加收藏
+                    if ("0".equals(pictureList.get(index).getIsSaveImg())||"0".equals(pictureList01.get(index).getIsSaveImg())) {//加收藏
                         if (NetWorkUtil.isNetworkConnected(this)) {
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
