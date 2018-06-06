@@ -1,19 +1,34 @@
 package com.pufei.gxdt.module.discover.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.mylhyl.acp.Acp;
+import com.mylhyl.acp.AcpListener;
+import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -37,6 +52,10 @@ import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,6 +113,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     private DisPictureAdapter adapter01;
     private String URL;
     private int type = 0;
+    private static AlertDialog sharedialog;
 
     @Override
     public void initView() {
@@ -344,7 +364,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     }
 
 
-    @OnClick({R.id.look_edit_image_iv, R.id.tv_change_img, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
+    @OnClick({R.id.look_edit_image_iv, R.id.tv_change_img, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.look_edit_image_iv:
@@ -363,6 +383,20 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 //                } else {
 //                    ToastUtils.showShort(this, getResources().getString(R.string.none_pic));
 //                }
+                break;
+            case R.id.tv_share_qq:
+                if (ActivityCompat.checkSelfPermission(DisPictureDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    openPermissin();
+                } else {
+                    QQshowShare(URL, SHARE_MEDIA.QQ);
+                }
+                break;
+            case R.id.tv_share_wx:
+                if (ActivityCompat.checkSelfPermission(DisPictureDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    openPermissin();
+                } else {
+                    WXshowShare(URL, SHARE_MEDIA.WEIXIN);
+                }
                 break;
             case R.id.ib_dowm_load:
                 new Thread(new Runnable() {
@@ -462,6 +496,102 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
             }
         }
+    }
+
+    private void openPermissin() {
+        Acp.getInstance(this)
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                        new AcpListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onGranted() {
+
+                            }
+
+                            @Override
+                            public void onDenied(List<String> permissions) {
+                                ToastUtils.showShort(DisPictureDetailActivity.this, "请求权限失败,请手动开启！");
+                            }
+                        });
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            shareDialog(DisPictureDetailActivity.this);
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            ToastUtils.showShort(DisPictureDetailActivity.this, "分享成功");
+            sharedialog.dismiss();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            sharedialog.dismiss();
+            ToastUtils.showShort(DisPictureDetailActivity.this, "分享失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            sharedialog.dismiss();
+            ToastUtils.showShort(DisPictureDetailActivity.this, "分享取消");
+        }
+    };
+
+    public void shareDialog(Activity activity) {
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.img_animation);
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        animation.setInterpolator(lin);
+        sharedialog = new AlertDialog.Builder(activity, R.style.TransDialogStyle).create();
+        if (!activity.isFinishing()) {
+            sharedialog.show();
+        }
+        Window window = sharedialog.getWindow();
+        window.setContentView(R.layout.share_dialog);
+        ImageView imageView = (ImageView) window.findViewById(R.id.share_dialog_image);
+        imageView.setAnimation(animation);
+    }
+
+    private void QQshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (URL != null) {
+            UMImage image = null;
+            if (URL.contains("http")) {
+                image = new UMImage(this, URL);
+            } else {
+                image = new UMImage(this, BitmapFactory.decodeFile(URL));
+            }
+            try {
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } catch (NullPointerException e) {
+                ToastUtils.showShort(DisPictureDetailActivity.this, "选择的内容为空，请重试");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void WXshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (URL != null) {
+            UMImage image = null;
+            if (URL.contains("http")) {
+                image = new UMImage(this, URL);
+            } else {
+                image = new UMImage(this, BitmapFactory.decodeFile(URL));
+            }
+            try {
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } catch (NullPointerException e) {
+                ToastUtils.showShort(DisPictureDetailActivity.this, "选择的内容为空，请重试");
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void GetImageInputStream(String imageurl) {//下载图片
