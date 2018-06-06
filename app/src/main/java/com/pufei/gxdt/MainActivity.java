@@ -135,7 +135,7 @@ public class MainActivity extends BaseActivity {
                         new AcpListener() {
                             @Override
                             public void onGranted() {
-//                                StartUtils.getInstance(MainActivity.this).detection();
+                                StartUtils.getInstance(MainActivity.this).detection();
                             }
 
                             @Override
