@@ -22,46 +22,53 @@ import java.util.List;
 public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyHolder> {
     private Context mcontext;
     private List<String> list;
-    private List<String>imagelist;
+    private List<String> imagelist;
     private int a;
-    private String SHARE_APP_TAG="frist";
-    public JokeDetalAdpater(Context context, List<String> list, List<String> list1){
-        this.mcontext=context;
-        this.list=list;
-        this.imagelist=list1;
+    private String SHARE_APP_TAG = "frist";
+
+    public JokeDetalAdpater(Context context, List<String> list, List<String> list1) {
+        this.mcontext = context;
+        this.list = list;
+        this.imagelist = list1;
     }
+
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(mcontext).inflate(R.layout.activity_jokedetal_item,parent,false);
-        MyHolder holder=new MyHolder(view,itemOnclick);
+        View view = LayoutInflater.from(mcontext).inflate(R.layout.activity_jokedetal_item, parent, false);
+        MyHolder holder = new MyHolder(view, itemOnclick);
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final MyHolder holder, int position) {
-        final String value=list.get(position);
-        for (int i=0;i<imagelist.size();i++){
-            if (value.equals(imagelist.get(i))){
+        final String value = list.get(position);
+        for (int i = 0; i < imagelist.size(); i++) {
+            if (value.equals(imagelist.get(i))) {
                 holder.ll.setTag(i);
             }
         }
-        if (value.contains("jpg")&&value.contains("http")){
-            if (holder.iv.getScaleType() != ImageView.ScaleType.FIT_XY) {
-                holder.iv.setScaleType(ImageView.ScaleType.FIT_XY);
-            }
-                holder.tv.setVisibility(View.GONE);
-                holder.ll.setVisibility(View.VISIBLE);
-                holder.ivgif.setVisibility(View.GONE);
-                GlideApp.with(mcontext)
-                      .load(value).placeholder(R.mipmap.ic_default_picture)
-                      .into(holder.iv);
+        if (value.contains("jpg") && value.contains("http")) {
+            holder.tv.setVisibility(View.GONE);
+            holder.ll.setVisibility(View.VISIBLE);
+            holder.ivgif.setVisibility(View.GONE);
+            GlideApp.with(mcontext)
+                    .load(value).placeholder(R.mipmap.ic_default_picture)
+                    .into(holder.iv);
 
-            }else {
-                holder.tv.setVisibility(View.VISIBLE);
-                holder.ll.setVisibility(View.GONE);
-                holder.tv.setText(value);
-            }
+//        } else if (value.contains("gif") && value.contains("http")) {
+//            holder.tv.setVisibility(View.GONE);
+//            holder.ll.setVisibility(View.GONE);
+//            holder.ivgif.setVisibility(View.VISIBLE);
+//            GlideApp.with(mcontext)
+//                    .load(value).placeholder(R.mipmap.ic_default_picture)
+//                    .into(holder.iv);
+        } else {
+            holder.tv.setVisibility(View.VISIBLE);
+            holder.ll.setVisibility(View.GONE);
+            holder.ivgif.setVisibility(View.GONE);
+            holder.tv.setText(value);
+        }
 
     }
 
@@ -71,17 +78,18 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
         return list.size();
     }
 
-    class MyHolder extends XRecyclerView.ViewHolder{
+    class MyHolder extends XRecyclerView.ViewHolder {
         private TextView tv;
-        private ImageView iv,ivgif;
+        private ImageView iv, ivgif;
         private FrameLayout ll;
-        public MyHolder(View itemView,MyItemOnclick myItemOnclick) {
+
+        public MyHolder(View itemView, MyItemOnclick myItemOnclick) {
             super(itemView);
-            itemOnclick=myItemOnclick;
-            ivgif= (ImageView) itemView.findViewById(R.id.activity_jokedetail_item_gif);
-            tv= (TextView) itemView.findViewById(R.id.activity_jokedetail_item_tv);
-            iv= (ImageView) itemView.findViewById(R.id.activity_jokedetail_item_iv);
-            ll= (FrameLayout) itemView.findViewById(R.id.activity_jokedetail_item_ll);
+            itemOnclick = myItemOnclick;
+            ivgif = (ImageView) itemView.findViewById(R.id.activity_jokedetail_item_gif);
+            tv = (TextView) itemView.findViewById(R.id.activity_jokedetail_item_tv);
+            iv = (ImageView) itemView.findViewById(R.id.activity_jokedetail_item_iv);
+            ll = (FrameLayout) itemView.findViewById(R.id.activity_jokedetail_item_ll);
             ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,12 +106,15 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
         }
     }
 
-    private MyItemOnclick itemOnclick=null;
+    private MyItemOnclick itemOnclick = null;
+
     public void setOnItemClickListener(MyItemOnclick listener) {
         this.itemOnclick = listener;
     }
-    public interface  MyItemOnclick{
+
+    public interface MyItemOnclick {
         void OnImage(int position);
+
         void OnlongImage(int position);
     }
 }

@@ -22,16 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:scaleType="fitXY"
             android:id="@+id/activity_jokedetail_item_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/activity_jokedetail_item_gif"
             android:layout_gravity="center"
-            android:src="@mipmap/gif"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </FrameLayout>
 
 </FrameLayout>

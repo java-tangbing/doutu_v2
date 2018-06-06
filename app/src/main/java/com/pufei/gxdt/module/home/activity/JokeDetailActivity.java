@@ -53,7 +53,7 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
     private JokeDetalAdpater adpater;
     private List<String> list = new ArrayList<>();
     private List<String> imagelist = new ArrayList<>();
-    private TextView title,time,advert_title,advert_describe;
+    private TextView title,time;
     JSONArray jsonObject ;
     @Override
     public void initView() {
@@ -63,18 +63,17 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         View headerView = lif.inflate(R.layout.title_time_joke, null);
         title = (TextView) headerView.findViewById(R.id.title_time_title);
         time = (TextView) headerView.findViewById(R.id.title_time_time);
-        View  footView = lif.inflate(R.layout.adver_layout,null);
-        RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
-        AdvUtil.getAdvHttp(this,relativeLayout,4);
+        //View  footView = lif.inflate(R.layout.adver_layout,null);
+        //RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT );
         headerView.setLayoutParams(layoutParams);
-        footView.setLayoutParams(layoutParams);
+       //footView.setLayoutParams(layoutParams);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         activityJokedetailRy.setLayoutManager(layoutManager);
         activityJokedetailRy.addHeaderView(headerView);
-        activityJokedetailRy.addFootView(footView);
+//        activityJokedetailRy.addFootView(footView);
         activityJokedetailRy.setPullRefreshEnabled(false);
         adpater = new JokeDetalAdpater(this, list, imagelist);
         activityJokedetailRy.setAdapter(adpater);
