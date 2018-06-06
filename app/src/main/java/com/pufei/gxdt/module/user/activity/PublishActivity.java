@@ -123,7 +123,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 bundle.putInt("picture_index", postion);
                 bundle.putSerializable("picture_list", (Serializable) jokeList);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,1);
 
             }
 
@@ -189,5 +189,13 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     private  int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            page = 1;
+            requestJoke(page);
+        }
     }
 }
