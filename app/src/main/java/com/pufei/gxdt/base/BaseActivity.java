@@ -24,7 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayout());
         StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.white));
         AppManager.getAppManager().addActivity(this);
-//        PushAgent.getInstance(this).onAppStart();
+        MobclickAgent.setCatchUncaughtExceptions(true);
         ButterKnife.bind(this);
         initView();
         getData();

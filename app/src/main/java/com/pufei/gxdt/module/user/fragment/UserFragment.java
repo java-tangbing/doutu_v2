@@ -54,8 +54,6 @@ import static com.pufei.gxdt.utils.SignUtils.IsToday;
 
 public class UserFragment extends BaseFragment {
 
-    @BindView(R.id.tv_checkin_state)
-    TextView tv_checkin_state;
     @BindView(R.id.user_name)
     TextView tvUserName;
     @BindView(R.id.user_dec)
@@ -68,6 +66,8 @@ public class UserFragment extends BaseFragment {
     TextView fragmentCollectSign;
     @BindView(R.id.fragment_collect_loading_tv)
     TextView fragmentCollectLoadingTv;
+    @BindView(R.id.tv_checkin_state)
+    TextView fragmentCollectSignBtn;
     private String total = "0";
     private String times = "0";
     private boolean isSign = false;
@@ -101,13 +101,6 @@ public class UserFragment extends BaseFragment {
         timeList = new ArrayList<>();
         sharedPreferences = getActivity().getSharedPreferences(SHARE_APP_USER, 0);
         if (App.userBean != null) {
-            Log.e(TAG, "name: " + App.userBean.getName());
-            Log.e(TAG, "header: " + App.userBean.getHead());
-            Log.e(TAG, "gender: " + App.userBean.getGender());
-            Log.e(TAG, "address: " + App.userBean.getAddress());
-            Log.e(TAG, "Auth: " + App.userBean.getAuth());
-            Log.e(TAG, "Mind: " + App.userBean.getMind());
-
             tvUserName.setText(App.userBean.getName());
             user_dec.setText(App.userBean.getMind());
             if (!TextUtils.isEmpty(App.userBean.getGender()) && App.userBean.getGender().equals("男")) {
@@ -152,7 +145,7 @@ public class UserFragment extends BaseFragment {
                 if (App.userBean != null) {
                     sharedPreferences.edit().putLong(App.userBean.getAuth(), System.currentTimeMillis()).apply();
                     initSign();
-                    EventBus.getDefault().post(new EventBean(Contents.DAY_SIGN, null));
+                    //EventBus.getDefault().post(new EventBean(Contents.DAY_SIGN, null));
                     Intent intent1 = new Intent(getActivity(), SignActivity.class);
                     intent1.putExtra("total", total);
                     intent1.putExtra("times", times);
@@ -286,14 +279,14 @@ public class UserFragment extends BaseFragment {
                                             e.printStackTrace();
                                         }
                                     }
-//                                    try {
-//                                        android.util.Log.e("StoreActivity", App.Total_score + "----");
-//                                        App.Total_score = getScoreBean.getResult().getTotal_score();
-//                                        EventBus.getDefault().post(new EventBean(Constants.USER_EXCHANGE, null));
+                                    try {
+                                        android.util.Log.e("StoreActivity", App.Total_score + "----");
+                                        App.Total_score = getScoreBean.getResult().getTotal_score();
+//                                        EventBus.getDefault().post(new EventBean(Contents.USER_EXCHANGE, null));
 //                                        fragmentCollectFenshu.setText(App.Total_score);
-//                                    } catch (Exception e) {
-//                                        e.printStackTrace();
-//                                    }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
                         }

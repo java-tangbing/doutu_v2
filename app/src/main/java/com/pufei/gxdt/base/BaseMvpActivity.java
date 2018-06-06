@@ -28,11 +28,10 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
         AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.white));
-//        PushAgent.getInstance(this).onAppStart();
 //        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 //        UMConfigure.setLogEnabled(true);
 //        UMConfigure.init(this,UMConfigure.DEVICE_TYPE_PHONE, "");
-//        MobclickAgent.setCatchUncaughtExceptions(true);
+        MobclickAgent.setCatchUncaughtExceptions(true);
         setPresenter(presenter);
         initView();
         getData();
