@@ -56,7 +56,7 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
 
     @Override
     public void initView() {
-        jokeAdapter = new FavoriteAdapter(getActivity(), jokeList,3);
+        jokeAdapter = new FavoriteAdapter(getActivity(),jokeList,3);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_pkg_xryv.setLayoutManager(layoutManager);
@@ -106,7 +106,7 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
                 intent.putExtra("title", jokeList.get(postion).getCategory_name());
                 intent.putExtra("eyes",  jokeList.get(postion).getImgs().get(0).getView());
                 intent.putExtra("hot",  jokeList.get(postion).getImgs().get(0).getHot());
-                startActivity(intent);
+                FavoritePkgFragment.this.startActivityForResult(intent,1);
             }
 
             @Override
@@ -170,5 +170,13 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
     @Override
     public void resultJokeDetail(MyImagesBean bean) {
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            page = 1;
+            requestJoke(page);
+        }
     }
 }

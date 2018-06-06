@@ -77,7 +77,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
     public void initView() {
         xrl_doutu.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         xrl_doutu.addItemDecoration(new SpaceItemDecoration(dp2px(getActivity(), 10)));
-        adapter = new ImageTypeAdapter(getActivity(), picturelist);
+        adapter = new ImageTypeAdapter(getActivity(),DouTuFragment.this, picturelist);
         xrl_doutu.setAdapter(adapter);
         srl_doutu.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         srl_doutu.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
@@ -178,4 +178,14 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
     public void resultHomeTypeList(HomeTypeBean bean) {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            page = 1;
+            requestData(page);
+        }
+    }
+
 }

@@ -30,9 +30,9 @@ public class NewsSystemAdapter extends BaseQuickAdapter<NewsBean.ResultBean, Bas
         helper.addOnClickListener(R.id.new_system_item_bd)
                 .setText(R.id.news_system_item_dateline_tv, item.getDateline())
                 .setText(R.id.news_system_item_content_tv, item.getContent());
-        GlideApp.with(mContext).load(item.getUrl())
-                .placeholder(R.mipmap.my_uer_picture)
-                .into((CircleImageView) helper.getView(R.id.news_system_item_cv));
+//        GlideApp.with(mContext).load(item.getUrl())
+//                .placeholder(R.mipmap.my_uer_picture)
+//                .into((CircleImageView) helper.getView(R.id.news_system_item_cv));
     }
 
 }

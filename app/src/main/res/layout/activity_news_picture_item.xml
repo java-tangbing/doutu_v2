@@ -37,7 +37,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="5dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/news_ic_assistant" />
 
         <LinearLayout
             android:id="@+id/news_picture_item"
@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:gravity="center_horizontal"
+
                         android:text="引用了您的表情"
                         android:textSize="16sp" />
                 </LinearLayout>

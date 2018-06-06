@@ -81,7 +81,7 @@
         <activity
             android:name=".module.user.activity.AgreeementActivity"
             android:screenOrientation="portrait" />
-<activity
+        <activity
             android:name=".module.user.activity.FeedBackActivity"
             android:screenOrientation="portrait" />
         <activity

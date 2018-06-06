@@ -39,9 +39,9 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.Resu
             case 0:
                 helper.setText(R.id.news_feedback_item_server_dateline_tv, item.getDateline())
                         .setText(R.id.news_feedback_item_server_content_tv, item.getContent());
-                GlideApp.with(mContext).load(item.getUrl())
-                        .placeholder(R.mipmap.my_uer_picture)
-                        .into((CircleImageView) helper.getView(R.id.news_feedback_item_server_icon_cv));
+//                GlideApp.with(mContext).load(R.mipmap.news_ic_system)
+//                        .placeholder(R.mipmap.news_ic_system)
+//                        .into((CircleImageView) helper.getView(R.id.news_feedback_item_server_icon_cv));
                 break;
         }
 

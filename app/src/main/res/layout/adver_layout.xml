@@ -5,5 +5,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/your_original_layout"
-        android:layout_height="60dp"></RelativeLayout>
+        android:layout_height="60dp">
+        <ImageView
+            android:id="@+id/iv_adv"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:scaleType="fitXY"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 </LinearLayout>
