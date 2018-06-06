@@ -1,9 +1,12 @@
 package com.pufei.gxdt;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
@@ -11,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.mylhyl.acp.Acp;
+import com.mylhyl.acp.AcpListener;
+import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.TabVpAdapter;
@@ -25,6 +31,8 @@ import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.module.user.fragment.UserFragment;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.StartUtils;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
 import com.umeng.message.entity.Alias;
@@ -37,6 +45,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
 
 public class MainActivity extends BaseActivity {
 
@@ -82,10 +95,10 @@ public class MainActivity extends BaseActivity {
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
                 ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setSelected(true);
                 homeVp.setCurrentItem(tab.getPosition());
-                if(tab.getPosition() == 2) {
+                if (tab.getPosition() == 2) {
                     Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
                     startActivity(intent);
-                }else {
+                } else {
                     previousItem = tab.getPosition();
                 }
             }
@@ -110,13 +123,26 @@ public class MainActivity extends BaseActivity {
         mPushAgent.setAlias(alias, "User", new UTrack.ICallBack() {
             @Override
             public void onMessage(boolean isSuccess, String message) {
-                Log.e("push",isSuccess +" " + message);
+                Log.e("push", isSuccess + " " + message);
             }
         });
     }
 
     @Override
     public void getData() {
+        Acp.getInstance(this)
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                        new AcpListener() {
+                            @Override
+                            public void onGranted() {
+//                                StartUtils.getInstance(MainActivity.this).detection();
+                            }
+
+                            @Override
+                            public void onDenied(List<String> permissions) {
+                                ToastUtils.showShort(MainActivity.this, "请求权限失败,请手动开启！");
+                            }
+                        });
     }
 
     @Override
@@ -131,9 +157,9 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(EventMsg type) {
-        if(type.getTYPE() == MsgType.MAKER_IMAGE) {
+        if (type.getTYPE() == MsgType.MAKER_IMAGE) {
             homeVp.setCurrentItem(previousItem);
         }
     }
@@ -150,8 +176,6 @@ public class MainActivity extends BaseActivity {
         fragmentList.add(new MakerFragment());
         fragmentList.add(new UserFragment());
     }
-
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

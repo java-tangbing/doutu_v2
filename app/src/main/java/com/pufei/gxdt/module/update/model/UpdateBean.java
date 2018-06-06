@@ -5,10 +5,11 @@ package com.pufei.gxdt.module.update.model;
  */
 public class UpdateBean {
 
+
     /**
      * code : 0
      * msg : success
-     * result : {"version":"3.2.1","link":"http://erp.xianwan.com/app-gengxin-release_321_jiagu_sign.apk","des":"修复BUG，优化运行","version_code":"7"}
+     * result : {"version":"3.5","link":"http://dtds.oss-cn-hangzhou.aliyuncs.com/apk/app-gengxin-release_342_jiagu_sign.apk","des":"新增\r\n·改图功能，\r\n·制图增加图片、文字、和画笔的功能\r\n·发现表情，用户制作的表情可发布在发现中。\r\n·系统消息\r\n·助手消息\r\n·意见反馈\r\n优化\r\n·更加细致的表情分类\r\n·UI界面的优化\r\n·搞笑斗图大师会持续更新应用，每次更新都包含性能和稳定性的提升，让应用变得更完美","version_code":"20","updateOpen":"1"}
      */
 
     private String code;
@@ -41,18 +42,28 @@ public class UpdateBean {
 
     public static class ResultBean {
         /**
-         * version : 3.2.1
-         * link : http://erp.xianwan.com/app-gengxin-release_321_jiagu_sign.apk
-         * des : 修复BUG，优化运行
-         * version_code : 7
+         * version : 3.5
+         * link : http://dtds.oss-cn-hangzhou.aliyuncs.com/apk/app-gengxin-release_342_jiagu_sign.apk
+         * des : 新增
+         ·改图功能，
+         ·制图增加图片、文字、和画笔的功能
+         ·发现表情，用户制作的表情可发布在发现中。
+         ·系统消息
+         ·助手消息
+         ·意见反馈
+         优化
+         ·更加细致的表情分类
+         ·UI界面的优化
+         ·搞笑斗图大师会持续更新应用，每次更新都包含性能和稳定性的提升，让应用变得更完美
+         * version_code : 20
+         * updateOpen : 1
          */
 
         private String version;
         private String link;
         private String des;
         private String version_code;
-        private boolean update;
-        private boolean force;
+        private String updateOpen;
 
         public String getVersion() {
             return version;
@@ -86,20 +97,12 @@ public class UpdateBean {
             this.version_code = version_code;
         }
 
-        public boolean isUpdate() {
-            return update;
+        public String getUpdateOpen() {
+            return updateOpen;
         }
 
-        public void setUpdate(boolean update) {
-            this.update = update;
-        }
-
-        public boolean isForce() {
-            return force;
-        }
-
-        public void setForce(boolean force) {
-            this.force = force;
+        public void setUpdateOpen(String updateOpen) {
+            this.updateOpen = updateOpen;
         }
     }
 }

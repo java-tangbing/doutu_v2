@@ -20,9 +20,9 @@ public class PublishPresenter extends BasePresenter<PublishView> {
             Disposable disposable = ApiService.getPersonalApi().getMymyDesignImages(body)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<MyImagesBean>() {
+                    .subscribe(new Consumer<PictureResultBean>() {
                     @Override
-                    public void accept(MyImagesBean result) throws Exception {
+                    public void accept(PictureResultBean result) throws Exception {
                         baseview.resultPublish(result);
                     }
                 });
