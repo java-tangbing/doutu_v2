@@ -53,6 +53,7 @@ import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -593,7 +594,11 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
 
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
     public void GetImageInputStream(String imageurl) {//下载图片
         java.net.URL url;
         HttpURLConnection connection = null;
