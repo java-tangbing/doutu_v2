@@ -12,7 +12,7 @@ public class Contents {
     public static final int SleepTime = 1500;
     public static final String BASE_URL = "http://erp.xianwan.com/api/v5/android/";
     //public static final String Update ="http://erp.xianwan.com/api/apiStart/version";
-    public static final String Update = "https://jiakao.xianwan.com/version?pname=com.pufei.dashi";
+    public static final String Update = "http://erp.xianwan.com/api/v5/android/Version/index";
     private static final String TAG = "http://erp.xianwan.com";
     public static final String friststart = TAG + "/api/apiStart/firstStart";
     public static final String USER_ANSER_TOTAL_FRIST = "USER_ANSER_TOTAL_FRIST";

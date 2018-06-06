@@ -96,64 +96,64 @@ public class StartUtils {
             return;
         }
         JSONObject jsonObject = KeyUtil.getJson(activity);
+//        try {
+//            jsonObject.put("pname", activity.getPackageName());
+        Log.e("StartUtils", jsonObject.toString());
         try {
-            jsonObject.put("pname", activity.getPackageName());
-            Log.e("StartUtils", jsonObject.toString());
-            try {
-                OkhttpUtils.get(Contents.Update, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e(StartUtils.class.getSimpleName(), e.toString());
-                    }
+            OkhttpUtils.post(Contents.Update, jsonObject.toString(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e(StartUtils.class.getSimpleName(), e.toString());
+                }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Log.i("axaiskajsia", result);
-                        UpdateBean updateBean = null;
-                        try {
-                            updateBean = new Gson().fromJson(result, UpdateBean.class);
-                            newVersion = updateBean.getResult().getVersion();
-                            final String upURl = updateBean.getResult().getLink();
-                            final boolean update = updateBean.getResult().isUpdate();
-                            final boolean force = updateBean.getResult().isForce();
-                            des = updateBean.getResult().getDes();
-                            //newVersion="1.0";
-                            newcode = Integer.parseInt(updateBean.getResult().getVersion_code());
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    PackageManager pm = activity.getApplicationContext().getPackageManager();
-                                    PackageInfo pi = null;
-                                    try {
-                                        pi = pm.getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if (pi != null) {
-                                        oldVersion = pi.versionName;
-                                        oldcode = pi.versionCode;
-                                    }
-                                    if (update && newcode > oldcode) {
-                                        Log.i("执行了么", "en");
-                                        Update(upURl, force, newVersion);
-                                    }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+                    Log.i("axaiskajsia", result);
+                    UpdateBean updateBean = null;
+                    try {
+                        updateBean = new Gson().fromJson(result, UpdateBean.class);
+                        newVersion = updateBean.getResult().getVersion();
+                        final String upURl = updateBean.getResult().getLink();
+                        final boolean update = updateBean.getResult().getUpdateOpen().equals("1");
+                        //final boolean force = updateBean.getResult().isForce();
+                        des = updateBean.getResult().getDes();
+                        //newVersion="1.0";
+                        newcode = Integer.parseInt(updateBean.getResult().getVersion_code());
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PackageManager pm = activity.getApplicationContext().getPackageManager();
+                                PackageInfo pi = null;
+                                try {
+                                    pi = pm.getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                        } catch (JsonSyntaxException e) {
-                            //newVersion = "3.0";
-                            e.printStackTrace();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
+                                if (pi != null) {
+                                    oldVersion = pi.versionName;
+                                    oldcode = pi.versionCode;
+                                }
+                                if (update && newcode > oldcode) {
+                                    Log.i("执行了么", "en");
+                                    Update(upURl, false, newVersion);
+                                }
+                            }
+                        });
+                    } catch (JsonSyntaxException e) {
+                        //newVersion = "3.0";
+                        e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (JSONException e) {
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -161,7 +161,7 @@ public class StartUtils {
         if (!activity.isFinishing()) {
             dialog = new AlertDialog.Builder(activity, R.style.TransDialogStyle).create();
             Log.i("新版本", newVersion);
-            dialog.setCancelable(false);
+            dialog.setCancelable(!cance);
             dialog.show();
             Window window = dialog.getWindow();
             window.setContentView(R.layout.update);
