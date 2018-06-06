@@ -99,7 +99,7 @@ public class ImageBlushFragment extends BaseFragment implements BaseQuickAdapter
         colorList.add(ContextCompat.getColor(getActivity(), R.color.select_color24));
         colorList.add(ContextCompat.getColor(getActivity(), R.color.select_earse));
 
-        selectColorAdapter = new SelectColorAdapter(colorList);
+        selectColorAdapter = new SelectColorAdapter(colorList,1);
         selectColorAdapter.setOnItemClickListener(this);
         rvColor.setAdapter(selectColorAdapter);
     }
@@ -111,6 +111,8 @@ public class ImageBlushFragment extends BaseFragment implements BaseQuickAdapter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        selectColorAdapter.setSelectState(position);
+        selectColorAdapter.notifyDataSetChanged();
         if(position != colorList.size() - 1) {
             blushListener.setBlushColor(colorList.get(position));
         }else {

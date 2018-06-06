@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="5dp">
 
     <View
         android:id="@+id/v_color"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:background="@drawable/circle_grey"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"/>
+        android:background="@drawable/circle_grey"/>
+
+    <ImageView
+        android:id="@+id/iv_choose_color"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@mipmap/bt_made_tool_color_xuanze"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_earser"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:background="@mipmap/bt_made_tool_eraser"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
         android:visibility="gone"/>
 </FrameLayout>

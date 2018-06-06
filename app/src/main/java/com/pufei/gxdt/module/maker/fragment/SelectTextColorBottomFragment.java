@@ -78,13 +78,15 @@ public class SelectTextColorBottomFragment extends BottomSheetDialogFragment imp
         colorList.add(ContextCompat.getColor(getActivity(),R.color.select_color22));
         colorList.add(ContextCompat.getColor(getActivity(),R.color.select_color23));
         colorList.add(ContextCompat.getColor(getActivity(),R.color.select_color24));
-        selectColorAdapter = new SelectColorAdapter(colorList);
+        selectColorAdapter = new SelectColorAdapter(colorList,0);
         selectColorAdapter.setOnItemClickListener(this);
         rvColorList.setAdapter(selectColorAdapter);
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        selectColorAdapter.setSelectState(position);
+        selectColorAdapter.notifyDataSetChanged();
         EventBus.getDefault().post(new MakerEventMsg(2,colorList.get(position)));
     }
 }

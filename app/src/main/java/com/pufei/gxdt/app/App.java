@@ -2,11 +2,13 @@ package com.pufei.gxdt.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.pufei.gxdt.module.news.activity.NewsPictureActivity;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -15,6 +17,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.PlatformConfig;
 
 
@@ -53,6 +57,15 @@ public class App extends Application {
             }
         });
 
+        UmengNotificationClickHandler clickHandler = new UmengNotificationClickHandler(){
+            @Override
+            public void openActivity(Context context, UMessage uMessage) {
+                Intent intent = new Intent(context,NewsPictureActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        };
+        mPushAgent.setNotificationClickHandler(clickHandler);
     }
 
     /**
