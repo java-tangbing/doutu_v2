@@ -24,7 +24,7 @@ public class UrlString {
     public static final String ADVERT_FLASH = "http://api.tuimao.com//get_creative?did=418547200&pid=1400&ct=1&tpt=2&n=1&s=0";
     public static final String ADVERT_START = "http://api.tuimao.com//get_creative?did=418547200&pid=1467&ct=1&tpt=2&n=1&s=0";
     public static final String ADVERT_HEARDER = "http://api.tuimao.com/get_creative?did=418547200&pid=1369&ct=1&tpt=2&n=5&s=0";
-    public static final String REPORT = TAG + "/api/v3/OptionImg/DealImg/";
+    public static final String REPORT = "http://erp.xianwan.com/api/v5/android/OptionImg/DealImg/";
     public static final String FIND_PACKGE = TAG + "/api/v4/Category/getRandList";
     public static final String FIND_FACE = TAG + "/api/v4/AmuseImages/getRandNewList";
     public static final String FIND_SHARE = TAG + "/api/v3/User/getAllImage";
