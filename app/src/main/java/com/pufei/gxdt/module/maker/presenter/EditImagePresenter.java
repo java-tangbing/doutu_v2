@@ -95,7 +95,9 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                     try {
                         byte[] inputData = getBytes(stream);
                         String base64 = Base64.encodeToString(inputData,Base64.NO_WRAP);
-                        baseview.downloadImageResult(base64,type);
+                        if(baseview != null) {
+                            baseview.downloadImageResult(base64,type);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

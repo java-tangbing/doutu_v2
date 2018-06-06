@@ -521,12 +521,16 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                             gifEncodeBitmap.add(bean);
                                         }
 
-//                                        mPhotoEditor.saveFrame(gifEncodeBitmap, new PhotoEditor.OnSaveFrameListener() {
-//                                            @Override
-//                                            public void onSaveFrameSuccess() {
-//
-//                                            }
-//                                        });
+                                        mPhotoEditor.saveFrame(gifEncodeBitmap, new PhotoEditor.OnSaveFrameListener() {
+                                            @Override
+                                            public void onSaveFrameSuccess() {
+                                                for (int i = 0; i < gifEncodeBitmap.size(); i++) {
+                                                    BitmapBean bean = gifEncodeBitmap.get(i);
+                                                    bean.setBitmap(gifEncodeBitmap.get(i).getBitmap());
+                                                    gifEncodeBitmap.set(i,bean);
+                                                }
+                                            }
+                                        });
 
                                         mPhotoEditor.encodeGif(photoEditorView.getWidth(), photoEditorView.getHeight(), gifPath, gifEncodeBitmap, new PhotoEditor.OnEncodeGifListener() {
                                             @Override

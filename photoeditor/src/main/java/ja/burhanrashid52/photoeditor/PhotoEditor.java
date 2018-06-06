@@ -45,6 +45,7 @@ import ja.burhanrashid52.photoeditor.bean.BitmapBean;
 import ja.burhanrashid52.photoeditor.bean.DraftImageBean;
 import ja.burhanrashid52.photoeditor.bean.DraftTextBean;
 import ja.burhanrashid52.photoeditor.bean.TextBean;
+import ja.burhanrashid52.photoeditor.gifmaker.AnimatedGifEncoder;
 
 /**
  * <p>
@@ -841,6 +842,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 return null;
             }
 
@@ -872,7 +874,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                     File file = new File(bitmap.get(i).getPath());
                     try {
                         FileOutputStream stream = new FileOutputStream(file);
-                        bitmap.get(i).getBitmap().compress(Bitmap.CompressFormat.PNG,100,stream);
+                        bitmap.get(i).getBitmap().compress(Bitmap.CompressFormat.JPEG,20,stream);
                         stream.flush();
                         stream.close();
                     } catch (FileNotFoundException e) {

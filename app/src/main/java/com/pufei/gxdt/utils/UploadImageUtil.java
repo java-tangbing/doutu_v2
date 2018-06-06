@@ -53,7 +53,7 @@ public class UploadImageUtil {
         if (makeUrl.contains(".gif") || makeUrl.contains(".GIF")) {
             map.put("image_type", "gif");
         } else {
-            map.put("image_type", "png");
+            map.put("image_type", "jpg");
         }
         for (int i = 0; i < imageDrafts.size(); i++) {
             final ImageDraft draft = imageDrafts.get(i);
