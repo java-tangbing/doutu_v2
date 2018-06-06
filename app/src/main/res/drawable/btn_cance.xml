@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--点击特效：当用户按下[按钮]时的特效-->
+    <item
+        android:bottom="-10dp"
+        android:right="0dp"
+        android:state_checked="true">
+        <shape>
+            <!--
+            corners:圆角，radius-圆角半径
+            solid：背景填充颜色
+            -->
+            <stroke android:color="#ffe04e" android:width="2dp"/>
+            <corners
+                android:bottomLeftRadius="10dp"
+                android:bottomRightRadius="10dp"
+                android:topLeftRadius="10dp"
+                android:topRightRadius="10dp"
+                />
+            <solid android:color="@color/white"/>
+        </shape>
+    </item>
+    <!--点击特效：当用户没按下[按钮]时的特效-->
+    <item
+        android:bottom="0dp"
+        android:right="-10dp"
+        android:state_checked="false">
+        <shape>
+            <stroke android:color="@color/white" android:width="2dp"/>
+            <corners
+                android:bottomLeftRadius="5dp"
+                android:bottomRightRadius="5dp"
+                android:topLeftRadius="5dp"
+                android:topRightRadius="5dp"/>
+            <solid android:color="#FFFF"/>
+        </shape>
+    </item>
+</selector>

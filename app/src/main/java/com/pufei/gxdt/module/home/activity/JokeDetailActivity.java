@@ -63,12 +63,12 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         View headerView = lif.inflate(R.layout.title_time_joke, null);
         title = (TextView) headerView.findViewById(R.id.title_time_title);
         time = (TextView) headerView.findViewById(R.id.title_time_time);
-        //View  footView = lif.inflate(R.layout.adver_layout,null);
-        //RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
+        View  footView = lif.inflate(R.layout.adver_layout,null);
+//        RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
+//        AdvUtil.getAdvHttp(this,relativeLayout,4);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT );
         headerView.setLayoutParams(layoutParams);
-       //footView.setLayoutParams(layoutParams);
-
+        footView.setLayoutParams(layoutParams);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         activityJokedetailRy.setLayoutManager(layoutManager);
