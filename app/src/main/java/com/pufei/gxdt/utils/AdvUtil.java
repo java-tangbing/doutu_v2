@@ -2,6 +2,8 @@ package com.pufei.gxdt.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -152,10 +154,21 @@ public class AdvUtil {
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                View view = LayoutInflater.from(context).inflate(R.layout.image_view,null);
-                                                ImageView imageView =  view.findViewById(R.id.adv_image);
-                                                GlideApp.with(context).load(advBean.getResult().getData().getImage()).into(imageView);
-                                                layout.addView(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                                                ImageView imageView =  layout.findViewById(R.id.iv_adv);
+                                                imageView.setVisibility(View.VISIBLE);
+                                                GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
+                                                imageView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        if(advBean.getResult().getData().getLink()!=null){
+                                                            Intent intent = new Intent();
+                                                            intent.setAction("android.intent.action.VIEW");
+                                                            Uri content_url = Uri.parse(advBean.getResult().getData().getLink()+"");
+                                                            intent.setData(content_url);
+                                                            context.startActivity(intent);
+                                                        }
+                                                    }
+                                                });
                                             }
                                         });
                                     }else{

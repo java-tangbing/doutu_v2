@@ -274,6 +274,8 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 pictureList.get(index).setIsSaveImg("1");
                 activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
                 ToastUtils.showShort(this,"收藏成功");
+                Intent mIntent = new Intent();
+                this.setResult(1, mIntent);
             }else {
                 pictureList.get(index).setIsSaveImg("0");
                 ToastUtils.showShort(this,bean.getMsg());
@@ -289,6 +291,8 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 pictureList.get(index).setIsSaveImg("0");
                 activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
                 ToastUtils.showShort(this,"取消收藏成功");
+                Intent mIntent = new Intent();
+                this.setResult(1, mIntent);
             }else {
                 pictureList.get(index).setIsSaveImg("1");
                 ToastUtils.showShort(this,bean.getMsg());

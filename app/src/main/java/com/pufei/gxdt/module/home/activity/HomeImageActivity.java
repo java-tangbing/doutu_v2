@@ -152,7 +152,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 bundle.putInt("picture_index", postion);
                 bundle.putSerializable("picture_list", (Serializable) list);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
 
             @Override
@@ -265,6 +265,8 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
             ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
             resultBean.setIsSave("1");
             ToastUtils.showShort(this,"收藏成功");
+            Intent mIntent = new Intent();
+            this.setResult(1, mIntent);
         }else{
             ToastUtils.showShort(this,bean.getMsg());
         }
@@ -276,8 +278,18 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
             ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
             resultBean.setIsSave("0");
             ToastUtils.showShort(this,"取消收藏成功");
+            Intent mIntent = new Intent();
+            this.setResult(1, mIntent);
         }else{
             ToastUtils.showShort(this,bean.getMsg());
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            page = 1;
+            requestHomeImage(page);
         }
     }
 }

@@ -3,62 +3,69 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <LinearLayout
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="12dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_height="match_parent">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@mipmap/subject_ic_topic"/>
-        </LinearLayout>
+        android:layout_height="50dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-        <com.pufei.gxdt.widgets.MyFrontTextView
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_gravity="left"
-            android:textSize="15sp"
-            android:id="@+id/fragment_pager_itme_title"
-            android:textColor="#333"
-            android:text="标题"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/subject_ic_topic" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
             <com.pufei.gxdt.widgets.MyFrontTextView
+                android:id="@+id/fragment_pager_itme_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:layout_gravity="left"
-                android:textSize="12sp"
-                android:id="@+id/tv_desc"
-                android:textColor="#9c9c9c"
                 android:text="标题"
+                android:textColor="#333"
+                android:textSize="15sp" />
+
+            <com.pufei.gxdt.widgets.MyFrontTextView
+                android:id="@+id/tv_desc"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="标题"
+                android:textColor="#9c9c9c"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="15dp"
             android:layout_weight="1"></View>
+
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:gravity="center">
             <ImageView
-                android:layout_marginRight="15dp"
-                android:background="@mipmap/com_bt_next"
                 android:layout_width="15dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:layout_marginRight="15dp"
+                android:background="@mipmap/com_bt_next" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

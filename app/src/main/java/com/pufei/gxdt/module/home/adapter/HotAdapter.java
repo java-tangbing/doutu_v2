@@ -45,14 +45,15 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
+        holder.setIsRecyclable(false);
         if(isTop){
-//                if(position == 0){
-//                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top1);
-//                }else if(position == 1){
-//                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top2);
-//                }else if(position == 2){
-//                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top3);
-//                }
+                if(position == 0){
+                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top1);
+                }else if(position == 1){
+                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top2);
+                }else if(position == 2){
+                    holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top3);
+                }
         }
         GlideApp.with(mcontext).load(list.get(position).getUrl()).placeholder(R.mipmap.ic_default_picture).override(100,80).into(holder.iv1);
 

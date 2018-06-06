@@ -83,7 +83,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                 bundle.putInt("picture_index", postion);
                 bundle.putSerializable("picture_list", (Serializable) picturelist);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
 
             @Override
@@ -192,5 +192,12 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     public  void finishActivity(){
         AppManager.getAppManager().finishActivity();
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            page = 1;
+            requestHot(page);
+        }
+    }
 }
