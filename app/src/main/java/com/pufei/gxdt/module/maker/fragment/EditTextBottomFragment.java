@@ -41,6 +41,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private EditText etInput;
     private TextView tvConfirm;
     private TextView tvRecommend;
+    private LinearLayout llRecommend;
     private LinearLayout llBottom;
     private RecyclerView rvHotText;
     private InputTextListener inputTextListener;
@@ -59,9 +60,10 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
         etInput = bottomSheetDialog.findViewById(R.id.et_input);
         tvConfirm = bottomSheetDialog.findViewById(R.id.tv_confirm);
         tvRecommend = bottomSheetDialog.findViewById(R.id.tv_recommend);
+        llRecommend = bottomSheetDialog.findViewById(R.id.ll_recommend);
         rvHotText = bottomSheetDialog.findViewById(R.id.rv_hot_text);
         tvConfirm.setOnClickListener(this);
-        tvRecommend.setOnClickListener(this);
+        llRecommend.setOnClickListener(this);
         rvHotText.setLayoutManager(new LinearLayoutManager(getActivity()));
         inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -132,7 +134,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
                 }
                 dismiss();
                 break;
-            case R.id.tv_recommend:
+            case R.id.ll_recommend:
                 if (rvHotText.getVisibility() == View.VISIBLE) {
                     tvRecommend.setTextColor(ContextCompat.getColor(getActivity(), R.color.hint_color));
                     tvRecommend.setBackgroundResource(R.drawable.circle_stroke_grey);

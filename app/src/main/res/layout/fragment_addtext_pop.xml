@@ -30,17 +30,25 @@
         android:layout_width="match_parent"
         android:layout_height="55dp">
 
-        <TextView
-            android:id="@+id/tv_recommend"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+        <LinearLayout
+            android:id="@+id/ll_recommend"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/circle_stroke_grey"
-            android:gravity="center"
-            android:text="荐"
-            android:textSize="10sp" />
+            android:layout_marginLeft="5dp"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tv_recommend"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/circle_stroke_grey"
+                android:gravity="center"
+                android:text="荐"
+                android:textSize="10sp" />
+        </LinearLayout>
+
 
         <View
             android:layout_width="1dp"

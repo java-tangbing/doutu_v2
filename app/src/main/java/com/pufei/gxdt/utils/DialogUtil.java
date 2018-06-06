@@ -72,7 +72,7 @@ public class DialogUtil {
         tvcancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPushAgent.deleteAlias(App.userBean.getUid(), "gxdt_msg", new UTrack.ICallBack() {
+                mPushAgent.deleteAlias(App.userBean.getUid(), "User", new UTrack.ICallBack() {
                     @Override
                     public void onMessage(boolean isSuccess, String message) {
 

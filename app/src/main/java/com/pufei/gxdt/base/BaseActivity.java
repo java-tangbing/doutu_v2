@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AppManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
@@ -50,13 +51,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        MobclickAgent.onPause(this);
     }
 
 }

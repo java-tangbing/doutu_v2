@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity {
         String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
         if (user_detail != null) {
             App.userBean = new Gson().fromJson(user_detail, UserBean.class);
-            Log.e("fdsaf",App.userBean.getUid() +" ");
+//            Log.e("fdsaf",App.userBean.getUid() +" ");
             initUPush(App.userBean.getUid());
         }
         addFragment();
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
     private void initUPush(String alias) {
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.onAppStart();
-        mPushAgent.setAlias(alias, "gxdt_msg", new UTrack.ICallBack() {
+        mPushAgent.setAlias(alias, "User", new UTrack.ICallBack() {
             @Override
             public void onMessage(boolean isSuccess, String message) {
                 Log.e("push",isSuccess +" " + message);

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AppManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
@@ -68,13 +69,13 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
     protected void onResume() {
         super.onResume();
 //        MobclickAgent.onPageStart(getClass().getSimpleName()); //手动统计页面("SplashScreen"为页面名称，可自定义)
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPageEnd(getClass().getSimpleName());
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 }
