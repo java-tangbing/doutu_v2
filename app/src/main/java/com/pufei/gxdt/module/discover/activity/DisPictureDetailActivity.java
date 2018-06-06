@@ -16,7 +16,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -47,11 +49,15 @@ import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
+import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
+import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UrlString;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -64,6 +70,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -72,6 +79,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 表情操作
@@ -115,7 +125,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     private String URL;
     private int type = 0;
     private static AlertDialog sharedialog;
-
+    private CommonPopupWindow popupWindow;
     @Override
     public void initView() {
         path = Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
@@ -365,7 +375,11 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     }
 
 
-    @OnClick({R.id.look_edit_image_iv, R.id.tv_change_img, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
+    @OnClick({R.id.look_edit_image_iv,R.id.iv_report,
+
+
+
+            R.id.tv_change_img, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.look_edit_image_iv:
@@ -427,6 +441,65 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
+            case R.id.iv_report:
+                popupWindow = new CommonPopupWindow.Builder(this)
+                        .setView(R.layout.menu_pictruedetail)
+                        .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT)
+                        .setBackGroundLevel(0.5f)
+                        .setAnimationStyle(R.style.anim_menu_pop)
+                        .setViewOnclickListener(new CommonPopupWindow.ViewInterface() {
+                            @Override
+                            public void getChildView(final View view, int layoutResId) {
+                                view.findViewById(R.id.menu_pictruedetail_jubao).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        reportImage();
+                                    }
+                                });
+                                view.findViewById(R.id.menu_pictruedetail_cance).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        popupWindow.dismiss();
+                                    }
+                                });
+
+                            }
+                        })
+                        .setOutsideTouchable(true)
+                        .create();
+                popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.BOTTOM, 0, 0);
+                break;
+        }
+    }
+
+    private void reportImage() {
+        JSONObject jsonObject = KeyUtil.getJson(this);
+        try {
+            jsonObject.put("type", "1");
+            jsonObject.put("link", URL);
+            OkhttpUtils.post(UrlString.REPORT, jsonObject.toString(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+                    LogUtils.i("tb", result);
+                    DisPictureDetailActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(popupWindow.isShowing()){
+                                popupWindow.dismiss();
+                            }
+                            ToastUtils.showShort(DisPictureDetailActivity.this, "举报成功");
+                        }
+                    });
+                }
+            });
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
         }
     }
 
