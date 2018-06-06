@@ -1,5 +1,7 @@
 package com.pufei.gxdt.module.home.adapter;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
+import com.pufei.gxdt.module.home.fragment.DouTuFragment;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.widgets.GlideApp;
 
@@ -27,10 +30,12 @@ import java.util.List;
 public class ImageTypeAdapter extends RecyclerView.Adapter<ImageTypeAdapter.MyHodler> {
     private List<PictureResultBean.ResultBean>list;
     private Context mcontext;
+    private DouTuFragment fragment;
 
-    public ImageTypeAdapter(Context context, List<PictureResultBean.ResultBean> list){//获取数据源
+    public ImageTypeAdapter(Context context, DouTuFragment fragment, List<PictureResultBean.ResultBean> list){//获取数据源
         this.mcontext=context;
         this.list=list;
+        this.fragment = fragment;
     }
     @Override
     public MyHodler onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,7 +58,7 @@ public class ImageTypeAdapter extends RecyclerView.Adapter<ImageTypeAdapter.MyHo
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) list);
                 intent.putExtras(bundle);
-                mcontext.startActivity(intent);
+                fragment.startActivityForResult(intent,1);
             }
         });
     }
