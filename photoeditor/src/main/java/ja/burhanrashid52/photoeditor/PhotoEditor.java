@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -831,15 +832,37 @@ public class PhotoEditor implements BrushViewChangeListener {
             @SuppressLint("MissingPermission")
             @Override
             protected Exception doInBackground(String... strings) {
-                GifEncoder gifEncoder = new GifEncoder();
-                try {
-                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
+//                GifEncoder gifEncoder = new GifEncoder();
+//                try {
+//                    gifEncoder.init(220, 220, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
+//                    for (int i = 0; i < bitmap.size(); i++) {
+//                        gifEncoder.setDither(true);
+//                        gifEncoder.encodeFrame(bitmap.get(i).getBitmap(),bitmap.get(i).getDelay());
+//                    }
+//                    gifEncoder.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+                localAnimatedGifEncoder.start(baos);//start
+                localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
                     for (int i = 0; i < bitmap.size(); i++) {
-                        gifEncoder.setDither(true);
-                        gifEncoder.encodeFrame(bitmap.get(i).getBitmap(),bitmap.get(i).getDelay());
+                        localAnimatedGifEncoder.setDelay(bitmap.get(i).getDelay());
+                        Bitmap resizeBm = resizeImage(bitmap.get(i).getBitmap(), 220, 220);
+                        localAnimatedGifEncoder.addFrame(resizeBm);
                     }
-                    gifEncoder.close();
-                } catch (Exception e) {
+                localAnimatedGifEncoder.finish();
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(path);
+                    baos.writeTo(fos);
+                    baos.flush();
+                    fos.flush();
+                    baos.close();
+                    fos.close();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
@@ -858,6 +881,27 @@ public class PhotoEditor implements BrushViewChangeListener {
 
 
     }
+    private  Bitmap resizeImage(Bitmap bitmap, int w, int h)
+    {
+        Bitmap BitmapOrg = bitmap;
+        int width = BitmapOrg.getWidth();
+        int height = BitmapOrg.getHeight();
+        int newWidth = w;
+        int newHeight = h;
+
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        // if you want to rotate the Bitmap
+        // matrix.postRotate(45);
+        Bitmap resizedBitmap = Bitmap.createBitmap(BitmapOrg, 0, 0, width,
+                height, matrix, true);
+        return resizedBitmap;
+    }
+
+
 
     @SuppressLint("StaticFieldLeak")
     public void saveFrame( final List<BitmapBean> bitmap, final OnSaveFrameListener listener) {
