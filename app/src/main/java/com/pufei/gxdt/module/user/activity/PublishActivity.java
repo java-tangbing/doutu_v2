@@ -1,8 +1,12 @@
 package com.pufei.gxdt.module.user.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,7 +16,11 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.module.home.activity.HomeImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
+import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
+import com.pufei.gxdt.module.home.adapter.HotAdapter;
 import com.pufei.gxdt.module.home.adapter.JokeAdapter;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
@@ -26,6 +34,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -36,6 +45,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,18 +65,17 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
-    private FavoriteJokeAdapter jokeAdapter;
-    private List<MyImagesBean.ResultBean> jokeList = new ArrayList<>();
+    private HomeImageAdapter jokeAdapter;
+    private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
 
     @Override
     public void initView() {
         tv_title.setText("我的发布");
         ll_left.setVisibility(View.VISIBLE);
-        jokeAdapter = new FavoriteJokeAdapter(PublishActivity.this,jokeList,1);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rl_publish.setLayoutManager(layoutManager);
+        jokeAdapter = new HomeImageAdapter(PublishActivity.this,jokeList);
+        rl_publish.setLayoutManager(new GridLayoutManager(PublishActivity.this, 3));
+        rl_publish.addItemDecoration(new SpaceItemDecoration(dp2px(PublishActivity.this, 10)));
         rl_publish.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
@@ -106,32 +115,28 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             }
         });
 
-//        jokeAdapter.setOnItemClickListener(new JokeAdapter.MyItemClickListener() {
-//            @Override
-//            public void setOnItemClickListener(View itemview, View view, int postion) {
-//                    try {
-//                        Intent intent = new Intent(PublishActivity.this, JokeDetailActivity.class);
-//                        intent.putExtra("id",jokeList.get(postion).getId());
-//                        intent.putExtra("title",jokeList.get(postion).getTitle());
-//                        intent.putExtra("time",jokeList.get(postion).getDateline());
-//                        startActivity(intent);
-//                    } catch (NullPointerException e) {
-//                        jokeList.remove(postion);
-//                        notify();
-//                        e.printStackTrace();
-//                    }
-//
-//            }
-//            @Override
-//            public void OnLike(int position) {
-//                //showShare("http://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E6%99%AF%E7%94%9C&step_word=&hs=0&pn=40&spn=0&di=100938213560&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=1636489337%2C340249600&os=4078026530%2C4243386462&simid=0%2C0&adpicid=0&ln=3946&fr=&fmq=1482737443249_R&fm=&ic=undefined&s=undefined&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=star&bdtype=11&oriquery=&objurl=http%3A%2F%2Fpic.yesky.com%2FuploadImages%2F2016%2F324%2F13%2F9973OGM66IW9.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Frtv_z%26e3Byjfhy_z%26e3Bv54AzdH3FkkfAzdH3Fpi6jw1-nnm8ca-8-8_z%26e3Bip4s&gsm=0&rpstart=0&rpnum=0");
-//            }
-//
-//            @Override
-//            public void OnBtDelete(int position) {
-//                Toast.makeText(PublishActivity.this, "已收藏", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        jokeAdapter.setOnItemClickListener(new HomeImageAdapter.MyItemClickListener() {
+            @Override
+            public void setOnItemClickListener(View itemview, View view, int postion) {
+                Intent intent = new Intent(PublishActivity.this, PictureDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("picture_index", postion);
+                bundle.putSerializable("picture_list", (Serializable) jokeList);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onDelete(int position) {
+
+            }
+
+            @Override
+            public void onAdd(int position) {
+
+            }
+        });
     }
 
     @Override
@@ -166,7 +171,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     }
 
     @Override
-    public void resultPublish(MyImagesBean bean) {
+    public void resultPublish(PictureResultBean bean) {
         if(page == 1){
             jokeList.clear();
         }
@@ -180,5 +185,9 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             this.presenter = new PublishPresenter();
             this.presenter.attachView(this);
         }
+    }
+    private  int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
     }
 }
