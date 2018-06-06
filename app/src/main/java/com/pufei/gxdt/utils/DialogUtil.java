@@ -11,6 +11,8 @@ import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,7 +55,7 @@ public class DialogUtil {
             }
         });
     }
-    public void canceDialog(final Activity activity) {
+    public void canceDialog(final Activity activity, final PushAgent mPushAgent) {
         builder = new AlertDialog.Builder(activity).create();
         builder.setCanceledOnTouchOutside(false);
         builder.show();
@@ -70,6 +72,12 @@ public class DialogUtil {
         tvcancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPushAgent.deleteAlias(App.userBean.getUid(), "gxdt_msg", new UTrack.ICallBack() {
+                    @Override
+                    public void onMessage(boolean isSuccess, String message) {
+
+                    }
+                });
                 App.userBean=null;
                 SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL,null);
                 EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_OUT));

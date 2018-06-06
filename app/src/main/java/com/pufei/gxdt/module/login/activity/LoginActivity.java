@@ -157,14 +157,14 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 address = "未知";
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile());
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(),bean.getUid());
             EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
-            Log.e(TAG, "name: " + App.userBean.getName());
-            Log.e(TAG, "header: " + App.userBean.getHead());
-            Log.e(TAG, "gender: " + App.userBean.getGender());
-            Log.e(TAG, "address: " + App.userBean.getAddress());
-            Log.e(TAG, "Auth: " + App.userBean.getAuth());
-            Log.e(TAG, "Mind: " + App.userBean.getMind());
+//            Log.e(TAG, "name: " + App.userBean.getName());
+//            Log.e(TAG, "header: " + App.userBean.getHead());
+//            Log.e(TAG, "gender: " + App.userBean.getGender());
+//            Log.e(TAG, "address: " + App.userBean.getAddress());
+//            Log.e(TAG, "Auth: " + App.userBean.getAuth());
+//            Log.e(TAG, "Mind: " + App.userBean.getMind());
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);

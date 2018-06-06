@@ -91,6 +91,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+    android{
+        sourceSets {
+            main {
+                jniLibs.srcDirs = ['libs']
+            }
+        }
+    }
 }
 
 dependencies {
@@ -118,11 +125,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'top.zibin:Luban:1.1.5'
-    //    implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
     implementation files('libs/Baidu_MobAds_SDK.jar')
     implementation files('libs/GDTUnionSDK.4.17.568.min.jar')
     implementation project(':photoeditor')
-    //implementation project(':PushSDK')
     implementation('com.github.hotchemi:permissionsdispatcher:2.4.0') {
         exclude module: 'support-v13'
     }
@@ -143,4 +148,6 @@ dependencies {
     implementation files('libs/umeng-share-core-6.9.2.jar')
     implementation files('libs/umeng-share-wechat-simplify-6.9.2.jar')
     implementation files('libs/umeng-sharetool-6.9.2.jar')
+    implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
+    implementation files('libs/SecurityEnvSDK-release-1.1.0.jar')
 }

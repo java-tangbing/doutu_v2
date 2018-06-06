@@ -281,6 +281,7 @@
 -dontwarn com.xiaomi.**
 -dontwarn com.huawei.**
 -dontwarn com.meizu.**
+-dontwarn com.alibaba.**
 
 -keepattributes *Annotation*
 

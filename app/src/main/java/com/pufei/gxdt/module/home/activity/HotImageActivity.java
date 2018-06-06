@@ -72,7 +72,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         ll_left.setVisibility(View.VISIBLE);
         hotXryv.setLayoutManager(new GridLayoutManager(HotImageActivity.this, 3));
         hotXryv.addItemDecoration(new SpaceItemDecoration(dp2px(HotImageActivity.this, 10)));
-        adapter = new HotAdapter(HotImageActivity.this, picturelist);
+        adapter = new HotAdapter(HotImageActivity.this, picturelist,true);
         hotXryv.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new HotAdapter.MyItemClickListener() {

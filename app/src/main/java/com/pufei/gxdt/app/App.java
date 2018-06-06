@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
@@ -12,6 +13,8 @@ import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 
 
@@ -34,21 +37,21 @@ public class App extends Application {
         initPrefs();
         FlowManager.init(this);
         initUMConfig();
-//        PushAgent mPushAgent = PushAgent.getInstance(this);
-//        mPushAgent.register(new IUmengRegisterCallback() {
-//
-//            @Override
-//            public void onSuccess(String deviceToken) {
-//                //注册成功会返回device token
-//                Log.i(TAG, "device token: " + deviceToken);
-//
-//            }
-//
-//            @Override
-//            public void onFailure(String s, String s1) {
-//
-//            }
-//        });
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                Log.i(TAG, "device token: " + deviceToken);
+
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });
 
     }
 
