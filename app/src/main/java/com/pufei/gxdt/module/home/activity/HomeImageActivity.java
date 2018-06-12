@@ -96,7 +96,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     @Override
     public void initView() {
         tv_title.setText("");
-        AdvUtil.getAdvHttp(this,your_original_layout,2);
+        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,2);
         tv_top_title.setText(getIntent().getExtras().getString("title"));
         tv_hot.setText(getIntent().getExtras().getString("hot"));
         tv_eyes.setText(getIntent().getExtras().getString("eyes"));

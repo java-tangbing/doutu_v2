@@ -67,7 +67,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
 
     @Override
     public void initView() {
-        AdvUtil.getAdvHttp(this,your_original_layout,5);
+        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,5);
         title.setText("热门表情");
         ll_left.setVisibility(View.VISIBLE);
         hotXryv.setLayoutManager(new GridLayoutManager(HotImageActivity.this, 3));
