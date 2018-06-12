@@ -61,7 +61,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     @Override
     public void initView() {
         tv_title.setText("主题表情");
-        AdvUtil.getAdvHttp(this,your_original_layout,6);
+        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,6);
         ll_left.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adpater = new ThemeImageAdpater(ThemeImageActivity.this,list);

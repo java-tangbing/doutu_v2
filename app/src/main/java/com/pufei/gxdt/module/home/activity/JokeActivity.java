@@ -59,7 +59,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     @Override
     public void initView() {
         tv_title.setText("笑话段子");
-        AdvUtil.getAdvHttp(this,your_original_layout,4);
+        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,4);
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdapter(JokeActivity.this,jokeList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
