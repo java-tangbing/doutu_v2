@@ -19,6 +19,6 @@ public class StickerImageAdapter extends BaseQuickAdapter<MaterialBean.ResultBea
 
     @Override
     protected void convert(BaseViewHolder helper, MaterialBean.ResultBean item) {
-        GlideApp.with(mContext).load(item.getImage()).placeholder(R.mipmap.ic_launcher).into((ImageView)helper.getView(R.id.iv_sticker));
+        GlideApp.with(mContext).load(item.getImage()).placeholder(R.mipmap.newloding).into((ImageView)helper.getView(R.id.iv_sticker));
     }
 }

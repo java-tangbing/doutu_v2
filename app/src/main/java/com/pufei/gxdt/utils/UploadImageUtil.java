@@ -88,6 +88,7 @@ public class UploadImageUtil {
                             map1.put("height", "");
                             map1.put("width", "");
                             map1.put("textFontSize", "12");
+                            map1.put("textFont",draft.textFont);
                             map1.put("textFontColor", draft.textColor + "");
                             map1.put("zoom", draft.scaleX + "");
                             map1.put("rolling", draft.rotation + "");
@@ -119,6 +120,7 @@ public class UploadImageUtil {
                 map1.put("height", "");
                 map1.put("width", "");
                 map1.put("textFontSize", "12");
+                map1.put("textFont",draft.textFont);
                 map1.put("textFontColor", draft.textColor + "");
                 map1.put("zoom", draft.scaleX + "");
                 map1.put("rolling", draft.rotation + "");

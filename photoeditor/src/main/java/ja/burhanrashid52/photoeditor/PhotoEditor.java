@@ -269,9 +269,9 @@ public class PhotoEditor implements BrushViewChangeListener {
         textInputTv.setText(reAdd.getText());
         textInputTv.setTextColor(reAdd.getTextColor());
         textRootView.setDrawingCacheEnabled(true);
-//        if (textTypeface != null) {
-//            textInputTv.setTypeface(textTypeface);
-//        }
+        if (reAdd.getTextFont() != null) {
+            textInputTv.setTypeface(reAdd.getTextFont());
+        }
         MultiTouchListener multiTouchListener = getMultiTouchListener();
         multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
             @Override

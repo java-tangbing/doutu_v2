@@ -153,10 +153,13 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private void initData() {
         ImageTextEditFragment fragment = (ImageTextEditFragment) getParentFragment();
         if(fragment != null) {
-            hotTextList = fragment.getBean().getResult();
-            hotTextAdapter = new HotTextAdapter(hotTextList);
-            rvHotText.setAdapter(hotTextAdapter);
-            hotTextAdapter.setOnItemClickListener(this);
+            if(fragment.getBean() != null) {
+                hotTextList = fragment.getBean().getResult();
+                hotTextAdapter = new HotTextAdapter(hotTextList);
+                rvHotText.setAdapter(hotTextAdapter);
+                hotTextAdapter.setOnItemClickListener(this);
+            }
+
         }
     }
 

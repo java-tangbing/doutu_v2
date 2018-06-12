@@ -1,10 +1,12 @@
 package ja.burhanrashid52.photoeditor.bean;
 
+import android.graphics.Typeface;
+
 public class DraftTextBean {
     private String text;
     private int textColor;
     private float textSize;
-    private String textFont;
+    private Typeface textFont;
     private float translationX;
     private float translationY;
     private float scaleX;
@@ -35,11 +37,11 @@ public class DraftTextBean {
         this.textSize = textSize;
     }
 
-    public String getTextFont() {
+    public Typeface getTextFont() {
         return textFont;
     }
 
-    public void setTextFont(String textFont) {
+    public void setTextFont(Typeface textFont) {
         this.textFont = textFont;
     }
 

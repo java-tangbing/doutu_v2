@@ -4,6 +4,7 @@ public class MakerEventMsg {
     private int type;
     private String url;
     private int color;
+    private int textFontStyle;
 
     public MakerEventMsg(int type, String url) {
         this.type = type;
@@ -13,6 +14,20 @@ public class MakerEventMsg {
     public MakerEventMsg(int type, int color) {
         this.type = type;
         this.color = color;
+    }
+
+    public MakerEventMsg(int type, int color, int textFontStyle) {
+        this.type = type;
+        this.color = color;
+        this.textFontStyle = textFontStyle;
+    }
+
+    public int getTextFontStyle() {
+        return textFontStyle;
+    }
+
+    public void setTextFontStyle(int textFontStyle) {
+        this.textFontStyle = textFontStyle;
     }
 
     public int getColor() {

@@ -106,6 +106,11 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
                 }
                 break;
             case R.id.ll_select_font:
+                int type2 = activity.getTypes();
+                if(type2 == 1) {
+                    TextFontBottomFragment fontBottomFragment = new TextFontBottomFragment();
+                    fontBottomFragment.show(getChildFragmentManager(),"");
+                }
                 break;
         }
     }

@@ -67,6 +67,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,21 +132,32 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private int editType = 0;
     private String draftImgPath = "";//制成图的路径
     private Typeface fangzhengjianzhi;
+    private Typeface fangzhengkatong;
+    private Typeface fangzhengyasong;
+    private Typeface lantingdahei;
+    private Typeface xindijianzhi;
+    private Typeface xindixiaowanzixiaoxueban;
+    private int colorMode;
 
     @Override
     public void initView() {
         addFragment();
         defaultSelect();
 
-       // fangzhengjianzhi = Typeface.createFromAsset(getAssets(), "fangzhengjianzhi.ttf");
+        fangzhengjianzhi = Typeface.createFromAsset(getAssets(), "fangzhengjianzhi.ttf");
+        fangzhengkatong = Typeface.createFromAsset(getAssets(), "fangzhengkatong.ttf");
+        fangzhengyasong = Typeface.createFromAsset(getAssets(), "fangzhengyasong.TTF");
+        lantingdahei = Typeface.createFromAsset(getAssets(), "lantingdahei.ttf");
+        xindijianzhi = Typeface.createFromAsset(getAssets(), "xindijianzhi.ttf");
+        xindixiaowanzixiaoxueban = Typeface.createFromAsset(getAssets(), "xindischool.ttf");
 
         mPhotoEditor = new PhotoEditor.Builder(this, photoEditorView)
                 .setPinchTextScalable(true) // set flag to make text scalable when pinch
-                //.setDefaultEmojiTypeface(mEmojiTypeFace)
+                .setDefaultTextTypeface(fangzhengjianzhi)
                 .build(); // build photo editor sdk
 
         mPhotoEditor.setOnPhotoEditorListener(this);
-        mPhotoEditor.setBrushColor(ContextCompat.getColor(this,R.color.select_color1));
+        mPhotoEditor.setBrushColor(ContextCompat.getColor(this, R.color.select_color1));
         imageDrafts = new ArrayList<>();
         textDrafts = new ArrayList<>();
     }
@@ -163,9 +175,9 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 PictureDetailBean.ResultBean bean = (PictureDetailBean.ResultBean) bundle.getSerializable("picture_bean");
                 if (bean != null) {
                     imagePath = bean.getUrl();
-                    if(TextUtils.isEmpty(bean.getOrginid())) {
+                    if (TextUtils.isEmpty(bean.getOrginid())) {
                         imageId = System.currentTimeMillis() + "";
-                    }else {
+                    } else {
                         imageId = bean.getOrginid();
                     }
                     id = bean.getId();
@@ -224,6 +236,20 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 }
                 bean.setText(text1);
                 bean.setTextColor(Color.parseColor("#" + dataBean.getTextFontColor()));
+                String fontStyle = dataBean.getTextFont();
+                if(fontStyle.equals("FZLTDHK--GBK1-0")) {
+                    bean.setTextFont(fangzhengjianzhi);
+                }else if(fontStyle.equals("FZZYSK1--GBK1-0")) {
+                    bean.setTextFont(fangzhengkatong);
+                }else if(fontStyle.equals("FZKATJW--GB1-0")) {
+                    bean.setTextFont(fangzhengyasong);
+                }else if(fontStyle.equals("SentyMARUKO-Elementary")) {
+                    bean.setTextFont(lantingdahei);
+                }else if(fontStyle.equals("SentyPaperCut")) {
+                    bean.setTextFont(xindijianzhi);
+                }else if(fontStyle.equals("FZJZJW--GB1-0")) {
+                    bean.setTextFont(xindixiaowanzixiaoxueban);
+                }
 //                bean.setTextSize(Integer.parseInt(dataBean.getTextFontSize()));
                 mPhotoEditor.reAddText(bean);
             } else {
@@ -235,7 +261,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 bean.setRotation(Float.parseFloat(dataBean.getRolling()));
                 float width = Float.parseFloat(dataBean.getWidth());
                 float height = Float.parseFloat(dataBean.getHeight());
-                SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>((int)width,(int)height) {
+                SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>((int) width, (int) height) {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
                         mPhotoEditor.reAddImage(bean, resource, dataBean.getUrl());
@@ -263,6 +289,20 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setText(draft.text);
             bean.setTextColor(Color.parseColor("#" + draft.textColor));
             bean.setTextSize(draft.textSize);
+            String fontStyle = draft.textFont;
+            if(fontStyle.equals("FZLTDHK--GBK1-0")) {
+                bean.setTextFont(fangzhengjianzhi);
+            }else if(fontStyle.equals("FZZYSK1--GBK1-0")) {
+                bean.setTextFont(fangzhengkatong);
+            }else if(fontStyle.equals("FZKATJW--GB1-0")) {
+                bean.setTextFont(fangzhengyasong);
+            }else if(fontStyle.equals("SentyMARUKO-Elementary")) {
+                bean.setTextFont(lantingdahei);
+            }else if(fontStyle.equals("SentyPaperCut")) {
+                bean.setTextFont(xindijianzhi);
+            }else if(fontStyle.equals("FZJZJW--GB1-0")) {
+                bean.setTextFont(xindixiaowanzixiaoxueban);
+            }
             mPhotoEditor.reAddText(bean);
         }
     }
@@ -324,7 +364,22 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             };
             GlideApp.with(this).asBitmap().load(msg.getUrl()).into(simpleTarget);
         } else if (msg.getType() == 2) {//更改文本颜色
+            this.colorMode = msg.getColor();
             mPhotoEditor.editText(rootView, text, msg.getColor());
+        } else if (msg.getType() == 3) {//更改字体
+            if (msg.getTextFontStyle() == 0) {
+                mPhotoEditor.editText(rootView, fangzhengjianzhi, text, colorMode);
+            } else if (msg.getTextFontStyle() == 1) {
+                mPhotoEditor.editText(rootView, fangzhengkatong, text, colorMode);
+            } else if (msg.getTextFontStyle() == 2) {
+                mPhotoEditor.editText(rootView, fangzhengyasong, text, colorMode);
+            } else if (msg.getTextFontStyle() == 3) {
+                mPhotoEditor.editText(rootView, lantingdahei, text, colorMode);
+            } else if (msg.getTextFontStyle() == 4) {
+                mPhotoEditor.editText(rootView, xindijianzhi, text, colorMode);
+            } else if (msg.getTextFontStyle() == 5) {
+                mPhotoEditor.editText(rootView, xindixiaowanzixiaoxueban, text, colorMode);
+            }
         }
     }
 
@@ -436,6 +491,20 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         textDraft.text = tv.getText().toString();
                         textDraft.textColor = Integer.toHexString(tv.getCurrentTextColor()).substring(2);
                         textDraft.textSize = tv.getTextSize();
+                        Typeface type = tv.getTypeface();
+                        if(type == fangzhengjianzhi) {
+                            textDraft.textFont = "FZLTDHK--GBK1-0";
+                        }else if(type == fangzhengkatong) {
+                            textDraft.textFont = "FZZYSK1--GBK1-0";
+                        }else if(type == fangzhengyasong) {
+                            textDraft.textFont = "FZKATJW--GB1-0";
+                        }else if(type == lantingdahei) {
+                            textDraft.textFont = "SentyMARUKO-Elementary";
+                        }else if(type == xindijianzhi) {
+                            textDraft.textFont = "SentyPaperCut";
+                        }else if(type == xindixiaowanzixiaoxueban) {
+                            textDraft.textFont = "FZJZJW--GB1-0";
+                        }
                         textDraft.translationX = textRoot.getTranslationX();
                         textDraft.translationY = textRoot.getTranslationY();
                         textDraft.scaleX = textRoot.getScaleX();
@@ -532,7 +601,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                                 for (int i = 0; i < gifEncodeBitmap.size(); i++) {
                                                     BitmapBean bean = gifEncodeBitmap.get(i);
                                                     bean.setBitmap(gifEncodeBitmap.get(i).getBitmap());
-                                                    gifEncodeBitmap.set(i,bean);
+                                                    gifEncodeBitmap.set(i, bean);
                                                 }
                                             }
                                         });
@@ -726,6 +795,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             type = 0;
         } else {
             this.text = text;
+            this.colorMode = colorCode;
             type = 1;
         }
     }
@@ -753,7 +823,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Override
     public void getInputTextCallback(int type, String text, int color) {
         if (type == 0) {
-            mPhotoEditor.addText(text, color);
+            mPhotoEditor.addText(fangzhengjianzhi,text, color);
         } else {
             mPhotoEditor.editText(rootView, text, color);
         }
