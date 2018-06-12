@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.baidu.mobads.AdSettings;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
@@ -23,12 +21,9 @@ import com.qq.e.ads.banner.ADSize;
 import com.qq.e.ads.banner.AbstractBannerADListener;
 import com.qq.e.ads.banner.BannerView;
 import com.qq.e.comm.util.AdError;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -97,8 +92,8 @@ public class AdvUtil {
         String posId ="5030634484990442";
         bv = new BannerView((Activity) context, ADSize.BANNER,"1106938548",posId);
         bv.setRefresh(30);
+        bv.setShowClose(true);
         bv.setADListener(new AbstractBannerADListener() {
-
             @Override
             public void onNoAD(AdError error) {
             }
