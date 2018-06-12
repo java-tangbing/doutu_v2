@@ -131,7 +131,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void sendRusult(LoginResultBean resultBean) {
-        Toast.makeText(LoginActivity.this, "resultcode = " + resultBean.getCode(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(LoginActivity.this, "resultcode = " + resultBean.getCode(), Toast.LENGTH_SHORT).show();
         if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
             LoginResultBean.ResultBean bean = resultBean.getResult();
             String name = "";
@@ -157,29 +157,25 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 address = "未知";
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(),bean.getUid());
-            EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
-//            Log.e(TAG, "name: " + App.userBean.getName());
-//            Log.e(TAG, "header: " + App.userBean.getHead());
-//            Log.e(TAG, "gender: " + App.userBean.getGender());
-//            Log.e(TAG, "address: " + App.userBean.getAddress());
-//            Log.e(TAG, "Auth: " + App.userBean.getAuth());
-//            Log.e(TAG, "Mind: " + App.userBean.getMind());
-            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            AppManager.getAppManager().finishActivity();
-            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL));
-        } else if (resultBean.getCode().equals(Contents.CODE_ONE)) {
-            Intent intent = new Intent(this, BindPhoneActivity.class);
-            intent.putExtra("openId", openid);
-            intent.putExtra("iconUrl", header);
-            intent.putExtra("nickName", nickName);
-            intent.putExtra("gender", gender);
-            intent.putExtra("type", type);
-            intent.putExtra("orgin", orgin);
-            startActivity(intent);
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
+            if (!TextUtils.isEmpty(bean.getMobile())) {
+                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
+                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                AppManager.getAppManager().finishActivity();
+            }else {
+                Intent intent = new Intent(this, BindPhoneActivity.class);
+                intent.putExtra("openId", openid);
+                intent.putExtra("iconUrl", header);
+                intent.putExtra("nickName", nickName);
+                intent.putExtra("gender", gender);
+                intent.putExtra("type", type);
+                intent.putExtra("orgin", orgin);
+                startActivity(intent);
+            }
+
         } else {
             Toast.makeText(LoginActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
@@ -298,8 +294,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
                 nickName = map.get("name");
                 openid = map.get("uid");
-                province = map.get("uid");
-                city = map.get("uid");
+                province = map.get("province");
+                city = map.get("city");
                 gender = map.get("gender");
                 header = map.get("iconurl");
                 if (type == 1) {

@@ -63,7 +63,7 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     private String openid;
     private String orgin;
     private String nickName;
-    private int gender;
+    private String gender;
     private String iconUrl;
     private int type;
 
@@ -77,16 +77,12 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
 
     @Override
     public void getData() {
-        if (TextUtils.isEmpty(getIntent().getStringExtra("sysMsg"))) {
-
-        } else {
-            openid = getIntent().getStringExtra("openId");
-            orgin = getIntent().getStringExtra("orgin");
-            nickName = getIntent().getStringExtra("nickName");
-            gender = getIntent().getIntExtra("gender", 0);
-            iconUrl = getIntent().getStringExtra("iconUrl");
-            type = getIntent().getIntExtra("type", 1);
-        }
+        openid = getIntent().getStringExtra("openId");
+        orgin = getIntent().getStringExtra("orgin");
+        nickName = getIntent().getStringExtra("nickName");
+        gender = getIntent().getStringExtra("gender");
+        iconUrl = getIntent().getStringExtra("iconUrl");
+        type = getIntent().getIntExtra("type", 1);
     }
 
     @Override
@@ -115,12 +111,15 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     @Override
     public void bindResult(SendCodeBean sendCodeBean) {
         if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
+            UserBean bean = App.userBean;
+            bean.setPhone(loginIphone.getText().toString());
+            Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-            finish();
-            Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
-
+            AppManager.getAppManager().finishActivity();
+        }else {
+            ToastUtils.showShort(this,sendCodeBean.getMsg());
         }
     }
 
@@ -149,13 +148,19 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             case R.id.login_sendcode:
                 if (!isSendingCode) {
                     try {
-                        if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
-                            JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
-                            jsonObject.put("mobile", loginIphone.getText().toString());
-                            presenter.sendCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
-                        } else {
-                            ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");
+                        if(!TextUtils.isEmpty(loginIphone.getText().toString())) {
+                            if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
+                                JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
+
+                                jsonObject.put("mobile", loginIphone.getText().toString());
+                                presenter.sendCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                            } else {
+                                ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");
+                            }
+                        }else {
+                            ToastUtils.showShort(this,"请输入手机号");
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
