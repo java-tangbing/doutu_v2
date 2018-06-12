@@ -1,9 +1,14 @@
 package com.pufei.gxdt.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +19,11 @@ import com.baidu.mobads.AdSettings;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
 import com.google.gson.Gson;
+import com.mylhyl.acp.Acp;
+import com.mylhyl.acp.AcpListener;
+import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.model.AdvBean;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.qq.e.ads.banner.ADSize;
@@ -24,6 +33,8 @@ import com.qq.e.comm.util.AdError;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.List;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -143,7 +154,12 @@ public class AdvUtil {
                                     if("2".equals(advBean.getResult().getType())){
                                         setAdvBaiDu(context,layout);
                                     }else if("3".equals(advBean.getResult().getType())){
-                                        setAdvTecent(context,layout);
+                                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                                            openPermissin(context,layout);
+                                        }else{
+                                            setAdvTecent(context,layout);
+                                        }
+
                                     }else if("1".equals(advBean.getResult().getType())){
                                         Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
@@ -215,6 +231,28 @@ public class AdvUtil {
         }
 
     }
+    private static void openPermissin(final Context context,final RelativeLayout layout) {
+        Acp.getInstance(context)
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.READ_PHONE_STATE).build(),
+                        new AcpListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onGranted() {
+                                setAdvTecent(context,layout);
+                            }
 
+                            @Override
+                            public void onDenied(List<String> permissions) {
+                                Activity activity = (Activity)context;
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        layout.setVisibility(View.GONE);
+                                    }
+                                });
+                                ToastUtils.showShort(context, "请求权限失败,请手动开启！");
+                            }
+                        });
+    }
 
 }
