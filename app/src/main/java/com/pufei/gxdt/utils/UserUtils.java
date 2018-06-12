@@ -24,6 +24,8 @@ public class UserUtils {
                 jsonObject.put("phone", user.getPhone());
                 jsonObject.put("pwd", user.isPwd());
                 jsonObject.put("uid",user.getUid());
+                jsonObject.put("wechat",user.getWechat());
+                jsonObject.put("qq",user.getQq());
                 return jsonObject.toString();
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -80,7 +80,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
 
     @Override
     public void initView() {
-        AdvUtil.getAdvHttp(getActivity(),your_original_layout,1);
+        AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
         LayoutInflater lif = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);

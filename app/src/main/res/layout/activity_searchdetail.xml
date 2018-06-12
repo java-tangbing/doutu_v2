@@ -9,11 +9,11 @@
         android:layout_height="50dp">
         <ImageView
             android:id="@+id/activity_searchdetail_cancel"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:layout_gravity="center"
-            android:src="@mipmap/back0"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:background="@mipmap/com_bt_ttab_return_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <TextView
             android:gravity="center"
             android:layout_marginRight="60dp"
