@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,7 +32,7 @@ public class StartActivity extends Activity {
     RelativeLayout rl_adv;
     private String SHARE_APP_TAG = "frist_3.3.5";
     private final String TAG = "StartActivity";
-    private int timer = 8;
+    private int timer = 5;
     private boolean imageis = true;
     final Handler handler = new Handler() {
         @Override

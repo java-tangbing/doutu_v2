@@ -23,6 +23,7 @@ import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.model.AdvBean;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.qq.e.ads.banner.ADSize;
@@ -55,40 +56,40 @@ public class AdvUtil {
             }
         return mInstance;
     }
-//    public void setAdvTencentStart(final  Context context, final RelativeLayout layout){
-//        final Activity activity  =(Activity) context;
-//        SplashAD splashAD = new SplashAD(activity, layout, "1106938548", "5030634484990442", new SplashADListener() {
-//            @Override
-//            public void onADDismissed() {
-//
-//            }
-//
-//            @Override
-//            public void onNoAD(AdError adError) {
-//
-//            }
-//
-//            @Override
-//            public void onADPresent() {
-//
-//            }
-//
-//            @Override
-//            public void onADClicked() {
-//
-//            }
-//
-//            @Override
-//            public void onADTick(long l) {
-//
-//            }
-//        });
-//
-//    }
+    public void setAdvTencentStart(final  Context context, final RelativeLayout layout){
+        final Activity activity  =(Activity) context;
+        SplashAD splashAD = new SplashAD(activity, layout, Contents.TENCENT_ID, Contents.TENCENT_SPLASH_ID, new SplashADListener() {
+            @Override
+            public void onADDismissed() {
+
+            }
+
+            @Override
+            public void onNoAD(AdError adError) {
+
+            }
+
+            @Override
+            public void onADPresent() {
+
+            }
+
+            @Override
+            public void onADClicked() {
+
+            }
+
+            @Override
+            public void onADTick(long l) {
+
+            }
+        });
+
+    }
     public void setAdvBaiDu(final  Context context, final RelativeLayout layout) {
         final Activity activity  =(Activity) context;
         AdSettings.setKey(new String[]{"baidu", "中国"});
-        String adPlaceID = "5831972";//重要：请填上你的代码位 ID,否则无法请求到广告
+        String adPlaceID = Contents.BAIDU_BANER_ID;//重要：请填上你的代码位 ID,否则无法请求到广告
         final AdView adView = new AdView(context, adPlaceID);
         adView.setListener(new AdViewListener() {
             public void onAdSwitch() {
@@ -141,8 +142,8 @@ public class AdvUtil {
     public void setAdvTecent(final Context context , final RelativeLayout layout){
         final Activity activity  =(Activity) context;
         final BannerView bv;
-        String posId ="5030634484990442";
-        bv = new BannerView((Activity) context, ADSize.BANNER,"1106938548",posId);
+        String posId = Contents.TENCENT_ID_BANER_ID;
+        bv = new BannerView((Activity) context, ADSize.BANNER,Contents.TENCENT_ID,posId);
         bv.setRefresh(30);
         bv.setShowClose(true);
         bv.setADListener(new AbstractBannerADListener() {
@@ -202,10 +203,10 @@ public class AdvUtil {
                                         }
 
                                     }else if("1".equals(advBean.getResult().getType())){
-//                                        if(position == 7){
-//                                            setAdvTencentStart(context,layout);
-//                                            return;
-//                                        }
+                                        if(position == 7){
+                                            setAdvTencentStart(context,layout);
+                                            return;
+                                        }
                                         Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
                                             @Override

@@ -21,4 +21,9 @@ public class Contents {
     public static final String USER_EXERCISE_FRIST = "USER_EXERCISE_FRIST";
     public static final String USER_EXERCISE_FOUR = "USER_EXERCISE_FOUR";
     public static final String DAY_SIGN="DAY_SIGN";
+    public static final String BAIDU_ID = "";
+    public static final String BAIDU_BANER_ID = "5831972";
+    public static final String TENCENT_ID = "1106938548";
+    public static final String TENCENT_ID_BANER_ID = "5030634484990442";
+    public static final String TENCENT_SPLASH_ID = "3090032590538253";
 }
