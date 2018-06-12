@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -129,18 +130,22 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private List<PictureDetailBean.ResultBean.DataBean> attachMentList;
     private int editType = 0;
     private String draftImgPath = "";//制成图的路径
+    private Typeface fangzhengjianzhi;
 
     @Override
     public void initView() {
         addFragment();
         defaultSelect();
+
+       // fangzhengjianzhi = Typeface.createFromAsset(getAssets(), "fangzhengjianzhi.ttf");
+
         mPhotoEditor = new PhotoEditor.Builder(this, photoEditorView)
                 .setPinchTextScalable(true) // set flag to make text scalable when pinch
-                //.setDefaultTextTypeface(mTextRobotoTf)
                 //.setDefaultEmojiTypeface(mEmojiTypeFace)
                 .build(); // build photo editor sdk
 
         mPhotoEditor.setOnPhotoEditorListener(this);
+        mPhotoEditor.setBrushColor(ContextCompat.getColor(this,R.color.select_color1));
         imageDrafts = new ArrayList<>();
         textDrafts = new ArrayList<>();
     }

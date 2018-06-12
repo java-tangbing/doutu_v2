@@ -129,7 +129,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
         switch (view.getId()) {
             case R.id.tv_confirm:
                 if (!etInput.getText().toString().isEmpty()) {
-                    inputTextListener.inputText(type, etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    inputTextListener.inputText(type, etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.select_color1));
                     etInput.setText("");
                 }
                 dismiss();
