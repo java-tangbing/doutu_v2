@@ -14,6 +14,8 @@ public class UserBean {
     private boolean pwd;
     private String mind;
     private String uid;
+    private String wechat;
+    private String qq;
 
     public UserBean(String name, String head, String gender, String address, String auth, String phone,String uid) {
         this.name = name;
@@ -114,4 +116,19 @@ public class UserBean {
             this.mind = mind;
         }
 
+    public String getWechat() {
+        return wechat;
+    }
+
+    public void setWechat(String wechat) {
+        this.wechat = wechat;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
 }
