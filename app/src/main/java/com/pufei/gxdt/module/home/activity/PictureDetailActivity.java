@@ -129,9 +129,9 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         adapter.setOnItemClickListener(new OtherPictureAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
-                GlideApp.with(PictureDetailActivity.this).load(pictureList.get(postion).getUrl()).placeholder(R.mipmap.loading).into(iv_picture);
-                index = postion;
                 URL = pictureList.get(postion).getUrl();
+                GlideApp.with(PictureDetailActivity.this).load(URL).placeholder(R.mipmap.loading).into(iv_picture);
+                index = postion;
                 refreshPictureData();
             }
         });

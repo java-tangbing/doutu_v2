@@ -9,22 +9,18 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
-
+import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.floating.FloatWindowService;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.umeng.analytics.MobclickAgent;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -40,18 +36,12 @@ public class FristActivity extends Activity {
     View dot2;
     @BindView(R.id.dot_3)
     View dot3;
-
-    /* @InjectView(R.id.frist_vp)
-        ViewPager fristVp;
-        @InjectView(R.id.frist_btn)
-        Button fristBtn;*/
     private List<View> viewList;
     private List<View> dotList;
     private String SHARE_APP_USER = "FLOAT";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private int oldPosition = 0;// 记录上一次点的位置
-
     private int currentItem;
 
     @Override
@@ -167,30 +157,32 @@ public class FristActivity extends Activity {
         button_v3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cb.isChecked()) {
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (!Settings.canDrawOverlays(FristActivity.this)) {
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    Uri.parse("package:" + getPackageName()));
-                            startActivityForResult(intent, 101);
-                        } else {
-                            editor.putBoolean(SHARE_APP_USER, true).apply();
-                            startService(new Intent(FristActivity.this, FloatWindowService.class));
-                            Log.e("fristactivity", "111111111111111");
-                            startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
-                            finish();
-                        }
-                    } else {
-                        editor.putBoolean(SHARE_APP_USER, true).apply();
-                        startService(new Intent(FristActivity.this, FloatWindowService.class));
-                        Log.e("fristactivity", "111111111111111");
-                        startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
-                        finish();
-                    }
-
-
-                }
+                startActivity(new Intent(FristActivity.this, MainActivity.class));
+                finish();
+//                if (cb.isChecked()) {
+//
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        if (!Settings.canDrawOverlays(FristActivity.this)) {
+//                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                                    Uri.parse("package:" + getPackageName()));
+//                            startActivityForResult(intent, 101);
+//                        } else {
+//                            editor.putBoolean(SHARE_APP_USER, true).apply();
+//                            startService(new Intent(FristActivity.this, FloatWindowService.class));
+//                            Log.e("fristactivity", "111111111111111");
+//                            startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
+//                            finish();
+//                        }
+//                    } else {
+//                        editor.putBoolean(SHARE_APP_USER, true).apply();
+//                        startService(new Intent(FristActivity.this, FloatWindowService.class));
+//                        Log.e("fristactivity", "111111111111111");
+//                        startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
+//                        finish();
+//                    }
+//
+//
+//                }
 
             }
         });
@@ -208,26 +200,26 @@ public class FristActivity extends Activity {
         MobclickAgent.onPause(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 101:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (Settings.canDrawOverlays(FristActivity.this)) {
-                        editor.putBoolean(SHARE_APP_USER, true).apply();
-                        startService(new Intent(FristActivity.this, FloatWindowService.class));
-                    } else {
-                        Toast.makeText(FristActivity.this, "悬浮窗权限被拒绝，请在设置里面开启相应权限，若无相应权限会影响使用", Toast.LENGTH_LONG).show();
-                    }
-                    Log.e("fristactivity", "111111111111111");
-                    startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
-                    finish();
-                }
-
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            case 101:
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    if (Settings.canDrawOverlays(FristActivity.this)) {
+//                        editor.putBoolean(SHARE_APP_USER, true).apply();
+//                        startService(new Intent(FristActivity.this, FloatWindowService.class));
+//                    } else {
+//                        Toast.makeText(FristActivity.this, "悬浮窗权限被拒绝，请在设置里面开启相应权限，若无相应权限会影响使用", Toast.LENGTH_LONG).show();
+//                    }
+//                    Log.e("fristactivity", "111111111111111");
+//                    startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
+//                    finish();
+//                }
+//
+//                break;
+//            default:
+//                super.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 
 }

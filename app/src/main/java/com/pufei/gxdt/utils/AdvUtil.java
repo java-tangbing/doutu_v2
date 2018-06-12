@@ -203,10 +203,10 @@ public class AdvUtil {
                                         }
 
                                     }else if("1".equals(advBean.getResult().getType())){
-                                        if(position == 7){
-                                            setAdvTencentStart(context,layout);
-                                            return;
-                                        }
+//                                        if(position == 7){
+//                                            setAdvTencentStart(context,layout);
+//                                            return;
+//                                        }
                                         Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
