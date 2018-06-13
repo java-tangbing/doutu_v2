@@ -28,6 +28,7 @@ import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
 import com.pufei.gxdt.module.maker.view.EditImageView;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
+import com.pufei.gxdt.utils.ImageUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
@@ -140,7 +141,7 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
                 case PICK_REQUEST:
                     try {
                         Uri uri = data.getData();
-                        String path1 = getRealFilePath(activity, uri);
+                        String path1 = ImageUtils.getFilePathByUri(activity,uri);
                         if (path1 != null) {
                             if (path1.contains(".gif") || path1.contains(".GIF")) {
                                 gifCallback.showGif(new File(path1), path1);
@@ -149,7 +150,9 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
                                 callback.showBitmap(bitmap, path1);
                             }
                         }
+                        Log.e("album path",path1 +" " + uri);
                     } catch (IOException e) {
+                        Log.e("Album",e.getMessage());
                         e.printStackTrace();
                     }
                     break;
@@ -173,6 +176,12 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
         return "";
     }
 
+    /**
+     * 此方式存在版本适配问题
+     * @param context
+     * @param uri
+     * @return
+     */
     public static String getRealFilePath(final Context context, final Uri uri) {
         if (null == uri) return null;
         final String scheme = uri.getScheme();

@@ -413,14 +413,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
                 break;
             case R.id.tv_save_draft:
-                if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                    if (gifFile == null) {
-                        gifFile = new File(imagePath);
+                if(imagePath != null) {
+                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                        if (gifFile == null) {
+                            gifFile = new File(imagePath);
+                        }
+                        saveGif(true);
+                    } else {
+                        saveImage(true);
                     }
-                    saveGif(true);
-                } else {
-                    saveImage(true);
                 }
+
                 break;
             case R.id.tv_redo:
                 mPhotoEditor.redo();
