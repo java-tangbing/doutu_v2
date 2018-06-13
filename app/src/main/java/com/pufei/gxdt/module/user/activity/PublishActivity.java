@@ -126,16 +126,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 startActivityForResult(intent,1);
 
             }
-
-            @Override
-            public void onDelete(int position) {
-
-            }
-
-            @Override
-            public void onAdd(int position) {
-
-            }
         });
     }
 

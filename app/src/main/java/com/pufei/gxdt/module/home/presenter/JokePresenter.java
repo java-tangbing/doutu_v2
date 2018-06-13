@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.home.presenter;
 
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.view.JokeView;
@@ -35,6 +36,18 @@ public class JokePresenter extends BasePresenter<JokeView> {
                     @Override
                     public void accept(JokeDetailBean result) throws Exception {
                         baseview.resultJokeDetail(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
+    public void getCountView(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getConutView(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<FavoriteBean>() {
+                    @Override
+                    public void accept(FavoriteBean result) throws Exception {
+                        baseview.resultCountView(result);
                     }
                 });
         addSubscription(disposable);

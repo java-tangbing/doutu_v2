@@ -17,6 +17,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.home.adapter.JokeDetalAdpater;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.presenter.JokePresenter;
@@ -149,6 +150,12 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         }
 
     }
+
+    @Override
+    public void resultCountView(FavoriteBean bean) {
+
+    }
+
     private void toJson(List<String> content){
         jsonObject = new JSONArray();
         for (int i = 0; i < content.size(); i++) {

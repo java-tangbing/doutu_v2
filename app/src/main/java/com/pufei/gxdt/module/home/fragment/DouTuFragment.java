@@ -12,6 +12,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.ImageTypeAdapter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
@@ -159,6 +160,11 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
 
     @Override
     public void resultHomeTypeList(HomeTypeBean bean) {
+
+    }
+
+    @Override
+    public void resultCountView(FavoriteBean bean) {
 
     }
 

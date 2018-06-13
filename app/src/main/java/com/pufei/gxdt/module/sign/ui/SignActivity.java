@@ -120,43 +120,43 @@ public class SignActivity extends AppCompatActivity {
         tvSignDay.setText(Html.fromHtml(String.format(getString(R.string.you_have_sign), "#999999", "#1B89CD", Integer.valueOf(intent.getStringExtra("times")))));
         tvScore.setText(intent.getStringExtra("total"));
         //---------------------------------分辨率适配----------------------------------
-//        ResolutionUtil resolutionUtil = ResolutionUtil.getInstance();
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-//        layoutParams.topMargin = resolutionUtil.formatVertical(40);
-//        tvSignDay.setLayoutParams(layoutParams);
-//        tvSignDay.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(42));
-//        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-//        layoutParams.topMargin = resolutionUtil.formatVertical(40);
-//        tvScore.setLayoutParams(layoutParams);
-//        tvScore.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(95));
-//        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, resolutionUtil.formatVertical(130));
-//        layoutParams.topMargin = resolutionUtil.formatVertical(54);
-//        View llDate = findViewById(R.id.activity_main_ll_date);
-//        if (llDate != null) {
-//            llDate.setLayoutParams(layoutParams);
-//        }
-//        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        layoutParams.gravity = Gravity.CENTER_VERTICAL;
-//        layoutParams.leftMargin = resolutionUtil.formatHorizontal(43);
-//        tvYear.setLayoutParams(layoutParams);
-//        tvYear.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(43));
-//        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        layoutParams.gravity = Gravity.CENTER_VERTICAL;
-//        layoutParams.leftMargin = resolutionUtil.formatHorizontal(44);
-//        tvMonth.setLayoutParams(layoutParams);
-//        tvMonth.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(43));
-//        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, resolutionUtil.formatVertical(818));
-//        signView.setLayoutParams(layoutParams);
+        ResolutionUtil resolutionUtil = ResolutionUtil.getInstance();
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        layoutParams.topMargin = resolutionUtil.formatVertical(40);
+        tvSignDay.setLayoutParams(layoutParams);
+        tvSignDay.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(42));
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        layoutParams.topMargin = resolutionUtil.formatVertical(40);
+        tvScore.setLayoutParams(layoutParams);
+        tvScore.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(95));
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, resolutionUtil.formatVertical(130));
+        layoutParams.topMargin = resolutionUtil.formatVertical(54);
+        View llDate = findViewById(R.id.activity_main_ll_date);
+        if (llDate != null) {
+            llDate.setLayoutParams(layoutParams);
+        }
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_VERTICAL;
+        layoutParams.leftMargin = resolutionUtil.formatHorizontal(43);
+        tvYear.setLayoutParams(layoutParams);
+        tvYear.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(43));
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_VERTICAL;
+        layoutParams.leftMargin = resolutionUtil.formatHorizontal(44);
+        tvMonth.setLayoutParams(layoutParams);
+        tvMonth.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(43));
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, resolutionUtil.formatVertical(818));
+        signView.setLayoutParams(layoutParams);
         getScore();
-//        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, resolutionUtil.formatVertical(142));
-//        layoutParams.topMargin = resolutionUtil.formatVertical(111);
-//        layoutParams.leftMargin = layoutParams.rightMargin = resolutionUtil.formatHorizontal(42);
-//        if (btnSign != null) {
-//            btnSign.setLayoutParams(layoutParams);
-//            btnSign.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(54));
-//        }
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, resolutionUtil.formatVertical(142));
+        layoutParams.topMargin = resolutionUtil.formatVertical(111);
+        layoutParams.leftMargin = layoutParams.rightMargin = resolutionUtil.formatHorizontal(42);
+        if (btnSign != null) {
+            btnSign.setLayoutParams(layoutParams);
+            btnSign.setTextSize(TypedValue.COMPLEX_UNIT_PX, resolutionUtil.formatVertical(54));
+        }
         tvbang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
