@@ -196,6 +196,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         switch (view.getId()) {
             case R.id.login_sendcode:
                 if (!isSendingCode) {
+                    if (TextUtils.isEmpty(loginIphone.getText().toString())){
+                        ToastUtils.showLong(this,"请输入常用手机号");
+                        break;
+                    }
                     try {
                         JSONObject jsonObject = KeyUtil.getJson(this);
                         jsonObject.put("mobile", loginIphone.getText().toString());
@@ -212,6 +216,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             case R.id.login_login_btn:
                 if (cxAgreement.isChecked()) {
                     if (loginSendcode.getVisibility() == View.VISIBLE) {//验证码登录
+                        if (TextUtils.isEmpty(loginCode.getText().toString())){
+                            ToastUtils.showLong(this,"请输入验证码");
+                            break;
+                        }
                         UmengStatisticsUtil.statisticsEvent(this, "Login", "vcodeLogin", "验证码登录");
                         try {
                             JSONObject jsonObject = KeyUtil.getJson(this);

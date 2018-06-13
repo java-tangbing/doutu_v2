@@ -118,8 +118,8 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             AppManager.getAppManager().finishActivity();
-        }else {
-            ToastUtils.showShort(this,sendCodeBean.getMsg());
+        } else {
+            ToastUtils.showShort(this, sendCodeBean.getMsg());
         }
     }
 
@@ -148,17 +148,17 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             case R.id.login_sendcode:
                 if (!isSendingCode) {
                     try {
-                        if(!TextUtils.isEmpty(loginIphone.getText().toString())) {
-                            if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
-                                JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
+                        if (TextUtils.isEmpty(loginIphone.getText().toString())) {
+                            ToastUtils.showLong(this, "请输入常用手机号");
+                            break;
+                        }
+                        if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
+                            JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
 
-                                jsonObject.put("mobile", loginIphone.getText().toString());
-                                presenter.sendCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
-                            } else {
-                                ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");
-                            }
-                        }else {
-                            ToastUtils.showShort(this,"请输入手机号");
+                            jsonObject.put("mobile", loginIphone.getText().toString());
+                            presenter.sendCode(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                        } else {
+                            ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");
                         }
 
                     } catch (JSONException e) {
@@ -168,6 +168,10 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
                 break;
             case R.id.btn_login:
                 try {
+                    if (TextUtils.isEmpty(loginCode.getText().toString())) {
+                        ToastUtils.showLong(this, "请输入验证码");
+                        break;
+                    }
                     if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
                         JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
                         jsonObject.put("mobile", loginIphone.getText().toString());
