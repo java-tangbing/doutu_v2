@@ -22,7 +22,19 @@ public class NewsAdapter extends BaseQuickAdapter<NoticeBean.ResultBean, BaseVie
                 .setText(R.id.news_item_dateline_tv, item.getDateline())
                 .setText(R.id.news_item_title_tv, item.getTitle())
                 .setText(R.id.news_item_content_tv, item.getContent());
-        GlideApp.with(mContext).load(R.mipmap.ic_launcher).into((ImageView) helper.getView(R.id.news_item_icon_cv));
+        //1=系统消息 2=斗图小助手 3=意见反馈
+        switch (item.getType()) {
+            case "1":
+                GlideApp.with(mContext).load(R.mipmap.news_ic_system).into((ImageView) helper.getView(R.id.news_item_icon_cv));
+                break;
+            case "2":
+                GlideApp.with(mContext).load(R.mipmap.news_ic_assistant).into((ImageView) helper.getView(R.id.news_item_icon_cv));
+                break;
+            case "3":
+                GlideApp.with(mContext).load(R.mipmap.news_ic_opinion).into((ImageView) helper.getView(R.id.news_item_icon_cv));
+                break;
+        }
+
 
     }
 }
