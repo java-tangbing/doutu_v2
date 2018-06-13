@@ -42,6 +42,7 @@ import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
+import com.suke.widget.SwitchButton;
 import com.umeng.message.PushAgent;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -65,6 +66,8 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     TextView phoneBind;
     @BindView(R.id.wechat_bind)
     TextView wechatBind;
+    @BindView(R.id.change_notify)
+    SwitchButton switchButton;
     @BindView(R.id.qq_bind)
     TextView qqBind;
     @BindView(R.id.setting_log_out)
@@ -94,6 +97,12 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         }
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.onAppStart();
+        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+
+            }
+        });
     }
 
     @Override
@@ -141,11 +150,11 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.userdata_name_ll:
                 type = 1;
-                thirdLogin(SHARE_MEDIA.WEIXIN);
+                bindAccount(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.userdata_name_qq:
                 type = 2;
-                thirdLogin(SHARE_MEDIA.QQ);
+                bindAccount(SHARE_MEDIA.QQ);
                 break;
             default:
                 break;
@@ -177,12 +186,12 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             if ((TextUtils.isEmpty(qq))) {
                 qqBind.setText("未绑定");
             } else {
-                qqBind.setText(App.userBean.getQq());
+                qqBind.setText(qq);
             }
             if ((TextUtils.isEmpty(wechat))) {
                 wechatBind.setText("未绑定");
             } else {
-                wechatBind.setText(App.userBean.getWechat());
+                wechatBind.setText(wechat);
             }
         } else {
             ToastUtils.showShort(this, bean.getMsg() + " ");
@@ -191,6 +200,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
 
     @Override
     public void sendRusult(BindAccountBean resultBean) {
+        ToastUtils.showLong(SettingActivity.this, "resultBean code: " + resultBean.getCode());
         if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
             if (type == 1) {
                 App.userBean.setWechat(nickName);
@@ -200,7 +210,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 qqBind.setText(nickName);
             }
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-            Toast.makeText(SettingActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
 //            LoginResultBean.ResultBean bean = resultBean.getResult();
 //            String name = "";
 //            String header = "";
@@ -257,27 +267,29 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         }
     }
 
-    private void thirdLogin(SHARE_MEDIA share_media) {
+    private void bindAccount(SHARE_MEDIA share_media) {
         UMShareAPI api = UMShareAPI.get(this);
         api.getPlatformInfo(this, share_media, new UMAuthListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                //ToastUtils.showLong(SettingActivity.this, "开始");
+                ToastUtils.showLong(SettingActivity.this, "开始");
 
             }
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                ToastUtils.showLong(SettingActivity.this, "onComplete");
+                ToastUtils.showLong(SettingActivity.this, "type == " + type);
                 for (Map.Entry<String, String> entry : map.entrySet()) {
-                    Log.e("LoginActivity", "key:" + entry.getKey() + "; value:" + entry.getValue());
+                    Log.e("SettingActivity", "key:" + entry.getKey() + "; value:" + entry.getValue());
                 }
 
-                nickName = map.get("name");
                 openid = map.get("uid");
+                nickName = map.get("name");
                 province = map.get("province");
-                city = map.get("city");
-                gender = map.get("gender");
-                header = map.get("iconurl");
+                //city = map.get("city");
+                //gender = map.get("gender");
+                //header = map.get("iconurl");
                 if (type == 1) {
                     orgin = "wechat";
                 } else {
@@ -286,14 +298,13 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 try {
                     if (NetWorkUtil.isNetworkConnected(SettingActivity.this)) {
                         JSONObject jsonObject = KeyUtil.getJson(SettingActivity.this);
-                        jsonObject.put("username", nickName);
+                        jsonObject.put("auth", App.userBean.getAuth());
                         jsonObject.put("openid", openid);
-                        jsonObject.put("province", province);
-                        jsonObject.put("city", city);
-                        jsonObject.put("gender", gender);
-                        jsonObject.put("header", header);
                         jsonObject.put("orgin", orgin);
+                        jsonObject.put("nickname", nickName);
+                        ToastUtils.showLong(SettingActivity.this, jsonObject.toString());
                         presenter.bindAccount(RetrofitFactory.getRequestBody(jsonObject.toString()));
+                        ToastUtils.showLong(SettingActivity.this, "开始 bindAccount");
                     } else {
                         ToastUtils.showShort(SettingActivity.this, "请检查网络设置");
                     }

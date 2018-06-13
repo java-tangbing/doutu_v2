@@ -34,6 +34,7 @@ public class StartActivity extends Activity {
     private final String TAG = "StartActivity";
     private int timer = 5;
     private boolean imageis = true;
+    private boolean user_first;
     final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -83,8 +84,8 @@ public class StartActivity extends Activity {
         }
         ButterKnife.bind(this);
 //        StatusBarUtil.StatusBarLightMode(this);
-//        setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启动
-//        user_first = setting.getBoolean("FIRST", true);
+         setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启动
+          user_first = setting.getBoolean("FIRST", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            StatusBarUtil.transparencyBar(this);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -142,21 +143,22 @@ public class StartActivity extends Activity {
         }
     }
 
-    private boolean user_first;
+
 
     private void IfStart() {
-//        if (user_first) {//第一次
-//            setting.edit().putBoolean("FIRST", false).apply();
-//            setting.edit().putBoolean("GIF", true).apply();
-//            setting.edit().apply();
-//            startActivity(new Intent(StartActivity.this, FristActivity.class));
-//            finish();
-//        } else {
+        if (user_first) {//第一次
+            setting.edit().putBoolean("FIRST", false).apply();
+            setting.edit().putBoolean("GIF", true).apply();
+            setting.edit().apply();
+            startActivity(new Intent(StartActivity.this, FristActivity.class));
+            finish();
+        } else {
 //            if (imageis) {
-                startActivity(new Intent(StartActivity.this, MainActivity.class));
-                finish();
+            startActivity(new Intent(StartActivity.this, MainActivity.class));
+            finish();
 //            }
 //        }
+        }
     }
 
 }

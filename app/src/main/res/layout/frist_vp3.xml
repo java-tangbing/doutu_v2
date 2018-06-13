@@ -20,6 +20,7 @@
         android:layout_centerHorizontal="true" />
 
     <CheckBox
+        android:visibility="invisible"
         android:checked="true"
         style="@style/checkBoxStyle"
         android:textColor="#797979"
@@ -31,6 +32,7 @@
         android:layout_alignLeft="@+id/frist_loading3_btn"
         android:layout_alignStart="@+id/frist_loading3_btn" />
     <com.pufei.gxdt.widgets.MyFrontTextView
+        android:visibility="invisible"
         android:text="开启悬浮窗"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

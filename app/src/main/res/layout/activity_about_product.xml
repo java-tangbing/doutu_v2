@@ -15,14 +15,6 @@
         android:src="@mipmap/ic_logo" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="驾考大师"
-        android:textColor="@color/about_tv_color"
-        android:textSize="14sp" />
-
-    <TextView
         android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

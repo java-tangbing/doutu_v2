@@ -6,21 +6,14 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.baidu.mobads.AdSettings;
-import com.baidu.mobads.AdView;
-import com.baidu.mobads.AdViewListener;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
@@ -29,7 +22,6 @@ import com.pufei.gxdt.module.home.activity.HomeImageActivity;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeActivity;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
-import com.pufei.gxdt.module.home.activity.PictureActivity;
 import com.pufei.gxdt.module.home.activity.SearchActivity;
 import com.pufei.gxdt.module.home.activity.ThemeImageActivity;
 import com.pufei.gxdt.module.home.adapter.HomeListAdapter;
@@ -43,6 +35,7 @@ import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -196,7 +189,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                 e.printStackTrace();
             }
         } else {
-            request_failed.setVisibility(View.VISIBLE);
+            headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
         }
     }
 
