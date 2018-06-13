@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.R;
@@ -33,7 +35,6 @@ public class AboutProductActivity extends BaseActivity {
         llTitleLeft.setVisibility(View.VISIBLE);
         llTitleRight.setVisibility(View.GONE);
         tvTitle.setText("关于产品");
-        tvAgreement.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class AboutProductActivity extends BaseActivity {
         return R.layout.activity_about_product;
     }
 
-    @OnClick({R.id.ll_title_left, R.id.login_about, R.id.tv_agreement, R.id.tv_user_feedback})
+    @OnClick({R.id.ll_title_left, R.id.login_about, R.id.tv_agreement, R.id.tv_user_feedback, R.id.tv_user_manage, R.id.tv_user_score})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_left:
@@ -68,6 +69,18 @@ public class AboutProductActivity extends BaseActivity {
                 break;
             case R.id.tv_user_feedback:
                 startActivity(new Intent(this, FeedBackActivity.class));
+                break;
+            case R.id.tv_user_manage:
+                startActivity(new Intent(this, ManagerRulesActivity.class));
+                break;
+            case R.id.tv_user_score:
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("market://details?id=" + getPackageName()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "您的系统中没有安装应用市场", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
