@@ -194,6 +194,11 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
 
     }
 
+    @Override
+    public void resultCountView(FavoriteBean bean) {
+
+    }
+
     public static int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());

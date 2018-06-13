@@ -4,10 +4,7 @@ package com.pufei.gxdt.module.user.presenter;
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
-import com.pufei.gxdt.module.home.view.ImageTypeView;
-import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.view.PublishView;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;

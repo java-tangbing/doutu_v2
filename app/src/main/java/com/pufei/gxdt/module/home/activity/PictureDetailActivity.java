@@ -35,7 +35,6 @@ import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
-import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.OtherPictureAdapter;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
@@ -47,7 +46,6 @@ import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
-import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
@@ -63,11 +61,8 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
-
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -78,10 +73,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import ja.burhanrashid52.photoeditor.PhotoEditor;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -143,8 +136,24 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         joinPicture();
         URL = pictureList.get(index).getUrl();
         refreshPictureData();
-    }
+        countView(pictureList.get(index).getId(),3,pictureList.get(index).getOrgintable(),"click");
 
+    }
+    private void countView(String id,int type,String orgintable,String option){
+        if(NetWorkUtil.isNetworkConnected(this)){
+            try {
+                JSONObject countViewObj = KeyUtil.getJson(this);
+                countViewObj.put("id", id);
+                countViewObj.put("type", type+"");
+                countViewObj.put("orgintable", orgintable+"");
+                countViewObj.put("option", option+"");
+                presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     private void setUserData(PictureDetailBean pictureDetailBeans) {
         if (pictureDetailBeans != null) {
             tv_eyes.setText(pictureDetailBeans.getResult().getView());
@@ -378,6 +387,11 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
     }
 
+    @Override
+    public void resultCountView(FavoriteBean bean) {
+
+    }
+
     public void GetImageInputStream(String imageurl) {//下载图片
         java.net.URL url;
         HttpURLConnection connection = null;
@@ -501,6 +515,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
         @Override
         public void onResult(SHARE_MEDIA platform) {
+            countView(pictureList.get(index).getId(),3,pictureList.get(index).getOrgintable(),"share");
             ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
             sharedialog.dismiss();
         }
