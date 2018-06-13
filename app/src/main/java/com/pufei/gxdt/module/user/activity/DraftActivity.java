@@ -26,6 +26,7 @@ import com.pufei.gxdt.db.ImageDraft;
 import com.pufei.gxdt.db.ImageDraft_Table;
 import com.pufei.gxdt.db.TextDraft;
 import com.pufei.gxdt.db.TextDraft_Table;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.module.maker.bean.MaterialBean;
 import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
@@ -152,6 +153,7 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
                 break;
             case R.id.tv_publish:
 //                if(imageBase64 != null && bgImageBase64 != null) {
+                if(App.userBean != null) {
                     final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(datas.get(position).imageId)).and(ImageDraft_Table.isDraft.is(true)).queryList();
                     final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(datas.get(position).imageId)).and(TextDraft_Table.isDraft.is(true)).queryList();
                     getBase64(datas.get(position).imagePath,datas.get(position).make_url);
@@ -161,6 +163,11 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
                         originTable = datas.get(position).originTable;
                         UploadImageUtil.uploadImage(this, datas.get(position), datas.get(position).imagePath, imageBase64, bgImageBase64, imageDrafts, textDrafts);
                     }
+                }else {
+                    Intent intent1 = new Intent(this, LoginActivity.class);
+                    startActivity(intent1);
+                }
+
 //                }
 
                 break;

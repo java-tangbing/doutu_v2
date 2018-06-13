@@ -162,8 +162,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
                 SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }else {
+                    String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
+                    if (user_detail != null) {
+                        App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+                    }
+                }
                 AppManager.getAppManager().finishActivity();
             }else {
                 Intent intent = new Intent(this, BindPhoneActivity.class);

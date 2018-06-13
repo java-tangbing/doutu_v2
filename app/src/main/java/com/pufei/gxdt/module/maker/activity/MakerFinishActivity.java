@@ -35,6 +35,7 @@ import com.pufei.gxdt.db.ImageDraft;
 import com.pufei.gxdt.db.ImageDraft_Table;
 import com.pufei.gxdt.db.TextDraft;
 import com.pufei.gxdt.db.TextDraft_Table;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.bean.MaterialBean;
 import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
@@ -114,6 +115,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
         id = intent.getStringExtra("Id");
         uid = intent.getStringExtra("uid");
         originTable = intent.getStringExtra("originTable");
+        Log.e("make finish  path",path+" ");
         info = new Select().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(false)).querySingle();
         if (info != null) {
             if (path.contains("http:") || path.contains("https:")) {//合成图
@@ -275,11 +277,12 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
             case R.id.btn_publish:
                 if (App.userBean != null) {
                     if (info != null) {
-                        showLoading("上传中...");
                         setRequestData();
                     }
                 } else {
-                    ToastUtils.showShort(this, "请先登录");
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+//                    ToastUtils.showShort(this, "请先登录");
                 }
 
                 break;
@@ -288,6 +291,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
 
     private void setRequestData() {
         if (imageBase64 != null && bgImageBase64 != null) {
+            showLoading("上传中...");
             final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
             final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
             UploadImageUtil.uploadImage(this, info, path, imageBase64, bgImageBase64, imageDrafts, textDrafts);
@@ -312,7 +316,6 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 map.put("option","edit");
                 presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
-
             ToastUtils.showShort(this, "发布成功");
         }else {
             ToastUtils.showShort(this, response.getMsg());

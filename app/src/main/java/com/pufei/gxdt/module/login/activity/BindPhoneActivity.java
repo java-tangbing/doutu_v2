@@ -114,9 +114,15 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             UserBean bean = App.userBean;
             bean.setPhone(loginIphone.getText().toString());
             Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
+                Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
+                startActivity(intent);
+            }else {
+                String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
+                if (user_detail != null) {
+                    App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+                }
+            }
             AppManager.getAppManager().finishActivity();
         } else {
             ToastUtils.showShort(this, sendCodeBean.getMsg());
