@@ -54,10 +54,10 @@ public class FristActivity extends Activity {
         //ButterKnife.inject(this);
         dotList = new ArrayList<>();
         viewList = new ArrayList<>();
-        dotList.add(dot1);
-        dotList.add(dot2);
-        dotList.add(dot3);
-        dotList.get(0).setBackgroundResource(R.drawable.dot_focused);
+//        dotList.add(dot1);
+//        dotList.add(dot2);
+//        dotList.add(dot3);
+//        dotList.get(0).setBackgroundResource(R.drawable.dot_focused);
         LayoutInflater inflater = getLayoutInflater();
         View view1 = inflater.inflate(R.layout.frist_vp1, null);
         Button button_v1 = (Button) view1.findViewById(R.id.frist_loading1_btn);
@@ -105,35 +105,35 @@ public class FristActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
-                //下面就是获取上一个位置，并且把点的状体设置成默认状体
-                dotList.get(oldPosition).setBackgroundResource(R.drawable.dot_normal);
-                //获取到选中页面对应的点，设置为选中状态
-                dotList.get(position).setBackgroundResource(R.drawable.dot_focused);
-                //下面是记录本次的位置，因为在滑动，他就会变成过时的点了
-                oldPosition = position;
-                //关联页卡
-                currentItem = position;
-                if (position >= viewList.size()) {
-                    if (cb.isChecked()) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (!Settings.canDrawOverlays(FristActivity.this)) {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                        Uri.parse("package:" + getPackageName()));
-                                startActivityForResult(intent, 101);
-                            } else {
-                                editor.putBoolean(SHARE_APP_USER, true).apply();
-                                startService(new Intent(FristActivity.this, FloatWindowService.class));
-                            }
-                        } else {
-                            editor.putBoolean(SHARE_APP_USER, true).apply();
-                            startService(new Intent(FristActivity.this, FloatWindowService.class));
-                        }
-
-
-                    }
-                    startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
-                    finish();
-                }
+//                //下面就是获取上一个位置，并且把点的状体设置成默认状体
+//                dotList.get(oldPosition).setBackgroundResource(R.drawable.dot_normal);
+//                //获取到选中页面对应的点，设置为选中状态
+//                dotList.get(position).setBackgroundResource(R.drawable.dot_focused);
+//                //下面是记录本次的位置，因为在滑动，他就会变成过时的点了
+//                oldPosition = position;
+//                //关联页卡
+//                currentItem = position;
+//                if (position >= viewList.size()) {
+//                    if (cb.isChecked()) {
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                            if (!Settings.canDrawOverlays(FristActivity.this)) {
+//                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                                        Uri.parse("package:" + getPackageName()));
+//                                startActivityForResult(intent, 101);
+//                            } else {
+//                                editor.putBoolean(SHARE_APP_USER, true).apply();
+//                                startService(new Intent(FristActivity.this, FloatWindowService.class));
+//                            }
+//                        } else {
+//                            editor.putBoolean(SHARE_APP_USER, true).apply();
+//                            startService(new Intent(FristActivity.this, FloatWindowService.class));
+//                        }
+//
+//
+//                    }
+//                    startActivity(new Intent(FristActivity.this, LoginActivity.class));//点击跳转回主页面
+//                    finish();
+//                }
             }
 
             @Override
