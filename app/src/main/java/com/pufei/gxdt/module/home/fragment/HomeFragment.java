@@ -25,6 +25,7 @@ import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
 import com.pufei.gxdt.module.home.activity.SearchActivity;
 import com.pufei.gxdt.module.home.activity.ThemeImageActivity;
 import com.pufei.gxdt.module.home.adapter.HomeListAdapter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
@@ -35,7 +36,6 @@ import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
-import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -122,6 +122,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
                 if ("3".equals(homeList.get(postion).getCat())) {
+                    countView(homeList.get(postion).getId(),1,"","click");
                     Intent intent = new Intent(getActivity(), HomeImageActivity.class);
                     intent.putExtra("category_id", homeList.get(postion).getImgs().get(0).getCategory_id());
                     intent.putExtra("title", homeList.get(postion).getCategory_name());
@@ -129,6 +130,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                     intent.putExtra("hot", homeList.get(postion).getHot());
                     startActivity(intent);
                 }else if("1".equals(homeList.get(postion).getCat())){
+                    countView(homeList.get(postion).getId(),4,"","click");
                     int position = 0;
                     for(int  i = 0;i<homeTypeList.size();i++){
                         if(homeList.get(postion).getId().equals(homeTypeList.get(i).getId()) ){
@@ -143,6 +145,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else {
+                    countView(homeList.get(postion).getId(),2,"","click");
                     Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
                     intent.putExtra("id",homeList.get(postion).getId());
                     intent.putExtra("title",homeList.get(postion).getTitle());
@@ -151,17 +154,23 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                 }
 
             }
-
-            @Override
-            public void OnLike(int position) {
-
-            }
-
-            @Override
-            public void OnBtDelete(int position) {
-
-            }
         });
+    }
+
+    private void countView(String id,int type,String orgintable,String option){
+        if(NetWorkUtil.isNetworkConnected(getActivity())){
+            try {
+                JSONObject countViewObj = KeyUtil.getJson(getActivity());
+                countViewObj.put("id", id);
+                countViewObj.put("type", type+"");
+                countViewObj.put("orgintable", orgintable+"");
+                countViewObj.put("option", option+"");
+                presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override
@@ -222,6 +231,9 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     @Override
     public void resultHomeList(HomeResultBean bean) {
         if (bean != null) {
+            if(page == 1){
+                homeList.clear();
+            }
             homeList.addAll(bean.getResult());
             adapter.notifyDataSetChanged();
         }
@@ -239,6 +251,11 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             homeTypeList.addAll(bean.getResult());
             setTypeText(headView);
         }
+
+    }
+
+    @Override
+    public void resultCountView(FavoriteBean bean) {
 
     }
 
@@ -300,6 +317,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             holder.ll_doutu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    countView(homeTypeList.get(position).getId(),4,"","click");
                     Intent intent = new Intent(getActivity(), FaceTypeActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("title_list", (Serializable) homeTypeList);

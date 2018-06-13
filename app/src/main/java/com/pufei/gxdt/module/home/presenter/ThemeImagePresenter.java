@@ -65,4 +65,16 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                 });
         addSubscription(disposable);
     }
+    public void getCountView(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getConutView(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<FavoriteBean>() {
+                    @Override
+                    public void accept(FavoriteBean result) throws Exception {
+                        baseview.resultCountView(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
 }

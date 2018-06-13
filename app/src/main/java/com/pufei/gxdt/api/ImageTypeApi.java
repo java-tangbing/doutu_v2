@@ -31,4 +31,6 @@ public interface ImageTypeApi {
     Observable<FavoriteBean> addFavarite(@Body RequestBody body);
     @POST("User/deleteImages")
     Observable<FavoriteBean> cancleFavarite(@Body RequestBody body);
+    @POST("Piece/countView")
+    Observable<FavoriteBean> getConutView(@Body RequestBody body);
 }

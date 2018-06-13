@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.home.presenter;
 
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
@@ -48,6 +49,18 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
                     @Override
                     public void accept(HomeTypeBean result) throws Exception {
                         baseview.resultHomeTypeList(result);
+                    }
+                });
+        addSubscription(disposable);
+    }
+    public void getCountView(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getConutView(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<FavoriteBean>() {
+                    @Override
+                    public void accept(FavoriteBean result) throws Exception {
+                        baseview.resultCountView(result);
                     }
                 });
         addSubscription(disposable);

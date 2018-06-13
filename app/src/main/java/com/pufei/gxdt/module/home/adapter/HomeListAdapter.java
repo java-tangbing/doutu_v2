@@ -124,9 +124,5 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
 
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
-
-        void OnLike(int position);
-
-        void OnBtDelete(int position);
     }
 }

@@ -18,13 +18,9 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
-import com.pufei.gxdt.module.home.model.HomeResultBean;
-import com.pufei.gxdt.module.home.model.HomeTypeBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.ThemeResultBean;
-import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
-import com.pufei.gxdt.module.home.view.HomeListView;
 import com.pufei.gxdt.module.home.view.ThemeImageView;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.utils.AdvUtil;
@@ -41,15 +37,11 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -147,6 +139,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         adapter.setOnItemClickListener(new HomeImageAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
+                countView(list.get(postion).getId(),3,list.get(postion).getOrgintable(),"click");
                 Intent intent = new Intent(HomeImageActivity.this, PictureDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("picture_index", postion);
@@ -154,19 +147,23 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 intent.putExtras(bundle);
                 startActivityForResult(intent,1);
             }
-
-            @Override
-            public void onDelete(int position) {
-
-            }
-
-            @Override
-            public void onAdd(int position) {
-
-            }
         });
     }
+    private void countView(String id,int type,String orgintable,String option){
+        if(NetWorkUtil.isNetworkConnected(this)){
+            try {
+                JSONObject countViewObj = KeyUtil.getJson(this);
+                countViewObj.put("id", id);
+                countViewObj.put("type", type+"");
+                countViewObj.put("orgintable", orgintable+"");
+                countViewObj.put("option", option+"");
+                presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
+    }
     @Override
     public void getData() {
         requestHomeImage(page);
@@ -284,6 +281,12 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
             ToastUtils.showShort(this,bean.getMsg());
         }
     }
+
+    @Override
+    public void resultCountView(FavoriteBean bean) {
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
