@@ -140,8 +140,13 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
                     break;
                 case PICK_REQUEST:
                     try {
+                        String path1 = "";
                         Uri uri = data.getData();
-                        String path1 = ImageUtils.getFilePathByUri(activity,uri);
+                        if(uri.toString().contains("provider")) {
+                            path1 = ImageUtils.getFilePathByUri(activity,uri);
+                        }else {
+                            path1 = getRealFilePath(activity,uri);
+                        }
                         if (path1 != null) {
                             if (path1.contains(".gif") || path1.contains(".GIF")) {
                                 gifCallback.showGif(new File(path1), path1);
@@ -232,6 +237,11 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
 
     @Override
     public void requestErrResult(String msg) {
+
+    }
+
+    @Override
+    public void requestSuccess(String msg) {
 
     }
 

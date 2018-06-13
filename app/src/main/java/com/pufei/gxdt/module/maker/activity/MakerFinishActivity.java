@@ -287,127 +287,32 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     }
 
     private void setRequestData() {
-        if(imageBase64 != null && bgImageBase64 != null) {
+        if (imageBase64 != null && bgImageBase64 != null) {
             final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
             final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
-            UploadImageUtil.uploadImage(this,info,path,imageBase64,bgImageBase64,imageDrafts,textDrafts);
+            UploadImageUtil.uploadImage(this, info, path, imageBase64, bgImageBase64, imageDrafts, textDrafts);
         }
-
-
-//        final Map<String, Object> map = new HashMap<>();
-//        final List<Map<String, String>> mapList = new ArrayList<>();
-//        map.put("deviceid", SystemInfoUtils.deviced(this));
-//        map.put("version", SystemInfoUtils.versionName(this));
-//        map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
-//        map.put("os", "1");
-//        if (type == 0 || type == 2) {
-//            map.put("orginid", "");
-//            map.put("orgintable", "design_images");
-//            map.put("uid", "");
-//            map.put("id", "");
-//        } else {
-//            map.put("orginid", imageId);
-//            map.put("uid", uid);
-//            map.put("id", id);
-//            map.put("orgintable", originTable);
-//
-//        }
-//        map.put("height", info.height);
-//        map.put("width", info.width);
-//        map.put("title", "");
-//        map.put("make_url", imageBase64);
-//        map.put("url", bgImageBase64);
-//        map.put("sign", "sign");
-//        map.put("key", "");
-//        map.put("auth", App.userBean.getAuth());
-//
-//        if (path.contains(".gif") || path.contains(".GIF")) {
-//            map.put("image_type", "gif");
-//        } else {
-//            map.put("image_type", "png");
-//        }
-//        for (int i = 0; i < imageDrafts.size(); i++) {
-//            final ImageDraft draft = imageDrafts.get(i);
-//            final Map<String, String> map1 = new HashMap<>();
-//            final int finalI = i;
-//            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(draft.imageWidth, draft.imageHeight) {
-//                @Override
-//                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-//                    map1.put("url", ImageUtils.bitmapToBase64(resource));
-//                    map1.put("index", "1");
-//                    map1.put("textName", "");
-//                    map1.put("centerX", draft.translationX + "");
-//                    map1.put("centerY", draft.translationY + "");
-//                    map1.put("height", draft.imageHeight + "");
-//                    map1.put("width", draft.imageWidth + "");
-//                    map1.put("textFontSize", "0");
-//                    map1.put("textFontColor", "");
-//                    map1.put("zoom", draft.scaleX + "");
-//                    map1.put("rolling", draft.rotation + "");
-//                    mapList.add(map1);
-//
-//                    if (finalI == (imageDrafts.size() - 1)) {
-//                        int index = finalI;
-//                        for (int i = 0; i < textDrafts.size(); i++) {
-//                            TextDraft draft = textDrafts.get(i);
-//                            Map<String, String> map1 = new HashMap<>();
-//                            map1.put("url", "");
-//                            map1.put("index", index + "");
-//                            map1.put("textName", draft.text);
-//                            map1.put("centerX", draft.translationX + "");
-//                            map1.put("centerY", draft.translationY + "");
-//                            map1.put("height", "");
-//                            map1.put("width", "");
-//                            map1.put("textFontSize", "12");
-//                            map1.put("textFontColor", draft.textColor + "");
-//                            map1.put("zoom", draft.scaleX + "");
-//                            map1.put("rolling", draft.rotation + "");
-//                            mapList.add(map1);
-//                            index++;
-//                        }
-//                        if (mapList.size() > 0) {
-//                            map.put("attachment", mapList);
-//                        } else {
-//                            map.put("attachment", "");
-//                        }
-//                        EventBus.getDefault().post(new MakerEventMsg(12, new Gson().toJson(map)));
-//                    }
-//
-//                }
-//            };
-//            GlideApp.with(this).asBitmap().load(draft.stickerImagePath).into(simpleTarget);
-//        }
-//
-//        if (imageDrafts.size() == 0) {
-//            for (int i = 0; i < textDrafts.size(); i++) {
-//                TextDraft draft = textDrafts.get(i);
-//                Map<String, String> map1 = new HashMap<>();
-//                map1.put("url", "");
-//                map1.put("index", i + "");
-//                map1.put("textName", draft.text);
-//                map1.put("centerX", draft.translationX + "");
-//                map1.put("centerY", draft.translationY + "");
-//                map1.put("height", "");
-//                map1.put("width", "");
-//                map1.put("textFontSize", "12");
-//                map1.put("textFontColor", draft.textColor + "");
-//                map1.put("zoom", draft.scaleX + "");
-//                map1.put("rolling", draft.rotation + "");
-//                mapList.add(map1);
-//            }
-//            if (mapList.size() > 0) {
-//                map.put("attachment", mapList);
-//            } else {
-//                map.put("attachment", "");
-//            }
-//            EventBus.getDefault().post(new MakerEventMsg(12, new Gson().toJson(map)));
-//        }
     }
 
     @Override
     public void upLoadImageResult(ModifyResultBean response) {
         hideLoading();
         if(response.getCode() == 0 ) {
+            if(!TextUtils.isEmpty(id)) {
+                Map<String,String> map = new HashMap<>();
+                map.put("deviceid", SystemInfoUtils.deviced(this));
+                map.put("version", SystemInfoUtils.versionName(this));
+                map.put("sign","sign");
+                map.put("key","key");
+                map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
+                map.put("os", "1");
+                map.put("id",id);
+                map.put("type","3");
+                map.put("orgintable",originTable);
+                map.put("option","edit");
+                presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
+            }
+
             ToastUtils.showShort(this, "发布成功");
         }else {
             ToastUtils.showShort(this, response.getMsg());
@@ -475,6 +380,11 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     @Override
     public void requestErrResult(String msg) {
         ToastUtils.showShort(this,msg);
+    }
+
+    @Override
+    public void requestSuccess(String msg) {
+
     }
 
 

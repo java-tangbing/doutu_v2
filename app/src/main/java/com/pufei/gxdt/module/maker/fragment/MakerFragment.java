@@ -1,10 +1,7 @@
 package com.pufei.gxdt.module.maker.fragment;
 
-import android.content.Intent;
-
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseFragment;
-import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 
 public class MakerFragment extends BaseFragment {
     @Override

@@ -115,6 +115,11 @@ public class ExpressionFragment extends BaseMvpFragment<EditImagePresenter> impl
     }
 
     @Override
+    public void requestSuccess(String msg) {
+
+    }
+
+    @Override
     public void setPresenter(EditImagePresenter presenter) {
         if (presenter == null) {
             this.presenter = new EditImagePresenter();

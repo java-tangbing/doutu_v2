@@ -116,6 +116,11 @@ public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implem
     }
 
     @Override
+    public void requestSuccess(String msg) {
+
+    }
+
+    @Override
     public void setPresenter(EditImagePresenter presenter) {
         if(presenter == null) {
             this.presenter = new EditImagePresenter();

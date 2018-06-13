@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.maker.bean.MaterialBean;
 import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.view.EditImageView;
@@ -29,6 +30,23 @@ import retrofit2.Response;
 
 public class EditImagePresenter extends BasePresenter<EditImageView> {
 
+    public void favoriteCounter(RequestBody body) {
+        Disposable disposable = ApiService.getImageTypeAoi().getConutView(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<FavoriteBean>() {
+                    @Override
+                    public void accept(FavoriteBean result) throws Exception {
+                        baseview.requestSuccess(result.getMsg());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
+                });
+        addSubscription(disposable);
+    }
 
     public void getMaterial(RequestBody body, final int type) {
         Disposable disposable = ApiService.getEditImageApi().getMaterialList(body)
