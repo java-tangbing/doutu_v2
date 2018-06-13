@@ -9,6 +9,7 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.pufei.gxdt.module.news.activity.NewsPictureActivity;
+import com.pufei.gxdt.module.sign.utils.ResolutionUtil;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -38,6 +39,7 @@ public class App extends Application {
         super.onCreate();
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
+        ResolutionUtil.getInstance().init(this);
         initPrefs();
         FlowManager.init(this);
         initUMConfig();
