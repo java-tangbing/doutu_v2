@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -36,6 +37,7 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.ImageUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UploadImageUtil;
 import com.pufei.gxdt.widgets.GlideApp;
@@ -50,7 +52,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,6 +79,8 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
     private String imageBase64;
     private String bgImageBase64;
     private ProgressDialog mProgressDialog;
+    private String id;
+    private String originTable;
 
     @Override
     public void initView() {
@@ -151,6 +157,8 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
                     getBase64(datas.get(position).imagePath,datas.get(position).make_url);
                     if(!TextUtils.isEmpty(imageBase64) && !TextUtils.isEmpty(bgImageBase64)) {
                         showLoading("上传中...");
+                        id = datas.get(position).originId;
+                        originTable = datas.get(position).originTable;
                         UploadImageUtil.uploadImage(this, datas.get(position), datas.get(position).imagePath, imageBase64, bgImageBase64, imageDrafts, textDrafts);
                     }
 //                }
@@ -264,6 +272,23 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
     @Override
     public void upLoadImageResult(ModifyResultBean response) {
         hideLoading();
+        if(response.getCode() == 0) {
+            if(!TextUtils.isEmpty(id)) {
+                Map<String,String> map = new HashMap<>();
+                map.put("deviceid", SystemInfoUtils.deviced(this));
+                map.put("version", SystemInfoUtils.versionName(this));
+                map.put("sign","sign");
+                map.put("key","key");
+                map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
+                map.put("os", "1");
+                map.put("id",id);
+                map.put("type","3");
+                map.put("orgintable",originTable);
+                map.put("option","edit");
+                presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
+            }
+        }
+
         ToastUtils.showShort(this,response.getMsg());
 
     }
