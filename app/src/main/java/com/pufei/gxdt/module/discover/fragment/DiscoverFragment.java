@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.pufei.gxdt.module.discover.adapter.DiscoverTabVpAdapter;
 import com.pufei.gxdt.module.news.activity.NewsActivity;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
+import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.scwang.smartrefresh.layout.util.DensityUtil.px2dp;
 
 public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSelectedListener {
     @BindView(R.id.tv_title)
@@ -49,9 +53,14 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
 //        if (isAdded()) {
 //            titleArray = getResources().getStringArray(R.array.discover_title);
 //        }
-        titleArray=getResources().getStringArray(R.array.discover_title);
+        titleArray = getResources().getStringArray(R.array.discover_title);
         titleTextView.setText(getResources().getString(R.string.discover));
-        GlideApp.with(getActivity()).load(R.mipmap.com_bt_ttab_news_normal).into(newsImageView);
+        LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(DensityUtil.dp2px(40), DensityUtil.dp2px(40));
+        layout.setMargins(0, 0, 40, 0);
+        newsImageView.setLayoutParams(layout);
+
+        GlideApp.with(getActivity()).load(R.drawable.home_my_image).into(newsImageView);
+
         newsLinearLayout.setVisibility(View.VISIBLE);
         addfragment();
         init();
