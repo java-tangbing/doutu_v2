@@ -78,6 +78,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         adapter.setOnItemClickListener(new HotAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
+                countView(picturelist.get(postion).getId(),3,picturelist.get(postion).getOrgintable(),"click");
                 Intent intent = new Intent(HotImageActivity.this, PictureDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("picture_index", postion);
@@ -184,6 +185,25 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
 
     }
 
+    @Override
+    public void resultCountView(FavoriteBean bean) {
+
+    }
+    private void countView(String id,int type,String orgintable,String option){
+        if(NetWorkUtil.isNetworkConnected(this)){
+            try {
+                JSONObject countViewObj = KeyUtil.getJson(this);
+                countViewObj.put("id", id);
+                countViewObj.put("type", type+"");
+                countViewObj.put("orgintable", orgintable+"");
+                countViewObj.put("option", option+"");
+                presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     private  int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());

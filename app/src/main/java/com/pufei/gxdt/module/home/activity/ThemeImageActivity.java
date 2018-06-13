@@ -104,6 +104,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
         adpater.setOnItemClickListener(new ThemeImageAdpater.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
+                countView(list.get(postion).getId(),1,"","click");
                 Intent intent = new Intent(ThemeImageActivity.this, HomeImageActivity.class);
                 intent.putExtra("category_id", list.get(postion).getId());
                 intent.putExtra("title", list.get(postion).getCategory_name());
@@ -113,7 +114,21 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
             }
         });
     }
+    private void countView(String id,int type,String orgintable,String option){
+        if(NetWorkUtil.isNetworkConnected(this)){
+            try {
+                JSONObject countViewObj = KeyUtil.getJson(this);
+                countViewObj.put("id", id);
+                countViewObj.put("type", type+"");
+                countViewObj.put("orgintable", orgintable+"");
+                countViewObj.put("option", option+"");
+                presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
+    }
     @Override
     public void getData() {
         requestTheme(page);
@@ -171,6 +186,11 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
 
     @Override
     public void resultCancleFavorite(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void resultCountView(FavoriteBean bean) {
 
     }
 

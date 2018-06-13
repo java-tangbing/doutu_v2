@@ -62,7 +62,7 @@
             <View
                 android:layout_width="13dp"
                 android:layout_height="13dp"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/circle_grey"/>
         </LinearLayout>
         

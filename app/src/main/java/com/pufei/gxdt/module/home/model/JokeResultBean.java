@@ -56,7 +56,25 @@ public class JokeResultBean {
         private String down_url;
         private String dateline;
         private String title;
+        private String view;
+        private String hot;
         private List<String> images;
+
+        public String getView() {
+            return view;
+        }
+
+        public void setView(String view) {
+            this.view = view;
+        }
+
+        public String getHot() {
+            return hot;
+        }
+
+        public void setHot(String hot) {
+            this.hot = hot;
+        }
 
         public int getType() {
             return type;

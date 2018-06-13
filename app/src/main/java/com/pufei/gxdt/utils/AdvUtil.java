@@ -106,6 +106,12 @@ public class AdvUtil {
 
             public void onAdFailed(String reason) {
                 Log.w("tb", "onAdFailed " + reason);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout.setVisibility(View.GONE);
+                    }
+                });
             }
 
             public void onAdClick(JSONObject info) {
@@ -149,6 +155,12 @@ public class AdvUtil {
         bv.setADListener(new AbstractBannerADListener() {
             @Override
             public void onNoAD(AdError error) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout.setVisibility(View.GONE);
+                    }
+                });
             }
 
             @Override

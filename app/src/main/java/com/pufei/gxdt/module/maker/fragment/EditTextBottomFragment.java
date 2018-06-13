@@ -1,5 +1,6 @@
 package com.pufei.gxdt.module.maker.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -7,12 +8,16 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -50,22 +55,55 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private HotTextAdapter hotTextAdapter;
     private InputMethodManager inputManager;
     private EditImagePresenter imagePresenter;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
-
+    @SuppressLint("RestrictedApi")
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
-        bottomSheetDialog.setContentView(R.layout.fragment_addtext_pop);
+    public void setupDialog(Dialog dialog, int style) {
+        super.setupDialog(dialog, style);
+        final View bottomSheetDialog = View.inflate(getContext(), R.layout.fragment_addtext_pop, null);
+        dialog.setContentView(bottomSheetDialog);
         llBottom = bottomSheetDialog.findViewById(R.id.ll_bottom);
         etInput = bottomSheetDialog.findViewById(R.id.et_input);
         tvConfirm = bottomSheetDialog.findViewById(R.id.tv_confirm);
         tvRecommend = bottomSheetDialog.findViewById(R.id.tv_recommend);
         llRecommend = bottomSheetDialog.findViewById(R.id.ll_recommend);
         rvHotText = bottomSheetDialog.findViewById(R.id.rv_hot_text);
+        etInput.setSelection(etInput.getText().length());
         tvConfirm.setOnClickListener(this);
         llRecommend.setOnClickListener(this);
         rvHotText.setLayoutManager(new LinearLayoutManager(getActivity()));
         inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) bottomSheetDialog.getParent()).getLayoutParams();
+        CoordinatorLayout.Behavior behavior = params.getBehavior();
+
+        if (behavior != null && behavior instanceof BottomSheetBehavior) {
+            mBottomSheetBehavior = (BottomSheetBehavior) behavior;
+            mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                        dismiss();
+                    }
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                }
+            });
+
+            bottomSheetDialog.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    bottomSheetDialog.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int height = bottomSheetDialog.getMeasuredHeight();
+                    mBottomSheetBehavior.setPeekHeight(height);
+                }
+            });
+        }
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -89,31 +127,18 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
                 });
 
         initData();
-        try {
-            Field mBehaviorField = bottomSheetDialog.getClass().getDeclaredField("mBehavior");
-            mBehaviorField.setAccessible(true);
-            final BottomSheetBehavior behavior = (BottomSheetBehavior) mBehaviorField.get(bottomSheetDialog);
-            behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-                @Override
-                public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                        dismiss();
-                    }
-                }
 
-                @Override
-                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+        etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (!etInput.getText().toString().isEmpty()) {
+                    inputTextListener.inputText(type, etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.select_color1));
+                    etInput.setText("");
                 }
-            });
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return bottomSheetDialog;
+                dismiss();
+                return false;
+            }
+        });
     }
 
 
@@ -152,8 +177,8 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
 
     private void initData() {
         ImageTextEditFragment fragment = (ImageTextEditFragment) getParentFragment();
-        if(fragment != null) {
-            if(fragment.getBean() != null) {
+        if (fragment != null) {
+            if (fragment.getBean() != null) {
                 hotTextList = fragment.getBean().getResult();
                 hotTextAdapter = new HotTextAdapter(hotTextList);
                 rvHotText.setAdapter(hotTextAdapter);

@@ -76,8 +76,6 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
     }
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
-        void onDelete(int position);
-        void onAdd(int position);
     }
 
    public void releaseImageViewResouce(ImageView imageView) {

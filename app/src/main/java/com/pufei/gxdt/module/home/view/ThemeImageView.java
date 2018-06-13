@@ -12,4 +12,5 @@ public interface ThemeImageView extends BaseView<ThemeImagePresenter> {
     void resultThemeImageDetail(PictureResultBean bean);
     void resultAddFavorite(FavoriteBean bean);
     void resultCancleFavorite(FavoriteBean bean);
+    void resultCountView(FavoriteBean bean);
 }
