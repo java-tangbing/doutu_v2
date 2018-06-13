@@ -237,17 +237,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 bean.setText(text1);
                 bean.setTextColor(Color.parseColor("#" + dataBean.getTextFontColor()));
                 String fontStyle = dataBean.getTextFont();
-                if(fontStyle.equals("FZLTDHK--GBK1-0")) {
+                if (fontStyle.equals("FZLTDHK--GBK1-0")) {
                     bean.setTextFont(fangzhengjianzhi);
-                }else if(fontStyle.equals("FZZYSK1--GBK1-0")) {
+                } else if (fontStyle.equals("FZZYSK1--GBK1-0")) {
                     bean.setTextFont(fangzhengkatong);
-                }else if(fontStyle.equals("FZKATJW--GB1-0")) {
+                } else if (fontStyle.equals("FZKATJW--GB1-0")) {
                     bean.setTextFont(fangzhengyasong);
-                }else if(fontStyle.equals("SentyMARUKO-Elementary")) {
+                } else if (fontStyle.equals("SentyMARUKO-Elementary")) {
                     bean.setTextFont(lantingdahei);
-                }else if(fontStyle.equals("SentyPaperCut")) {
+                } else if (fontStyle.equals("SentyPaperCut")) {
                     bean.setTextFont(xindijianzhi);
-                }else if(fontStyle.equals("FZJZJW--GB1-0")) {
+                } else if (fontStyle.equals("FZJZJW--GB1-0")) {
                     bean.setTextFont(xindixiaowanzixiaoxueban);
                 }
 //                bean.setTextSize(Integer.parseInt(dataBean.getTextFontSize()));
@@ -290,17 +290,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setTextColor(Color.parseColor("#" + draft.textColor));
             bean.setTextSize(draft.textSize);
             String fontStyle = draft.textFont;
-            if(fontStyle.equals("FZLTDHK--GBK1-0")) {
+            if (fontStyle.equals("FZLTDHK--GBK1-0")) {
                 bean.setTextFont(fangzhengjianzhi);
-            }else if(fontStyle.equals("FZZYSK1--GBK1-0")) {
+            } else if (fontStyle.equals("FZZYSK1--GBK1-0")) {
                 bean.setTextFont(fangzhengkatong);
-            }else if(fontStyle.equals("FZKATJW--GB1-0")) {
+            } else if (fontStyle.equals("FZKATJW--GB1-0")) {
                 bean.setTextFont(fangzhengyasong);
-            }else if(fontStyle.equals("SentyMARUKO-Elementary")) {
+            } else if (fontStyle.equals("SentyMARUKO-Elementary")) {
                 bean.setTextFont(lantingdahei);
-            }else if(fontStyle.equals("SentyPaperCut")) {
+            } else if (fontStyle.equals("SentyPaperCut")) {
                 bean.setTextFont(xindijianzhi);
-            }else if(fontStyle.equals("FZJZJW--GB1-0")) {
+            } else if (fontStyle.equals("FZJZJW--GB1-0")) {
                 bean.setTextFont(xindixiaowanzixiaoxueban);
             }
             mPhotoEditor.reAddText(bean);
@@ -413,7 +413,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
                 break;
             case R.id.tv_save_draft:
-                if(imagePath != null) {
+                if (!TextUtils.isEmpty(imagePath)) {
                     if (imagePath.contains("gif") || imagePath.contains("GIF")) {
                         if (gifFile == null) {
                             gifFile = new File(imagePath);
@@ -423,7 +423,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         saveImage(true);
                     }
                 }
-
                 break;
             case R.id.tv_redo:
                 mPhotoEditor.redo();
@@ -495,17 +494,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         textDraft.textColor = Integer.toHexString(tv.getCurrentTextColor()).substring(2);
                         textDraft.textSize = tv.getTextSize();
                         Typeface type = tv.getTypeface();
-                        if(type == fangzhengjianzhi) {
+                        if (type == fangzhengjianzhi) {
                             textDraft.textFont = "FZLTDHK--GBK1-0";
-                        }else if(type == fangzhengkatong) {
+                        } else if (type == fangzhengkatong) {
                             textDraft.textFont = "FZZYSK1--GBK1-0";
-                        }else if(type == fangzhengyasong) {
+                        } else if (type == fangzhengyasong) {
                             textDraft.textFont = "FZKATJW--GB1-0";
-                        }else if(type == lantingdahei) {
+                        } else if (type == lantingdahei) {
                             textDraft.textFont = "SentyMARUKO-Elementary";
-                        }else if(type == xindijianzhi) {
+                        } else if (type == xindijianzhi) {
                             textDraft.textFont = "SentyPaperCut";
-                        }else if(type == xindixiaowanzixiaoxueban) {
+                        } else if (type == xindixiaowanzixiaoxueban) {
                             textDraft.textFont = "FZJZJW--GB1-0";
                         }
                         textDraft.translationX = textRoot.getTranslationX();
@@ -826,7 +825,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Override
     public void getInputTextCallback(int type, String text, int color) {
         if (type == 0) {
-            mPhotoEditor.addText(fangzhengjianzhi,text, color);
+            mPhotoEditor.addText(fangzhengjianzhi, text, color);
         } else {
             mPhotoEditor.editText(rootView, text, color);
         }
