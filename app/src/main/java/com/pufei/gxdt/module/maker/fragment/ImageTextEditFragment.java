@@ -150,6 +150,11 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
 
     }
 
+    @Override
+    public void requestSuccess(String msg) {
+
+    }
+
 
     @Override
     public void setPresenter(EditImagePresenter presenter) {

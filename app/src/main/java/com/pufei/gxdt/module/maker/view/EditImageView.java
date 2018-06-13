@@ -13,4 +13,5 @@ public interface EditImageView extends BaseView<EditImagePresenter> {
     void recommentTextResult(RecommendTextBean response);
     void materialResult(MaterialBean response,int type);
     void requestErrResult(String msg);
+    void requestSuccess(String msg);
 }

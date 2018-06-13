@@ -298,6 +298,11 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
     }
 
     @Override
+    public void requestSuccess(String msg) {
+
+    }
+
+    @Override
     public void setPresenter(EditImagePresenter presenter) {
         if(presenter == null) {
             this.presenter = new EditImagePresenter();

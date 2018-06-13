@@ -886,6 +886,11 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         ToastUtils.showShort(this, msg);
     }
 
+    @Override
+    public void requestSuccess(String msg) {
+
+    }
+
 
     @Override
     public void setPresenter(EditImagePresenter presenter) {
