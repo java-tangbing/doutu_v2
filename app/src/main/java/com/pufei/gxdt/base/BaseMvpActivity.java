@@ -67,14 +67,14 @@ public abstract class BaseMvpActivity<P extends BasePresenter>extends AppCompatA
     @Override
     protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart(getClass().getSimpleName()); //手动统计页面("SplashScreen"为页面名称，可自定义)
+        MobclickAgent.onPageStart(getClass().getSimpleName()); //手动统计页面("SplashScreen"为页面名称，可自定义)
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd(getClass().getSimpleName());
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 }
