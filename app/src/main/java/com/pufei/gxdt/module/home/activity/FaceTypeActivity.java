@@ -1,7 +1,6 @@
 package com.pufei.gxdt.module.home.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,28 +8,17 @@ import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.base.MyPagerAdapder;
 import com.pufei.gxdt.module.home.fragment.DouTuFragment;
 import com.pufei.gxdt.module.home.model.HomeTypeBean;
-import com.pufei.gxdt.module.home.model.PictureResultBean;
-import com.pufei.gxdt.utils.EvenMsg;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.widgets.viewpager.MyViewPager;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import butterknife.BindView;
 
 /**表情分类
@@ -88,8 +76,6 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
     }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        if(titleLists!=null){
-        }
 
     }
 
