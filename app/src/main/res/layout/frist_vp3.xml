@@ -10,12 +10,12 @@
         android:layout_height="match_parent" />
     <Button
         android:id="@+id/frist_loading3_btn"
-        android:text="立即开始"
+        android:text="立即进入"
         android:layout_gravity="bottom"
         android:background="@drawable/cruncheies_tv"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="35dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

@@ -10,7 +10,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -86,6 +84,7 @@ public class AdvUtil {
         });
 
     }
+
     public void setAdvBaiDu(final  Context context, final RelativeLayout layout) {
         final Activity activity  =(Activity) context;
         AdSettings.setKey(new String[]{"baidu", "中国"});
@@ -98,6 +97,7 @@ public class AdvUtil {
 
             public void onAdShow(JSONObject info) {
                 // 广告已经渲染出来
+                LogUtils.e("tb", "success:" + info.toString());
             }
 
             public void onAdReady(AdView adView) {
@@ -105,7 +105,7 @@ public class AdvUtil {
             }
 
             public void onAdFailed(String reason) {
-                Log.w("tb", "onAdFailed " + reason);
+                LogUtils.e("tb", "fail:" + reason);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -145,6 +145,7 @@ public class AdvUtil {
             }
         });
     }
+
     public void setAdvTecent(final Context context , final RelativeLayout layout){
         final Activity activity  =(Activity) context;
         final BannerView bv;
@@ -155,6 +156,7 @@ public class AdvUtil {
         bv.setADListener(new AbstractBannerADListener() {
             @Override
             public void onNoAD(AdError error) {
+                LogUtils.i("tb",error.toString());
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -165,6 +167,7 @@ public class AdvUtil {
 
             @Override
             public void onADReceiv() {
+                LogUtils.i("tb","success");
             }
 
             @Override
