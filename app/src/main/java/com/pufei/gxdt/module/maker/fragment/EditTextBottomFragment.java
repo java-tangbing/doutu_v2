@@ -100,7 +100,12 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
                 public void onGlobalLayout() {
                     bottomSheetDialog.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     int height = bottomSheetDialog.getMeasuredHeight();
-                    mBottomSheetBehavior.setPeekHeight(height);
+                    if(height < 1200) {
+                        mBottomSheetBehavior.setPeekHeight(height);
+                    }else {
+                        mBottomSheetBehavior.setPeekHeight(height - 200);
+                    }
+                    Log.e("height",height +"  ");
                 }
             });
         }
