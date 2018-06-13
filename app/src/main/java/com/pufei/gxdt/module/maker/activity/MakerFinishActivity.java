@@ -379,6 +379,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
 
     @Override
     public void requestErrResult(String msg) {
+        hideLoading();
         ToastUtils.showShort(this,msg);
     }
 

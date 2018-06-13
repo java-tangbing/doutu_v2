@@ -287,9 +287,11 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
                 map.put("option","edit");
                 presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
+            ToastUtils.showShort(this,"发布成功");
+        }else {
+            ToastUtils.showShort(this,response.getMsg());
         }
 
-        ToastUtils.showShort(this,response.getMsg());
 
     }
 
@@ -319,6 +321,7 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
 
     @Override
     public void requestErrResult(String msg) {
+        hideLoading();
         ToastUtils.showShort(this,msg);
     }
 
