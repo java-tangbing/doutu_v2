@@ -199,6 +199,11 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     public static int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());

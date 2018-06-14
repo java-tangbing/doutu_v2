@@ -14,4 +14,5 @@ public interface HomeListView extends BaseView<HomeListPresenter> {
     void resultHomeDetailList(PictureResultBean bean);
     void resultHomeTypeList(HomeTypeBean bean);
     void resultCountView(FavoriteBean bean);
+    void requestErrResult(String msg);
 }
