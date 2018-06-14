@@ -131,6 +131,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
                 countViewObj.put("type", type+"");
                 countViewObj.put("orgintable", orgintable+"");
                 countViewObj.put("option", option+"");
+                countViewObj.put("url", "");
                 presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();

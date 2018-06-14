@@ -36,6 +36,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.module.discover.activity.DiscoverDetailedActivity;
 import com.pufei.gxdt.module.home.adapter.OtherPictureAdapter;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
@@ -147,6 +148,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 countViewObj.put("type", type+"");
                 countViewObj.put("orgintable", orgintable+"");
                 countViewObj.put("option", option+"");
+                countViewObj.put("url", URL);
                 presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -175,9 +177,21 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         getImageDetail();
     }
 
-    @OnClick({R.id.look_edit_image_iv, R.id.iv_report, R.id.ib_dowm_load, R.id.activity_home1_shoucang, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish})
+    @OnClick({R.id.tv_change_img,R.id.look_edit_image_iv, R.id.iv_report, R.id.ib_dowm_load, R.id.activity_home1_shoucang, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish})
     public void viewClick(View view) {
         switch (view.getId()) {
+            case R.id.tv_change_img:
+                if(Integer.parseInt(pictureDetailBean.getCount())!=0 ){
+                    Intent intent0 = new Intent(this, DiscoverDetailedActivity.class);
+                    Bundle bundle0 = new Bundle();
+                    bundle0.putString("id",pictureList.get(index).getId());
+                    bundle0.putString("orginid",pictureList.get(index).getOrginid());
+                    bundle0.putString("orgintable",pictureList.get(index).getOrgintable());
+                    bundle0.putString("uid",pictureDetailBean.getUid());
+                    intent0.putExtras(bundle0);
+                    startActivity(intent0);
+                }
+                break;
             case R.id.look_edit_image_iv:
                 Intent intent = new Intent(this, EditImageActivity.class);
                 Bundle bundle = new Bundle();
