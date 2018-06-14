@@ -58,7 +58,9 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
     JSONArray jsonObject ;
     @Override
     public void initView() {
-        tv_title.setText("笑话详情");
+        tv_title.setText(getIntent().getExtras().getString("title"));
+        tv_title.setLines(1);
+        tv_title.setEllipsize(TextUtils.TruncateAt.END);
         ll_left.setVisibility(View.VISIBLE);
         LayoutInflater lif = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View headerView = lif.inflate(R.layout.title_time_joke, null);
