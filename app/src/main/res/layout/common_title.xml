@@ -30,12 +30,14 @@
         android:textColor="@color/black"
         android:textSize="18sp" />
 
-    <RelativeLayout
-        android:id="@+id/rl_title_right"
+
+    <LinearLayout
+        android:id="@+id/ll_title_right"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:orientation="horizontal"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="visible">
 
         <TextView
@@ -53,16 +55,42 @@
             android:id="@+id/iv_title_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+    </LinearLayout>
 
-        <View
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="14dp"
-            android:layout_marginTop="10dp"
-            android:background="@mipmap/news_ic_new"
-            android:visibility="gone"></View>
-    </RelativeLayout>
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_title_right"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:visibility="visible">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_right"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:paddingRight="9.5dp"-->
+            <!--android:text="右侧文字"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="14sp"-->
+            <!--android:visibility="gone" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_title_right"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<View-->
+            <!--android:layout_width="12dp"-->
+            <!--android:layout_height="12dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="14dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@mipmap/news_ic_new"-->
+            <!--android:visibility="gone"></View>-->
+    <!--</RelativeLayout>-->
 
     <!--<LinearLayout-->
     <!--android:id="@+id/ll_title_right2"-->
