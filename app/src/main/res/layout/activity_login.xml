@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="密码登录"
+                android:text="密码登录" android:visibility="invisible"
                 android:textColor="@color/tv_login_color" />
 
         </LinearLayout>

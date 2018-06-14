@@ -2,6 +2,8 @@ package com.pufei.gxdt.module.user.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,6 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -98,7 +101,9 @@ public class FeedBackActivity extends BaseActivity {
     private Boolean setdate() {
         content = activityFeedbackRespose.getText().toString();
         qq = activityFeedbackQq.getText().toString();
-        if (content.length() > 100) {
+        if (TextUtils.isEmpty(content.replaceAll("\\s*", ""))) {
+            ToastUtils.showShort(this, "请输入反馈意见");
+        } else if (content.length() > 100) {
             ToastUtils.showShort(this, "超过了200字数限制");
             return false;
         }
