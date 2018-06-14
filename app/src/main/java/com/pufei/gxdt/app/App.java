@@ -23,6 +23,8 @@ import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.PlatformConfig;
 
+import java.io.File;
+
 
 public class App extends Application {
     private static final String TAG = App.class.getName();
@@ -41,6 +43,10 @@ public class App extends Application {
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
         ResolutionUtil.getInstance().init(this);
+        File file = new File(path1);
+        if(!file.exists()) {
+            file.mkdir();
+        }
         initPrefs();
         FlowManager.init(this);
         initUMConfig();

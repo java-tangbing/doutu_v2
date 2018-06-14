@@ -158,10 +158,10 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 address = "未知";
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
-            EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
-            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             if (!TextUtils.isEmpty(bean.getMobile())) {
+                App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
+                EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
+                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

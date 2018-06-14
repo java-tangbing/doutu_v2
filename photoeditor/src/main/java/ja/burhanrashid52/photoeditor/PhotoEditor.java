@@ -787,8 +787,14 @@ public class PhotoEditor implements BrushViewChangeListener {
             @SuppressLint("MissingPermission")
             @Override
             protected Exception doInBackground(String... strings) {
-                // Create a media file name
                 File file = new File(imagePath);
+                if(!file.exists()) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 try {
                     FileOutputStream out = new FileOutputStream(file, false);
                     if (parentView != null) {
