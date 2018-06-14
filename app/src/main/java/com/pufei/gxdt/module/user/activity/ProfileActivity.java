@@ -283,4 +283,9 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         }
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
+    }
+
 }

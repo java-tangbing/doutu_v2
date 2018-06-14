@@ -22,6 +22,11 @@ public class SetPersonalPresenter extends BasePresenter<SetPersonalView> {
                     public void accept(SetPersonalResultBean result) throws Exception {
                         baseview.setPersonalInfo(result);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -34,6 +39,11 @@ public class SetPersonalPresenter extends BasePresenter<SetPersonalView> {
                     @Override
                     public void accept(SetAvatarResultBean result) throws Exception {
                         baseview.setPersonAvatar(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);

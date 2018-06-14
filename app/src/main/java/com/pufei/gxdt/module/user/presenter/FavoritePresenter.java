@@ -25,6 +25,11 @@ public class FavoritePresenter extends BasePresenter<FavoriteView> {
                     public void accept(MyImagesBean result) throws Exception {
                         baseview.resultJokeList(result);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage() + "");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -38,6 +43,11 @@ public class FavoritePresenter extends BasePresenter<FavoriteView> {
                     public void accept(MyImagesBean result) throws Exception {
                         baseview.resultJokeList(result);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage() + "");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -50,6 +60,11 @@ public class FavoritePresenter extends BasePresenter<FavoriteView> {
                     @Override
                     public void accept(MyImagesBean result) throws Exception {
                         baseview.resultJokeDetail(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);

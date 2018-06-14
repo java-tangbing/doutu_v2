@@ -137,6 +137,11 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
     }
 
     @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
+    }
+
+    @Override
     public void setPresenter(LoginPresenter presenter) {
         if (presenter == null) {
             this.presenter = new LoginPresenter();

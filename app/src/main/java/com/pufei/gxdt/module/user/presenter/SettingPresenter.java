@@ -25,7 +25,12 @@ public class SettingPresenter extends BasePresenter<SettingView> {
                     public void accept(SetsBean result) throws Exception {
                         baseview.resultSets(result);
                     }
-                });
+                }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            baseview.requestErrResult(throwable.getMessage()+"");
+                        }
+                    });
         addSubscription(disposable);
     }
 
@@ -37,6 +42,11 @@ public class SettingPresenter extends BasePresenter<SettingView> {
                     @Override
                     public void accept(BindAccountBean resultBean) throws Exception {
                         baseview.sendRusult(resultBean);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);

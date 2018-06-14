@@ -200,6 +200,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
+    }
+
     @OnClick({R.id.login_sendcode, R.id.login_login_btn, R.id.login_finish, R.id.iv_clear, R.id.iv_login_wechat, R.id.iv_login_qq, R.id.tv_change_login_type, R.id.tv_agreement})
     public void onViewClicked(View view) {
         switch (view.getId()) {

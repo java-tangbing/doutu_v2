@@ -146,6 +146,11 @@ public class EditDeclarationActivity extends BaseMvpActivity<SetPersonalPresente
     }
 
     @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
+    }
+
+    @Override
     public void setPresenter(SetPersonalPresenter presenter) {
         if (presenter == null) {
             this.presenter = new SetPersonalPresenter();

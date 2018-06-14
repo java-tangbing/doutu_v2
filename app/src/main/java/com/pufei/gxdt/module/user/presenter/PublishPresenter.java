@@ -22,7 +22,12 @@ public class PublishPresenter extends BasePresenter<PublishView> {
                     public void accept(PictureResultBean result) throws Exception {
                         baseview.resultPublish(result);
                     }
-                });
+                }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            baseview.requestErrResult(throwable.getMessage()+"");
+                        }
+                    });
         addSubscription(disposable);
     }
 }

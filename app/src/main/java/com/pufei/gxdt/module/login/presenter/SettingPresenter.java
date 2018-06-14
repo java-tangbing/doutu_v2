@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 
 public class SettingPresenter extends BasePresenter<SettingView> {
 
-    public void setNewPwd(RequestBody body){
+    public void setNewPwd(RequestBody body) {
         Disposable disposable = ApiService.getSettingApi().setNewPwd(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -21,6 +21,11 @@ public class SettingPresenter extends BasePresenter<SettingView> {
                     @Override
                     public void accept(ModifyResultBean result) throws Exception {
                         baseview.setNewPwd(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -34,6 +39,11 @@ public class SettingPresenter extends BasePresenter<SettingView> {
                     @Override
                     public void accept(ModifyResultBean result) throws Exception {
                         baseview.updatePwd(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);

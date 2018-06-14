@@ -10,4 +10,5 @@ import com.pufei.gxdt.module.user.presenter.FavoritePresenter;
 public interface FavoriteView extends BaseView<FavoritePresenter> {
     void resultJokeList(MyImagesBean bean);
     void resultJokeDetail(MyImagesBean bean);
+    void requestErrResult(String msg);
 }

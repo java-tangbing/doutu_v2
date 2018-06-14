@@ -8,10 +8,8 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 
 public interface LoginView extends BaseView<LoginPresenter> {
     void sendCode(SendCodeBean sendCodeBean);
-
     void sendRusult(LoginResultBean sendCodeBean);
-
     void bindResult(SendCodeBean sendCodeBean);
-
     void retrievePwdResult(ModifyResultBean bean);
+    void requestErrResult(String msg);
 }

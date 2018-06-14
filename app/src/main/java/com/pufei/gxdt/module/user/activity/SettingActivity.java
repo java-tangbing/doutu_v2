@@ -278,6 +278,11 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     }
 
     @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
+    }
+
+    @Override
     public void setPresenter(SettingPresenter presenter) {
         if (presenter == null) {
             this.presenter = new SettingPresenter();

@@ -27,6 +27,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -56,7 +57,7 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
 
     @Override
     public void initView() {
-        jokeAdapter = new FavoriteAdapter(getActivity(),jokeList,3);
+        jokeAdapter = new FavoriteAdapter(getActivity(), jokeList, 3);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_pkg_xryv.setLayoutManager(layoutManager);
@@ -104,9 +105,9 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
                 Intent intent = new Intent(getActivity(), HomeImageActivity.class);
                 intent.putExtra("category_id", jokeList.get(postion).getId());
                 intent.putExtra("title", jokeList.get(postion).getCategory_name());
-                intent.putExtra("eyes",  jokeList.get(postion).getImgs().get(0).getView());
-                intent.putExtra("hot",  jokeList.get(postion).getImgs().get(0).getHot());
-                FavoritePkgFragment.this.startActivityForResult(intent,1);
+                intent.putExtra("eyes", jokeList.get(postion).getImgs().get(0).getView());
+                intent.putExtra("hot", jokeList.get(postion).getImgs().get(0).getHot());
+                FavoritePkgFragment.this.startActivityForResult(intent, 1);
             }
 
             @Override
@@ -149,7 +150,6 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
     }
 
 
-
     @Override
     public void setPresenter(FavoritePresenter presenter) {
         if (presenter == null) {
@@ -171,6 +171,12 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
     public void resultJokeDetail(MyImagesBean bean) {
 
     }
+
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(getActivity(), msg);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

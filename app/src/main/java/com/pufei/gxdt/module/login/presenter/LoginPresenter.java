@@ -27,6 +27,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     public void accept(SendCodeBean sendCodeBean) throws Exception {
                         baseview.sendCode(sendCodeBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -39,6 +44,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void accept(LoginResultBean sendCodeBean) throws Exception {
                         baseview.sendRusult(sendCodeBean);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
@@ -53,6 +63,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     public void accept(LoginResultBean sendCodeBean) throws Exception {
                         baseview.sendRusult(sendCodeBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -65,6 +80,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void accept(LoginResultBean resultBean) throws Exception {
                         baseview.sendRusult(resultBean);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
@@ -79,6 +99,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     public void accept(LoginResultBean resultBean) throws Exception {
                         baseview.sendRusult(resultBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -91,6 +116,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void accept(LoginResultBean resultBean) throws Exception {
                         baseview.sendRusult(resultBean);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
@@ -106,6 +136,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     public void accept(SendCodeBean resultBean) throws Exception {
                         baseview.bindResult(resultBean);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -118,6 +153,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void accept(ModifyResultBean resultBean) throws Exception {
                         baseview.retrievePwdResult(resultBean);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
