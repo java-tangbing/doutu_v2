@@ -159,17 +159,16 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             }
             SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
             App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
+            EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             if (!TextUtils.isEmpty(bean.getMobile())) {
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
-                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
                 if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else {
                     String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
                     if (user_detail != null) {
-                        EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
                         App.userBean = new Gson().fromJson(user_detail, UserBean.class);
                     }
                 }

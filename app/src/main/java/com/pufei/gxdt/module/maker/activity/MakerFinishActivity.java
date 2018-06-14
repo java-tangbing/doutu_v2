@@ -24,10 +24,12 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
+import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.db.DraftInfo;
 import com.pufei.gxdt.db.DraftInfo_Table;
@@ -122,7 +124,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 GlideApp.with(this).load(path).into(ivFaceImage);
                 presenter.downloadImage(path, 0);
             } else {
-                if (path.contains("gif") || path.contains("GIF")) {
+                if (path.contains(".gif") || path.contains(".GIF")) {
                     GlideApp.with(this).load(new File(path)).into(ivFaceImage);
                     InputStream inputStream = null;
                     try {
@@ -173,13 +175,13 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
 
 
             if (info.imagePath.contains("http:") || info.imagePath.contains("https:")) {//背景图
-                    if(info.imagePath.contains(".gif") || info.imagePath.contains("GIF")) {
+                    if(info.imagePath.contains(".gif") || info.imagePath.contains(".GIF")) {
                         presenter.downloadImage(info.imagePath,1);
                     }else {
                         presenter.downloadGif(info.imagePath,App.path1 + "/" + System.currentTimeMillis() +".png");
                     }
                 } else {
-                    if (info.imagePath.contains("gif") || info.imagePath.contains("GIF")) {
+                    if (info.imagePath.contains(".gif") || info.imagePath.contains(".GIF")) {
                         try {
                             InputStream inputStream = new FileInputStream(new File(info.imagePath));
                             byte[] inputData = getBytes(inputStream);
@@ -317,6 +319,11 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
             ToastUtils.showShort(this, "发布成功");
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("make_finish",MsgType.MAKER_FINISH);
+            startActivity(intent);
+            AppManager.getAppManager().finishActivity();
         }else {
             ToastUtils.showShort(this, response.getMsg());
         }
