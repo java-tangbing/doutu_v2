@@ -27,7 +27,7 @@ public class ManagerRulesActivity extends BaseActivity {
     public void initView() {
         tvTitle.setText("管理规则");
         llTitleLeft.setVisibility(View.VISIBLE);
-        llTitleRight.setVisibility(View.GONE);
+        llTitleRight.setVisibility(View.INVISIBLE);
         WebSettings webSettings = webAgreement.getSettings();
 
         webSettings.setUseWideViewPort(true);
