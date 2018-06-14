@@ -122,6 +122,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                 countViewObj.put("type", type+"");
                 countViewObj.put("orgintable", orgintable+"");
                 countViewObj.put("option", option+"");
+                countViewObj.put("url", "");
                 presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -191,6 +192,11 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
 
     @Override
     public void resultCountView(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
 
     }
 

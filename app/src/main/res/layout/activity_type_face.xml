@@ -5,11 +5,12 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <include layout="@layout/common_title"/>
         <android.support.design.widget.TabLayout
             app:tabIndicatorHeight="2dp"
             app:tabIndicatorColor="@color/skin"

@@ -206,13 +206,20 @@ public class AdvUtil {
                         LogUtils.i("tb","广告："+result);
                         try {
                             JSONObject resultObj = new JSONObject(result);
+                            Activity activity  =(Activity) context;
                             if(resultObj.optJSONObject("result").optJSONObject("data")!=null){
                                 final AdvBean advBean = new Gson().fromJson(result, AdvBean.class);
                                     if("2".equals(advBean.getResult().getType())){
                                         setAdvBaiDu(context,layout);
                                     }else if("3".equals(advBean.getResult().getType())){
                                         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                                            openPermissin(context,layout);
+//                                            openPermissin(context,layout);
+                                            activity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    layout.setVisibility(View.GONE);
+                                                }
+                                            });
                                         }else{
                                             setAdvTecent(context,layout);
                                         }
@@ -222,7 +229,6 @@ public class AdvUtil {
 //                                            setAdvTencentStart(context,layout);
 //                                            return;
 //                                        }
-                                        Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -244,7 +250,6 @@ public class AdvUtil {
                                             }
                                         });
                                     }else{
-                                        Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -261,7 +266,6 @@ public class AdvUtil {
                                         setAdvTecent(context,layout);
                                     }else if("1".equals(advType)){
                                         //layout.setVisibility(View.INVISIBLE);
-                                        Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -270,7 +274,6 @@ public class AdvUtil {
                                         });
 
                                     }else{
-                                        Activity activity  =(Activity) context;
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -292,27 +295,26 @@ public class AdvUtil {
         }
 
     }
-    private void openPermissin(final Context context,final RelativeLayout layout) {
-        Acp.getInstance(context)
-                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.READ_PHONE_STATE).build(),
-                        new AcpListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                            @Override
-                            public void onGranted() {
-                                setAdvTecent(context,layout);
-                            }
-                            @Override
-                            public void onDenied(List<String> permissions) {
-                                Activity activity = (Activity)context;
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layout.setVisibility(View.GONE);
-                                    }
-                                });
-                                ToastUtils.showShort(context, "请求权限失败,请手动开启！");
-                            }
-                        });
-    }
+//    private void openPermissin(final Context context,final RelativeLayout layout) {
+//        Acp.getInstance(context)
+//                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.READ_PHONE_STATE,Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+//                        new AcpListener() {
+//                            @Override
+//                            public void onGranted() {
+//                                setAdvTecent(context,layout);
+//                            }
+//                            @Override
+//                            public void onDenied(List<String> permissions) {
+//                                Activity activity = (Activity)context;
+//                                activity.runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        layout.setVisibility(View.GONE);
+//                                    }
+//                                });
+//                                ToastUtils.showShort(context, "请求权限失败,请手动开启！");
+//                            }
+//                        });
+//    }
 
 }

@@ -22,6 +22,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
@@ -160,7 +161,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
             if (!TextUtils.isEmpty(bean.getMobile())) {
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
+                EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
                 SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
                 if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -168,6 +169,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 }else {
                     String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
                     if (user_detail != null) {
+                        EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
                         App.userBean = new Gson().fromJson(user_detail, UserBean.class);
                     }
                 }

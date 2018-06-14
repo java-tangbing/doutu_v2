@@ -24,6 +24,11 @@ public class ImageTypePresenter extends BasePresenter<ImageTypeView> {
                     public void accept(PictureResultBean result) throws Exception {
                         baseview.resultHotImage(result);
                     }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -35,6 +40,11 @@ public class ImageTypePresenter extends BasePresenter<ImageTypeView> {
                     @Override
                     public void accept(PictureDetailBean result) throws Exception {
                         baseview.resultImageDetail(result);
+                    }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
@@ -60,6 +70,11 @@ public class ImageTypePresenter extends BasePresenter<ImageTypeView> {
                     public void accept(FavoriteBean result) throws Exception {
                         baseview.resultCancleFavorite(result);
                     }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -71,6 +86,11 @@ public class ImageTypePresenter extends BasePresenter<ImageTypeView> {
                     @Override
                     public void accept(FavoriteBean result) throws Exception {
                         baseview.resultCountView(result);
+                    }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
