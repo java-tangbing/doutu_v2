@@ -34,6 +34,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -167,6 +168,11 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         }
         jokeList.addAll(bean.getResult());
         jokeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
     }
 
     @Override
