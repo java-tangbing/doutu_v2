@@ -17,6 +17,7 @@ import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.activity.DiscoverDetailedActivity;
 import com.pufei.gxdt.module.news.adapter.NewsPictureAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
@@ -78,7 +79,7 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("auth", auth);
-            jsonObject.put("type", 2);
+            jsonObject.put("type", "2");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -135,6 +136,11 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
             mlist.addAll(bean.getResult());
             newsPictureAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void getsNoticeContentTypeTwo(NewsTypeTwoBean bean) {
+
     }
 
     @Override
