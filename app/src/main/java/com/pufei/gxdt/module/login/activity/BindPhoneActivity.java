@@ -17,6 +17,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
@@ -120,6 +121,7 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             }else {
                 String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
                 if (user_detail != null) {
+                    EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
                     App.userBean = new Gson().fromJson(user_detail, UserBean.class);
                 }
             }

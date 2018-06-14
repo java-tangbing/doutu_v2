@@ -44,6 +44,7 @@ import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
 import com.suke.widget.SwitchButton;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -100,6 +101,23 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (App.userBean != null) {
+                    if (isChecked) {
+                        mPushAgent.setAlias(App.userBean.getUid(), "User", new UTrack.ICallBack() {
+                            @Override
+                            public void onMessage(boolean isSuccess, String message) {
+                                Log.e("push", isSuccess + " " + message);
+                            }
+                        });
+                    } else {
+                        mPushAgent.deleteAlias(App.userBean.getUid(), "User", new UTrack.ICallBack() {
+                            @Override
+                            public void onMessage(boolean isSuccess, String message) {
+
+                            }
+                        });
+                    }
+                }
 
             }
         });
