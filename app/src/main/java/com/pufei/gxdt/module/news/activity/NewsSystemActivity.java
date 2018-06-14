@@ -19,6 +19,7 @@ import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
 import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
@@ -49,7 +50,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     RecyclerView recyclerView;
     private TextView textViewBD;
     NewsSystemAdapter newsSystemAdapter;
-    private List<NewsBean.ResultBean> mlist;
+    private List<NewsTypeTwoBean.ResultBean> mlist;
     private View viewHeader;
     private String auth = "";
     private String type = "";
@@ -88,12 +89,12 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("auth", auth);
-            jsonObject.put("type", 1);
+            jsonObject.put("type", "1");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (NetWorkUtil.isNetworkConnected(this)) {
-            presenter.newsNoticeContent(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            presenter.newsNoticeContentTypeTwo(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
             ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
@@ -121,13 +122,16 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     @Override
     public void getsNoticeContent(NewsBean bean) {
 
+    }
+
+    @Override
+    public void getsNoticeContentTypeTwo(NewsTypeTwoBean bean) {
         if (bean.getResult().size() > 0) {
             mlist.addAll(bean.getResult());
             newsSystemAdapter.notifyDataSetChanged();
         }
-
-
     }
+
 
     @Override
     public void getAdviceResult(SendBean bean) {
@@ -137,16 +141,16 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        switch (view.getId()) {
-            case R.id.new_system_item_bd:
-                Intent intent = new Intent(this, BindPhoneActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("sysMsg", "sysMsg");
-                intent.putExtras(bundle);
-                startActivity(intent);
-                ToastUtils.showLong(NewsSystemActivity.this, getResources().getString(R.string.news_sys_bind_phone));
-                break;
-        }
+//        switch (view.getId()) {
+//            case R.id.new_system_item_bd:
+//                Intent intent = new Intent(this, BindPhoneActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("sysMsg", "sysMsg");
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//                ToastUtils.showLong(NewsSystemActivity.this, getResources().getString(R.string.news_sys_bind_phone));
+//                break;
+//        }
     }
 
     @OnClick(R.id.ll_title_left)

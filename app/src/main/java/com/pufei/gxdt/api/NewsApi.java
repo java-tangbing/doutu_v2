@@ -3,6 +3,7 @@ package com.pufei.gxdt.api;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 
@@ -21,6 +22,9 @@ public interface NewsApi {
 
     @POST("Piece/getNoticeContent")
     Observable<NewsBean> getNoticeContent(@Body RequestBody body);
+
+    @POST("Piece/getNoticeContent")
+    Observable<NewsTypeTwoBean> getNoticeContentTypeTwo(@Body RequestBody body);
 
     @POST("Piece/getAdvice")
     Observable<SendBean> getAdvice(@Body RequestBody body);

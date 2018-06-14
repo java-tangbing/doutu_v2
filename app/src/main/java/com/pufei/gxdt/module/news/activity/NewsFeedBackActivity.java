@@ -15,6 +15,7 @@ import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.news.adapter.NewsFeedBackAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
@@ -50,7 +51,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
     EditText editTextMessage;
 
     NewsFeedBackAdapter newsFeedBackAdapter;
-    private List<NewsBean.ResultBean> mlist;
+    private List<NewsTypeTwoBean.ResultBean> mlist;
     private String auth = "";
     private String advice = "";
 
@@ -79,12 +80,12 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("auth", auth);
-            jsonObject.put("type", 3);
+            jsonObject.put("type", "3");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (NetWorkUtil.isNetworkConnected(this)) {
-            presenter.newsNoticeContent(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            presenter.newsNoticeContentTypeTwo(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
             ToastUtils.showShort(this,  getResources().getString(R.string.check_the_network_please));
         }
@@ -139,6 +140,11 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
 
     @Override
     public void getsNoticeContent(NewsBean bean) {
+
+    }
+
+    @Override
+    public void getsNoticeContentTypeTwo(NewsTypeTwoBean bean) {
         if (bean.getResult() != null) {
             mlist.addAll(bean.getResult());
             newsFeedBackAdapter.notifyDataSetChanged();
@@ -149,7 +155,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
     public void getAdviceResult(SendBean bean) {
         if (bean != null) {
 //            if (bean.getCode() == "0") {
-                NewsBean.ResultBean resultBean = new NewsBean.ResultBean();
+            NewsTypeTwoBean.ResultBean resultBean = new NewsTypeTwoBean.ResultBean();
                 resultBean.setContent(advice);
                 SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
                 String date = sDateFormat.format(new java.util.Date());

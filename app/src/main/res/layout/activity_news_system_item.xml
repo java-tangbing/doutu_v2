@@ -47,14 +47,14 @@
                 android:layout_marginLeft="10dp"
                 android:text="" />
 
-            <TextView
-                android:id="@+id/new_system_item_bd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/immediately_bind"
-                android:textColor="@color/khaki"
-                android:visibility="gone" />
+            <!--<TextView-->
+                <!--android:id="@+id/new_system_item_bd"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:text="@string/immediately_bind"-->
+                <!--android:textColor="@color/khaki"-->
+                <!--android:visibility="gone" />-->
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
