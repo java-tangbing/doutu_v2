@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -163,17 +164,17 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
                 SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
+                if (AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
-                }else {
+                } else {
                     String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
                     if (user_detail != null) {
                         App.userBean = new Gson().fromJson(user_detail, UserBean.class);
                     }
                 }
                 AppManager.getAppManager().finishActivity();
-            }else {
+            } else {
                 Intent intent = new Intent(this, BindPhoneActivity.class);
                 intent.putExtra("openId", openid);
                 intent.putExtra("iconUrl", header);
@@ -209,10 +210,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         switch (view.getId()) {
             case R.id.login_sendcode:
                 if (!isSendingCode) {
-                    if (TextUtils.isEmpty(loginIphone.getText().toString())){
-                        ToastUtils.showLong(this,"请输入常用手机号");
+
+                    if (TextUtils.isEmpty(loginIphone.getText().toString())) {
+                        ToastUtils.showLong(this, "请输入常用手机号");
+                        break;
+                    } else if (!isPhoneNumber(loginIphone.getText().toString())) {
+                        ToastUtils.showLong(this, "请输入正确手机号");
                         break;
                     }
+
                     try {
                         JSONObject jsonObject = KeyUtil.getJson(this);
                         jsonObject.put("mobile", loginIphone.getText().toString());
@@ -229,8 +235,15 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             case R.id.login_login_btn:
                 if (cxAgreement.isChecked()) {
                     if (loginSendcode.getVisibility() == View.VISIBLE) {//验证码登录
-                        if (TextUtils.isEmpty(loginCode.getText().toString())){
-                            ToastUtils.showLong(this,"请输入验证码");
+                        if (TextUtils.isEmpty(loginIphone.getText().toString())) {
+                            ToastUtils.showLong(this, "请输入常用手机号");
+                            break;
+                        } else if (!isPhoneNumber(loginIphone.getText().toString())) {
+                            ToastUtils.showLong(this, "请输入正确手机号");
+                            break;
+                        }
+                        if (TextUtils.isEmpty(loginCode.getText().toString())) {
+                            ToastUtils.showLong(this, "请输入验证码");
                             break;
                         }
                         UmengStatisticsUtil.statisticsEvent(this, "Login", "vcodeLogin", "验证码登录");
@@ -296,6 +309,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 startActivity(new Intent(this, AgreeementActivity.class));
                 break;
         }
+    }
+
+    public static boolean isPhoneNumber(String input) {
+        String regex = "^1[34578]\\d{9}$";
+        Pattern p = Pattern.compile(regex);
+        return p.matches(regex, input);
     }
 
     private void thirdLogin(SHARE_MEDIA share_media, final int type) {

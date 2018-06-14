@@ -71,7 +71,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     public void setMyadapter() {
         if (App.userBean == null) {
             startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            AppManager.getAppManager().finishActivity();
         } else {
             Map<String, String> map = new HashMap<>();
             map.put("auth", App.userBean.getAuth());

@@ -29,6 +29,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.module.home.adapter.MyfourPagerAdapder;
 import com.pufei.gxdt.module.home.fragment.ImageFragment;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.StatusBarCompat;
 import com.umeng.analytics.MobclickAgent;
@@ -165,7 +166,7 @@ public class ImageActivity extends FragmentActivity {
 
     @OnClick(R.id.activity_iamge_back)
     public void onClick() {
-        finish();
+        AppManager.getAppManager().finishActivity();
     }
 
 

@@ -110,30 +110,6 @@ public class UserFragment extends BaseFragment {
                 iv_sex.setImageResource(R.mipmap.user_ic_woman);
             }
             if (!TextUtils.isEmpty(App.userBean.getHead())) {
-//                Luban.with(getActivity())
-//                        .load(new File(App.userBean.getHead()))
-//                        .ignoreBy(100)
-//                        .setTargetDir(App.path1 + "/")
-//                        .filter(new CompressionPredicate() {
-//                            @Override
-//                            public boolean apply(String path) {
-//                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-//                            }
-//                        })
-//                        .setCompressListener(new OnCompressListener() {
-//                            @Override
-//                            public void onStart() {
-//                            }
-//
-//                            @Override
-//                            public void onSuccess(File file) {
-//                                GlideApp.with(getActivity()).asBitmap().load(file).into(ivUserHead);
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                            }
-//                        }).launch();
                 Glide.with(this).load(App.userBean.getHead()).into(ivUserHead);
             } else {
                 Glide.with(this).load(R.mipmap.my_uer_picture).into(ivUserHead);
