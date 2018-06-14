@@ -123,6 +123,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         adapter.setOnItemClickListener(new OtherPictureAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
+                countView(pictureList.get(index).getId(),3,pictureList.get(index).getOrgintable(),"click");
                 URL = pictureList.get(postion).getUrl();
                 GlideApp.with(PictureDetailActivity.this).load(URL).placeholder(R.mipmap.loading).into(iv_picture);
                 index = postion;
