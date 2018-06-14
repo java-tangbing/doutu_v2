@@ -24,6 +24,8 @@
         <ImageView
             android:id="@+id/activity_jokedetail_item_iv"
             android:layout_width="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/activity_jokedetail_item_gif"

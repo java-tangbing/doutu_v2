@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/white">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/ll_title_left"
         android:layout_width="48dp"
@@ -20,16 +23,20 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/com_bt_ttab_return_2" />
     </LinearLayout>
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:layout_height="match_parent">
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:text="搞笑斗图"
+
         android:textColor="@color/black"
         android:textSize="18sp" />
-
+</LinearLayout>
     <LinearLayout
         android:id="@+id/ll_title_right"
         android:layout_width="50dp"
@@ -71,5 +78,5 @@
     <!--android:src="@mipmap/com_bt_ttab_my_set_normal"/>-->
     <!--</LinearLayout>-->
 
-
+</LinearLayout>
 </RelativeLayout>
