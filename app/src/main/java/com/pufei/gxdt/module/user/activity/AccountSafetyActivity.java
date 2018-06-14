@@ -58,7 +58,7 @@ public class AccountSafetyActivity extends BaseActivity {
     @Override
     public void initView() {
         llTitleLeft.setVisibility(View.VISIBLE);
-        llTitleRight.setVisibility(View.GONE);
+        llTitleRight.setVisibility(View.INVISIBLE);
         tvTitle.setText("帐号安全");
     }
 
