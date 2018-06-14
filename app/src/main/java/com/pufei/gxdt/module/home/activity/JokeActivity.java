@@ -194,4 +194,9 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     public void resultCountView(FavoriteBean bean) {
 
     }
+
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
 }

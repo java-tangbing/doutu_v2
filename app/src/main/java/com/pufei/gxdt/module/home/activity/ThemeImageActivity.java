@@ -195,6 +195,11 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     @OnClick(R.id.ll_title_left)
     public void  finishActivity(){
         AppManager.getAppManager().finishActivity();

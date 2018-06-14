@@ -290,6 +290,11 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     private void setTypeText(View headView) {
         if (homeTypeList.size() > 0) {
             RecyclerView home_xrl_image = headView.findViewById(R.id.home_xrl_image);

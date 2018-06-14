@@ -135,6 +135,12 @@ public class MainActivity extends BaseActivity {
 
                             @Override
                             public void onDenied(List<String> permissions) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        EventBus.getDefault().post(new EvenMsg(1));
+                                    }
+                                },200);
                                 ToastUtils.showShort(MainActivity.this, "请求权限失败,请手动开启！");
                             }
                         });

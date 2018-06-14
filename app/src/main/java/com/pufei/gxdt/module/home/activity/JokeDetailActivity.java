@@ -156,6 +156,11 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     private void toJson(List<String> content){
         jsonObject = new JSONArray();
         for (int i = 0; i < content.size(); i++) {

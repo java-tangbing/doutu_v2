@@ -11,4 +11,5 @@ public interface JokeView extends BaseView<JokePresenter> {
     void resultJokeList(JokeResultBean bean);
     void resultJokeDetail(JokeDetailBean bean);
     void resultCountView(FavoriteBean bean);
+    void requestErrResult(String msg);
 }

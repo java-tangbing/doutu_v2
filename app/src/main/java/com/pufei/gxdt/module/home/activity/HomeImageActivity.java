@@ -289,6 +289,11 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     }
 
     @Override
+    public void requestErrResult(String msg) {
+
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){

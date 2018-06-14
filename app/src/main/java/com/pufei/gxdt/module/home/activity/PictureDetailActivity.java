@@ -85,7 +85,7 @@ import okhttp3.Response;
  * Created by tb on 2018/5/23.
  */
 
-public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> implements ImageTypeView {
+public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> implements ImageTypeView{
     @BindView(R.id.iv_now_picture)
     ImageView iv_picture;
     @BindView(R.id.rl_picture)
@@ -245,12 +245,14 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 }
                 break;
             case R.id.ib_dowm_load:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        GetImageInputStream(URL);
-                    }
-                }).start();
+                if(URL!=null){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GetImageInputStream(URL);
+                        }
+                    }).start();
+                }
                 break;
             case R.id.activity_home1_shoucang:
                 if (App.userBean != null) {
@@ -407,6 +409,11 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
     }
 
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     public void GetImageInputStream(String imageurl) {//下载图片
         java.net.URL url;
         HttpURLConnection connection = null;
@@ -431,8 +438,12 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         if (!file.exists()) {
             file.mkdir();
         }
-        String[] a = URL.split("/");
-        final String fileName = a[a.length - 1];
+        String fileName = null;
+        if(URL.contains("gif")||URL.contains("GIF")){
+            fileName = System.currentTimeMillis() + ".gif";
+        }else{
+            fileName = System.currentTimeMillis() + ".jpg";
+        }
         //final String fileName = System.currentTimeMillis() + ".gif";
         File filena = new File(file, fileName);
         try {
@@ -454,14 +465,15 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);//保存成功，通知系统更新相册
-        Uri uri = Uri.fromFile(filena);
-        intent.setData(uri);
-        PictureDetailActivity.this.sendBroadcast(intent);
+//        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);//保存成功，通知系统更新相册
+//        Uri uri = Uri.fromFile(filena);
+//        intent.setData(uri);
+//        PictureDetailActivity.this.sendBroadcast(intent);
+        final String finalFileName = fileName;
         PictureDetailActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtils.showShort(PictureDetailActivity.this, "图片已保存到" + path + "/" + fileName);
+                ToastUtils.showShort(PictureDetailActivity.this, "图片已保存到" + path + "/" + finalFileName);
             }
         });
     }

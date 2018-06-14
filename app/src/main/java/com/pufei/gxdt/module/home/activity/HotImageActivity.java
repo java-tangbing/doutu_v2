@@ -189,6 +189,12 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     public void resultCountView(FavoriteBean bean) {
 
     }
+
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     private void countView(String id,int type,String orgintable,String option){
         if(NetWorkUtil.isNetworkConnected(this)){
             try {
