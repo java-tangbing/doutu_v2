@@ -25,7 +25,12 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                     public void accept(ThemeResultBean result) throws Exception {
                         baseview.resultThemeImage(result);
                     }
-                });
+                },new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            baseview.requestErrResult(throwable.getMessage()+"");
+                        }
+                    });
         addSubscription(disposable);
     }
 
@@ -37,6 +42,11 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                     @Override
                     public void accept(PictureResultBean result) throws Exception {
                         baseview.resultThemeImageDetail(result);
+                    }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
@@ -50,6 +60,11 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                     public void accept(FavoriteBean result) throws Exception {
                         baseview.resultAddFavorite(result);
                     }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -62,6 +77,11 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                     public void accept(FavoriteBean result) throws Exception {
                         baseview.resultCancleFavorite(result);
                     }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -73,6 +93,11 @@ public class ThemeImagePresenter extends BasePresenter<ThemeImageView> {
                     @Override
                     public void accept(FavoriteBean result) throws Exception {
                         baseview.resultCountView(result);
+                    }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);

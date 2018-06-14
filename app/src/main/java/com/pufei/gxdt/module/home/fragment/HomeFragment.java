@@ -2,6 +2,7 @@ package com.pufei.gxdt.module.home.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,9 +34,12 @@ import com.pufei.gxdt.module.home.presenter.HomeListPresenter;
 import com.pufei.gxdt.module.home.view.HomeListView;
 import com.pufei.gxdt.module.news.activity.NewsActivity;
 import com.pufei.gxdt.utils.AdvUtil;
+import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.KeyUtil;
+import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.StartUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -45,6 +49,9 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,7 +80,6 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
 
     @Override
     public void initView() {
-        AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
         LayoutInflater lif = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
@@ -165,6 +171,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                 countViewObj.put("type", type+"");
                 countViewObj.put("orgintable", orgintable+"");
                 countViewObj.put("option", option+"");
+                countViewObj.put("url", "");
                 presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -172,7 +179,31 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         }
 
     }
+    @Override
+    public void onStart() {
+        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+            EventBus.getDefault().register(this);
+        }
+        super.onStart();
+    }
 
+    @Override
+    public void onDestroy() {
+        if (EventBus.getDefault().isRegistered(this)){
+            //加上判断
+            EventBus.getDefault().unregister(this);
+        }
+
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAdv(EvenMsg type) {
+        if(type.getTYPE() == 1){
+            LogUtils.i("tb","eventbus");
+            AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
+        }
+    }
     @Override
     public void getData() {
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
@@ -256,6 +287,11 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
 
     @Override
     public void resultCountView(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
 
     }
 

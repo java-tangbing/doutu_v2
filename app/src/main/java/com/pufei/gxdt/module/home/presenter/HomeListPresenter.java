@@ -26,7 +26,12 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
                     public void accept(HomeResultBean result) throws Exception {
                         baseview.resultHomeList(result);
                     }
-                });
+                },new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            baseview.requestErrResult(throwable.getMessage()+"");
+                        }
+                    });
         addSubscription(disposable);
     }
     public void getHomeDetailList(RequestBody body) {
@@ -37,6 +42,11 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
                     @Override
                     public void accept(PictureResultBean result) throws Exception {
                         baseview.resultHomeDetailList(result);
+                    }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);
@@ -50,6 +60,11 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
                     public void accept(HomeTypeBean result) throws Exception {
                         baseview.resultHomeTypeList(result);
                     }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }
@@ -61,6 +76,11 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
                     @Override
                     public void accept(FavoriteBean result) throws Exception {
                         baseview.resultCountView(result);
+                    }
+                },new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
         addSubscription(disposable);

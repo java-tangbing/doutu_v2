@@ -1,18 +1,16 @@
 package com.pufei.gxdt;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
@@ -30,27 +28,18 @@ import com.pufei.gxdt.module.maker.fragment.MakerFragment;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.module.user.fragment.UserFragment;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.StartUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
-import com.umeng.message.entity.Alias;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
-import permissions.dispatcher.OnPermissionDenied;
-import permissions.dispatcher.OnShowRationale;
-import permissions.dispatcher.PermissionRequest;
-
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.home_vp)
@@ -131,15 +120,27 @@ public class MainActivity extends BaseActivity {
     @Override
     public void getData() {
         Acp.getInstance(this)
-                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE).build(),
                         new AcpListener() {
                             @Override
                             public void onGranted() {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        EventBus.getDefault().post(new EvenMsg(1));
+                                    }
+                                },200);
                                 StartUtils.getInstance(MainActivity.this).detection();
                             }
 
                             @Override
                             public void onDenied(List<String> permissions) {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        EventBus.getDefault().post(new EvenMsg(1));
+                                    }
+                                },200);
                                 ToastUtils.showShort(MainActivity.this, "请求权限失败,请手动开启！");
                             }
                         });

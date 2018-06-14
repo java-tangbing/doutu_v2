@@ -189,6 +189,12 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     public void resultCountView(FavoriteBean bean) {
 
     }
+
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+
     private void countView(String id,int type,String orgintable,String option){
         if(NetWorkUtil.isNetworkConnected(this)){
             try {
@@ -197,6 +203,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                 countViewObj.put("type", type+"");
                 countViewObj.put("orgintable", orgintable+"");
                 countViewObj.put("option", option+"");
+                countViewObj.put("url", "");
                 presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
