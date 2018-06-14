@@ -7,6 +7,6 @@ import com.pufei.gxdt.module.user.presenter.SetPersonalPresenter;
 
 public interface SetPersonalView extends BaseView<SetPersonalPresenter> {
     void setPersonalInfo(SetPersonalResultBean bean);
-
     void setPersonAvatar(SetAvatarResultBean bean);
+    void requestErrResult(String msg);
 }

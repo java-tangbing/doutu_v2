@@ -456,7 +456,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     private void saveToDraft(boolean isDraft) {
         if (!isDraft) {
-            showLoading("saving");
+            showLoading("保存中...");
         }
         SQLite.delete().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(isDraft)).execute();
@@ -574,7 +574,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
-                                showLoading("Saving...");
+                                showLoading("保存中...");
                                 final String gifPath = App.path1 + "/"
                                         + System.currentTimeMillis() + ".gif";
 
@@ -618,6 +618,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                                     draftImgPath = path;
                                                     saveToDraft(true);
                                                 }
+
+                                                for (int i = 0; i < gifEncodeBitmap.size(); i++) {
+                                                    gifEncodeBitmap.get(i).getBitmap().recycle();
+                                                    gifEncodeBitmap.clear();
+                                                }
+                                                gifEncodeBitmap.clear();
                                             }
 
                                             @Override
@@ -660,7 +666,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
-                                showLoading("Saving...");
+                                showLoading("保存中...");
                                 final String path1 = App.path1 + "/"
                                         + System.currentTimeMillis() + ".png";
 
@@ -701,8 +707,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         float scaleHeight = ((float) newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
-        return newbm;
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
     }
 
     public Bitmap mergeBitmap(Bitmap backBitmap, Bitmap frontBitmap) {

@@ -30,6 +30,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -185,5 +186,10 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
     @Override
     public void resultJokeDetail(MyImagesBean bean) {
 
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(getActivity(), msg);
     }
 }

@@ -8,4 +8,5 @@ import com.pufei.gxdt.module.user.presenter.PublishPresenter;
 
 public interface DraftView extends BaseView<DraftPresenter> {
     void resultDraft(PictureResultBean bean);
+    void requestErrResult(String msg);
 }

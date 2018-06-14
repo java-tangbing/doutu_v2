@@ -24,6 +24,11 @@ public class DraftPresenter extends BasePresenter<DraftView> {
                     public void accept(PictureResultBean result) throws Exception {
                         baseview.resultDraft(result);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
                 });
         addSubscription(disposable);
     }

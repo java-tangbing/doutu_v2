@@ -10,4 +10,5 @@ import com.pufei.gxdt.module.user.presenter.SettingPresenter;
 public interface SettingView extends BaseView<SettingPresenter> {
     void resultSets(SetsBean bean);
     void sendRusult(BindAccountBean sendCodeBean);
+    void requestErrResult(String msg);
 }

@@ -6,6 +6,6 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 
 public interface SettingView extends BaseView<SettingPresenter> {
     void setNewPwd(ModifyResultBean result);
-
     void updatePwd(ModifyResultBean result);
+    void requestErrResult(String msg);
 }

@@ -43,6 +43,7 @@ import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
 import com.suke.widget.SwitchButton;
+import com.umeng.message.IUmengCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
 import com.umeng.socialize.UMAuthListener;
@@ -103,17 +104,21 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (App.userBean != null) {
                     if (isChecked) {
-                        mPushAgent.setAlias(App.userBean.getUid(), "User", new UTrack.ICallBack() {
+                        mPushAgent.enable(new IUmengCallback() {
                             @Override
-                            public void onMessage(boolean isSuccess, String message) {
-                                Log.e("push", isSuccess + " " + message);
+                            public void onSuccess() {
+                            }
+                            @Override
+                            public void onFailure(String s, String s1) {
                             }
                         });
                     } else {
-                        mPushAgent.deleteAlias(App.userBean.getUid(), "User", new UTrack.ICallBack() {
+                        mPushAgent.disable(new IUmengCallback() {
                             @Override
-                            public void onMessage(boolean isSuccess, String message) {
-
+                            public void onSuccess() {
+                            }
+                            @Override
+                            public void onFailure(String s, String s1) {
                             }
                         });
                     }
@@ -275,6 +280,11 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         } else {
             Toast.makeText(SettingActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
+        ToastUtils.showShort(this, msg);
     }
 
     @Override

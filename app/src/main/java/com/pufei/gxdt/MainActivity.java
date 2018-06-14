@@ -119,6 +119,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void getData() {
+        Intent intent = getIntent();
+        int index = intent.getIntExtra("make_finish",0);
+        if(index == MsgType.MAKER_FINISH) {
+            homeVp.setCurrentItem(1);
+        }else {
+            homeVp.setCurrentItem(0);
+
+        }
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE).build(),
                         new AcpListener() {
@@ -162,6 +170,8 @@ public class MainActivity extends BaseActivity {
     public void onEvent(EventMsg type) {
         if (type.getTYPE() == MsgType.MAKER_IMAGE) {
             homeVp.setCurrentItem(previousItem);
+        }else if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
+            initUPush(App.userBean.getUid());
         }
     }
 

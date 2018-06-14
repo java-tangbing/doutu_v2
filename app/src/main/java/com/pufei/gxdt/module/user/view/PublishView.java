@@ -8,4 +8,5 @@ import com.pufei.gxdt.module.user.presenter.PublishPresenter;
 
 public interface PublishView extends BaseView<PublishPresenter> {
     void resultPublish(PictureResultBean bean);
+    void requestErrResult(String msg);
 }
