@@ -126,6 +126,9 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
 //        if (bean.getResult() == null) return;
+        if(page == 1){
+            mlist.clear();
+        }
         if (bean.getResult().size() > 0) {
             if (isLoadMore) {
                 page = page + 1;
