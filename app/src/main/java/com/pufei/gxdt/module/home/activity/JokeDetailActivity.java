@@ -66,9 +66,9 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         View headerView = lif.inflate(R.layout.title_time_joke, null);
         title = (TextView) headerView.findViewById(R.id.title_time_title);
         time = (TextView) headerView.findViewById(R.id.title_time_time);
-        View  footView = lif.inflate(R.layout.adver_layout,null);
-//        RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
-//        AdvUtil.getAdvHttp(this,relativeLayout,4);
+        View  footView = lif.inflate(R.layout.adv_layout_joke,null);
+        RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
+        AdvUtil.getInstance().getAdvHttp(this,relativeLayout,8);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT );
         headerView.setLayoutParams(layoutParams);
         footView.setLayoutParams(layoutParams);
@@ -76,7 +76,7 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         activityJokedetailRy.setLayoutManager(layoutManager);
         activityJokedetailRy.addHeaderView(headerView);
-//        activityJokedetailRy.addFootView(footView);
+        activityJokedetailRy.addFootView(footView);
         activityJokedetailRy.setPullRefreshEnabled(false);
         adpater = new JokeDetalAdpater(this, list, imagelist);
         activityJokedetailRy.setAdapter(adpater);
@@ -89,11 +89,6 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
                 bundle.putInt("position", position);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }
-
-            @Override
-            public void OnlongImage(int position) {
-
             }
         });
     }
