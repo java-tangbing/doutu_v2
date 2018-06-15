@@ -108,6 +108,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                             @Override
                             public void onSuccess() {
                             }
+
                             @Override
                             public void onFailure(String s, String s1) {
                             }
@@ -117,6 +118,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                             @Override
                             public void onSuccess() {
                             }
+
                             @Override
                             public void onFailure(String s, String s1) {
                             }
@@ -173,11 +175,15 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.userdata_name_ll:
                 type = 1;
-                bindAccount(SHARE_MEDIA.WEIXIN);
+                if (TextUtils.isEmpty(wechat)) {
+                    bindAccount(SHARE_MEDIA.WEIXIN);
+                }
                 break;
             case R.id.userdata_name_qq:
                 type = 2;
-                bindAccount(SHARE_MEDIA.QQ);
+                if (TextUtils.isEmpty(qq)) {
+                    bindAccount(SHARE_MEDIA.QQ);
+                }
                 break;
             default:
                 break;
@@ -223,7 +229,6 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
 
     @Override
     public void sendRusult(BindAccountBean resultBean) {
-        ToastUtils.showLong(SettingActivity.this, "resultBean code: " + resultBean.getCode());
         if (resultBean.getCode().equals(Contents.CODE_ZERO)) {
             if (type == 1) {
                 App.userBean.setWechat(nickName);
@@ -234,49 +239,6 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             }
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             Toast.makeText(SettingActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
-//            LoginResultBean.ResultBean bean = resultBean.getResult();
-//            String name = "";
-//            String header = "";
-//            String gender = "";
-//            String address = "";
-//            if (!TextUtils.isEmpty(bean.getUsername())) {
-//                name = bean.getUsername();
-//            } else {
-//                name = "萌新上路";
-//            }
-//            if (!TextUtils.isEmpty(bean.getHeader())) {
-//                header = bean.getHeader();
-//            }
-//            if (!TextUtils.isEmpty(bean.getGender())) {
-//                gender = bean.getGender();
-//            } else {
-//                gender = "保密";
-//            }
-//            if (!TextUtils.isEmpty(bean.getCity())) {
-//                address = bean.getCity();
-//            } else {
-//                address = "未知";
-//            }
-//            SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-//            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
-//            if (!TextUtils.isEmpty(bean.getMobile())) {
-//                Toast.makeText(SettingActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//                EventBus.getDefault().post(new EvenMsg(MsgType.LOGIN_SUCCESS));
-//                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-//                Intent intent = new Intent(SettingActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                AppManager.getAppManager().finishActivity();
-//            } else {
-//                Intent intent = new Intent(this, BindPhoneActivity.class);
-//                intent.putExtra("openId", openid);
-//                intent.putExtra("iconUrl", header);
-//                intent.putExtra("nickName", nickName);
-//                intent.putExtra("gender", gender);
-//                intent.putExtra("type", type);
-//                intent.putExtra("orgin", orgin);
-//                startActivity(intent);
-//            }
-
         } else {
             Toast.makeText(SettingActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
@@ -301,17 +263,10 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             @Override
             public void onStart(SHARE_MEDIA share_media) {
                 ToastUtils.showLong(SettingActivity.this, "开始");
-
             }
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                ToastUtils.showLong(SettingActivity.this, "onComplete");
-                ToastUtils.showLong(SettingActivity.this, "type == " + type);
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                    Log.e("SettingActivity", "key:" + entry.getKey() + "; value:" + entry.getValue());
-                }
-
                 openid = map.get("uid");
                 nickName = map.get("name");
                 province = map.get("province");
@@ -330,9 +285,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                         jsonObject.put("openid", openid);
                         jsonObject.put("orgin", orgin);
                         jsonObject.put("nickname", nickName);
-                        ToastUtils.showLong(SettingActivity.this, jsonObject.toString());
                         presenter.bindAccount(RetrofitFactory.getRequestBody(jsonObject.toString()));
-                        ToastUtils.showLong(SettingActivity.this, "开始 bindAccount");
                     } else {
                         ToastUtils.showShort(SettingActivity.this, "请检查网络设置");
                     }
@@ -354,6 +307,12 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     private void dialog() {

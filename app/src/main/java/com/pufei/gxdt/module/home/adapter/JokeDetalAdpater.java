@@ -1,19 +1,21 @@
 package com.pufei.gxdt.module.home.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.widgets.GlideApp;
-
 import java.util.List;
 
 /**
@@ -55,14 +57,6 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
             GlideApp.with(mcontext)
                     .load(value).placeholder(R.mipmap.ic_default_picture)
                     .into(holder.iv);
-
-//        } else if (value.contains("gif") && value.contains("http")) {
-//            holder.tv.setVisibility(View.GONE);
-//            holder.ll.setVisibility(View.GONE);
-//            holder.ivgif.setVisibility(View.VISIBLE);
-//            GlideApp.with(mcontext)
-//                    .load(value).placeholder(R.mipmap.ic_default_picture)
-//                    .into(holder.iv);
         } else {
             holder.tv.setVisibility(View.VISIBLE);
             holder.ll.setVisibility(View.GONE);
@@ -117,4 +111,5 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
 
         void OnlongImage(int position);
     }
+
 }

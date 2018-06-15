@@ -2,16 +2,15 @@ package com.pufei.gxdt.module.user.activity;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.donkingliang.imageselector.utils.ImageSelectorUtils;
-import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -29,23 +28,22 @@ import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
+import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
-
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> implements SetPersonalView, View.OnClickListener {
     @BindView(R.id.ll_title_left)
@@ -64,7 +62,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     CircleImageView userdataHead;
     @BindView(R.id.userdata_dec)
     TextView userdata_dec;
-    private String sex;
+    private String sex = "";
     private static final int REQUEST_CODE = 17;
     private CommonPopupWindow popupWindow;
 
@@ -75,7 +73,6 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         tvTitle.setText("资料编辑");
         tvRight.setText("保存");
         if (App.userBean != null) {
-
             if (!App.userBean.getHead().isEmpty()) {
                 Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
             } else {
@@ -85,7 +82,6 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             tvSex.setText(App.userBean.getGender());
             loginstate.setText(R.string.log_out);
         }
-
     }
 
     @Override
@@ -119,7 +115,32 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         userdataname.setText(App.userBean.getName());
         userdata_dec.setText(App.userBean.getMind());
         tvSex.setText(App.userBean.getGender());
-        Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
+        Luban.with(this)
+                .load(new File(App.userBean.getHead()))
+                .ignoreBy(100)
+                .setTargetDir(App.path1 + "/")
+                .filter(new CompressionPredicate() {
+                    @Override
+                    public boolean apply(String path) {
+                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                    }
+                })
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        GlideApp.with(ProfileActivity.this).asBitmap().load(file).into(userdataHead);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                }).launch();
+
+//        Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -174,7 +195,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 break;
             case R.id.login_state:
                 if (App.userBean != null) {
-                    DialogUtil.getInstance().canceDialog(this,null);
+                    DialogUtil.getInstance().canceDialog(this, null);
                 } else {
                     ToastUtils.showLong(this, "请先登录");
                 }
@@ -191,18 +212,19 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             ArrayList<String> images = data.getStringArrayListExtra(
                     ImageSelectorUtils.SELECT_RESULT);
             String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(images.get(0)));
-            requestSetAvatar("", base64);
+            requestSetAvatar(base64);
             App.userBean.setHead(images.get(0));
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
         }
     }
 
-    private void requestSetAvatar(String type, String value) {
+    private void requestSetAvatar(String value) {
         try {
             if (NetWorkUtil.isNetworkConnected(this)) {
                 org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
                 jsonObject.put("auth", App.userBean.getAuth());
-                jsonObject.put("header", "");
-                jsonObject.put("username", value);
+                jsonObject.put("header", value);
+                jsonObject.put("username", "");
                 jsonObject.put("gender", "");
                 jsonObject.put("mind", "");
                 presenter.setPersonal(com.pufei.gxdt.utils.RetrofitFactory.getRequestBody(jsonObject.toString()));
@@ -261,7 +283,9 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     @Override
     public void setPersonalInfo(SetPersonalResultBean bean) {
         if (bean.getCode() == 0) {
-            App.userBean.setGender(sex);
+            if (!TextUtils.isEmpty(sex)) {
+                App.userBean.setGender(sex);
+            }
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             EventBus.getDefault().postSticky(new EventMsg(MsgType.UPDATA_USER));
         }

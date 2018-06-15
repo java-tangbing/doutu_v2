@@ -14,8 +14,6 @@ import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseFragment;
-import com.pufei.gxdt.contents.Contents;
-import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
@@ -30,6 +28,7 @@ import com.pufei.gxdt.module.user.activity.SettingActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.UrlString;
+import com.pufei.gxdt.widgets.GlideApp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,6 +36,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,8 +49,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.pufei.gxdt.utils.SignUtils.IsToday;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class UserFragment extends BaseFragment {
 
@@ -108,7 +109,31 @@ public class UserFragment extends BaseFragment {
             } else {
                 iv_sex.setImageResource(R.mipmap.user_ic_woman);
             }
-            if (TextUtils.isEmpty(App.userBean.getHead())) {
+            if (!TextUtils.isEmpty(App.userBean.getHead())) {
+//                Luban.with(getActivity())
+//                        .load(new File(App.userBean.getHead()))
+//                        .ignoreBy(100)
+//                        .setTargetDir(App.path1 + "/")
+//                        .filter(new CompressionPredicate() {
+//                            @Override
+//                            public boolean apply(String path) {
+//                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+//                            }
+//                        })
+//                        .setCompressListener(new OnCompressListener() {
+//                            @Override
+//                            public void onStart() {
+//                            }
+//
+//                            @Override
+//                            public void onSuccess(File file) {
+//                                GlideApp.with(getActivity()).asBitmap().load(file).into(ivUserHead);
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//                            }
+//                        }).launch();
                 Glide.with(this).load(App.userBean.getHead()).into(ivUserHead);
             } else {
                 Glide.with(this).load(R.mipmap.my_uer_picture).into(ivUserHead);
@@ -116,6 +141,7 @@ public class UserFragment extends BaseFragment {
         } else {
             tvUserName.setText("未登录");
             ivUserHead.setImageResource(R.mipmap.my_uer_picture);
+            user_dec.setText("个性签名");
         }
 
         initSign();
@@ -229,7 +255,7 @@ public class UserFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(EventMsg type) {
-        Log.e("eventmsg",type.getTYPE()+"");
+        Log.e("eventmsg", type.getTYPE() + "");
         if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
             initUserInfo();
         } else if (type.getTYPE() == MsgType.LOGIN_OUT) {

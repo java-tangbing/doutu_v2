@@ -53,6 +53,8 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
                     holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top2);
                 }else if(position == 2){
                     holder.hot_top.setBackgroundResource(R.mipmap.ic_expression_top3);
+                }else{
+
                 }
         }
         GlideApp.with(mcontext).load(list.get(position).getUrl()).placeholder(R.mipmap.ic_default_picture).override(100,80).into(holder.iv1);

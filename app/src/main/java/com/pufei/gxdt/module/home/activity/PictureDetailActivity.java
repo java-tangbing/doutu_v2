@@ -246,12 +246,16 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 break;
             case R.id.ib_dowm_load:
                 if(URL!=null){
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            GetImageInputStream(URL);
-                        }
-                    }).start();
+                    if (ActivityCompat.checkSelfPermission(PictureDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        openPermissin();
+                    }else{
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                GetImageInputStream(URL);
+                            }
+                        }).start();
+                    }
                 }
                 break;
             case R.id.activity_home1_shoucang:
