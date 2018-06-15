@@ -26,4 +26,5 @@ public class Contents {
     public static final String TENCENT_ID = "1106938548";
     public static final String TENCENT_ID_BANER_ID = "5030634484990442";
     public static final String TENCENT_SPLASH_ID = "3090032590538253";
+    public static final String NativeExpressPosID = "6000739542902160";
 }
