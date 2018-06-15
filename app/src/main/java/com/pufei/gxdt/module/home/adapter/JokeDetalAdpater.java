@@ -90,13 +90,6 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
                     itemOnclick.OnImage((Integer) v.getTag());
                 }
             });
-            ll.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    itemOnclick.OnlongImage((Integer) v.getTag());
-                    return false;
-                }
-            });
         }
     }
 
@@ -108,8 +101,6 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
 
     public interface MyItemOnclick {
         void OnImage(int position);
-
-        void OnlongImage(int position);
     }
 
 }
