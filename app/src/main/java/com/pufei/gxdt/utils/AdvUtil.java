@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
