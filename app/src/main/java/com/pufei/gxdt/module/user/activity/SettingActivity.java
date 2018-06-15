@@ -3,6 +3,8 @@ package com.pufei.gxdt.module.user.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
@@ -24,6 +28,7 @@ import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
+import com.pufei.gxdt.module.update.model.UpdateBean;
 import com.pufei.gxdt.module.user.bean.BindAccountBean;
 import com.pufei.gxdt.module.user.bean.SetsBean;
 import com.pufei.gxdt.module.user.bean.UserBean;
@@ -38,8 +43,10 @@ import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.FileUtil;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
+import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.StartUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
 import com.suke.widget.SwitchButton;
@@ -54,10 +61,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class SettingActivity extends BaseMvpActivity<SettingPresenter> implements SettingView {
     @BindView(R.id.ll_title_left)
@@ -87,6 +98,11 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     private String header;
     private String orgin;
     private int type;
+    private String newVersion = "";
+    private String oldVersion = "";
+    private String des;
+    private int newcode;
+    private int oldcode;
 
 
     @Override
@@ -156,7 +172,64 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 }
                 break;
             case R.id.setting_update_version:
-                DialogUtil.getInstance().showVersionDialog(this);
+
+                if (!NetWorkUtil.isNetworkConnected(App.AppContext)) {
+                    Toast.makeText(App.AppContext, "当前网络不可用，请检查网络情况", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                try {
+                    OkhttpUtils.post(Contents.Update, jsonObject.toString(), new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e(StartUtils.class.getSimpleName(), e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String result = response.body().string();
+                            UpdateBean updateBean = null;
+                            try {
+                                updateBean = new Gson().fromJson(result, UpdateBean.class);
+                                newVersion = updateBean.getResult().getVersion();
+                                final String upURl = updateBean.getResult().getLink();
+                                final boolean update = updateBean.getResult().getUpdateOpen().equals("1");
+                                //final boolean force = updateBean.getResult().isForce();
+                                des = updateBean.getResult().getDes();
+                                //newVersion="1.0";
+                                newcode = Integer.parseInt(updateBean.getResult().getVersion_code());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PackageManager pm = getApplicationContext().getPackageManager();
+                                        PackageInfo pi = null;
+                                        try {
+                                            pi = pm.getPackageInfo(getApplicationContext().getPackageName(), 0);
+                                        } catch (PackageManager.NameNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if (pi != null) {
+                                            oldVersion = pi.versionName;
+                                            oldcode = pi.versionCode;
+                                        }
+                                        if (newcode > oldcode) {
+                                            DialogUtil.getInstance().showVersionDialog(SettingActivity.this, upURl, newVersion);
+                                        } else {
+                                            DialogUtil.getInstance().showVersionDialog(SettingActivity.this, "", "");
+                                        }
+                                    }
+                                });
+                            } catch (JsonSyntaxException e) {
+                                e.printStackTrace();
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 break;
             case R.id.setting_about_product:
                 startActivity(new Intent(SettingActivity.this, AboutProductActivity.class));
@@ -170,8 +243,6 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.setting_clear_cache:
                 dialog();
-                break;
-            case R.id.change_notify:
                 break;
             case R.id.userdata_name_ll:
                 type = 1;
