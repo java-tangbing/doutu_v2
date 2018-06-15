@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.ToastUtils;
@@ -84,7 +85,7 @@ public class FeedBackActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.activity_feedback_return:
-                finish();
+                AppManager.getAppManager().finishActivity();
                 break;
             case R.id.activity_feedback_ok:
                 try {
@@ -103,6 +104,7 @@ public class FeedBackActivity extends BaseActivity {
         qq = activityFeedbackQq.getText().toString();
         if (TextUtils.isEmpty(content.replaceAll("\\s*", ""))) {
             ToastUtils.showShort(this, "请输入反馈意见");
+            return false;
         } else if (content.length() > 100) {
             ToastUtils.showShort(this, "超过了200字数限制");
             return false;
@@ -131,7 +133,7 @@ public class FeedBackActivity extends BaseActivity {
                         @Override
                         public void run() {
                             ToastUtils.showShort(getApplicationContext(), "发送成功");
-                            finish();
+                            AppManager.getAppManager().finishActivity();
                         }
                     });
 

@@ -27,7 +27,7 @@ public class AgreeementActivity extends BaseActivity {
     public void initView() {
         tvTitle.setText("用户协议");
         llTitleLeft.setVisibility(View.VISIBLE);
-        llTitleRight.setVisibility(View.GONE);
+        llTitleRight.setVisibility(View.INVISIBLE);
         WebSettings webSettings = webAgreement.getSettings();
 
         webSettings.setUseWideViewPort(true);

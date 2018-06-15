@@ -1,8 +1,16 @@
 package com.pufei.gxdt.module.user.activity;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.donkingliang.imageselector.utils.ImageSelectorUtils;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -19,6 +26,7 @@ import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.user.bean.SetAvatarResultBean;
 import com.pufei.gxdt.module.user.bean.SetPersonalResultBean;
+import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.module.user.presenter.SetPersonalPresenter;
 import com.pufei.gxdt.module.user.view.SetPersonalView;
 import com.pufei.gxdt.utils.AppManager;
@@ -28,7 +36,6 @@ import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
-import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,7 +43,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,6 +71,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     private String sex = "";
     private static final int REQUEST_CODE = 17;
     private CommonPopupWindow popupWindow;
+    private ProgressDialog mProgressDialog;
 
     @Override
     public void initView() {
@@ -115,32 +122,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         userdataname.setText(App.userBean.getName());
         userdata_dec.setText(App.userBean.getMind());
         tvSex.setText(App.userBean.getGender());
-        Luban.with(this)
-                .load(new File(App.userBean.getHead()))
-                .ignoreBy(100)
-                .setTargetDir(App.path1 + "/")
-                .filter(new CompressionPredicate() {
-                    @Override
-                    public boolean apply(String path) {
-                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                    }
-                })
-                .setCompressListener(new OnCompressListener() {
-                    @Override
-                    public void onStart() {
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        GlideApp.with(ProfileActivity.this).asBitmap().load(file).into(userdataHead);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-                }).launch();
-
-//        Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
+        Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -164,7 +146,11 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.userdata_head_ll:
-                ImageSelectorUtils.openPhoto(ProfileActivity.this, REQUEST_CODE, true, 0);
+                //ImageSelectorUtils.openPhoto(ProfileActivity.this, REQUEST_CODE, true, 0);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, ""), REQUEST_CODE);
                 break;
             case R.id.userdata_name_ll:
                 startActivity(new Intent(this, EditNameActivity.class));
@@ -209,18 +195,88 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && data != null) {
-            ArrayList<String> images = data.getStringArrayListExtra(
-                    ImageSelectorUtils.SELECT_RESULT);
-            String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(images.get(0)));
-            requestSetAvatar(base64);
-            App.userBean.setHead(images.get(0));
-            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            String path1 = "";
+            Uri uri = data.getData();
+            if (uri.toString().contains("provider")) {
+                path1 = ImageUtils.getFilePathByUri(this, uri);
+            } else {
+                path1 = getRealFilePath(this, uri);
+            }
+            if (path1 != null) {
+                Luban.with(this)
+                        .load(new File(path1))
+                        .ignoreBy(100)
+                        .setTargetDir(App.path1 + "/")
+                        .filter(new CompressionPredicate() {
+                            @Override
+                            public boolean apply(String path) {
+                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                            }
+                        })
+                        .setCompressListener(new OnCompressListener() {
+                            @Override
+                            public void onStart() {
+                            }
+
+                            @Override
+                            public void onSuccess(File file) {
+                                //GlideApp.with(ProfileActivity.this).asBitmap().load(file).into(userdataHead);
+                                String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(file.getPath()));
+                                requestSetAvatar(base64);
+                                UserBean userBean = App.userBean;
+                                userBean.setHead(file.getPath());
+                                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+                        }).launch();
+
+
+//                String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(path1));
+//                requestSetAvatar(base64);
+//                App.userBean.setHead(base64);
+//                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            }
+            Log.e("album path", path1 + " " + uri);
+
+//            ArrayList<String> images = data.getStringArrayListExtra(
+//                    ImageSelectorUtils.SELECT_RESULT);
+//            String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(images.get(0)));
+//            requestSetAvatar(base64);
+//            App.userBean.setHead(images.get(0));
+//            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
         }
+    }
+
+    public static String getRealFilePath(final Context context, final Uri uri) {
+        if (null == uri) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null)
+            data = uri.getPath();
+        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
     }
 
     private void requestSetAvatar(String value) {
         try {
             if (NetWorkUtil.isNetworkConnected(this)) {
+                showLoading("上传中...");
                 org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
                 jsonObject.put("auth", App.userBean.getAuth());
                 jsonObject.put("header", value);
@@ -282,6 +338,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
 
     @Override
     public void setPersonalInfo(SetPersonalResultBean bean) {
+        hideLoading();
         if (bean.getCode() == 0) {
             if (!TextUtils.isEmpty(sex)) {
                 App.userBean.setGender(sex);
@@ -312,4 +369,18 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         ToastUtils.showShort(this, msg);
     }
 
+
+    void showLoading(@NonNull String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+    }
+
+    void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
 }

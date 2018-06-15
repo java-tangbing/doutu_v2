@@ -24,6 +24,7 @@ import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
 import com.pufei.gxdt.module.news.view.NewsView;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -156,7 +157,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.ll_title_left:
-                finish();
+                AppManager.getAppManager().finishActivity();
                 break;
         }
     }

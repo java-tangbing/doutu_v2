@@ -28,6 +28,7 @@ import com.pufei.gxdt.module.sign.model.SignInBean;
 import com.pufei.gxdt.module.sign.utils.ResolutionUtil;
 import com.pufei.gxdt.module.sign.model.SignEntity;
 import com.pufei.gxdt.module.sign.adapter.SignAdapter;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -166,7 +167,7 @@ public class SignActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                AppManager.getAppManager().finishActivity();
             }
         });
     }

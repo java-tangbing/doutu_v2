@@ -4,28 +4,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
         <include layout="@layout/common_title"/>
-        <View
-            android:layout_width="150dp"
-            android:layout_height="wrap_content">
-        </View>
-        <com.pufei.gxdt.widgets.MyFrontTextView
-            android:visibility="gone"
-            android:id="@+id/activity_jokedetail_pictrue"
-            android:textColor="#333"
-            android:layout_marginRight="20dp"
-            android:textSize="18sp"
-            android:text="进入看图模式"
-            android:gravity="center"
-            android:layout_weight="7"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:layout_marginRight="18dp"
         android:layout_marginLeft="18dp"

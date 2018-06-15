@@ -27,6 +27,7 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.base.BasePresenter;
 import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.module.home.adapter.SearchAdapter;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.UrlString;
@@ -176,7 +177,7 @@ public class SearchActivity extends BaseMvpActivity  implements TextView.OnEdito
                         imm.hideSoftInputFromWindow(activitySearchSv.getWindowToken(), 0); // 输入法如果是显示状态，那么就隐藏输入法
                     }
                 }
-                finish();
+                AppManager.getAppManager().finishActivity();
                 break;
         }
     }
@@ -205,7 +206,7 @@ public class SearchActivity extends BaseMvpActivity  implements TextView.OnEdito
                     imm.hideSoftInputFromWindow(activitySearchSv.getWindowToken(), 0); // 输入法如果是显示状态，那么就隐藏输入法
                 }
             }
-            finish();
+            AppManager.getAppManager().finishActivity();
         }
         editor.putString(SHARE_TYPE_TAG,jsonArray.toString()).apply();
         return super.onKeyDown(keyCode, event);

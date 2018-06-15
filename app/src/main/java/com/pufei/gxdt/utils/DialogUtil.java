@@ -83,6 +83,7 @@ public class DialogUtil {
                 EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_OUT));
                 builder.dismiss();
                 activity.finish();
+                AppManager.getAppManager().finishAllActivity();
             }
         });
     }
