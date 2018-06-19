@@ -9,10 +9,13 @@ import android.net.Uri;
 
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.baidu.mobads.AdSettings;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
@@ -27,6 +30,8 @@ import com.qq.e.ads.banner.BannerView;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
+
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -215,10 +220,9 @@ public class AdvUtil {
                                         }
 
                                     }else if("1".equals(advBean.getResult().getType())){
-//                                        if(position == 7){
-//                                            setAdvTencentStart(context,layout);
-//                                            return;
-//                                        }
+                                        if(position == 7){
+                                            EventBus.getDefault().post(new EvenMsg(1));
+                                        }
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -243,6 +247,10 @@ public class AdvUtil {
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                if(position == 7){
+                                                    LogUtils.e("111","2222");
+                                                    EventBus.getDefault().post(new EvenMsg(1));
+                                                }
                                                 layout.setVisibility(View.GONE);
                                             }
                                         });
@@ -260,6 +268,10 @@ public class AdvUtil {
                                             @Override
                                             public void run() {
                                                 layout.setVisibility(View.GONE);
+                                                if(position == 7){
+                                                    LogUtils.e("111","2222");
+                                                    EventBus.getDefault().post(new EvenMsg(0));
+                                                }
                                             }
                                         });
 
@@ -268,6 +280,9 @@ public class AdvUtil {
                                             @Override
                                             public void run() {
                                                 layout.setVisibility(View.GONE);
+                                                if(position == 7){
+                                                    EventBus.getDefault().post(new EvenMsg(0));
+                                                }
                                             }
                                         });
                                     }

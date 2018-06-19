@@ -3,19 +3,15 @@ package com.pufei.gxdt.module.home.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
-import com.pufei.gxdt.module.home.adapter.JokeAdapter;
 import com.pufei.gxdt.module.home.adapter.JokeAdvAdapter;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
@@ -27,13 +23,9 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
-import com.pufei.gxdt.utils.TimeUtils;
-import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
-import com.qq.e.ads.nativ.NativeExpressMediaListener;
-import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.util.AdError;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -302,51 +294,52 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
 
     }
-    private NativeExpressMediaListener mediaListener = new NativeExpressMediaListener() {
-        @Override
-        public void onVideoInit(NativeExpressADView nativeExpressADView) {
-            Log.i("tb", "onVideoInit: ");
-        }
-
-        @Override
-        public void onVideoLoading(NativeExpressADView nativeExpressADView) {
-            Log.i("tb", "onVideoLoading");
-        }
-
-        @Override
-        public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
-            Log.i("tb", "onVideoReady");
-        }
-
-        @Override
-        public void onVideoStart(NativeExpressADView nativeExpressADView) {
-            Log.i("tb", "onVideoStart: ");
-        }
-
-        @Override
-        public void onVideoPause(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoPause: ");
-        }
-
-        @Override
-        public void onVideoComplete(NativeExpressADView nativeExpressADView) {
-            Log.i("tb", "onVideoComplete: ");
-        }
-
-        @Override
-        public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
-            Log.i(TAG, "onVideoError");
-        }
-
-        @Override
-        public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoPageOpen");
-        }
-
-        @Override
-        public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
-            Log.i(TAG, "onVideoPageClose");
-        }
-    };
+/*    广告视频监听*/
+//    private NativeExpressMediaListener mediaListener = new NativeExpressMediaListener() {
+//        @Override
+//        public void onVideoInit(NativeExpressADView nativeExpressADView) {
+//            Log.i("tb", "onVideoInit: ");
+//        }
+//
+//        @Override
+//        public void onVideoLoading(NativeExpressADView nativeExpressADView) {
+//            Log.i("tb", "onVideoLoading");
+//        }
+//
+//        @Override
+//        public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
+//            Log.i("tb", "onVideoReady");
+//        }
+//
+//        @Override
+//        public void onVideoStart(NativeExpressADView nativeExpressADView) {
+//            Log.i("tb", "onVideoStart: ");
+//        }
+//
+//        @Override
+//        public void onVideoPause(NativeExpressADView nativeExpressADView) {
+//            Log.i(TAG, "onVideoPause: ");
+//        }
+//
+//        @Override
+//        public void onVideoComplete(NativeExpressADView nativeExpressADView) {
+//            Log.i("tb", "onVideoComplete: ");
+//        }
+//
+//        @Override
+//        public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
+//            Log.i(TAG, "onVideoError");
+//        }
+//
+//        @Override
+//        public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
+//            Log.i(TAG, "onVideoPageOpen");
+//        }
+//
+//        @Override
+//        public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
+//            Log.i(TAG, "onVideoPageClose");
+//        }
+//    };
 
 }
