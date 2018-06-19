@@ -1,23 +1,14 @@
 package com.pufei.gxdt.module.home.adapter;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.module.home.bean.HomeListBean;
 import com.pufei.gxdt.module.home.model.HomeResultBean;
-import com.pufei.gxdt.module.home.model.JokeResultBean;
-import com.pufei.gxdt.utils.AddHeader;
 import com.pufei.gxdt.widgets.GlideApp;
-import com.pufei.gxdt.widgets.MyFrontTextView;
-
 import java.util.List;
 
 public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder> {

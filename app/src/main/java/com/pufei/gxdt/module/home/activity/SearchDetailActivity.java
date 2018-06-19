@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.pufei.gxdt.R;
@@ -18,12 +17,9 @@ import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.module.home.adapter.SearchDetailAdpater;
 import com.pufei.gxdt.module.home.model.RecommendBean;
 import com.pufei.gxdt.utils.ToastUtils;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
