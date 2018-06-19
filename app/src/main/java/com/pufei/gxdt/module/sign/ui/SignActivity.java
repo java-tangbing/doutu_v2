@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Html;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -20,18 +19,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
-import com.pufei.gxdt.base.BaseActivity;
-import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventBean;
+import com.pufei.gxdt.module.sign.adapter.SignAdapter;
 import com.pufei.gxdt.module.sign.model.GetScoreBean;
+import com.pufei.gxdt.module.sign.model.SignEntity;
 import com.pufei.gxdt.module.sign.model.SignInBean;
 import com.pufei.gxdt.module.sign.utils.ResolutionUtil;
-import com.pufei.gxdt.module.sign.model.SignEntity;
-import com.pufei.gxdt.module.sign.adapter.SignAdapter;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
-import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.SignUtils;
 import com.pufei.gxdt.utils.UrlString;
 import com.pufei.gxdt.widgets.MyFrontTextView;
@@ -112,7 +108,6 @@ public class SignActivity extends AppCompatActivity {
                 }
             });
         }
-        //Log.e("传过来的boolean",intent.getBooleanExtra("issign",false)+"");
         boolean isSign = intent.getBooleanExtra("issign", false);
         if (isSign) {
             btnSign.setEnabled(false);
@@ -194,7 +189,6 @@ public class SignActivity extends AppCompatActivity {
         int maxDate = calendarToday.get(Calendar.DATE);
         dayOfMonthToday = calendarToday.get(Calendar.DAY_OF_MONTH);
         data = new ArrayList<>();
-        Log.e("本月天数：", maxDate + "" + "当天多少号" + dayOfMonthToday);
         //Random ran = new Random();
         for (int i = 1; i <= maxDate; i++) {
             SignEntity signEntity = new SignEntity();
@@ -202,9 +196,7 @@ public class SignActivity extends AppCompatActivity {
             if (Type == 0) {
                 signEntity.setDayType(0);
             } else if (Type == 1) {
-                Log.e("循环到了：", i + "" + "当天多少号" + dayOfMonthToday);
                 if (i == dayOfMonthToday) {
-                    Log.e("到这啦", "--------------------");
                     signEntity.setDayType(2);
                 } else {
                     signEntity.setDayType(1);
@@ -223,9 +215,7 @@ public class SignActivity extends AppCompatActivity {
         int type = 1;
         for (int a = 0; a < timeList.size(); a++) {
             long timer = Long.parseLong(timeList.get(a)) * 1000;
-            Log.e("SignAcitivty", "签到时间：" + timer + "---月初时间：" + getTimesMonthmorning() + "a" + a);
             if (timer >= getTimesMonthmorning()) {
-                Log.e("SignAcitivty", "当天日期：" + day + "---签到日期：" + getDay(timeList.get(a)));
                 if (day == getDay(timeList.get(a))) {
                     type = 0;
                 }
@@ -253,7 +243,6 @@ public class SignActivity extends AppCompatActivity {
         int old = calendar1.get(Calendar.MONTH);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
         String date = dateFormat.format(predate);
-        Log.e("SignActivity", "当前月:" + now + "显示月：" + old + "日期" + date);
         if (old == now) {
             return true;
         } else {
@@ -339,7 +328,6 @@ public class SignActivity extends AppCompatActivity {
                     } catch (JsonSyntaxException | NumberFormatException e) {
                         e.printStackTrace();
                     }
-                    Log.e("签到的结果", result);
                 }
             });
         } catch (JSONException | IOException e) {
@@ -362,7 +350,6 @@ public class SignActivity extends AppCompatActivity {
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
                     final GetScoreBean getScoreBean = new Gson().fromJson(result, GetScoreBean.class);
-                    //Log.e("签到的列表",getScoreBean.getResult().getDatastr().size()+"");
                     if (getScoreBean.getResult() != null && getScoreBean.getResult().getDatastr() != null) {
                         SignActivity.this.runOnUiThread(new Runnable() {
                             @Override
@@ -377,7 +364,6 @@ public class SignActivity extends AppCompatActivity {
                             }
                         });
                     }
-                    Log.e("获取的积分", result);
                 }
             });
         } catch (JSONException | IOException e) {

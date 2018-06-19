@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/common_title"></include>
+    <include layout="@layout/common_title" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/news_system_rv"

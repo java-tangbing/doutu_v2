@@ -92,7 +92,6 @@ public class AdvUtil {
 
             public void onAdShow(JSONObject info) {
                 // 广告已经渲染出来
-                LogUtils.e("tb", "success:" + info.toString());
             }
 
             public void onAdReady(AdView adView) {
@@ -100,7 +99,6 @@ public class AdvUtil {
             }
 
             public void onAdFailed(String reason) {
-                LogUtils.e("tb", "fail:" + reason);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -151,7 +149,6 @@ public class AdvUtil {
         bv.setADListener(new AbstractBannerADListener() {
             @Override
             public void onNoAD(AdError error) {
-                LogUtils.i("tb",error.toString());
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -162,7 +159,6 @@ public class AdvUtil {
 
             @Override
             public void onADReceiv() {
-                LogUtils.i("tb","success");
             }
 
             @Override
@@ -198,7 +194,6 @@ public class AdvUtil {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
-                        LogUtils.i("tb","广告："+result);
                         try {
                             JSONObject resultObj = new JSONObject(result);
                             Activity activity  =(Activity) context;

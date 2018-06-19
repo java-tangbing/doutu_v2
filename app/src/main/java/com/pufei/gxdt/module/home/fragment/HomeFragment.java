@@ -2,7 +2,6 @@ package com.pufei.gxdt.module.home.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.module.home.activity.FaceTypeActivity;
@@ -37,10 +36,8 @@ import com.pufei.gxdt.module.news.activity.NewsActivity;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.KeyUtil;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
-import com.pufei.gxdt.utils.StartUtils;
 import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
@@ -204,7 +201,6 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAdv(EvenMsg type) {
         if(type.getTYPE() == 1){
-            LogUtils.i("tb","eventbus");
             AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
         }
     }
