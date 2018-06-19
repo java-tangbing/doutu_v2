@@ -49,6 +49,7 @@ import com.pufei.gxdt.utils.ImageUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UploadImageUtil;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -277,6 +278,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.btn_publish:
+                UmengStatisticsUtil.statisticsEvent(this,"19");
                 if (App.userBean != null) {
                     if (info != null) {
                         setRequestData();

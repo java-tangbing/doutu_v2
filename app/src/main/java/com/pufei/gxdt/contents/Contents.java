@@ -13,6 +13,7 @@ public class Contents {
     public static final String BASE_URL = "http://erp.xianwan.com/api/v5/android/";
     //public static final String Update ="http://erp.xianwan.com/api/apiStart/version";
     public static final String Update = "http://erp.xianwan.com/api/v5/android/Version/index";
+    public static final String Ignore = "http://erp.xianwan.com/api/v5/android/Piece/isUpdateIgnore";
     private static final String TAG = "http://erp.xianwan.com";
     public static final String friststart = TAG + "/api/apiStart/firstStart";
     public static final String USER_ANSER_TOTAL_FRIST = "USER_ANSER_TOTAL_FRIST";
@@ -20,7 +21,7 @@ public class Contents {
     public static final String USER_DETAIL = "USER_DETAIL";
     public static final String USER_EXERCISE_FRIST = "USER_EXERCISE_FRIST";
     public static final String USER_EXERCISE_FOUR = "USER_EXERCISE_FOUR";
-    public static final String DAY_SIGN="DAY_SIGN";
+    public static final String DAY_SIGN = "DAY_SIGN";
     public static final String BAIDU_ID = "";
     public static final String BAIDU_BANER_ID = "5831972";
     public static final String TENCENT_ID = "1106938548";

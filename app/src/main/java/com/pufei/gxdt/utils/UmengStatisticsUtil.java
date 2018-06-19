@@ -12,8 +12,12 @@ import java.util.HashMap;
 
 public class UmengStatisticsUtil {
     public static void statisticsEvent(Context context, String eventId, String key, String value) {
-        HashMap<String,String> mobcMap1 = new HashMap<String,String>();
-        mobcMap1.put(key,value);
+        HashMap<String, String> mobcMap1 = new HashMap<String, String>();
+        mobcMap1.put(key, value);
         MobclickAgent.onEvent(context, eventId, mobcMap1);
+    }
+
+    public static void statisticsEvent(Context context, String eventId) {
+        MobclickAgent.onEvent(context, eventId);
     }
 }

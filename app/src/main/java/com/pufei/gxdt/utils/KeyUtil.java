@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
+import com.pufei.gxdt.app.App;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,25 +36,12 @@ public class KeyUtil {
         String key = "h32nfow45e";
         String vresion = pi.versionName;//获取版本号
         String os = "1";
-        String deviceid =null;
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            deviceid="";
-        }
-        //deviceid = TelephonyMgr.getDeviceId();//获取唯一辨识码
-        deviceid = "123456789";
         String sign = md5(md5(timestamp + key + vresion));
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("sign", sign);
             jsonObject.put("key", key);
-            jsonObject.put("deviceid", deviceid);
+            jsonObject.put("deviceid", SystemInfoUtils.deviced(context));
             jsonObject.put("os", os);
             jsonObject.put("version", vresion);
             jsonObject.put("timestamp", timestamp);
@@ -63,6 +52,7 @@ public class KeyUtil {
 
         return jsonObject;
     }
+
     public static String md5(String string) {//MD5加密
         byte[] hash;
         try {
