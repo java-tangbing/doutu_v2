@@ -4,7 +4,9 @@ package com.pufei.gxdt.module.home.activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,7 +14,9 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
+import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.adapter.JokeAdapter;
+import com.pufei.gxdt.module.home.adapter.JokeAdvAdapter;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
@@ -24,6 +28,13 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.TimeUtils;
+import com.qq.e.ads.cfg.VideoOption;
+import com.qq.e.ads.nativ.ADSize;
+import com.qq.e.ads.nativ.NativeExpressAD;
+import com.qq.e.ads.nativ.NativeExpressADView;
+import com.qq.e.ads.nativ.NativeExpressMediaListener;
+import com.qq.e.comm.constants.AdPatternType;
+import com.qq.e.comm.util.AdError;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -41,7 +52,7 @@ import butterknife.OnClick;
  * Created by tb on 2018/5/23.
  */
 
-public class JokeActivity extends BaseMvpActivity<JokePresenter> implements JokeView{
+public class JokeActivity extends BaseMvpActivity<JokePresenter> implements JokeView, NativeExpressAD.NativeExpressADListener{
     @BindView(R.id.ll_title_left)
     LinearLayout ll_left;
     @BindView(R.id.tv_title)
@@ -54,15 +65,21 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     LinearLayout request_failed;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
-    private JokeAdapter jokeAdapter;
+//    @BindView(R.id.container)
+//    RelativeLayout container;
+    private JokeAdvAdapter jokeAdapter;
     private List<JokeResultBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
+    private NativeExpressADView nativeExpressADView;
+    private NativeExpressAD nativeExpressAD;
+    private List<NativeExpressADView> adLists = new ArrayList<>();
     @Override
     public void initView() {
+        refreshAd();
         tv_title.setText("笑话段子");
         AdvUtil.getInstance().getAdvHttp(this,your_original_layout,4);
         ll_left.setVisibility(View.VISIBLE);
-        jokeAdapter = new JokeAdapter(JokeActivity.this,jokeList);
+        jokeAdapter = new JokeAdvAdapter(JokeActivity.this,jokeList,adLists);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_joke.setLayoutManager(layoutManager);
@@ -105,7 +122,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             }
         });
 
-        jokeAdapter.setOnItemClickListener(new JokeAdapter.MyItemClickListener() {
+        jokeAdapter.setOnItemClickListener(new JokeAdvAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
                     try {
@@ -199,4 +216,137 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     public void requestErrResult(String msg) {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (nativeExpressADView != null) {
+            nativeExpressADView.destroy();
+        }
+    }
+
+    //广告
+    private void refreshAd() {
+        nativeExpressAD = new NativeExpressAD(this, new ADSize(ADSize.FULL_WIDTH, 100), Contents.TENCENT_ID, Contents.NativeExpressPosID, this); // 传入Activity
+        // 注意：如果您在联盟平台上新建原生模板广告位时，选择了“是”支持视频，那么可以进行个性化设置（可选）
+//        nativeExpressAD.setVideoOption(new VideoOption.Builder()
+//                .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.WIFI) // WIFI环境下可以自动播放视频
+//                .setAutoPlayMuted(true) // 自动播放时为静音
+//                .build()); //
+        nativeExpressAD.loadAD(10);
+    }
+
+    @Override
+    public void onNoAD(AdError adError) {
+        Log.i("tb", "onError: " + adError.getErrorMsg()+"..."+adError.getErrorCode());
+    }
+
+    @Override
+    public void onADLoaded(List<NativeExpressADView> adList) {
+        Log.i("tb", "onADLoaded: " + adList.size());
+        // 释放前一个展示的NativeExpressADView的资源
+          adLists.clear();
+//        if (nativeExpressADView != null) {
+//            nativeExpressADView.destroy();
+//        }
+//        nativeExpressADView = adList.get(0);
+//        for(int i = 0;i<adList.size();i++){
+            adLists.addAll(adList);
+            jokeAdapter.notifyDataSetChanged();
+//        }
+
+//        if (nativeExpressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
+//            nativeExpressADView.setMediaListener(mediaListener);
+//        }
+        // 广告可见才会产生曝光，否则将无法产生收益。
+//        container.addView(nativeExpressADView);
+//        nativeExpressADView.render();
+    }
+
+    @Override
+    public void onRenderFail(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onADExposure(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onADClicked(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onADClosed(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
+
+    }
+
+    @Override
+    public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
+
+    }
+    private NativeExpressMediaListener mediaListener = new NativeExpressMediaListener() {
+        @Override
+        public void onVideoInit(NativeExpressADView nativeExpressADView) {
+            Log.i("tb", "onVideoInit: ");
+        }
+
+        @Override
+        public void onVideoLoading(NativeExpressADView nativeExpressADView) {
+            Log.i("tb", "onVideoLoading");
+        }
+
+        @Override
+        public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
+            Log.i("tb", "onVideoReady");
+        }
+
+        @Override
+        public void onVideoStart(NativeExpressADView nativeExpressADView) {
+            Log.i("tb", "onVideoStart: ");
+        }
+
+        @Override
+        public void onVideoPause(NativeExpressADView nativeExpressADView) {
+            Log.i(TAG, "onVideoPause: ");
+        }
+
+        @Override
+        public void onVideoComplete(NativeExpressADView nativeExpressADView) {
+            Log.i("tb", "onVideoComplete: ");
+        }
+
+        @Override
+        public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
+            Log.i(TAG, "onVideoError");
+        }
+
+        @Override
+        public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
+            Log.i(TAG, "onVideoPageOpen");
+        }
+
+        @Override
+        public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
+            Log.i(TAG, "onVideoPageClose");
+        }
+    };
+
 }
