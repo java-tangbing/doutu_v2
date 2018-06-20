@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AdvUtil;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.StartUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -73,7 +74,7 @@ public class StartActivity extends Activity {
                     IfStart();
                     break;
                 case 4:
-                    finish();
+                    AppManager.getAppManager().finishActivity();
                     break;
             }
             super.handleMessage(msg);
@@ -101,13 +102,14 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        AppManager.getAppManager().addActivity(this);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
         }
         ButterKnife.bind(this);
 //        StatusBarUtil.StatusBarLightMode(this);
-         setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
+         setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
           user_first = setting.getBoolean("FIRST", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            StatusBarUtil.transparencyBar(this);
@@ -133,7 +135,7 @@ public class StartActivity extends Activity {
 //                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 //                    out.flush();
 //                    out.close();
-//                    //保存图片后发送广播通知更新数据�
+//                    //保存图片后发送广播通知更新数据�
 //                    Uri uri = Uri.fromFile(file);
 //                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 //                } catch (Exception e) {
@@ -178,16 +180,16 @@ public class StartActivity extends Activity {
 
 
     private void IfStart() {
-        if (user_first) {//第一�
+        if (user_first) {//第一
             setting.edit().putBoolean("FIRST", false).apply();
             setting.edit().putBoolean("GIF", true).apply();
             setting.edit().apply();
             startActivity(new Intent(StartActivity.this, FristActivity.class));
-            finish();
+            AppManager.getAppManager().finishActivity();
         } else {
 //            if (imageis) {
             startActivity(new Intent(StartActivity.this, MainActivity.class));
-            finish();
+            AppManager.getAppManager().finishActivity();
 //            }
 //        }
         }
