@@ -29,6 +29,7 @@ import com.pufei.gxdt.module.login.model.SendCodeBean;
 import com.pufei.gxdt.module.login.presenter.LoginPresenter;
 import com.pufei.gxdt.module.login.view.LoginView;
 import com.pufei.gxdt.module.user.activity.AgreeementActivity;
+import com.pufei.gxdt.module.user.activity.SettingActivity;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.AppManager;
@@ -183,6 +184,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 intent.putExtra("type", type);
                 intent.putExtra("orgin", orgin);
                 startActivity(intent);
+                if (type == 1){
+                    UmengStatisticsUtil.statisticsEvent(this,"32");
+                }else {
+                    UmengStatisticsUtil.statisticsEvent(this,"34");
+                }
             }
 
         } else {
@@ -247,6 +253,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                             break;
                         }
                         UmengStatisticsUtil.statisticsEvent(this, "Login", "vcodeLogin", "验证码登录");
+                        UmengStatisticsUtil.statisticsEvent(this,"30");
                         try {
                             JSONObject jsonObject = KeyUtil.getJson(this);
                             jsonObject.put("mobile", loginIphone.getText().toString());
@@ -298,11 +305,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 type = 1;
                 thirdLogin(SHARE_MEDIA.WEIXIN, 1);
                 UmengStatisticsUtil.statisticsEvent(this, "Login", "weChatLogin", "微信登录");
+                UmengStatisticsUtil.statisticsEvent(this,"31");
                 //ToastUtils.showShort(this, "敬请期待...");
                 break;
             case R.id.iv_login_qq:
                 type = 2;
                 UmengStatisticsUtil.statisticsEvent(this, "Login", "QQLogin", "QQ登录");
+                UmengStatisticsUtil.statisticsEvent(this,"33");
                 thirdLogin(SHARE_MEDIA.QQ, 2);
                 break;
             case R.id.tv_agreement:

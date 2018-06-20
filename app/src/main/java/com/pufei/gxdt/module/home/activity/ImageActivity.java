@@ -24,9 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.pufei.gxdt.R;
-import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.module.home.adapter.MyfourPagerAdapder;
 import com.pufei.gxdt.module.home.fragment.ImageFragment;
 import com.pufei.gxdt.utils.AppManager;

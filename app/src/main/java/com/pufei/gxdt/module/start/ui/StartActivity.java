@@ -16,7 +16,14 @@ import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.EvenMsg;
+import com.pufei.gxdt.utils.StartUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -74,7 +81,23 @@ public class StartActivity extends Activity {
         }
     };
     private SharedPreferences setting;
+    @Override
+    public void onStart() {
+        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+            EventBus.getDefault().register(this);
+        }
+        super.onStart();
+    }
 
+    @Override
+    public void onDestroy() {
+        if (EventBus.getDefault().isRegistered(this)){
+            //加上判断
+            EventBus.getDefault().unregister(this);
+        }
+
+        super.onDestroy();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +109,7 @@ public class StartActivity extends Activity {
         }
         ButterKnife.bind(this);
 //        StatusBarUtil.StatusBarLightMode(this);
-         setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启动
+         setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
           user_first = setting.getBoolean("FIRST", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            StatusBarUtil.transparencyBar(this);
@@ -100,7 +123,7 @@ public class StartActivity extends Activity {
 //        }
         //getData();
         //Message message = handler.obtainMessage(1);
-        handler.sendEmptyMessage(1);
+//        handler.sendEmptyMessage(1);
 //        final Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
 //        //handler.sendMessageDelayed(message, 1000);
 //        new Thread(new Runnable() {
@@ -112,7 +135,7 @@ public class StartActivity extends Activity {
 //                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 //                    out.flush();
 //                    out.close();
-//                    //保存图片后发送广播通知更新数据库
+//                    //保存图片后发送广播通知更新数据�
 //                    Uri uri = Uri.fromFile(file);
 //                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 //                } catch (Exception e) {
@@ -122,7 +145,16 @@ public class StartActivity extends Activity {
 //        }).start();
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void updateAdv(EvenMsg type) {
+        if(type.getTYPE() == 1){
+            handler.sendEmptyMessage(1);
+        }else {
+            startTime.setVisibility(View.GONE);
+            timer = 1;
+            handler.sendEmptyMessage(1);
+       }
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -148,7 +180,7 @@ public class StartActivity extends Activity {
 
 
     private void IfStart() {
-        if (user_first) {//第一次
+        if (user_first) {//第一
             setting.edit().putBoolean("FIRST", false).apply();
             setting.edit().putBoolean("GIF", true).apply();
             setting.edit().apply();

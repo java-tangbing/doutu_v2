@@ -48,6 +48,7 @@ import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.StartUtils;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UserUtils;
 import com.suke.widget.SwitchButton;
 import com.umeng.message.IUmengCallback;
@@ -167,6 +168,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.setting_data_editor:
+                    UmengStatisticsUtil.statisticsEvent(SettingActivity.this,"35");
                 if ((TextUtils.isEmpty(mobile))) {
                     startActivity(new Intent(SettingActivity.this, BindPhoneActivity.class));
                 }

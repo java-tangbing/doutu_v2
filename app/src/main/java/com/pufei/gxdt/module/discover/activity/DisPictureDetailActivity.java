@@ -42,14 +42,12 @@ import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DisPicDetPresenter;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
-import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -486,7 +484,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
-                    LogUtils.i("tb", result);
                     DisPictureDetailActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

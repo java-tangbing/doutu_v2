@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 
 import java.util.List;
 
@@ -44,18 +46,22 @@ public class TabVpAdapter extends FragmentPagerAdapter {
             case 0:
                 iv.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.home_tab_state));
                 tv.setText("首页");
+                UmengStatisticsUtil.statisticsEvent(context,"1");
                 break;
             case 1:
                 iv.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.home_tab_find));
                 tv.setText("发现");
+                UmengStatisticsUtil.statisticsEvent(context,"2");
                 break;
             case 2:
                 iv.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.home_tab_made));
                 tv.setText("制图");
+                UmengStatisticsUtil.statisticsEvent(context,"3");
                 break;
             case 3:
                 iv.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.home_tab_user));
                 tv.setText("我的");
+                UmengStatisticsUtil.statisticsEvent(context,"5");
                 break;
         }
         return view;

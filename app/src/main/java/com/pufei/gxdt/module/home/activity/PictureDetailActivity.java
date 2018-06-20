@@ -5,18 +5,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
@@ -48,12 +44,12 @@ import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UrlString;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
@@ -62,8 +58,10 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -74,6 +72,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -200,6 +199,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 intent.putExtras(bundle);
                 intent.putExtra(EditImageActivity.EDIT_TYPE, EditImageActivity.EDIT_TYPE_EDIT);
                 startActivity(intent);
+                UmengStatisticsUtil.statisticsEvent(this,"18");
                 break;
             case R.id.iv_report:
                 popupWindow = new CommonPopupWindow.Builder(this)
@@ -215,6 +215,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                                     @Override
                                     public void onClick(View v) {
                                         reportImage();
+                                        UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"10");
                                     }
                                 });
                                 view.findViewById(R.id.menu_pictruedetail_cance).setOnClickListener(new View.OnClickListener() {
@@ -246,6 +247,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 break;
             case R.id.ib_dowm_load:
                 if(URL!=null){
+                    UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"11");
                     if (ActivityCompat.checkSelfPermission(PictureDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         openPermissin();
                     }else{
@@ -313,7 +315,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
-                    LogUtils.i("tb", result);
                     PictureDetailActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -383,6 +384,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 ToastUtils.showShort(this, "收藏成功");
                 Intent mIntent = new Intent();
                 this.setResult(1, mIntent);
+                UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"12");
             } else {
                 pictureList.get(index).setIsSaveImg("0");
                 ToastUtils.showShort(this, bean.getMsg());
@@ -400,6 +402,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 ToastUtils.showShort(this, "取消收藏成功");
                 Intent mIntent = new Intent();
                 this.setResult(1, mIntent);
+                UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"13");
             } else {
                 pictureList.get(index).setIsSaveImg("1");
                 ToastUtils.showShort(this, bean.getMsg());
@@ -500,6 +503,12 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     }
 
     private void QQshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (share_media.equals(SHARE_MEDIA.WEIXIN)){
+            UmengStatisticsUtil.statisticsEvent(this,"16");
+        }else if (share_media.equals(SHARE_MEDIA.QQ)){
+            UmengStatisticsUtil.statisticsEvent(this,"14");
+        }
+
         if (URL != null) {
             UMImage image = null;
             if (URL.contains("http")) {
@@ -549,6 +558,11 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             countView(pictureList.get(index).getId(),3,pictureList.get(index).getOrgintable(),"share");
             ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
             sharedialog.dismiss();
+            if (platform.equals(SHARE_MEDIA.WEIXIN)){
+                UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"17");
+            }else if (platform.equals(SHARE_MEDIA.QQ)){
+                UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"15");
+            }
         }
 
         @Override

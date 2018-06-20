@@ -421,3 +421,6 @@
 }
 -dontwarn com.umeng.socialize.**
 -dontwarn com.umeng.**
+-keepclasseswithmembernames class * { # 保持native方法不被混淆
+    native <methods>;
+}

@@ -9,10 +9,13 @@ import android.net.Uri;
 
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.baidu.mobads.AdSettings;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
@@ -27,6 +30,8 @@ import com.qq.e.ads.banner.BannerView;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
+
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -92,7 +97,6 @@ public class AdvUtil {
 
             public void onAdShow(JSONObject info) {
                 // 广告已经渲染出来
-                LogUtils.e("tb", "success:" + info.toString());
             }
 
             public void onAdReady(AdView adView) {
@@ -100,7 +104,6 @@ public class AdvUtil {
             }
 
             public void onAdFailed(String reason) {
-                LogUtils.e("tb", "fail:" + reason);
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -151,7 +154,6 @@ public class AdvUtil {
         bv.setADListener(new AbstractBannerADListener() {
             @Override
             public void onNoAD(AdError error) {
-                LogUtils.i("tb",error.toString());
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -162,7 +164,6 @@ public class AdvUtil {
 
             @Override
             public void onADReceiv() {
-                LogUtils.i("tb","success");
             }
 
             @Override
@@ -198,7 +199,6 @@ public class AdvUtil {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
-                        LogUtils.i("tb","广告："+result);
                         try {
                             JSONObject resultObj = new JSONObject(result);
                             Activity activity  =(Activity) context;
@@ -220,10 +220,9 @@ public class AdvUtil {
                                         }
 
                                     }else if("1".equals(advBean.getResult().getType())){
-//                                        if(position == 7){
-//                                            setAdvTencentStart(context,layout);
-//                                            return;
-//                                        }
+                                        if(position == 7){
+                                            EventBus.getDefault().post(new EvenMsg(1));
+                                        }
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
@@ -248,6 +247,10 @@ public class AdvUtil {
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                if(position == 7){
+                                                    LogUtils.e("111","2222");
+                                                    EventBus.getDefault().post(new EvenMsg(1));
+                                                }
                                                 layout.setVisibility(View.GONE);
                                             }
                                         });
@@ -265,6 +268,10 @@ public class AdvUtil {
                                             @Override
                                             public void run() {
                                                 layout.setVisibility(View.GONE);
+                                                if(position == 7){
+                                                    LogUtils.e("111","2222");
+                                                    EventBus.getDefault().post(new EvenMsg(0));
+                                                }
                                             }
                                         });
 
@@ -273,6 +280,9 @@ public class AdvUtil {
                                             @Override
                                             public void run() {
                                                 layout.setVisibility(View.GONE);
+                                                if(position == 7){
+                                                    EventBus.getDefault().post(new EvenMsg(0));
+                                                }
                                             }
                                         });
                                     }

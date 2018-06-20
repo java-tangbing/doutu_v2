@@ -32,6 +32,7 @@ import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.StartUtils;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
 import org.greenrobot.eventbus.EventBus;
