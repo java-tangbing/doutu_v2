@@ -14,9 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.utils.AdvUtil;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
-import com.pufei.gxdt.utils.StartUtils;
+import com.pufei.gxdt.utils.LogUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,24 +59,7 @@ public class StartActivity extends Activity {
                         handler.sendMessageDelayed(message, 1000);
                     }
                     break;
-                case 2:
-//                    if (startAdvertBean.getResults() != null) {
-//                        Intent intent = new Intent(StartActivity.this, WebAdvertActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("URL", startAdvertBean.getResults().get(0).getDest_url());
-//                        bundle.putString("source", "start");
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-//                    } else {
-//                        IfStart();
-//                    }
-                    break;
-                case 3:
-                    IfStart();
-                    break;
-                case 4:
-                    finish();
-                    break;
+
             }
             super.handleMessage(msg);
         }
@@ -100,9 +85,10 @@ public class StartActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
         setContentView(R.layout.activity_start);
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            finish();
+            AppManager.getAppManager().finishActivity();
             return;
         }
         ButterKnife.bind(this);
@@ -145,10 +131,10 @@ public class StartActivity extends Activity {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void updateAdv(EvenMsg type) {
-        if(type.getTYPE() == 1){
+        if(type.getTYPE() == MsgType.START_ADV){
+            startTime.setVisibility(View.VISIBLE);
             handler.sendEmptyMessage(1);
-        }else {
-            startTime.setVisibility(View.GONE);
+        }else if(type.getTYPE() == MsgType.START_ADV_NO){
             timer = 1;
             handler.sendEmptyMessage(1);
        }
@@ -183,14 +169,12 @@ public class StartActivity extends Activity {
             setting.edit().putBoolean("GIF", true).apply();
             setting.edit().apply();
             startActivity(new Intent(StartActivity.this, FristActivity.class));
-            finish();
+            AppManager.getAppManager().finishActivity();
         } else {
-//            if (imageis) {
             startActivity(new Intent(StartActivity.this, MainActivity.class));
-            finish();
-//            }
-//        }
+            AppManager.getAppManager().finishActivity();
         }
     }
+
 
 }
