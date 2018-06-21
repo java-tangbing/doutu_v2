@@ -1,22 +1,17 @@
 package com.pufei.gxdt.module.news.activity;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
-
 import com.pufei.gxdt.contents.Contents;
-import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
 import com.pufei.gxdt.module.news.adapter.NewsSystemAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
@@ -59,7 +54,7 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 
     @Override
     public void initView() {
-        if (App.userBean.getPhone().length() > 0) {
+        if (TextUtils.isEmpty(App.userBean.getPhone())) {
             isbdphone = true;
         }
         textViewTitle.setText(getResources().getString(R.string.news_system));
