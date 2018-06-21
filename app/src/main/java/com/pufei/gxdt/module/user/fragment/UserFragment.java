@@ -146,7 +146,7 @@ public class UserFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_checkin_state:
                 if (App.userBean != null) {
-                    UmengStatisticsUtil.statisticsEvent(getActivity(),"20");
+                    UmengStatisticsUtil.statisticsEvent(getActivity(), "20");
                     sharedPreferences.edit().putLong(App.userBean.getAuth(), System.currentTimeMillis()).apply();
                     initSign();
                     //EventBus.getDefault().post(new EventBean(Contents.DAY_SIGN, null));
@@ -166,27 +166,27 @@ public class UserFragment extends BaseFragment {
                 }
                 break;
             case R.id.user_edit:
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"");
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "");
                 startActivity(new Intent(getActivity(), ProfileActivity.class));
                 break;
             case R.id.tv_user_publish:
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"21");
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "21");
                 startActivity(new Intent(getActivity(), PublishActivity.class));
                 break;
             case R.id.tv_user_favorite:
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"22");
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "22");
                 startActivity(new Intent(getActivity(), FavoriteActivity.class));
                 break;
             case R.id.tv_user_draft:
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"23");
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "23");
                 startActivity(new Intent(getActivity(), DraftActivity.class));
                 break;
             case R.id.tv_douqi:
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"24");
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "24");
                 startActivity(new Intent(getActivity(), CrunchiesActivity.class));
                 break;
             case R.id.tv_setting:
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"25");
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "25");
                 startActivity(new Intent(getActivity(), SettingActivity.class));
                 break;
 
@@ -265,7 +265,7 @@ public class UserFragment extends BaseFragment {
                     String result = response.body().string();
                     try {
                         final GetScoreBean getScoreBean = new Gson().fromJson(result, GetScoreBean.class);
-                        if (getScoreBean.getResult() != null) {
+                        if (getScoreBean.getResult() != null && getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
