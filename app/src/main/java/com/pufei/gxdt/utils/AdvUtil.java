@@ -22,6 +22,7 @@ import com.baidu.mobads.AdViewListener;
 import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.home.model.AdvBean;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.qq.e.ads.banner.ADSize;
@@ -221,7 +222,7 @@ public class AdvUtil {
 
                                     }else if("1".equals(advBean.getResult().getType())){
                                         if(position == 7){
-                                            EventBus.getDefault().post(new EvenMsg(1));
+                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV));
                                         }
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
@@ -248,8 +249,7 @@ public class AdvUtil {
                                             @Override
                                             public void run() {
                                                 if(position == 7){
-                                                    LogUtils.e("111","2222");
-                                                    EventBus.getDefault().post(new EvenMsg(1));
+                                                    EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
                                                 }
                                                 layout.setVisibility(View.GONE);
                                             }
@@ -269,8 +269,7 @@ public class AdvUtil {
                                             public void run() {
                                                 layout.setVisibility(View.GONE);
                                                 if(position == 7){
-                                                    LogUtils.e("111","2222");
-                                                    EventBus.getDefault().post(new EvenMsg(0));
+                                                    EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
                                                 }
                                             }
                                         });
@@ -281,7 +280,7 @@ public class AdvUtil {
                                             public void run() {
                                                 layout.setVisibility(View.GONE);
                                                 if(position == 7){
-                                                    EventBus.getDefault().post(new EvenMsg(0));
+                                                    EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
                                                 }
                                             }
                                         });

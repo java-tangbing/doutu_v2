@@ -354,7 +354,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         public void onBindViewHolder(final ImageTypeAdapter.MyHodler holder, final int position) {
             holder.itemView.setTag(position);
             holder.tv.setText(list.get(position).getCategory_name());
-            GlideApp.with(mcontext).load(list.get(position).getImages()).into(holder.iv);
+            GlideApp.with(mcontext).load(list.get(position).getImages()).placeholder(R.mipmap.ic_default_picture).into(holder.iv);
             holder.ll_doutu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
