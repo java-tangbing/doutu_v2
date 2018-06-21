@@ -91,6 +91,7 @@ public class ImageActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
         ButterKnife.bind(this);
+        AppManager.getAppManager().addActivity(this);
         //StatusBarUtil.StatusBarLightMode(this);
         //fristStart();
         StatusBarCompat.compat(this, getResources().getColor(R.color.black));

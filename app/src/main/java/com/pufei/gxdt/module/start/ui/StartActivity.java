@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.contents.MsgType;
@@ -59,16 +60,16 @@ public class StartActivity extends Activity {
                         handler.sendMessageDelayed(message, 1000);
                     }
                     break;
-
-                    AppManager.getAppManager().finishActivity();
             }
+            AppManager.getAppManager().finishActivity();
             super.handleMessage(msg);
         }
     };
     private SharedPreferences setting;
+
     @Override
     public void onStart() {
-        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
         }
         super.onStart();
@@ -76,13 +77,14 @@ public class StartActivity extends Activity {
 
     @Override
     public void onDestroy() {
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             //加上判断
             EventBus.getDefault().unregister(this);
         }
 
         super.onDestroy();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,15 +97,15 @@ public class StartActivity extends Activity {
         }
         ButterKnife.bind(this);
 //        StatusBarUtil.StatusBarLightMode(this);
-         setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
-          user_first = setting.getBoolean("FIRST", true);
+        setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
+        user_first = setting.getBoolean("FIRST", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            StatusBarUtil.transparencyBar(this);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        AdvUtil.getInstance().getAdvHttp(this,rl_adv,7);
+        AdvUtil.getInstance().getAdvHttp(this, rl_adv, 7);
 //        if (!user_first) {
 //            //getAdvert();
 //        }
@@ -121,7 +123,7 @@ public class StartActivity extends Activity {
 //                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 //                    out.flush();
 //                    out.close();
-//                    //保存图片后发送广播通知更新数据�
+//                    //保存图片后发送广播通知更新数据�
 //                    Uri uri = Uri.fromFile(file);
 //                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 //                } catch (Exception e) {
@@ -133,14 +135,15 @@ public class StartActivity extends Activity {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void updateAdv(EvenMsg type) {
-        if(type.getTYPE() == MsgType.START_ADV){
+        if (type.getTYPE() == MsgType.START_ADV) {
             startTime.setVisibility(View.VISIBLE);
             handler.sendEmptyMessage(1);
-        }else if(type.getTYPE() == MsgType.START_ADV_NO){
+        } else if (type.getTYPE() == MsgType.START_ADV_NO) {
             timer = 1;
             handler.sendEmptyMessage(1);
-       }
+        }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -153,7 +156,7 @@ public class StartActivity extends Activity {
         MobclickAgent.onPause(this);
     }
 
-    @OnClick( R.id.start_time)
+    @OnClick(R.id.start_time)
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.start_time:
@@ -162,7 +165,6 @@ public class StartActivity extends Activity {
                 break;
         }
     }
-
 
 
     private void IfStart() {

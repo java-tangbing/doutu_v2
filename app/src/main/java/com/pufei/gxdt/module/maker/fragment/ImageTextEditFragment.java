@@ -64,6 +64,14 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(editTextBottomFragment.isVisible()) {
+            editTextBottomFragment.dismiss();
+        }
+    }
+
+    @Override
     public void initView() {
         editTextBottomFragment = new EditTextBottomFragment();
         editTextBottomFragment.setInputTextListener(this);
@@ -154,6 +162,7 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
     public void requestSuccess(String msg) {
 
     }
+
 
 
     @Override
