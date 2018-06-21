@@ -124,6 +124,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     private int type = 0;
     private static AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
+
     @Override
     public void initView() {
         path = Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
@@ -194,14 +195,14 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     public void getImageDetailList() {
         switch (type) {
             case 0:
-                if (pictureList.size() > 0) {
+                if (pictureList != null && pictureList.size() > 0) {
                     mlist.clear();
                     mlist.addAll(pictureList);
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case 1:
-                if (pictureList01.size() > 0) {
+                if (pictureList01 != null && pictureList01.size() > 0) {
                     mlist01.clear();
                     mlist01.addAll(pictureList01);
                     adapter01.notifyDataSetChanged();
@@ -365,16 +366,29 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        id = mlist.get(position).getId();
-        orginid = mlist.get(position).getOrginid();
-        orgintable = mlist.get(position).getOrgintable();
+        switch (type) {
+            case 0:
+                if (mlist != null && mlist.size() > 0) {
+                    id = mlist.get(position).getId();
+                    orginid = mlist.get(position).getOrginid();
+                    orgintable = mlist.get(position).getOrgintable();
+                }
+                break;
+            case 1:
+                if (mlist01 != null && mlist01.size() > 0) {
+                    id = mlist01.get(position).getId();
+                    orginid = mlist01.get(position).getOrginid();
+                    orgintable = mlist01.get(position).getOrgintable();
+                }
+                break;
+        }
+
         index = position;
         setMyAdapter();
     }
 
 
-    @OnClick({R.id.look_edit_image_iv,R.id.iv_report,
-
+    @OnClick({R.id.look_edit_image_iv, R.id.iv_report,
 
 
             R.id.tv_change_img, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
@@ -487,7 +501,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     DisPictureDetailActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(popupWindow.isShowing()){
+                            if (popupWindow.isShowing()) {
                                 popupWindow.dismiss();
                             }
                             ToastUtils.showShort(DisPictureDetailActivity.this, "举报成功");
@@ -664,11 +678,13 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
     public void GetImageInputStream(String imageurl) {//下载图片
         java.net.URL url;
         HttpURLConnection connection = null;
