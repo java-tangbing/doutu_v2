@@ -3,8 +3,10 @@ package com.pufei.gxdt.module.maker.fragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -105,7 +107,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
                     }else {
                         mBottomSheetBehavior.setPeekHeight(height - 200);
                     }
-                    Log.e("height",height +"  ");
+//                    Log.e("height",height +"  ");
                 }
             });
         }
@@ -125,7 +127,10 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
                     public void onVisibilityChanged(boolean isOpen) {
                         if (!isOpen) {
                             if (rvHotText.getVisibility() != View.VISIBLE) {
-                                dismiss();
+                                if(!isHidden()) {
+                                    dismiss();
+
+                                }
                             }
                         }
                     }

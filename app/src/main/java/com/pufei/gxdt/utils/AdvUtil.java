@@ -1,12 +1,14 @@
 package com.pufei.gxdt.utils;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -224,11 +226,14 @@ public class AdvUtil {
                                             EventBus.getDefault().post(new EvenMsg(1));
                                         }
                                         activity.runOnUiThread(new Runnable() {
+                                            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
                                             @Override
                                             public void run() {
                                                 ImageView imageView =  layout.findViewById(R.id.iv_adv);
                                                 imageView.setVisibility(View.VISIBLE);
-                                                GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
+                                                if(((Activity) context).isDestroyed()) {
+                                                    GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
+                                                }
                                                 imageView.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
@@ -248,7 +253,7 @@ public class AdvUtil {
                                             @Override
                                             public void run() {
                                                 if(position == 7){
-                                                    LogUtils.e("111","2222");
+//                                                    LogUtils.e("111","2222");
                                                     EventBus.getDefault().post(new EvenMsg(1));
                                                 }
                                                 layout.setVisibility(View.GONE);
