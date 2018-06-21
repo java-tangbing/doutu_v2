@@ -618,12 +618,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                                     draftImgPath = path;
                                                     saveToDraft(true);
                                                 }
-
-                                                for (int i = 0; i < gifEncodeBitmap.size(); i++) {
-                                                    gifEncodeBitmap.get(i).getBitmap().recycle();
-                                                    gifEncodeBitmap.clear();
-                                                }
-                                                gifEncodeBitmap.clear();
                                             }
 
                                             @Override
