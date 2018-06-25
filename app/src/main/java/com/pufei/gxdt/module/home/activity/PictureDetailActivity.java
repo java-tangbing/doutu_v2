@@ -535,46 +535,44 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
     private void WXshowShare(String URL, SHARE_MEDIA share_media) {//分享
         if (share_media != null && URL != null) {
-            if (share_media == SHARE_MEDIA.WEIXIN) {
-                if (URL.contains("http")) {
-                    UMEmoji image = new UMEmoji(this, URL);
-                    image.compressStyle = UMEmoji.CompressStyle.SCALE;
-                    image.compressStyle = UMEmoji.CompressStyle.QUALITY;
-                    image.setThumb(new UMEmoji(this, URL));
-                    new ShareAction(this).withMedia(image)
-                            .setPlatform(share_media)
-                            .setCallback(umShareListener).share();
-                } else {
-                    UMEmoji image = new UMEmoji(this, new File(URL));
+            if (URL.contains("http")) {
+                UMEmoji image = new UMEmoji(this, URL);
+                image.compressStyle = UMEmoji.CompressStyle.SCALE;
+                image.compressStyle = UMEmoji.CompressStyle.QUALITY;
+                image.setThumb(new UMEmoji(this, URL));
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } else {
+                UMEmoji image = new UMEmoji(this, new File(URL));
+                image.setThumb(new UMEmoji(this, new File(URL)));
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            }
+        } else {
+            if (URL.contains("http")) {
+                UMImage image = new UMImage(this, URL);
+                image.compressStyle = UMImage.CompressStyle.SCALE;
+                image.compressStyle = UMImage.CompressStyle.QUALITY;
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } else {
+                try {
+                    UMImage image = new UMImage(this, new File(URL));
+                    image.compressStyle = UMImage.CompressStyle.SCALE;
+                    image.compressStyle = UMImage.CompressStyle.QUALITY;
                     image.setThumb(new UMEmoji(this, new File(URL)));
                     new ShareAction(this).withMedia(image)
                             .setPlatform(share_media)
                             .setCallback(umShareListener).share();
+                } catch (Exception e) {
+                    ToastUtils.showLong(this, "选中图片错误，请重新选择");
+                    e.printStackTrace();
                 }
-            UMImage thumb = new UMImage(this, URL);
-                if (URL.contains("http")) {
-                    UMImage image = new UMImage(this, URL);
-                    image.compressStyle = UMImage.CompressStyle.SCALE;
-                    image.compressStyle = UMImage.CompressStyle.QUALITY;
-                    new ShareAction(this).withMedia(image)
-                            .setPlatform(share_media)
-                            .setCallback(umShareListener).share();
-                } else {
-                    try {
-                        UMImage image = new UMImage(this,new File(URL));
-                        image.compressStyle = UMImage.CompressStyle.SCALE;
-                        image.compressStyle = UMImage.CompressStyle.QUALITY;
-                        image.setThumb(new UMEmoji(this, new File(URL)));
-                        new ShareAction(this).withMedia(image)
-                                .setPlatform(share_media)
-                                .setCallback(umShareListener).share();
-                    } catch (Exception e) {
-                        ToastUtils.showLong(this, "选中图片错误，请重新选择");
-                        e.printStackTrace();
-                    }
-                }
-
             }
+
         }
 
     }
