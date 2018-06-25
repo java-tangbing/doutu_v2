@@ -20,7 +20,6 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.LogUtils;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -79,7 +78,6 @@ public class StartActivity extends Activity {
             //加上判断
             EventBus.getDefault().unregister(this);
         }
-
         super.onDestroy();
     }
     @Override

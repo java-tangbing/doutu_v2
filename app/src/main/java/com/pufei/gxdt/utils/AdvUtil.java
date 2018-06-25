@@ -268,7 +268,6 @@ public class AdvUtil {
                                     }else if("3".equals(advType)){
                                         setAdvTecent(context,layout);
                                     }else if("1".equals(advType)){
-                                        //layout.setVisibility(View.INVISIBLE);
                                         activity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
