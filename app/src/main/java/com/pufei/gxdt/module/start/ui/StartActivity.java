@@ -97,7 +97,7 @@ public class StartActivity extends Activity {
         }
         ButterKnife.bind(this);
 //        StatusBarUtil.StatusBarLightMode(this);
-        setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
+        setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启
         user_first = setting.getBoolean("FIRST", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            StatusBarUtil.transparencyBar(this);
@@ -108,7 +108,7 @@ public class StartActivity extends Activity {
         if(NetWorkUtil.isNetworkConnected(this)){
             AdvUtil.getInstance().getAdvHttp(this,rl_adv,7);
         }else{
-            ToastUtils.showShort(this,"请检查网络设�);
+            ToastUtils.showShort(this,"请检查网络设置");
             handler.sendEmptyMessage(1);
         }
 
@@ -129,7 +129,7 @@ public class StartActivity extends Activity {
 //                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 //                    out.flush();
 //                    out.close();
-//                    //保存图片后发送广播通知更新数据�
+//                    //保存图片后发送广播通知更新数据
 //                    Uri uri = Uri.fromFile(file);
 //                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 //                } catch (Exception e) {

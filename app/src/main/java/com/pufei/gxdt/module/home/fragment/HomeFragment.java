@@ -84,7 +84,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
         adapter = new HomeListAdapter(getActivity(), homeList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_home_list.setLayoutManager(layoutManager);
         rl_home_list.setAdapter(adapter);
@@ -127,6 +127,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         adapter.setOnItemClickListener(new HomeListAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
+                UmengStatisticsUtil.statisticsEvent(getActivity(),"6");
                 try{
                     if ("3".equals(homeList.get(postion).getCat())) {
                         countView(homeList.get(postion).getId(),1,"","click");
@@ -335,7 +336,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         private List<HomeTypeBean.ResultBean> list;
         private Context mcontext;
 
-        public ImageTypeAdapter(Context context, List<HomeTypeBean.ResultBean> list) {//获取数据�
+        public ImageTypeAdapter(Context context, List<HomeTypeBean.ResultBean> list) {//获取数据�
             this.mcontext = context;
             this.list = list;
         }

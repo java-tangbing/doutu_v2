@@ -95,7 +95,7 @@ public class AdvUtil {
     public void setAdvBaiDu(final Context context, final RelativeLayout layout) {
         final Activity activity = (Activity) context;
         AdSettings.setKey(new String[]{"baidu", "中国"});
-        String adPlaceID = Contents.BAIDU_BANER_ID;//重要：请填上你的代码�ID,否则无法请求到广�
+        String adPlaceID = Contents.BAIDU_BANER_ID;//重要：请填上你的代码ID,否则无法请求到广
         final AdView adView = new AdView(context, adPlaceID);
         adView.setListener(new AdViewListener() {
             public void onAdSwitch() {
@@ -139,7 +139,7 @@ public class AdvUtil {
         int winH = dm.heightPixels;
         int width = Math.min(winW, winH);
         int height = width * 3 / 20;
-        //�adView 添加到父控件中（注：该父控件不一定为您的根控件，只要该控件能通过 addView添加广告视图即可�
+        //�adView 添加到父控件中（注：该父控件不一定为您的根控件，只要该控件能通过 addView添加广告视图即可�
         final RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width,
                 height);
         rllp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
