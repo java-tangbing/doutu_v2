@@ -84,28 +84,41 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
         adapter = new HomeListAdapter(getActivity(), homeList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理器
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_home_list.setLayoutManager(layoutManager);
         rl_home_list.setAdapter(adapter);
         srf_home_lisyt.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         srf_home_lisyt.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
-        srf_home_lisyt.setEnableLoadmore(true);
+        srf_home_lisyt.setEnableLoadmore(false);
+        rl_home_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                      ) {
+                    page++;
+                    requestHomeList(page);
+                }
+            }
+        });
+
         srf_home_lisyt.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestHomeList(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestHomeList(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, 2000);
             }
 
             @Override

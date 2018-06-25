@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -95,29 +96,42 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         ll_left.setVisibility(View.VISIBLE);
         ll_right.setVisibility(View.VISIBLE);
         ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-        xRecyclerView.setLayoutManager(new GridLayoutManager(HomeImageActivity.this, 3));
+        final GridLayoutManager layoutManager = new GridLayoutManager(HomeImageActivity.this, 3);
+        xRecyclerView.setLayoutManager(layoutManager);
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(dp2px(HomeImageActivity.this, 10)));
         adapter = new HomeImageAdapter(HomeImageActivity.this, list);
         xRecyclerView.setAdapter(adapter);
         srf_home_image.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         srf_home_image.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
-        srf_home_image.setEnableLoadmore(true);
+        srf_home_image.setEnableLoadmore(false);
+        xRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    page++;
+                    requestHomeImage(page);
+                }
+            }
+        });
         srf_home_image.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestHomeImage(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestHomeImage(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 2000);
             }
 
             @Override

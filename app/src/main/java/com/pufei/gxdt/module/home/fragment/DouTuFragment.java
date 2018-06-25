@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -59,29 +60,42 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
     }
     @Override
     public void initView() {
-        xrl_doutu.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        xrl_doutu.setLayoutManager(layoutManager);
         xrl_doutu.addItemDecoration(new SpaceItemDecoration(dp2px(getActivity(), 10)));
         adapter = new ImageTypeAdapter(getActivity(),DouTuFragment.this, picturelist);
         xrl_doutu.setAdapter(adapter);
         srl_doutu.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         srl_doutu.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
-        srl_doutu.setEnableLoadmore(true);
+        srl_doutu.setEnableLoadmore(false);
         srl_doutu.setEnableLoadmoreWhenContentNotFull(true);
+        xrl_doutu.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    page++;
+                    requestData(page);
+                }
+            }
+        });
         srl_doutu.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestData(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestData(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, 2000);
             }
 
             @Override
