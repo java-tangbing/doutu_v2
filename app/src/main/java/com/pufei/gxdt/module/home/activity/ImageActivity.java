@@ -70,14 +70,6 @@ public class ImageActivity extends FragmentActivity {
     ImageView activityImageDown;
     @BindView(R.id.activity_image_bar)
     TextView activityImageBar;
-    /*@InjectView(R.id.activity_iamge_vp)
-        ViewPager activityIamgeVp;
-        @InjectView(R.id.fragment_image_tv1)
-        TextView fragmentImageTv1;
-        @InjectView(R.id.fragment_image_tv2)
-        TextView fragmentImageTv2;
-        @InjectView(R.id.activity_iamge_back)
-        ImageView activityIamgeBack;*/
     private JSONArray jsonObject;
     private int position1;
     private List<Fragment> fragmentList;
@@ -91,6 +83,7 @@ public class ImageActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
         ButterKnife.bind(this);
+        AppManager.getAppManager().addActivity(this);
         //StatusBarUtil.StatusBarLightMode(this);
         //fristStart();
         StatusBarCompat.compat(this, getResources().getColor(R.color.black));

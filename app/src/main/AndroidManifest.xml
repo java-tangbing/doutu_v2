@@ -25,9 +25,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_logo"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".module.start.ui.StartActivity"
@@ -37,8 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".module.user.activity.DraftActivity" />
         <activity
             android:name=".module.maker.activity.MakerFinishActivity"
@@ -155,8 +156,10 @@
             android:name="com.pufei.gxdt.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

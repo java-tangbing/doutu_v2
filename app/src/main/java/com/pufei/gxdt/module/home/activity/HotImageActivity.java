@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -70,7 +71,8 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         AdvUtil.getInstance().getAdvHttp(this,your_original_layout,5);
         title.setText("热门表情");
         ll_left.setVisibility(View.VISIBLE);
-        hotXryv.setLayoutManager(new GridLayoutManager(HotImageActivity.this, 3));
+        final GridLayoutManager layoutManager = new GridLayoutManager(HotImageActivity.this, 3);
+        hotXryv.setLayoutManager(layoutManager);
         hotXryv.addItemDecoration(new SpaceItemDecoration(dp2px(HotImageActivity.this, 10)));
         adapter = new HotAdapter(HotImageActivity.this, picturelist,true);
         hotXryv.setAdapter(adapter);
@@ -97,18 +99,30 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         });
         fragmentHotSmart.setRefreshHeader(new ClassicsHeader(HotImageActivity.this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentHotSmart.setRefreshFooter(new ClassicsFooter(HotImageActivity.this).setSpinnerStyle(SpinnerStyle.Translate));
-        fragmentHotSmart.setEnableLoadmore(true);
+        fragmentHotSmart.setEnableLoadmore(false);
+        hotXryv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    page++;
+                    requestHot(page);
+                }
+            }
+        });
         fragmentHotSmart.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestHot(page);
-                        refreshlayout.finishLoadmore();
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestHot(page);
+//                        refreshlayout.finishLoadmore();
+//                    }
+//                }, 2000);
             }
 
             @Override

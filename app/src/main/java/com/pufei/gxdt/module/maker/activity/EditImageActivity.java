@@ -618,12 +618,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                                     draftImgPath = path;
                                                     saveToDraft(true);
                                                 }
-
-                                                for (int i = 0; i < gifEncodeBitmap.size(); i++) {
-                                                    gifEncodeBitmap.get(i).getBitmap().recycle();
-                                                    gifEncodeBitmap.clear();
-                                                }
-                                                gifEncodeBitmap.clear();
                                             }
 
                                             @Override
@@ -653,7 +647,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
                         new AcpListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onGranted() {
                                 if (ActivityCompat.checkSelfPermission(EditImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

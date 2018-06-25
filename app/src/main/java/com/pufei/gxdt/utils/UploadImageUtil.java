@@ -125,7 +125,7 @@ public class UploadImageUtil {
                 map1.put("zoom", draft.scaleX + "");
                 map1.put("rolling", draft.rotation + "");
                 mapList.add(map1);
-                Log.e("text",draft.text);
+//                Log.e("text",draft.text);
             }
             if (mapList.size() > 0) {
                 map.put("attachment", mapList);

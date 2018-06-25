@@ -12,4 +12,6 @@ public class MsgType {
     public static final int CHECK_IN = 4;
     public static final int MAKER_IMAGE = 10086;
     public static final int MAKER_FINISH = 900;
+    public static final int START_ADV = 100;
+    public static final int START_ADV_NO = 400;
 }

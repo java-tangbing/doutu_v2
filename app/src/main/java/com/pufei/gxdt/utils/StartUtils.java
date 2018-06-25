@@ -102,7 +102,6 @@ public class StartUtils {
             OkhttpUtils.post(Contents.Update, jsonObject.toString(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    ToastUtils.showLong(App.AppContext, e.toString());
                     Log.e(StartUtils.class.getSimpleName(), e.toString());
                 }
 

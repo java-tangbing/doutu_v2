@@ -1,12 +1,14 @@
 package com.pufei.gxdt.utils;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -22,6 +24,7 @@ import com.baidu.mobads.AdViewListener;
 import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.contents.Contents;
+import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.home.model.AdvBean;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.qq.e.ads.banner.ADSize;
@@ -34,7 +37,9 @@ import com.qq.e.comm.util.AdError;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -45,6 +50,7 @@ import okhttp3.Response;
 
 public class AdvUtil {
     private static AdvUtil mInstance;
+
     public static AdvUtil getInstance() {
         if (mInstance == null)
             synchronized (AdvUtil.class) {
@@ -54,8 +60,9 @@ public class AdvUtil {
             }
         return mInstance;
     }
-    public void setAdvTencentStart(final  Context context, final RelativeLayout layout){
-        final Activity activity  =(Activity) context;
+
+    public void setAdvTencentStart(final Context context, final RelativeLayout layout) {
+        final Activity activity = (Activity) context;
         SplashAD splashAD = new SplashAD(activity, layout, Contents.TENCENT_ID, Contents.TENCENT_SPLASH_ID, new SplashADListener() {
             @Override
             public void onADDismissed() {
@@ -85,10 +92,10 @@ public class AdvUtil {
 
     }
 
-    public void setAdvBaiDu(final  Context context, final RelativeLayout layout) {
-        final Activity activity  =(Activity) context;
+    public void setAdvBaiDu(final Context context, final RelativeLayout layout) {
+        final Activity activity = (Activity) context;
         AdSettings.setKey(new String[]{"baidu", "中国"});
-        String adPlaceID = Contents.BAIDU_BANER_ID;//重要：请填上你的代码位 ID,否则无法请求到广告
+        String adPlaceID = Contents.BAIDU_BANER_ID;//重要：请填上你的代码ID,否则无法请求到广
         final AdView adView = new AdView(context, adPlaceID);
         adView.setListener(new AdViewListener() {
             public void onAdSwitch() {
@@ -121,7 +128,7 @@ public class AdvUtil {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                       layout.setVisibility(View.GONE);
+                        layout.setVisibility(View.GONE);
                     }
                 });
             }
@@ -132,7 +139,7 @@ public class AdvUtil {
         int winH = dm.heightPixels;
         int width = Math.min(winW, winH);
         int height = width * 3 / 20;
-        //将 adView 添加到父控件中（注：该父控件不一定为您的根控件，只要该控件能通过 addView添加广告视图即可）
+        //�adView 添加到父控件中（注：该父控件不一定为您的根控件，只要该控件能通过 addView添加广告视图即可�
         final RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width,
                 height);
         rllp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -144,11 +151,11 @@ public class AdvUtil {
         });
     }
 
-    public void setAdvTecent(final Context context , final RelativeLayout layout){
-        final Activity activity  =(Activity) context;
+    public void setAdvTecent(final Context context, final RelativeLayout layout) {
+        final Activity activity = (Activity) context;
         final BannerView bv;
         String posId = Contents.TENCENT_ID_BANER_ID;
-        bv = new BannerView((Activity) context, ADSize.BANNER,Contents.TENCENT_ID,posId);
+        bv = new BannerView((Activity) context, ADSize.BANNER, Contents.TENCENT_ID, posId);
         bv.setRefresh(30);
         bv.setShowClose(true);
         bv.setADListener(new AbstractBannerADListener() {
@@ -186,116 +193,117 @@ public class AdvUtil {
         });
 
     }
-    public void getAdvHttp(final Context context, final  RelativeLayout layout, final int position){
+
+    public void getAdvHttp(final Context context, final RelativeLayout layout, final int position) {
         try {
             JSONObject jsonObject = KeyUtil.getJson(context);
-                jsonObject.put("position", position+"");
-                OkhttpUtils.post(UrlString.GET_ADV, jsonObject.toString(), new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
+            jsonObject.put("position", position + "");
+            OkhttpUtils.post(UrlString.GET_ADV, jsonObject.toString(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-                    }
+                }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        try {
-                            JSONObject resultObj = new JSONObject(result);
-                            Activity activity  =(Activity) context;
-                            if(resultObj.optJSONObject("result").optJSONObject("data")!=null){
-                                final AdvBean advBean = new Gson().fromJson(result, AdvBean.class);
-                                    if("2".equals(advBean.getResult().getType())){
-                                        setAdvBaiDu(context,layout);
-                                    }else if("3".equals(advBean.getResult().getType())){
-                                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+                    try {
+                        JSONObject resultObj = new JSONObject(result);
+                        Activity activity = (Activity) context;
+                        if (resultObj.optJSONObject("result").optJSONObject("data") != null) {
+                            final AdvBean advBean = new Gson().fromJson(result, AdvBean.class);
+                            if ("2".equals(advBean.getResult().getType())) {
+                                setAdvBaiDu(context, layout);
+                            } else if ("3".equals(advBean.getResult().getType())) {
+                                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 //                                            openPermissin(context,layout);
-                                            activity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    layout.setVisibility(View.GONE);
-                                                }
-                                            });
-                                        }else{
-                                            setAdvTecent(context,layout);
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            layout.setVisibility(View.GONE);
                                         }
-
-                                    }else if("1".equals(advBean.getResult().getType())){
-                                        if(position == 7){
-                                            EventBus.getDefault().post(new EvenMsg(1));
-                                        }
-                                        activity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ImageView imageView =  layout.findViewById(R.id.iv_adv);
-                                                imageView.setVisibility(View.VISIBLE);
-                                                GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
-                                                imageView.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        if(advBean.getResult().getData().getLink()!=null){
-                                                            Intent intent = new Intent();
-                                                            intent.setAction("android.intent.action.VIEW");
-                                                            Uri content_url = Uri.parse(advBean.getResult().getData().getLink()+"");
-                                                            intent.setData(content_url);
-                                                            context.startActivity(intent);
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }else{
-                                        activity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if(position == 7){
-                                                    LogUtils.e("111","2222");
-                                                    EventBus.getDefault().post(new EvenMsg(1));
-                                                }
-                                                layout.setVisibility(View.GONE);
-                                            }
-                                        });
-                                    }
-
-                            }else{
-                                String advType = resultObj.optJSONObject("result").optString("type") ;
-                                    if("2".equals(advType)){
-                                        setAdvBaiDu(context,layout);
-                                    }else if("3".equals(advType)){
-                                        setAdvTecent(context,layout);
-                                    }else if("1".equals(advType)){
-                                        //layout.setVisibility(View.INVISIBLE);
-                                        activity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                layout.setVisibility(View.GONE);
-                                                if(position == 7){
-                                                    LogUtils.e("111","2222");
-                                                    EventBus.getDefault().post(new EvenMsg(0));
-                                                }
-                                            }
-                                        });
-
-                                    }else{
-                                        activity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                layout.setVisibility(View.GONE);
-                                                if(position == 7){
-                                                    EventBus.getDefault().post(new EvenMsg(0));
-                                                }
-                                            }
-                                        });
-                                    }
+                                    });
+                                } else {
+                                    setAdvTecent(context, layout);
                                 }
 
-                        }catch (JSONException e){
-                            e.printStackTrace();
+                            } else if ("1".equals(advBean.getResult().getType())) {
+                                if (position == 7) {
+                                    EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV));
+                                }
+                                activity.runOnUiThread(new Runnable() {
+                                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                    @Override
+                                    public void run() {
+                                        ImageView imageView = layout.findViewById(R.id.iv_adv);
+                                        imageView.setVisibility(View.VISIBLE);
+                                        if (!((Activity) context).isDestroyed()) {
+                                            GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
+                                        }
+                                        imageView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                if (advBean.getResult().getData().getLink() != null) {
+                                                    Intent intent = new Intent();
+                                                    intent.setAction("android.intent.action.VIEW");
+                                                    Uri content_url = Uri.parse(advBean.getResult().getData().getLink() + "");
+                                                    intent.setData(content_url);
+                                                    context.startActivity(intent);
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (position == 7) {
+                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
+                                        }
+                                        layout.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+
+                        } else {
+                            String advType = resultObj.optJSONObject("result").optString("type");
+                            if ("2".equals(advType)) {
+                                setAdvBaiDu(context, layout);
+                            } else if ("3".equals(advType)) {
+                                setAdvTecent(context, layout);
+                            } else if ("1".equals(advType)) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        layout.setVisibility(View.GONE);
+                                        if (position == 7) {
+                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        layout.setVisibility(View.GONE);
+                                        if (position == 7) {
+                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
+                                        }
+                                    }
+                                });
+                            }
                         }
 
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
-        }catch (Exception e){
+
+
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

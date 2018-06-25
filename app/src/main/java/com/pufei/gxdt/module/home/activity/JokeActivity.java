@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.home.activity;
 
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -57,8 +58,6 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     LinearLayout request_failed;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
-//    @BindView(R.id.container)
-//    RelativeLayout container;
     private JokeAdvAdapter jokeAdapter;
     private List<JokeResultBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
@@ -72,29 +71,38 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
         AdvUtil.getInstance().getAdvHttp(this,your_original_layout,4);
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdvAdapter(JokeActivity.this,jokeList,adLists);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_joke.setLayoutManager(layoutManager);
         rl_joke.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
-        fragmentJokeSmart.setEnableLoadmore(true);
+        fragmentJokeSmart.setEnableLoadmore(false);
+        rl_joke.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1)) {
+                    page++;
+                    requestJoke(page);
+                }
+            }
+        });
         fragmentJokeSmart.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestJoke(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestJoke(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 2000);
             }
 
             @Override
