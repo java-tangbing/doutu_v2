@@ -2,6 +2,9 @@ package com.pufei.gxdt.module.home.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -105,7 +108,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     private List<PictureResultBean.ResultBean> pictureList = new ArrayList<>();
     private PictureDetailBean.ResultBean pictureDetailBean;
     private OtherPictureAdapter adapter;
-    private static AlertDialog sharedialog;
+    private AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
 
     @Override
@@ -262,7 +265,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 break;
             case R.id.activity_home1_shoucang:
                 if (App.userBean != null) {
-                    if ("0".equals(pictureList.get(index).getIsSaveImg())) {//加收藏
+                    if ("0".equals(pictureList.get(index).getIsSaveImg())) {//加收�
                         if (NetWorkUtil.isNetworkConnected(PictureDetailActivity.this)) {
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -274,7 +277,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                                 e.printStackTrace();
                             }
                         } else {
-                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连接");
+                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连�);
                         }
 
                     } else {//取消收藏
@@ -289,7 +292,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                                 e.printStackTrace();
                             }
                         } else {
-                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连接");
+                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连�);
                         }
                     }
                 } else {
@@ -344,7 +347,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             }
 
         } else {
-            ToastUtils.showShort(PictureDetailActivity.this, "无网络连接");
+            ToastUtils.showShort(PictureDetailActivity.this, "无网络连�);
         }
     }
 
@@ -429,7 +432,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(4000); //超时设置
             connection.setDoInput(true);
-            connection.setUseCaches(false); //设置不使用缓存
+            connection.setUseCaches(false); //设置不使用缓�
             InputStream inputStream = connection.getInputStream();
             SavaImage(inputStream, path);
             inputStream.close();
@@ -441,7 +444,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     public void SavaImage(InputStream inputStream, final String path) {//保存图片
         File file = new File(path);
         FileOutputStream fileOutputStream = null;
-        //文件夹不存在，则创建它
+        //文件夹不存在，则创建�
         if (!file.exists()) {
             file.mkdir();
         }
@@ -467,7 +470,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             e.printStackTrace();
         }
         try {
-            MediaStore.Images.Media.insertImage(PictureDetailActivity.this.getContentResolver(),//将图片插入系统图库
+            MediaStore.Images.Media.insertImage(PictureDetailActivity.this.getContentResolver(),//将图片插入系统图�
                     file.getAbsolutePath(), fileName, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -520,7 +523,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                         .setPlatform(share_media)
                         .setCallback(umShareListener).share();
             } catch (NullPointerException e) {
-                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重试");
+                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重�);
                 e.printStackTrace();
             }
         }
@@ -534,12 +537,14 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             } else {
                 image = new UMImage(this, BitmapFactory.decodeFile(URL));
             }
+            UMImage thumb =  new UMImage(this, URL);
+            image.setThumb(thumb);
             try {
                 new ShareAction(this).withMedia(image)
                         .setPlatform(share_media)
                         .setCallback(umShareListener).share();
             } catch (NullPointerException e) {
-                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重试");
+                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重�);
                 e.printStackTrace();
             }
         }
@@ -555,8 +560,8 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         @Override
         public void onResult(SHARE_MEDIA platform) {
             countView(pictureList.get(index).getId(),3,pictureList.get(index).getOrgintable(),"share");
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
-            sharedialog.dismiss();
             if (platform.equals(SHARE_MEDIA.WEIXIN)){
                 UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this,"17");
             }else if (platform.equals(SHARE_MEDIA.QQ)){
@@ -566,20 +571,20 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(PictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(PictureDetailActivity.this, "分享取消");
         }
     };
 
     public void shareDialog(Activity activity) {
         Animation animation = AnimationUtils.loadAnimation(activity, R.anim.img_animation);
-        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运�
         animation.setInterpolator(lin);
         sharedialog = new AlertDialog.Builder(activity, R.style.TransDialogStyle).create();
         if (!activity.isFinishing()) {
@@ -595,5 +600,23 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+    public void hideAlertDialog(AlertDialog mProgressDialog) {
+        if(mProgressDialog != null&& mProgressDialog.isShowing()) {
+                Context context = ((ContextWrapper)mProgressDialog.getContext()).getBaseContext();
+                if(context instanceof Activity) {
+                    if(!((Activity)context).isFinishing())
+                        mProgressDialog.dismiss();
+                } else{
+                    mProgressDialog.dismiss();
+                }
+            mProgressDialog = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideAlertDialog(sharedialog);
     }
 }

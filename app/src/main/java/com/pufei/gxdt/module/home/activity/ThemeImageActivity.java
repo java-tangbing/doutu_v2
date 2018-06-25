@@ -58,28 +58,41 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
         tv_title.setText("主题表情");
         AdvUtil.getInstance().getAdvHttp(this,your_original_layout,6);
         ll_left.setVisibility(View.VISIBLE);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         adpater = new ThemeImageAdpater(ThemeImageActivity.this,list);
         recyclerView.setAdapter(adpater);
         refresh_theme.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         refresh_theme.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
-        refresh_theme.setEnableLoadmore(true);
+        refresh_theme.setEnableLoadmore(false);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    page++;
+                    requestTheme(page);
+                }
+            }
+        });
         refresh_theme.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestTheme(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestTheme(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 2000);
 
             }
 

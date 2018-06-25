@@ -2,6 +2,7 @@ package com.pufei.gxdt.module.home.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +40,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.UmengStatisticsUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -84,28 +86,41 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
         adapter = new HomeListAdapter(getActivity(), homeList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_home_list.setLayoutManager(layoutManager);
         rl_home_list.setAdapter(adapter);
         srf_home_lisyt.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         srf_home_lisyt.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
-        srf_home_lisyt.setEnableLoadmore(true);
+        srf_home_lisyt.setEnableLoadmore(false);
+        rl_home_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                      ) {
+                    page++;
+                    requestHomeList(page);
+                }
+            }
+        });
+
         srf_home_lisyt.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestHomeList(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestHomeList(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, 2000);
             }
 
             @Override
@@ -217,6 +232,9 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else{
+            headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
         requestHomeList(page);
     }
@@ -232,7 +250,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                 e.printStackTrace();
             }
         } else {
-            headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
     }
 

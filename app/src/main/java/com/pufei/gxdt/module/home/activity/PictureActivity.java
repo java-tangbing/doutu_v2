@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -61,30 +62,43 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
         id = bundle.getString("id");
         title = bundle.getString("title");
         timeString = bundle.getString("desc");
-        rl_theme.setLayoutManager(new GridLayoutManager(PictureActivity.this, 3));
+        final GridLayoutManager layoutManager = new GridLayoutManager(PictureActivity.this, 3);
+        rl_theme.setLayoutManager(layoutManager);
         adapter = new HotAdapter(PictureActivity.this, list);
         rl_theme.setPullRefreshEnabled(false);
         rl_theme.addItemDecoration(new SpaceItemDecoration(dp2px(PictureActivity.this, 10)));
         rl_theme.setAdapter(adapter);
         srl_theme_detail.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         srl_theme_detail.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
-        srl_theme_detail.setEnableLoadmore(true);
+        srl_theme_detail.setEnableLoadmore(false);
+        rl_theme.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    page++;
+                    requestThemeDetail(page);
+                }
+            }
+        });
         srl_theme_detail.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestThemeDetail(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestThemeDetail(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 2000);
             }
 
             @Override
