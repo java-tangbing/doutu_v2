@@ -489,7 +489,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
                         new AcpListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onGranted() {
 
