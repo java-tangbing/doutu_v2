@@ -127,38 +127,41 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         adapter.setOnItemClickListener(new HomeListAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
-                if ("3".equals(homeList.get(postion).getCat())) {
-                    countView(homeList.get(postion).getId(),1,"","click");
-                    Intent intent = new Intent(getActivity(), HomeImageActivity.class);
-                    intent.putExtra("category_id", homeList.get(postion).getImgs().get(0).getCategory_id());
-                    intent.putExtra("title", homeList.get(postion).getCategory_name());
-                    intent.putExtra("eyes", homeList.get(postion).getView());
-                    intent.putExtra("hot", homeList.get(postion).getHot());
-                    startActivity(intent);
-                }else if("1".equals(homeList.get(postion).getCat())){
-                    countView(homeList.get(postion).getId(),4,"","click");
-                    int position = 0;
-                    for(int  i = 0;i<homeTypeList.size();i++){
-                        if(homeList.get(postion).getId().equals(homeTypeList.get(i).getId()) ){
-                            position = i;
-                            break;
+                try{
+                    if ("3".equals(homeList.get(postion).getCat())) {
+                        countView(homeList.get(postion).getId(),1,"","click");
+                        Intent intent = new Intent(getActivity(), HomeImageActivity.class);
+                        intent.putExtra("category_id", homeList.get(postion).getImgs().get(0).getCategory_id());
+                        intent.putExtra("title", homeList.get(postion).getCategory_name());
+                        intent.putExtra("eyes", homeList.get(postion).getView());
+                        intent.putExtra("hot", homeList.get(postion).getHot());
+                        startActivity(intent);
+                    }else if("1".equals(homeList.get(postion).getCat())){
+                        countView(homeList.get(postion).getId(),4,"","click");
+                        int position = 0;
+                        for(int  i = 0;i<homeTypeList.size();i++){
+                            if(homeList.get(postion).getId().equals(homeTypeList.get(i).getId()) ){
+                                position = i;
+                                break;
+                            }
                         }
+                        Intent intent = new Intent(getActivity(), FaceTypeActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("title_list", (Serializable) homeTypeList);
+                        bundle.putInt("index",position);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else {
+                        countView(homeList.get(postion).getId(),2,"","click");
+                        Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
+                        intent.putExtra("id",homeList.get(postion).getId());
+                        intent.putExtra("title",homeList.get(postion).getTitle());
+                        intent.putExtra("time",homeList.get(postion).getDateline());
+                        startActivity(intent);
                     }
-                    Intent intent = new Intent(getActivity(), FaceTypeActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("title_list", (Serializable) homeTypeList);
-                    bundle.putInt("index",position);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }else {
-                    countView(homeList.get(postion).getId(),2,"","click");
-                    Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
-                    intent.putExtra("id",homeList.get(postion).getId());
-                    intent.putExtra("title",homeList.get(postion).getTitle());
-                    intent.putExtra("time",homeList.get(postion).getDateline());
-                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
             }
         });
     }

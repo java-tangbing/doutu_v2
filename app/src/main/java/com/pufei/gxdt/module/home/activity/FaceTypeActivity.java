@@ -55,7 +55,7 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
         Bundle bundle = this.getIntent().getExtras();
         titleLists = (List<HomeTypeBean.ResultBean>) bundle.getSerializable("title_list");
         index = bundle.getInt("index");
-        if(titleLists.size()>0){
+        if(titleLists!=null&&titleLists.size()>0){
             for (int i = 0;i<8;i++){
                 titleArray[i] = titleLists.get(i).getCategory_name();
             }

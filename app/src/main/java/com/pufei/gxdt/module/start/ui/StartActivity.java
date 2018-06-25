@@ -19,6 +19,8 @@ import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.LogUtils;
+import com.pufei.gxdt.utils.NetWorkUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -99,7 +101,13 @@ public class StartActivity extends Activity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        AdvUtil.getInstance().getAdvHttp(this,rl_adv,7);
+        if(NetWorkUtil.isNetworkConnected(this)){
+            AdvUtil.getInstance().getAdvHttp(this,rl_adv,7);
+        }else{
+            ToastUtils.showShort(this,"请检查网络设置");
+            handler.sendEmptyMessage(1);
+        }
+
 //        if (!user_first) {
 //            //getAdvert();
 //        }
