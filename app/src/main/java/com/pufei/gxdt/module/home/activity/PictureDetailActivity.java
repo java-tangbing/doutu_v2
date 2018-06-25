@@ -2,6 +2,9 @@ package com.pufei.gxdt.module.home.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -102,7 +105,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     private List<PictureResultBean.ResultBean> pictureList = new ArrayList<>();
     private PictureDetailBean.ResultBean pictureDetailBean;
     private OtherPictureAdapter adapter;
-    private static AlertDialog sharedialog;
+    private AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
 
     @Override
@@ -522,6 +525,8 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             } else {
                 image = new UMImage(this, BitmapFactory.decodeFile(URL));
             }
+            UMImage thumb =  new UMImage(this, URL);
+            image.setThumb(thumb);
             try {
                 new ShareAction(this).withMedia(image)
                         .setPlatform(share_media)
@@ -543,19 +548,19 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         @Override
         public void onResult(SHARE_MEDIA platform) {
             countView(pictureList.get(index).getId(),3,pictureList.get(index).getOrgintable(),"share");
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
-            sharedialog.dismiss();
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(PictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(PictureDetailActivity.this, "分享取消");
         }
     };
@@ -578,5 +583,23 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+    public void hideAlertDialog(AlertDialog mProgressDialog) {
+        if(mProgressDialog != null&& mProgressDialog.isShowing()) {
+                Context context = ((ContextWrapper)mProgressDialog.getContext()).getBaseContext();
+                if(context instanceof Activity) {
+                    if(!((Activity)context).isFinishing())
+                        mProgressDialog.dismiss();
+                } else{
+                    mProgressDialog.dismiss();
+                }
+            mProgressDialog = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideAlertDialog(sharedialog);
     }
 }

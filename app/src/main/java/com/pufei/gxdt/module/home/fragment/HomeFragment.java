@@ -40,6 +40,7 @@ import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.StartUtils;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -230,6 +231,9 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else{
+            headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
         requestHomeList(page);
     }
@@ -245,7 +249,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                 e.printStackTrace();
             }
         } else {
-            headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
     }
 
