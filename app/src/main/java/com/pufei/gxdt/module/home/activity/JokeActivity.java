@@ -57,8 +57,6 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     LinearLayout request_failed;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
-//    @BindView(R.id.container)
-//    RelativeLayout container;
     private JokeAdvAdapter jokeAdapter;
     private List<JokeResultBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;

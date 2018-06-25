@@ -84,7 +84,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
         adapter = new HomeListAdapter(getActivity(), homeList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_home_list.setLayoutManager(layoutManager);
         rl_home_list.setAdapter(adapter);
@@ -127,39 +127,41 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         adapter.setOnItemClickListener(new HomeListAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
-                UmengStatisticsUtil.statisticsEvent(getActivity(),"6");
-                if ("3".equals(homeList.get(postion).getCat())) {
-                    countView(homeList.get(postion).getId(),1,"","click");
-                    Intent intent = new Intent(getActivity(), HomeImageActivity.class);
-                    intent.putExtra("category_id", homeList.get(postion).getImgs().get(0).getCategory_id());
-                    intent.putExtra("title", homeList.get(postion).getCategory_name());
-                    intent.putExtra("eyes", homeList.get(postion).getView());
-                    intent.putExtra("hot", homeList.get(postion).getHot());
-                    startActivity(intent);
-                }else if("1".equals(homeList.get(postion).getCat())){
-                    countView(homeList.get(postion).getId(),4,"","click");
-                    int position = 0;
-                    for(int  i = 0;i<homeTypeList.size();i++){
-                        if(homeList.get(postion).getId().equals(homeTypeList.get(i).getId()) ){
-                            position = i;
-                            break;
+                try{
+                    if ("3".equals(homeList.get(postion).getCat())) {
+                        countView(homeList.get(postion).getId(),1,"","click");
+                        Intent intent = new Intent(getActivity(), HomeImageActivity.class);
+                        intent.putExtra("category_id", homeList.get(postion).getImgs().get(0).getCategory_id());
+                        intent.putExtra("title", homeList.get(postion).getCategory_name());
+                        intent.putExtra("eyes", homeList.get(postion).getView());
+                        intent.putExtra("hot", homeList.get(postion).getHot());
+                        startActivity(intent);
+                    }else if("1".equals(homeList.get(postion).getCat())){
+                        countView(homeList.get(postion).getId(),4,"","click");
+                        int position = 0;
+                        for(int  i = 0;i<homeTypeList.size();i++){
+                            if(homeList.get(postion).getId().equals(homeTypeList.get(i).getId()) ){
+                                position = i;
+                                break;
+                            }
                         }
+                        Intent intent = new Intent(getActivity(), FaceTypeActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("title_list", (Serializable) homeTypeList);
+                        bundle.putInt("index",position);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else {
+                        countView(homeList.get(postion).getId(),2,"","click");
+                        Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
+                        intent.putExtra("id",homeList.get(postion).getId());
+                        intent.putExtra("title",homeList.get(postion).getTitle());
+                        intent.putExtra("time",homeList.get(postion).getDateline());
+                        startActivity(intent);
                     }
-                    Intent intent = new Intent(getActivity(), FaceTypeActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("title_list", (Serializable) homeTypeList);
-                    bundle.putInt("index",position);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }else {
-                    countView(homeList.get(postion).getId(),2,"","click");
-                    Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
-                    intent.putExtra("id",homeList.get(postion).getId());
-                    intent.putExtra("title",homeList.get(postion).getTitle());
-                    intent.putExtra("time",homeList.get(postion).getDateline());
-                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
             }
         });
     }
@@ -333,7 +335,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         private List<HomeTypeBean.ResultBean> list;
         private Context mcontext;
 
-        public ImageTypeAdapter(Context context, List<HomeTypeBean.ResultBean> list) {//获取数据源
+        public ImageTypeAdapter(Context context, List<HomeTypeBean.ResultBean> list) {//获取数据�
             this.mcontext = context;
             this.list = list;
         }

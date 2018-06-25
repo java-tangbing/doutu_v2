@@ -47,7 +47,6 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(XRecyclerView.ViewHolder holder, int position) {
-
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler) holder).titletv.setText(list.get(position).getCategory_name());
@@ -82,7 +81,9 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
         @Override
         public void onClick(View v) {
             if (mListener != null) {
-                mListener.setOnItemClickListener(itemView, v, (Integer) v.getTag());
+                if(v != null){
+                    mListener.setOnItemClickListener(itemView, v, (Integer) v.getTag());
+                }
             }
         }
     }

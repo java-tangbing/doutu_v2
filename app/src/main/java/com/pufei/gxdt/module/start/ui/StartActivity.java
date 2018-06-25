@@ -20,8 +20,9 @@ import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.LogUtils;
+import com.pufei.gxdt.utils.NetWorkUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -81,7 +82,6 @@ public class StartActivity extends Activity {
             //加上判断
             EventBus.getDefault().unregister(this);
         }
-
         super.onDestroy();
     }
 
@@ -97,7 +97,7 @@ public class StartActivity extends Activity {
         }
         ButterKnife.bind(this);
 //        StatusBarUtil.StatusBarLightMode(this);
-        setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
+        setting = getSharedPreferences(SHARE_APP_TAG, 0);//判断是否是第一次启�
         user_first = setting.getBoolean("FIRST", true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            StatusBarUtil.transparencyBar(this);
@@ -105,7 +105,13 @@ public class StartActivity extends Activity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        AdvUtil.getInstance().getAdvHttp(this, rl_adv, 7);
+        if(NetWorkUtil.isNetworkConnected(this)){
+            AdvUtil.getInstance().getAdvHttp(this,rl_adv,7);
+        }else{
+            ToastUtils.showShort(this,"请检查网络设�);
+            handler.sendEmptyMessage(1);
+        }
+
 //        if (!user_first) {
 //            //getAdvert();
 //        }
@@ -123,7 +129,7 @@ public class StartActivity extends Activity {
 //                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 //                    out.flush();
 //                    out.close();
-//                    //保存图片后发送广播通知更新数据�
+//                    //保存图片后发送广播通知更新数据�
 //                    Uri uri = Uri.fromFile(file);
 //                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 //                } catch (Exception e) {
