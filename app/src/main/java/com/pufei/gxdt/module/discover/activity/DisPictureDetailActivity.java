@@ -292,6 +292,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     public void setResulits(String str) {
         if (mbeanlist.size() > 0) {
+            List<IsSaveImgBean> isSaveImgBeanlist = new ArrayList<>();
+
             for (int i = 0; i < mbeanlist.size(); i++) {
                 if (mbeanlist.get(i).getIndex() == index) {
                     mbeanlist.get(i).setIsSaveImg(str);
@@ -299,9 +301,10 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     IsSaveImgBean isSaveImgBean = new IsSaveImgBean();
                     isSaveImgBean.setIndex(index);
                     isSaveImgBean.setIsSaveImg(str);
-                    mbeanlist.add(isSaveImgBean);
+                    isSaveImgBeanlist.add(isSaveImgBean);
                 }
             }
+            mbeanlist.addAll(isSaveImgBeanlist);
         } else {
             IsSaveImgBean isSaveImgBean = new IsSaveImgBean();
             isSaveImgBean.setIndex(index);
