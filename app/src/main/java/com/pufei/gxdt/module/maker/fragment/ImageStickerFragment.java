@@ -37,6 +37,7 @@ import com.pufei.gxdt.utils.ImageUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -108,14 +109,15 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
                                     @Override
                                     public void onGranted() {
                                         takePhotoPath = App.path1 + "/" + System.currentTimeMillis() + ".png";
-//                                        File file = new File(takePhotoPath);
-//                                        if (Build.VERSION.SDK_INT >= 24) {
-//                                            imageUri = FileProvider.getUriForFile(getActivity(), "com.pufei.gxdt.fileProvider", file);
-//                                        } else {
-//                                            imageUri = Uri.fromFile(file);
-//                                        }
+                                        File file = new File(takePhotoPath);
+                                        Uri imageUri = null;
+                                        if (Build.VERSION.SDK_INT >= 24) {
+                                            imageUri = FileProvider.getUriForFile(getActivity(), "com.pufei.gxdt.fileProvider", file);
+                                        } else {
+                                            imageUri = Uri.fromFile(file);
+                                        }
                                         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                                         startActivityForResult(cameraIntent, CAMERA_REQUEST);
                                     }
 
@@ -168,33 +170,71 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CAMERA_REQUEST:
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    callback.showBitmap(photo, saveBitmap(photo));
+                    File picPath = new File(takePhotoPath);
+                    if(picPath.exists()) {
+                        Uri uri = Uri.fromFile(picPath);
+                        beginCrop(uri);
+                    }else {
+                        Log.e("camera","文件不存在!");
+                    }
+//                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+//                    callback.showBitmap(photo, saveBitmap(photo));
                     break;
                 case PICK_REQUEST:
-                    try {
-                        String path1 = "";
-                        Uri uri = data.getData();
-                        if(uri.toString().contains("provider")) {
-                            path1 = ImageUtils.getFilePathByUri(activity,uri);
-                        }else {
-                            path1 = getRealFilePath(activity,uri);
-                        }
-                        if (path1 != null) {
-                            if (path1.contains(".gif") || path1.contains(".GIF")) {
-                                gifCallback.showGif(new File(path1), path1);
-                            } else {
-                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-                                callback.showBitmap(bitmap, path1);
-                            }
-                        }
-                        Log.e("album path",path1 +" " + uri);
-                    } catch (IOException e) {
-                        Log.e("Album",e.getMessage());
-                        e.printStackTrace();
+                    String path1 = "";
+                    Uri uri = data.getData();
+                    if (uri.toString().contains("provider")) {
+                        path1 = ImageUtils.getFilePathByUri(activity, uri);
+                    } else {
+                        path1 = getRealFilePath(activity, uri);
                     }
+                    if (path1 != null) {
+                        if (path1.contains(".gif") || path1.contains(".GIF")) {
+                            gifCallback.showGif(new File(path1), path1);
+                        } else {
+                            beginCrop(data.getData());
+//                                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+//                                callback.showBitmap(bitmap, path1);
+                        }
+                    }
+//                    Log.e("album path", path1);
+                    break;
+                case Crop.REQUEST_CROP:
+//                    Log.e("fdsfd","裁剪");
+                    handleCrop(resultCode,data);
                     break;
             }
+        }else {
+            Log.e("onActivityResult",resultCode+" " + requestCode);
+        }
+    }
+
+    private void beginCrop(Uri source) {
+//        Log.e("camera","拍照");
+        Uri destination = Uri.fromFile(new File(App.path1+"/",System.currentTimeMillis()+".png"));
+        Crop.of(source, destination).asSquare().start(getActivity(),this);
+    }
+
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == RESULT_OK) {
+            String path1 = "";
+            Uri uri = Crop.getOutput(result);
+            if (uri.toString().contains("provider")) {
+                path1 = ImageUtils.getFilePathByUri(activity, uri);
+            } else {
+                path1 = getRealFilePath(activity, uri);
+            }
+//            Log.e("fdsf",path1+" ");
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+                callback.showBitmap(bitmap, path1);
+            } catch (IOException e) {
+//                e.printStackTrace();
+                Log.e("ioException",e.getMessage()+" ");
+            }
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            ToastUtils.showShort(getActivity(), Crop.getError(result).getMessage());
         }
     }
 
@@ -202,7 +242,7 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
         File file = new File(takePhotoPath);
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             outputStream.flush();
             outputStream.close();
             return takePhotoPath;
@@ -216,6 +256,7 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
 
     /**
      * 此方式存在版本适配问题
+     *
      * @param context
      * @param uri
      * @return
@@ -264,7 +305,7 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
     }
 
     @Override
-    public void materialResult(MaterialBean response,int type) {
+    public void materialResult(MaterialBean response, int type) {
 
     }
 
@@ -280,7 +321,7 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
 
     @Override
     public void setPresenter(EditImagePresenter presenter) {
-        if(presenter == null) {
+        if (presenter == null) {
             this.presenter = new EditImagePresenter();
             this.presenter.attachView(this);
         }
