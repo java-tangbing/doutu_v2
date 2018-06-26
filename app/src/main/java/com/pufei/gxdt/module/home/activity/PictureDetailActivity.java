@@ -520,7 +520,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
     private void WXshowShare(String URL, SHARE_MEDIA share_media) {//分享
         if (share_media != null && URL != null) {
-            if (share_media == SHARE_MEDIA.WEIXIN) {
                 if (URL.contains("http")) {
                     UMEmoji image = new UMEmoji(this, URL);
                     image.compressStyle = UMEmoji.CompressStyle.SCALE;
@@ -560,7 +559,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                 }
 
             }
-        }
+
 
     }
 
