@@ -296,6 +296,12 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                         pictureList.get(index).setIsSaveImg("1");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
                         ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
+                        Intent i = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("index", index);
+                        bundle.putString("isSaveImg", "1");
+                        i.putExtras(bundle);
+                        setResult(10, i);
                     } else {
                         pictureList.get(index).setIsSaveImg("0");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -327,6 +333,12 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                         pictureList.get(index).setIsSaveImg("0");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
                         ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
+                        Intent i = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("index", index);
+                        bundle.putString("isSaveImg", "0");
+                        i.putExtras(bundle);
+                        setResult(10, i);
                     } else {
                         pictureList.get(index).setIsSaveImg("1");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -670,7 +682,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             } else {
                 image = new UMImage(this, BitmapFactory.decodeFile(URL));
             }
-            UMImage thumb = new UMImage(this,URL);
+            UMImage thumb = new UMImage(this, URL);
             image.setThumb(thumb);
             try {
                 new ShareAction(this).withMedia(image)
