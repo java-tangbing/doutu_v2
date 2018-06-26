@@ -20,6 +20,7 @@ import com.pufei.gxdt.module.discover.activity.DisWorksActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
+import com.pufei.gxdt.module.discover.bean.IsSaveImgBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 
 import com.pufei.gxdt.module.discover.view.DiscoverView;
@@ -59,6 +60,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     private boolean isfirst = true;
     private String auth;
     private final static int REQUESTCODE = 1; // 返回的结果码
+    private List<IsSaveImgBean> mbeanlist = new ArrayList<>();
 
     @Override
     public void initView() {
@@ -294,18 +296,15 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         if (requestCode == REQUESTCODE) {
             switch (resultCode) {
                 case 10:
-                    int mindex = data.getIntExtra("index", 0);
-                    String isSaveImg = data.getStringExtra("isSaveImg");
-                    mlist.get(mindex).setIsSaveImg(isSaveImg);
+                    mbeanlist = (List<IsSaveImgBean>) data.getSerializableExtra("IsSaveImgBeanList");
+                    if (mbeanlist.size() == 0) return;
+                    for (int i = 0; i < mbeanlist.size(); i++) {
+                        int mindex = mbeanlist.get(i).getIndex();
+                        String isSaveImg = mbeanlist.get(i).getIsSaveImg();
+                        mlist.get(mindex).setIsSaveImg(isSaveImg);
 
+                    }
                     break;
-//            case 11:
-//                if (requestCode == REQUESTCODE) {
-//                    int mindex = data.getIntExtra("index", 0);
-//                    String isSaveImg = data.getStringExtra("isSaveImg");
-//                    mlist.get(mindex).setIsSaveImg(isSaveImg);
-//                }
-//                break;
             }
         }
     }

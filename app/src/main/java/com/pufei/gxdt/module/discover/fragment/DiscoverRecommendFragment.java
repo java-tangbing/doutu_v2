@@ -19,6 +19,7 @@ import com.pufei.gxdt.module.discover.activity.DisWorksActivity;
 import com.pufei.gxdt.module.discover.adapter.DiscoverAdapter;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
+import com.pufei.gxdt.module.discover.bean.IsSaveImgBean;
 import com.pufei.gxdt.module.discover.presenter.DiscoverPresenter;
 import com.pufei.gxdt.module.discover.view.DiscoverView;
 import com.pufei.gxdt.utils.KeyUtil;
@@ -54,6 +55,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     private boolean isfirst = true;
     private String auth;
     private final static int REQUESTCODE = 2; // 返回的结果码
+    private List<IsSaveImgBean> mbeanlist = new ArrayList<>();
 
     @Override
     public void initView() {
@@ -269,11 +271,12 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         if (requestCode == REQUESTCODE) {
             switch (resultCode) {
                 case 10:
-
-                    int mindex = data.getIntExtra("index", 0);
-                    String isSaveImg = data.getStringExtra("isSaveImg");
-                    mlist.get(mindex).setIsSaveImg(isSaveImg);
-
+                    mbeanlist = (List<IsSaveImgBean>) data.getSerializableExtra("IsSaveImgBeanList");
+                    for (int i = 0; i < mbeanlist.size(); i++) {
+                        int mindex = mbeanlist.get(i).getIndex();
+                        String isSaveImg = mbeanlist.get(i).getIsSaveImg();
+                        mlist.get(mindex).setIsSaveImg(isSaveImg);
+                    }
                     break;
             }
         }
