@@ -18,6 +18,7 @@ import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.floating.FloatWindowService;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
+import com.pufei.gxdt.utils.AppManager;
 import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class FristActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frist);
+        AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(SHARE_APP_USER, 0);
         editor = sharedPreferences.edit();
@@ -158,7 +160,7 @@ public class FristActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(FristActivity.this, MainActivity.class));
-                finish();
+                AppManager.getAppManager().finishActivity();
 //                if (cb.isChecked()) {
 //
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

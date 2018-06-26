@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -327,7 +326,6 @@ public class SignView extends View {
     private int getRowIndex(int dayOfMonth) {
         float weight = (dayOfMonth - daysOfFirstWeek) / (MAX_COLUMN * 1f);
         double rowIndexDouble = Math.abs(Math.ceil(weight));
-        Log.e("signView",rowIndexDouble+"");
         return (int) rowIndexDouble;
     }
     @Override

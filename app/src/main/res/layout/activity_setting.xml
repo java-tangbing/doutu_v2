@@ -75,7 +75,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="大米粒"
             android:textColor="@color/khaki"
             android:textSize="16sp" />
 
@@ -115,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="大米粒"
+            android:text=""
             android:textColor="@color/khaki"
             android:textSize="16sp" />
 

@@ -64,6 +64,14 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(editTextBottomFragment.isVisible()) {
+            editTextBottomFragment.dismiss();
+        }
+    }
+
+    @Override
     public void initView() {
         editTextBottomFragment = new EditTextBottomFragment();
         editTextBottomFragment.setInputTextListener(this);
@@ -93,9 +101,14 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
             case R.id.ll_input:
                 int type = activity.getTypes();
                 if(type == 1) {
-                    editTextBottomFragment.show(getChildFragmentManager(),"1");
+                    if(!editTextBottomFragment.isVisible()) {
+                        editTextBottomFragment.show(getChildFragmentManager(),"1");
+
+                    }
                 }else {
-                    editTextBottomFragment.show(getChildFragmentManager(),"0");
+                    if(!editTextBottomFragment.isVisible()) {
+                        editTextBottomFragment.show(getChildFragmentManager(),"0");
+                    }
                 }
                 break;
             case R.id.ll_select_color:
@@ -154,6 +167,7 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
     public void requestSuccess(String msg) {
 
     }
+
 
 
     @Override

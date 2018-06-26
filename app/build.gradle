@@ -9,8 +9,8 @@ android {
         applicationId "com.pufei.gxdt"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 26
-        versionName "3.5"
+        versionCode 29
+        versionName "3.5.0"
         flavorDimensions "versionCode"
         multiDexEnabled true
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -39,8 +39,8 @@ android {
     buildTypes {
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            minifyEnabled true
-            zipAlignEnabled true
+            minifyEnabled false
+            zipAlignEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -105,6 +105,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support:design:27.1.0'
+    implementation "com.android.support:exifinterface:27.1.1"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -128,10 +129,6 @@ dependencies {
     implementation files('libs/Baidu_MobAds_SDK.jar')
     implementation files('libs/GDTUnionSDK.4.17.568.min.jar')
     implementation project(':photoeditor')
-    implementation('com.github.hotchemi:permissionsdispatcher:2.4.0') {
-        exclude module: 'support-v13'
-    }
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
     implementation 'com.mylhyl:acp:1.2.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation 'com.github.donkingliang:ImageSelector:1.5.0'

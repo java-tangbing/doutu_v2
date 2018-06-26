@@ -4,13 +4,14 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.widgets.GlideApp;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.ResultBean, BaseViewHolder> {
+public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsTypeTwoBean.ResultBean, BaseViewHolder> {
 
 
     /**
@@ -19,7 +20,7 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.Resu
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public NewsFeedBackAdapter(List<NewsBean.ResultBean> data) {
+    public NewsFeedBackAdapter(List<NewsTypeTwoBean.ResultBean> data) {
         super(data);
         addItemType(1, R.layout.activity_news_feedback_item_user);
         addItemType(0, R.layout.activity_news_feedback_item_server);
@@ -27,7 +28,7 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsBean.Resu
 
 
     @Override
-    protected void convert(BaseViewHolder helper, NewsBean.ResultBean item) {
+    protected void convert(BaseViewHolder helper, NewsTypeTwoBean.ResultBean item) {
         switch (helper.getItemViewType()) {
             case 1:
                 helper.setText(R.id.news_feedback_item_user_dateline_tv, item.getDateline())

@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout
-    android:background="@color/white"
-    android:layout_gravity="center"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:textColor="@color/blank"
-        android:gravity="center"
-        android:textSize="17sp"
-        android:text="@string/vip1"
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
-    <View
-        android:background="@color/backgrond"
-        android:layout_width="match_parent"
-        android:layout_height="1dp">
-    </View>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:orientation="vertical">
+
         <TextView
-            android:id="@+id/vip_dialog_kaitong"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:gravity="center"
-            android:textSize="18sp"
-            android:text="@string/kaitong"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:text="@string/vip1"
+            android:textColor="@color/blank"
+            android:textSize="17sp" />
+
         <View
-            android:background="@color/backgrond"
-            android:layout_width="1dp"
-            android:layout_height="match_parent">
-        </View>
-        <TextView
-            android:textColor="@color/log_divider_tab_selector"
-            android:id="@+id/vip_dialog_cancel"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:text="注销登录"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/backgrond"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/vip_dialog_kaitong"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/kaitong"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/backgrond"></View>
+
+            <TextView
+                android:id="@+id/vip_dialog_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="注销登录"
+                android:textColor="@color/log_divider_tab_selector"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/backgrond"></View>
     </LinearLayout>
-    <View
-        android:background="@color/backgrond"
-        android:layout_width="match_parent"
-        android:layout_height="1dp">
-    </View>
-</LinearLayout>
 </FrameLayout>

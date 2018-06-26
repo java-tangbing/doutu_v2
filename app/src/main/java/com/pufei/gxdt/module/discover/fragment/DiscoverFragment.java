@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pufei.gxdt.R;
@@ -42,7 +43,7 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
     ImageView newsImageView;
 
     @BindView(R.id.ll_title_right)
-    LinearLayout newsLinearLayout;
+    LinearLayout newsLayout;
     private List<Fragment> fragmentList;
     private List<String> titleList;
     private String[] titleArray;
@@ -56,12 +57,12 @@ public class DiscoverFragment extends BaseFragment implements TabLayout.OnTabSel
         titleArray = getResources().getStringArray(R.array.discover_title);
         titleTextView.setText(getResources().getString(R.string.discover));
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(DensityUtil.dp2px(40), DensityUtil.dp2px(40));
-        layout.setMargins(0, 0, 40, 0);
+        layout.setMargins(0, 20, 40, 0);
         newsImageView.setLayoutParams(layout);
 
         GlideApp.with(getActivity()).load(R.drawable.home_my_image).into(newsImageView);
 
-        newsLinearLayout.setVisibility(View.VISIBLE);
+        newsLayout.setVisibility(View.VISIBLE);
         addfragment();
         init();
     }

@@ -23,6 +23,8 @@ import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.PlatformConfig;
 
+import java.io.File;
+
 
 public class App extends Application {
     private static final String TAG = App.class.getName();
@@ -41,6 +43,10 @@ public class App extends Application {
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
         ResolutionUtil.getInstance().init(this);
+        File file = new File(path1);
+        if (!file.exists()) {
+            file.mkdir();
+        }
         initPrefs();
         FlowManager.init(this);
         initUMConfig();
@@ -60,10 +66,10 @@ public class App extends Application {
             }
         });
 
-        UmengNotificationClickHandler clickHandler = new UmengNotificationClickHandler(){
+        UmengNotificationClickHandler clickHandler = new UmengNotificationClickHandler() {
             @Override
             public void openActivity(Context context, UMessage uMessage) {
-                Intent intent = new Intent(context,NewsPictureActivity.class);
+                Intent intent = new Intent(context, NewsPictureActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -79,7 +85,7 @@ public class App extends Application {
             @Override
             public void dealWithNotificationMessage(Context context, UMessage msg) {
                 super.dealWithNotificationMessage(context, msg);
-                Log.e("UPush",msg.text+"");
+                Log.e("UPush", msg.text + "");
             }
         };
         mPushAgent.setMessageHandler(messageHandler);
@@ -91,6 +97,7 @@ public class App extends Application {
     protected void initPrefs() {
         SharedPreferencesUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_MULTI_PROCESS);
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -98,7 +105,7 @@ public class App extends Application {
     }
 
     private void initUMConfig() {
-        UMConfigure.setLogEnabled(true);
+        UMConfigure.setLogEnabled(false);
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         MobclickAgent.setCatchUncaughtExceptions(true);

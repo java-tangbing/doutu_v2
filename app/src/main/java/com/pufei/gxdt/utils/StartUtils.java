@@ -2,12 +2,14 @@ package com.pufei.gxdt.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -96,9 +98,6 @@ public class StartUtils {
             return;
         }
         JSONObject jsonObject = KeyUtil.getJson(activity);
-//        try {
-//            jsonObject.put("pname", activity.getPackageName());
-        Log.e("StartUtils", jsonObject.toString());
         try {
             OkhttpUtils.post(Contents.Update, jsonObject.toString(), new Callback() {
                 @Override
@@ -116,9 +115,10 @@ public class StartUtils {
                         newVersion = updateBean.getResult().getVersion();
                         final String upURl = updateBean.getResult().getLink();
                         final boolean update = updateBean.getResult().getUpdateOpen().equals("1");
-                        //final boolean force = updateBean.getResult().isForce();
+                        final boolean isIgnore = updateBean.getResult().getIsIgnore().equals("1");
+                        final boolean isForce = updateBean.getResult().getIsForce().equals("1");
+                        final String channel = updateBean.getResult().getChannel();
                         des = updateBean.getResult().getDes();
-                        //newVersion="1.0";
                         newcode = Integer.parseInt(updateBean.getResult().getVersion_code());
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -136,7 +136,7 @@ public class StartUtils {
                                 }
                                 if (update && newcode > oldcode) {
                                     Log.i("执行了么", "en");
-                                    Update(upURl, false, newVersion);
+                                    Update(upURl, isForce, newVersion, channel);
                                 }
                             }
                         });
@@ -151,13 +151,9 @@ public class StartUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
     }
 
-    private void Update(final String URL, final boolean cance, String code) {//更新弹窗
+    private void Update(final String URL, final boolean cance, String code, final String channel) {//更新弹窗
         if (!activity.isFinishing()) {
             dialog = new AlertDialog.Builder(activity, R.style.TransDialogStyle).create();
             Log.i("新版本", newVersion);
@@ -185,11 +181,36 @@ public class StartUtils {
             button2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, UpdateService.class);
-                    intent.putExtra("apk_url", URL);
-                    activity.startService(intent);
+                    if (channel.equals("normal")) {
+                        Intent intent = new Intent(activity, UpdateService.class);
+                        intent.putExtra("apk_url", URL);
+                        activity.startService(intent);
+                    } else {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(URL));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                            activity.startActivity(Intent.createChooser(intent, "请选择浏览器"));
+                        } else {
+                            Toast.makeText(activity, "请下载浏览器", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     dialog.dismiss();
                     ToastUtils.showShort(activity, "开始更新");
+                }
+            });
+            Button button3 = window.findViewById(R.id.update_bt_skip);
+            button3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cance) {
+                        AppManager.getAppManager().finishAllActivity();
+                        AppManager.getAppManager().AppExit(App.AppContext);
+                    } else {
+                        dialog.dismiss();
+                        updateIgnore();
+                    }
                 }
             });
         }
@@ -409,4 +430,29 @@ public class StartUtils {
         }
         return hex.toString();
     }
+
+    public void updateIgnore() {
+        if (!NetWorkUtil.isNetworkConnected(App.AppContext)) {
+            Toast.makeText(App.AppContext, "当前网络不可用，请检查网络情况", Toast.LENGTH_LONG).show();
+            return;
+        }
+        JSONObject jsonObject = KeyUtil.getJson(activity);
+        try {
+            OkhttpUtils.post(Contents.Ignore, jsonObject.toString(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e(StartUtils.class.getSimpleName(), e.toString());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+                    Log.i("Ignore", result);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

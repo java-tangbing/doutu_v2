@@ -1,6 +1,7 @@
 package com.pufei.gxdt.module.discover.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,10 +31,10 @@ public class DiscoverDetailedAdapter extends BaseQuickAdapter<DiscoverEditImageB
                 .error(R.mipmap.my_uer_picture)
                 .fallback(R.mipmap.my_uer_picture)
                 .into((CircleImageView) helper.getView(R.id.dis_item_user_header_iv));
-        if (item.getUser().getUsername().length() > 0 || !item.getUser().getUsername().isEmpty()) {
+        if (!TextUtils.isEmpty(item.getUser().getUsername())) {
             helper.setText(R.id.dis_item_user_name_tv, item.getUser().getUsername());
         }
-        if (item.getHot().length() > 0 || !item.getHot().isEmpty()) {
+        if (!TextUtils.isEmpty(item.getHot())) {
             helper.setText(R.id.dis_item_hot_tv, item.getHot());
         }
         helper.addOnClickListener(R.id.dis_item_user_img_list)

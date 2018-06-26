@@ -4,6 +4,7 @@ import com.pufei.gxdt.api.ApiService;
 import com.pufei.gxdt.base.BasePresenter;
 
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.view.NewsView;
@@ -48,6 +49,25 @@ public class NewsPresenter extends BasePresenter<NewsView> {
 //                        baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });
+        addSubscription(disposable);
+    }
+    public void newsNoticeContentTypeTwo(RequestBody body) {
+        Disposable disposable = ApiService.getNewsApi().getNoticeContentTypeTwo(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<NewsTypeTwoBean>() {
+                    @Override
+                    public void accept(NewsTypeTwoBean newsTypeTwoBean) throws Exception {
+                        baseview.getsNoticeContentTypeTwo(newsTypeTwoBean);
+                    }
+                }
+//                , new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+////                        baseview.requestErrResult(throwable.getMessage()+"");
+//                    }
+//                }
+                );
         addSubscription(disposable);
     }
 

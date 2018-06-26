@@ -17,6 +17,7 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.news.adapter.NewsAdapter;
 import com.pufei.gxdt.module.news.bean.NewsBean;
+import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.module.news.bean.NoticeBean;
 import com.pufei.gxdt.module.news.bean.SendBean;
 import com.pufei.gxdt.module.news.presenter.NewsPresenter;
@@ -71,7 +72,7 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     public void setMyadapter() {
         if (App.userBean == null) {
             startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            AppManager.getAppManager().finishActivity();
         } else {
             Map<String, String> map = new HashMap<>();
             map.put("auth", App.userBean.getAuth());
@@ -123,6 +124,11 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
 
     @Override
     public void getsNoticeContent(NewsBean bean) {
+
+    }
+
+    @Override
+    public void getsNoticeContentTypeTwo(NewsTypeTwoBean bean) {
 
     }
 

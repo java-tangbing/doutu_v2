@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpFragment;
@@ -36,10 +37,9 @@ import com.pufei.gxdt.module.news.activity.NewsActivity;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.KeyUtil;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
-import com.pufei.gxdt.utils.StartUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.pufei.gxdt.widgets.GridSpaceItemDecoration;
@@ -82,11 +82,12 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
 
     @Override
     public void initView() {
+        UmengStatisticsUtil.statisticsEvent(getActivity(),"1");
         LayoutInflater lif = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
         adapter = new HomeListAdapter(getActivity(), homeList);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理器
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_home_list.setLayoutManager(layoutManager);
         rl_home_list.setAdapter(adapter);
@@ -146,6 +147,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         adapter.setOnItemClickListener(new HomeListAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
+                UmengStatisticsUtil.statisticsEvent(getActivity(),"6");
                 try{
                     if ("3".equals(homeList.get(postion).getCat())) {
                         countView(homeList.get(postion).getId(),1,"","click");
@@ -222,7 +224,6 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAdv(EvenMsg type) {
         if(type.getTYPE() == 1){
-            LogUtils.i("tb","eventbus");
             AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
         }
     }
@@ -267,9 +268,11 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     public  void onViewClicked(View view){
         switch (view.getId()){
             case R.id.iv_news:
+                UmengStatisticsUtil.statisticsEvent(getActivity(),"38");
                 startActivity(new Intent(getActivity(), NewsActivity.class));
                 break;
             case R.id.activity_main_search:
+                UmengStatisticsUtil.statisticsEvent(getActivity(),"37");
                 startActivity(new Intent(getActivity(), SearchActivity.class));
         }
 
@@ -335,18 +338,21 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             headView.findViewById(R.id.tv_hot_face).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    UmengStatisticsUtil.statisticsEvent(getActivity(),"7");
                     startActivity(new Intent(getActivity(), HotImageActivity.class));
                 }
             });
             headView.findViewById(R.id.tv_joke).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    UmengStatisticsUtil.statisticsEvent(getActivity(),"9");
                     startActivity(new Intent(getActivity(), JokeActivity.class));
                 }
             });
             headView.findViewById(R.id.tv_theme_face).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    UmengStatisticsUtil.statisticsEvent(getActivity(),"8");
                     startActivity(new Intent(getActivity(), ThemeImageActivity.class));
                 }
             });
@@ -358,7 +364,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         private List<HomeTypeBean.ResultBean> list;
         private Context mcontext;
 
-        public ImageTypeAdapter(Context context, List<HomeTypeBean.ResultBean> list) {//获取数据源
+        public ImageTypeAdapter(Context context, List<HomeTypeBean.ResultBean> list) {//获取数据�
             this.mcontext = context;
             this.list = list;
         }

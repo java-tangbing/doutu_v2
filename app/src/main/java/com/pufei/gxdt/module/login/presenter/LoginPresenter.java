@@ -30,7 +30,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -48,7 +48,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -66,7 +66,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -79,12 +79,14 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 .subscribe(new Consumer<LoginResultBean>() {
                     @Override
                     public void accept(LoginResultBean resultBean) throws Exception {
-                        baseview.sendRusult(resultBean);
+                        if (baseview != null)
+                            baseview.sendRusult(resultBean);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        if (baseview != null)
+                            baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -102,7 +104,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -120,7 +122,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -139,7 +141,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);
@@ -157,7 +159,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        baseview.requestErrResult(throwable.getMessage()+"");
+                        baseview.requestErrResult(throwable.getMessage() + "");
                     }
                 });
         addSubscription(disposable);

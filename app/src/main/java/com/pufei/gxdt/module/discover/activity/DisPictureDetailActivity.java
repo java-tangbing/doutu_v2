@@ -2,6 +2,8 @@ package com.pufei.gxdt.module.discover.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -42,14 +44,12 @@ import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
 import com.pufei.gxdt.module.discover.presenter.DisPicDetPresenter;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
-import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
@@ -126,6 +126,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     private int type = 0;
     private static AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
+
     @Override
     public void initView() {
         path = Environment.getExternalStorageDirectory().getPath() + "/" + getResources().getString(R.string.dtds);
@@ -191,19 +192,20 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         super.onResume();
         setMyAdapter();
         getImageDetailList();
+        hideAlertDialog(sharedialog);
     }
 
     public void getImageDetailList() {
         switch (type) {
             case 0:
-                if (pictureList.size() > 0) {
+                if (pictureList != null && pictureList.size() > 0) {
                     mlist.clear();
                     mlist.addAll(pictureList);
                     adapter.notifyDataSetChanged();
                 }
                 break;
             case 1:
-                if (pictureList01.size() > 0) {
+                if (pictureList01 != null && pictureList01.size() > 0) {
                     mlist01.clear();
                     mlist01.addAll(pictureList01);
                     adapter01.notifyDataSetChanged();
@@ -367,16 +369,29 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        id = mlist.get(position).getId();
-        orginid = mlist.get(position).getOrginid();
-        orgintable = mlist.get(position).getOrgintable();
+        switch (type) {
+            case 0:
+                if (mlist != null && mlist.size() > 0) {
+                    id = mlist.get(position).getId();
+                    orginid = mlist.get(position).getOrginid();
+                    orgintable = mlist.get(position).getOrgintable();
+                }
+                break;
+            case 1:
+                if (mlist01 != null && mlist01.size() > 0) {
+                    id = mlist01.get(position).getId();
+                    orginid = mlist01.get(position).getOrginid();
+                    orgintable = mlist01.get(position).getOrgintable();
+                }
+                break;
+        }
+
         index = position;
         setMyAdapter();
     }
 
 
-    @OnClick({R.id.look_edit_image_iv,R.id.iv_report,
-
+    @OnClick({R.id.look_edit_image_iv, R.id.iv_report,
 
 
             R.id.tv_change_img, R.id.tv_share_qq, R.id.tv_share_wx, R.id.activity_finish, R.id.activity_home1_shoucang, R.id.ib_dowm_load})
@@ -486,11 +501,10 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
-                    LogUtils.i("tb", result);
                     DisPictureDetailActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(popupWindow.isShowing()){
+                            if (popupWindow.isShowing()) {
                                 popupWindow.dismiss();
                             }
                             ToastUtils.showShort(DisPictureDetailActivity.this, "举报成功");
@@ -599,18 +613,18 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         @Override
         public void onResult(SHARE_MEDIA platform) {
             ToastUtils.showShort(DisPictureDetailActivity.this, "分享成功");
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(DisPictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(DisPictureDetailActivity.this, "分享取消");
         }
     };
@@ -656,6 +670,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             } else {
                 image = new UMImage(this, BitmapFactory.decodeFile(URL));
             }
+            UMImage thumb = new UMImage(this,URL);
+            image.setThumb(thumb);
             try {
                 new ShareAction(this).withMedia(image)
                         .setPlatform(share_media)
@@ -667,11 +683,13 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         }
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
     public void GetImageInputStream(String imageurl) {//下载图片
         java.net.URL url;
         HttpURLConnection connection = null;
@@ -730,4 +748,18 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             }
         });
     }
+
+    public void hideAlertDialog(AlertDialog mProgressDialog) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            Context context = ((ContextWrapper) mProgressDialog.getContext()).getBaseContext();
+            if (context instanceof Activity) {
+                if (!((Activity) context).isFinishing())
+                    mProgressDialog.dismiss();
+            } else {
+                mProgressDialog.dismiss();
+            }
+            mProgressDialog = null;
+        }
+    }
+
 }

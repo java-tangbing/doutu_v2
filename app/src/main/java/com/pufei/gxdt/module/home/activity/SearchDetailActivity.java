@@ -16,6 +16,7 @@ import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.module.home.adapter.SearchDetailAdpater;
 import com.pufei.gxdt.module.home.model.RecommendBean;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class SearchDetailActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
+            AppManager.getAppManager().finishActivity();
             EventBus.getDefault().post(new EventBean("search_detail", null));
             return true;
         }
@@ -102,7 +103,7 @@ public class SearchDetailActivity extends BaseActivity {
 
     @OnClick(R.id.activity_searchdetail_cancel)
     public void onViewClicked() {
-        finish();
+        AppManager.getAppManager().finishActivity();
     }
 
 

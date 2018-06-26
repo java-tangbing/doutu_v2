@@ -32,6 +32,7 @@ import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UserUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -115,6 +116,7 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
             UserBean bean = App.userBean;
             bean.setPhone(loginIphone.getText().toString());
             Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
+            UmengStatisticsUtil.statisticsEvent(this,"36");
             if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
                 Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
                 startActivity(intent);

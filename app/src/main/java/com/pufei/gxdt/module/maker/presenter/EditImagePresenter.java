@@ -96,7 +96,6 @@ public class EditImagePresenter extends BasePresenter<EditImageView> {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.e("uploadImage",throwable.getMessage());
                         baseview.requestErrResult(throwable.getMessage()+"");
                     }
                 });

@@ -14,8 +14,6 @@ import com.google.gson.JsonSyntaxException;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseFragment;
-import com.pufei.gxdt.contents.Contents;
-import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
@@ -29,7 +27,9 @@ import com.pufei.gxdt.module.user.activity.PublishActivity;
 import com.pufei.gxdt.module.user.activity.SettingActivity;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.OkhttpUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UrlString;
+import com.pufei.gxdt.widgets.GlideApp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,8 +50,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.pufei.gxdt.utils.SignUtils.IsToday;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class UserFragment extends BaseFragment {
 
@@ -108,7 +110,7 @@ public class UserFragment extends BaseFragment {
             } else {
                 iv_sex.setImageResource(R.mipmap.user_ic_woman);
             }
-            if (TextUtils.isEmpty(App.userBean.getHead())) {
+            if (!TextUtils.isEmpty(App.userBean.getHead())) {
                 Glide.with(this).load(App.userBean.getHead()).into(ivUserHead);
             } else {
                 Glide.with(this).load(R.mipmap.my_uer_picture).into(ivUserHead);
@@ -116,6 +118,7 @@ public class UserFragment extends BaseFragment {
         } else {
             tvUserName.setText("未登录");
             ivUserHead.setImageResource(R.mipmap.my_uer_picture);
+            user_dec.setText("个性签名");
         }
 
         initSign();
@@ -143,6 +146,7 @@ public class UserFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_checkin_state:
                 if (App.userBean != null) {
+                    UmengStatisticsUtil.statisticsEvent(getActivity(), "20");
                     sharedPreferences.edit().putLong(App.userBean.getAuth(), System.currentTimeMillis()).apply();
                     initSign();
                     //EventBus.getDefault().post(new EventBean(Contents.DAY_SIGN, null));
@@ -162,21 +166,27 @@ public class UserFragment extends BaseFragment {
                 }
                 break;
             case R.id.user_edit:
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "");
                 startActivity(new Intent(getActivity(), ProfileActivity.class));
                 break;
             case R.id.tv_user_publish:
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "21");
                 startActivity(new Intent(getActivity(), PublishActivity.class));
                 break;
             case R.id.tv_user_favorite:
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "22");
                 startActivity(new Intent(getActivity(), FavoriteActivity.class));
                 break;
             case R.id.tv_user_draft:
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "23");
                 startActivity(new Intent(getActivity(), DraftActivity.class));
                 break;
             case R.id.tv_douqi:
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "24");
                 startActivity(new Intent(getActivity(), CrunchiesActivity.class));
                 break;
             case R.id.tv_setting:
+                UmengStatisticsUtil.statisticsEvent(getActivity(), "25");
                 startActivity(new Intent(getActivity(), SettingActivity.class));
                 break;
 
@@ -229,7 +239,7 @@ public class UserFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(EventMsg type) {
-        Log.e("eventmsg",type.getTYPE()+"");
+//        Log.e("eventmsg", type.getTYPE() + "");
         if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
             initUserInfo();
         } else if (type.getTYPE() == MsgType.LOGIN_OUT) {
@@ -255,7 +265,7 @@ public class UserFragment extends BaseFragment {
                     String result = response.body().string();
                     try {
                         final GetScoreBean getScoreBean = new Gson().fromJson(result, GetScoreBean.class);
-                        if (getScoreBean.getResult() != null) {
+                        if (getScoreBean.getResult() != null && getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

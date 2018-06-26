@@ -27,6 +27,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.module.sign.adapter.PictureAdapter1;
 import com.pufei.gxdt.module.sign.model.PictureBeanRe;
+import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.DensityUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UrlString;
@@ -96,6 +97,7 @@ public class BasePictureActivity extends AppCompatActivity {
         setContentView(getContentview());
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
+        AppManager.getAppManager().addActivity(this);
         initView();
         initData();
         initListener();
@@ -317,7 +319,7 @@ public class BasePictureActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.activity_basepicture_cancel:
-                finish();
+                AppManager.getAppManager().finishActivity();
                 break;
             case R.id.activity_basepicture_delete:
                 update();

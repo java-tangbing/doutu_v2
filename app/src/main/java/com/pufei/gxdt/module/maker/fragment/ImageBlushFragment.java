@@ -63,18 +63,23 @@ public class ImageBlushFragment extends BaseFragment implements BaseQuickAdapter
         rvColor.setLayoutManager(new GridLayoutManager(getActivity(), 8));
         seekbarBrushSize.setOnSeekBarChangeListener(this);
         //获取seerbar层次drawable对象
-        LayerDrawable layerDrawable = (LayerDrawable) seekbarBrushSize.getProgressDrawable();
-        int layers = layerDrawable.getNumberOfLayers();
-        for (int i = 0; i < layers; i++) {
-            if(layerDrawable.getId(i) == android.R.id.background) {
-                Drawable drawable = layerDrawable.getDrawable(i);
-                drawable.setColorFilter(Color.parseColor("#DEDEDE"), PorterDuff.Mode.SRC);
-            }else {
-                Drawable drawable = layerDrawable.getDrawable(i);
-                drawable.setColorFilter(Color.parseColor("#6A6A6A"), PorterDuff.Mode.SRC);
+        try {
+            LayerDrawable layerDrawable = (LayerDrawable) seekbarBrushSize.getProgressDrawable();
+            int layers = layerDrawable.getNumberOfLayers();
+            for (int i = 0; i < layers; i++) {
+                if(layerDrawable.getId(i) == android.R.id.background) {
+                    Drawable drawable = layerDrawable.getDrawable(i);
+                    drawable.setColorFilter(Color.parseColor("#DEDEDE"), PorterDuff.Mode.SRC);
+                }else {
+                    Drawable drawable = layerDrawable.getDrawable(i);
+                    drawable.setColorFilter(Color.parseColor("#6A6A6A"), PorterDuff.Mode.SRC);
+                }
             }
-
+        }catch (ClassCastException e) {
+            Log.e("ClassCastException",e.getMessage()+" ");
         }
+
+
         seekbarBrushSize.getThumb().setColorFilter(Color.parseColor("#6A6A6A"), PorterDuff.Mode.SRC_ATOP);
 
     }

@@ -1,17 +1,23 @@
 package com.pufei.gxdt.module.user.activity;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.donkingliang.imageselector.utils.ImageSelectorUtils;
-import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -20,6 +26,7 @@ import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.user.bean.SetAvatarResultBean;
 import com.pufei.gxdt.module.user.bean.SetPersonalResultBean;
+import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.module.user.presenter.SetPersonalPresenter;
 import com.pufei.gxdt.module.user.view.SetPersonalView;
 import com.pufei.gxdt.utils.AppManager;
@@ -31,21 +38,18 @@ import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UserUtils;
 import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
 
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
-import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> implements SetPersonalView, View.OnClickListener {
     @BindView(R.id.ll_title_left)
@@ -64,9 +68,10 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     CircleImageView userdataHead;
     @BindView(R.id.userdata_dec)
     TextView userdata_dec;
-    private String sex;
+    private String sex = "";
     private static final int REQUEST_CODE = 17;
     private CommonPopupWindow popupWindow;
+    private ProgressDialog mProgressDialog;
 
     @Override
     public void initView() {
@@ -75,7 +80,6 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         tvTitle.setText("资料编辑");
         tvRight.setText("保存");
         if (App.userBean != null) {
-
             if (!App.userBean.getHead().isEmpty()) {
                 Glide.with(this).load(App.userBean.getHead()).into(userdataHead);
             } else {
@@ -85,7 +89,6 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             tvSex.setText(App.userBean.getGender());
             loginstate.setText(R.string.log_out);
         }
-
     }
 
     @Override
@@ -143,7 +146,11 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.userdata_head_ll:
-                ImageSelectorUtils.openPhoto(ProfileActivity.this, REQUEST_CODE, true, 0);
+                //ImageSelectorUtils.openPhoto(ProfileActivity.this, REQUEST_CODE, true, 0);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, ""), REQUEST_CODE);
                 break;
             case R.id.userdata_name_ll:
                 startActivity(new Intent(this, EditNameActivity.class));
@@ -174,7 +181,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
                 break;
             case R.id.login_state:
                 if (App.userBean != null) {
-                    DialogUtil.getInstance().canceDialog(this,null);
+                    DialogUtil.getInstance().canceDialog(this, null);
                 } else {
                     ToastUtils.showLong(this, "请先登录");
                 }
@@ -188,21 +195,92 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && data != null) {
-            ArrayList<String> images = data.getStringArrayListExtra(
-                    ImageSelectorUtils.SELECT_RESULT);
-            String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(images.get(0)));
-            requestSetAvatar("", base64);
-            App.userBean.setHead(images.get(0));
+            String path1 = "";
+            Uri uri = data.getData();
+            if (uri.toString().contains("provider")) {
+                path1 = ImageUtils.getFilePathByUri(this, uri);
+            } else {
+                path1 = getRealFilePath(this, uri);
+            }
+            if (path1 != null) {
+                Luban.with(this)
+                        .load(new File(path1))
+                        .ignoreBy(100)
+                        .setTargetDir(App.path1 + "/")
+                        .filter(new CompressionPredicate() {
+                            @Override
+                            public boolean apply(String path) {
+                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                            }
+                        })
+                        .setCompressListener(new OnCompressListener() {
+                            @Override
+                            public void onStart() {
+                            }
+
+                            @Override
+                            public void onSuccess(File file) {
+                                //GlideApp.with(ProfileActivity.this).asBitmap().load(file).into(userdataHead);
+                                String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(file.getPath()));
+                                requestSetAvatar(base64);
+                                UserBean userBean = App.userBean;
+                                userBean.setHead(file.getPath());
+                                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+                        }).launch();
+
+
+//                String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(path1));
+//                requestSetAvatar(base64);
+//                App.userBean.setHead(base64);
+//                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            }
+            Log.e("album path", path1 + " " + uri);
+
+//            ArrayList<String> images = data.getStringArrayListExtra(
+//                    ImageSelectorUtils.SELECT_RESULT);
+//            String base64 = ImageUtils.bitmapToBase64(BitmapFactory.decodeFile(images.get(0)));
+//            requestSetAvatar(base64);
+//            App.userBean.setHead(images.get(0));
+//            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
         }
     }
 
-    private void requestSetAvatar(String type, String value) {
+    public static String getRealFilePath(final Context context, final Uri uri) {
+        if (null == uri) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null)
+            data = uri.getPath();
+        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
+    }
+
+    private void requestSetAvatar(String value) {
         try {
             if (NetWorkUtil.isNetworkConnected(this)) {
+                showLoading("上传中...");
                 org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
                 jsonObject.put("auth", App.userBean.getAuth());
-                jsonObject.put("header", "");
-                jsonObject.put("username", value);
+                jsonObject.put("header", value);
+                jsonObject.put("username", "");
                 jsonObject.put("gender", "");
                 jsonObject.put("mind", "");
                 presenter.setPersonal(com.pufei.gxdt.utils.RetrofitFactory.getRequestBody(jsonObject.toString()));
@@ -260,8 +338,11 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
 
     @Override
     public void setPersonalInfo(SetPersonalResultBean bean) {
+        hideLoading();
         if (bean.getCode() == 0) {
-            App.userBean.setGender(sex);
+            if (!TextUtils.isEmpty(sex)) {
+                App.userBean.setGender(sex);
+            }
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             EventBus.getDefault().postSticky(new EventMsg(MsgType.UPDATA_USER));
         }
@@ -288,4 +369,18 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         ToastUtils.showShort(this, msg);
     }
 
+
+    void showLoading(@NonNull String message) {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+    }
+
+    void hideLoading() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
 }

@@ -36,4 +36,11 @@
     <style name="DialogNoTitle" parent="Base.Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item><!--除去title-->
     </style>
+
+    <style name="WxNoTitleBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
 </resources>

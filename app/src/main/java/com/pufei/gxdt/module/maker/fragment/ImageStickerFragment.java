@@ -5,11 +5,15 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +27,7 @@ import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.base.BaseMvpFragment;
+import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.module.maker.bean.MaterialBean;
 import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
@@ -37,11 +42,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.OnClick;
+import ja.burhanrashid52.photoeditor.PhotoEditor;
+import ja.burhanrashid52.photoeditor.bean.BitmapBean;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -95,7 +103,7 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
         switch (view.getId()) {
             case R.id.ll_take_photo:
                 Acp.getInstance(getActivity())
-                        .request(new AcpOptions.Builder().setPermissions(Manifest.permission.CAMERA).build(),
+                        .request(new AcpOptions.Builder().setPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE).build(),
                                 new AcpListener() {
                                     @Override
                                     public void onGranted() {
@@ -118,10 +126,35 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
                                 });
                 break;
             case R.id.ll_open_album:
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, ""), PICK_REQUEST);
+                Acp.getInstance(getActivity())
+                        .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                                new AcpListener() {
+                                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                                    @Override
+                                    public void onGranted() {
+                                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                            // TODO: Consider calling
+                                            //    ActivityCompat#requestPermissions
+                                            // here to request the missing permissions, and then overriding
+                                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            //                                          int[] grantResults)
+                                            // to handle the case where the user grants the permission. See the documentation
+                                            // for ActivityCompat#requestPermissions for more details.
+                                            return;
+                                        }
+                                        Intent intent = new Intent();
+                                        intent.setType("image/*");
+                                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                                        startActivityForResult(Intent.createChooser(intent, ""), PICK_REQUEST);
+
+                                    }
+
+                                    @Override
+                                    public void onDenied(List<String> permissions) {
+                                        ToastUtils.showShort(getActivity(), "请求权限失败,请手动开启！");
+                                    }
+                                });
+
                 break;
             case R.id.ll_template:
                 StickerBottomFragment stickerBottomFragment = new StickerBottomFragment();
