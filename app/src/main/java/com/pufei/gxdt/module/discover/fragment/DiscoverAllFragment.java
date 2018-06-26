@@ -10,6 +10,7 @@ import android.view.View;
 
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
@@ -57,10 +58,11 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     private boolean isRefreshing = false;
     private boolean isfirst = true;
     private String auth;
+    private final static int REQUESTCODE = 1; // 返回的结果码
 
     @Override
     public void initView() {
-        GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
+        final GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
         int spacing = 30; // px
@@ -68,6 +70,19 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.addItemDecoration(new DividerGridItemDecoration(activity));
 
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+//                        (layoutManage.findLastVisibleItemPosition() ==
+//                                layoutManage.getItemCount() - 1)
+//                        ) {
+//                    page++;
+////                    requestHomeImage(page);
+//                    setMyadapter();
+//                }
+//            }
+//        });
 
     }
 
@@ -75,9 +90,14 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     public void getData() {
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
+
+
 //        discoverAdapter.setEnableLoadMore(false);
         discoverAdapter.setOnItemChildClickListener(this);
         discoverAdapter.setOnLoadMoreListener(this, recyclerView);
+        discoverAdapter.setPreLoadNumber(1);
+        discoverAdapter.setLoadMoreView(new CustomLoadMoreView());
+        discoverAdapter.setEnableLoadMore(true);
 //        discoverAdapter.addHeaderView(videoHeaderView);
 //        discoverAdapter.disableLoadMoreIfNotFullPage();
         recyclerView.setAdapter(discoverAdapter);
@@ -85,6 +105,42 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         page = 1;
         setMyadapter();
         initRefreshLayout();
+    }
+
+    public final class CustomLoadMoreView extends LoadMoreView {
+
+        @Override
+        public int getLayoutId() {
+            return R.layout.customloadmore_view;
+        }
+
+        /**
+         * 如果返回true，数据全部加载完毕后会隐藏加载更�
+         * 如果返回false，数据全部加载完毕后会显示getLoadEndViewId()布局
+         */
+        @Override
+        public boolean isLoadEndGone() {
+            return true;
+        }
+
+        @Override
+        protected int getLoadingViewId() {
+            return R.id.load_more_loading_view;
+        }
+
+        @Override
+        protected int getLoadFailViewId() {
+            return R.id.load_more_load_fail_view;
+        }
+
+        /**
+         * isLoadEndGone()为true，可以返�
+         * isLoadEndGone()为false，不能返�
+         */
+        @Override
+        protected int getLoadEndViewId() {
+            return 0;
+        }
     }
 
     private void setMyadapter() {
@@ -125,17 +181,19 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void getDiscoverHotList(DiscoverListBean bean) {
-//        if (bean.getResult() == null) return;
-        if(page == 1){
+        if (bean == null) return;
+        if (page == 1) {
             mlist.clear();
         }
         if (bean.getResult().size() > 0) {
             if (isLoadMore) {
+
                 page = page + 1;
                 mlist.addAll(bean.getResult());
                 discoverAdapter.notifyDataSetChanged();
                 isLoadMore = false;
                 discoverAdapter.loadMoreComplete();
+
             }
             if (isRefreshing) {
                 page = page + 1;
@@ -213,7 +271,9 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
-                startActivity(intent);
+//                startActivity(intent);
+                // 这种启动方式：startActivity(intent);并不能返回结�
+                startActivityForResult(intent, REQUESTCODE);//REQUESTCODE--->1
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
@@ -225,27 +285,42 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         }
     }
 
+    // 为了获取结果
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // RESULT_OK，判断另外一个activity已经结束数据输入功能，Standard activity result:
+        // operation succeeded. 默认值是-1
+        if (requestCode == REQUESTCODE) {
+            switch (resultCode) {
+                case 10:
+                    int mindex = data.getIntExtra("index", 0);
+                    String isSaveImg = data.getStringExtra("isSaveImg");
+                    mlist.get(mindex).setIsSaveImg(isSaveImg);
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (resultCode) {
-//            case 1:
-//                this.refresh();
+                    break;
+//            case 11:
+//                if (requestCode == REQUESTCODE) {
+//                    int mindex = data.getIntExtra("index", 0);
+//                    String isSaveImg = data.getStringExtra("isSaveImg");
+//                    mlist.get(mindex).setIsSaveImg(isSaveImg);
+//                }
 //                break;
-//        }
-//    }
-
-    public void refresh() {
-        page = 1;
-        isRefreshing = true;
-        isLoadMore = false;
-        setMyadapter();
+            }
+        }
     }
+
+//    public void refresh() {
+//        mlist.get(1).setIsSaveImg("");
+////        page = 1;
+////        isRefreshing = true;
+////        isLoadMore = false;
+////        setMyadapter();
+//    }
 
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+//        refresh();
     }
 }
