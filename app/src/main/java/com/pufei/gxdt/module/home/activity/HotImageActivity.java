@@ -63,6 +63,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
     private List<PictureResultBean.ResultBean> picturelist = new ArrayList<>();
+    private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private HotAdapter adapter;
     private  int page = 1;
 
@@ -107,8 +108,12 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    page++;
-                    requestHot(page);
+                    if(cashList.size()>0){
+                        picturelist.addAll(cashList);
+                        adapter.notifyDataSetChanged();
+                        page++;
+                        requestHot(page);
+                    }
                 }
             }
         });
@@ -149,13 +154,17 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         }
     }
     private void requestHot(int page ){
-        try {
-            JSONObject jsonObject = KeyUtil.getJson(this);
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-            presenter.getHotImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                presenter.getHotImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            requestFailed.setVisibility(View.VISIBLE);
         }
     }
 
@@ -177,9 +186,15 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
        if(bean!=null){
            if(page == 1){
                picturelist.clear();
+               picturelist.addAll(bean.getResult());
+               adapter.notifyDataSetChanged();
+               page++;
+               requestHot(page);
+           }else {
+              cashList.clear();
+              cashList.addAll(bean.getResult());
            }
-           picturelist.addAll(bean.getResult());
-           adapter.notifyDataSetChanged();
+
        }
 
     }
