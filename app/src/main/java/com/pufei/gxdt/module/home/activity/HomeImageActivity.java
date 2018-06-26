@@ -74,7 +74,8 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     LinearLayout request_failed;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
-    List<PictureResultBean.ResultBean> list = new ArrayList<>();
+    private List<PictureResultBean.ResultBean> list = new ArrayList<>();
+    private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private PictureResultBean resultBean;
     private int page = 1;
     @Override
@@ -111,8 +112,12 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    page++;
-                    requestHomeImage(page);
+                    if(cashList.size()>0){
+                        list.addAll(cashList);
+                        adapter.notifyDataSetChanged();
+                        page++;
+                        requestHomeImage(page);
+                    }
                 }
             }
         });
@@ -258,15 +263,21 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         if(bean!=null){
             if(page == 1){
                 list.clear();
-            }
-            resultBean = bean;
-            if("0".equals(bean.getIsSave())){
-                ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                resultBean = bean;
+                if("0".equals(bean.getIsSave())){
+                    ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
+                }else{
+                    ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+                }
+                list.addAll(bean.getResult());
+                adapter.notifyDataSetChanged();
+                page++;
+                requestHomeImage(page);
             }else{
-                ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
+                cashList.clear();
+                cashList.addAll(bean.getResult());
             }
-            list.addAll(bean.getResult());
-            adapter.notifyDataSetChanged();
+
         }
 
     }

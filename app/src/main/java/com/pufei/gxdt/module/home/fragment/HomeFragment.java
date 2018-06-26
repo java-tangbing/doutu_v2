@@ -75,6 +75,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     private HomeListAdapter adapter;
     private int page = 1;
     private List<HomeResultBean.ResultBean> homeList = new ArrayList<>();
+    private List<HomeResultBean.ResultBean> cashList = new ArrayList<>();
     private List<HomeTypeBean.ResultBean> homeTypeList = new ArrayList<>();
     private View headView;
 
@@ -100,8 +101,12 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                       ) {
-                    page++;
-                    requestHomeList(page);
+                    if(cashList.size()>0){
+                        homeList.addAll(cashList);
+                        adapter.notifyDataSetChanged();
+                        page++;
+                        requestHomeList(page);
+                    }
                 }
             }
         });
@@ -287,9 +292,14 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         if (bean != null) {
             if(page == 1){
                 homeList.clear();
+                homeList.addAll(bean.getResult());
+                adapter.notifyDataSetChanged();
+                page++;
+                requestHomeList(page);
+            }else{
+                cashList.clear();
+                cashList.addAll(bean.getResult());
             }
-            homeList.addAll(bean.getResult());
-            adapter.notifyDataSetChanged();
         }
 
     }

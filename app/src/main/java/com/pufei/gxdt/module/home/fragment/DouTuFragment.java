@@ -49,6 +49,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
     LinearLayout request_failed;
     private ImageTypeAdapter adapter;
     private List<PictureResultBean.ResultBean> picturelist = new ArrayList<>();
+    private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
     public  static DouTuFragment newInstence(String id){
         DouTuFragment fragment = new DouTuFragment();
@@ -76,8 +77,12 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    page++;
-                    requestData(page);
+                    if(cashList.size()>0){
+                        picturelist.addAll(cashList);
+                        adapter.notifyDataSetChanged();
+                        page++;
+                        requestData(page);
+                    }
                 }
             }
         });
@@ -165,9 +170,15 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
         if (bean != null) {
             if (page == 1) {
                 picturelist.clear();
+                picturelist.addAll(bean.getResult());
+                adapter.notifyDataSetChanged();
+                page++;
+                requestData(page);
+            }else{
+                cashList.clear();
+                cashList.addAll(bean.getResult());
             }
-            picturelist.addAll(bean.getResult());
-            adapter.notifyDataSetChanged();
+
         }
 
     }
