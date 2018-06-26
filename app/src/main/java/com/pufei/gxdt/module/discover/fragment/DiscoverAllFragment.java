@@ -115,7 +115,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         }
 
         /**
-         * 如果返回true，数据全部加载完毕后会隐藏加载更�
+         * 如果返回true，数据全部加载完毕后会隐藏加载更�
          * 如果返回false，数据全部加载完毕后会显示getLoadEndViewId()布局
          */
         @Override
@@ -134,8 +134,8 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         }
 
         /**
-         * isLoadEndGone()为true，可以返�
-         * isLoadEndGone()为false，不能返�
+         * isLoadEndGone()为true，可以返�
+         * isLoadEndGone()为false，不能返�
          */
         @Override
         protected int getLoadEndViewId() {
@@ -272,7 +272,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
 //                startActivity(intent);
-                // 这种启动方式：startActivity(intent);并不能返回结�
+                // 这种启动方式：startActivity(intent);并不能返回结�
                 startActivityForResult(intent, REQUESTCODE);//REQUESTCODE--->1
                 break;
             case R.id.dis_item_user_img_list:
@@ -291,14 +291,14 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         super.onActivityResult(requestCode, resultCode, data);
         // RESULT_OK，判断另外一个activity已经结束数据输入功能，Standard activity result:
         // operation succeeded. 默认值是-1
-        switch (resultCode){
-            case 10:
-                if (requestCode == REQUESTCODE) {
+        if (requestCode == REQUESTCODE) {
+            switch (resultCode) {
+                case 10:
                     int mindex = data.getIntExtra("index", 0);
                     String isSaveImg = data.getStringExtra("isSaveImg");
                     mlist.get(mindex).setIsSaveImg(isSaveImg);
-                }
-                break;
+
+                    break;
 //            case 11:
 //                if (requestCode == REQUESTCODE) {
 //                    int mindex = data.getIntExtra("index", 0);
@@ -306,6 +306,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //                    mlist.get(mindex).setIsSaveImg(isSaveImg);
 //                }
 //                break;
+            }
         }
     }
 

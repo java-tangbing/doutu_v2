@@ -53,6 +53,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
     private boolean isRefreshing = false;
     private boolean isfirst = true;
     private String auth;
+    private final static int REQUESTCODE = 2; // 返回的结果码
 
     @Override
     public void initView() {
@@ -246,7 +247,8 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 bundle.putInt("picture_index", position);
                 bundle.putSerializable("picture_list", (Serializable) mlist);
                 intent.putExtras(bundle);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, REQUESTCODE);//REQUESTCODE--->2
                 break;
             case R.id.dis_item_user_img_list:
                 Intent intent01 = new Intent(activity, DisWorksActivity.class);
@@ -258,15 +260,24 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         }
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (resultCode) {
-//            case 1:
-//                this.refresh();
-//                break;
-//        }
-//    }
+    // 为了获取结果
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // RESULT_OK，判断另外一个activity已经结束数据输入功能，Standard activity result:
+        // operation succeeded. 默认值是-1
+        if (requestCode == REQUESTCODE) {
+            switch (resultCode) {
+                case 10:
+
+                    int mindex = data.getIntExtra("index", 0);
+                    String isSaveImg = data.getStringExtra("isSaveImg");
+                    mlist.get(mindex).setIsSaveImg(isSaveImg);
+
+                    break;
+            }
+        }
+    }
 
     public void refresh() {
         page = 1;
