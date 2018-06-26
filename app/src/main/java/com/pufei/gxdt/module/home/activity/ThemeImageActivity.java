@@ -52,6 +52,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     RelativeLayout your_original_layout;
     private ThemeImageAdpater adpater;
     private List<ThemeResultBean.ResultBean> list = new ArrayList<>();
+    private List<ThemeResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
     @Override
     public void initView() {
@@ -72,8 +73,12 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    page++;
-                    requestTheme(page);
+                    if(cashList.size()>0){
+                        list.addAll(cashList);
+                        adpater.notifyDataSetChanged();
+                        page++;
+                        requestTheme(page);
+                    }
                 }
             }
         });
@@ -176,9 +181,15 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
         if (bean!=null){
             if(page == 1){
                 list.clear();
+                list.addAll(bean.getResult());
+                adpater.notifyDataSetChanged();
+                page++;
+                requestTheme(page);
+            }else{
+                cashList.clear();;
+                cashList.addAll(bean.getResult());
             }
-            list.addAll(bean.getResult());
-            adpater.notifyDataSetChanged();
+
         }
 
     }

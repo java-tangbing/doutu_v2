@@ -24,6 +24,7 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
@@ -60,6 +61,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     RelativeLayout your_original_layout;
     private JokeAdvAdapter jokeAdapter;
     private List<JokeResultBean.ResultBean> jokeList = new ArrayList<>();
+    private List<JokeResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
     private NativeExpressADView nativeExpressADView;
     private NativeExpressAD nativeExpressAD;
@@ -82,8 +84,12 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1)) {
-                    page++;
-                    requestJoke(page);
+                    if(cashList.size()>0){
+                        jokeList.addAll(cashList);
+                        jokeAdapter.notifyDataSetChanged();
+                        page++;
+                        requestJoke(page);
+                    }
                 }
             }
         });
@@ -165,15 +171,19 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
         }
     }
     private void requestJoke(int page) {
-        try {
-            JSONObject jsonObject = KeyUtil.getJson(this);
-            jsonObject.put("page", page + "");
-            presenter.getJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        if (NetWorkUtil.isNetworkConnected(JokeActivity.this)) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                jsonObject.put("page", page + "");
+                presenter.getJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+        }else {
+            ToastUtils.showShort(this,"请检查网络设置");
         }
+    }
 
     @Override
     public int getLayout() {
@@ -196,9 +206,15 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     public void resultJokeList(JokeResultBean bean) {
         if(page == 1){
             jokeList.clear();
+            jokeList.addAll(bean.getResult());
+            jokeAdapter.notifyDataSetChanged();
+            page++;
+            requestJoke(page);
+        }else{
+            cashList.clear();
+            cashList.addAll(bean.getResult());
         }
-        jokeList.addAll(bean.getResult());
-        jokeAdapter.notifyDataSetChanged();
+
 
     }
 

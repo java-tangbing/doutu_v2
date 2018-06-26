@@ -101,9 +101,14 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
             case R.id.ll_input:
                 int type = activity.getTypes();
                 if(type == 1) {
-                    editTextBottomFragment.show(getChildFragmentManager(),"1");
+                    if(!editTextBottomFragment.isVisible()) {
+                        editTextBottomFragment.show(getChildFragmentManager(),"1");
+
+                    }
                 }else {
-                    editTextBottomFragment.show(getChildFragmentManager(),"0");
+                    if(!editTextBottomFragment.isVisible()) {
+                        editTextBottomFragment.show(getChildFragmentManager(),"0");
+                    }
                 }
                 break;
             case R.id.ll_select_color:

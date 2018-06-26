@@ -22,6 +22,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -53,6 +54,7 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
     TextView tv_content;
     private HotAdapter adapter;
     private List<PictureResultBean.ResultBean> list = new ArrayList<>();
+    private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
     private String id,title,timeString;
 
@@ -78,8 +80,12 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    page++;
-                    requestThemeDetail(page);
+                    if(cashList.size()>0){
+                        list.addAll(cashList);
+                        adapter.notifyDataSetChanged();
+                        page++;
+                        requestThemeDetail(page);
+                    }
                 }
             }
         });
@@ -153,15 +159,19 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
         }
     }
     private void requestThemeDetail(int page){
-        JSONObject jsonObject = KeyUtil.getJson(this);
-        try{
-            jsonObject.put("category_id", id);
-            jsonObject.put("page", String.valueOf(page));
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-        }catch (JSONException e){
-            e.printStackTrace();
+        if (NetWorkUtil.isNetworkConnected(PictureActivity.this)) {
+            JSONObject jsonObject = KeyUtil.getJson(this);
+            try {
+                jsonObject.put("category_id", id);
+                jsonObject.put("page", String.valueOf(page));
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            presenter.getThemeDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
+        }else{
+            ToastUtils.showShort(this,"请检查网络设置");
         }
-        presenter.getThemeDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
     }
 
     @Override
@@ -187,9 +197,15 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
         if(bean!=null){
             if(page == 1){
                 list.clear();
+                list.addAll(bean.getResult());
+                adapter.notifyDataSetChanged();
+                page++;
+                requestThemeDetail(page);
+            }else{
+                cashList.clear();
+                cashList.addAll(bean.getResult());
             }
-            list.addAll(bean.getResult());
-            adapter.notifyDataSetChanged();
+
         }
 
     }

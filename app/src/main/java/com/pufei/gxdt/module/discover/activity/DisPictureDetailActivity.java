@@ -2,6 +2,8 @@ package com.pufei.gxdt.module.discover.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -190,6 +192,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         super.onResume();
         setMyAdapter();
         getImageDetailList();
+        hideAlertDialog(sharedialog);
     }
 
     public void getImageDetailList() {
@@ -610,18 +613,18 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
         @Override
         public void onResult(SHARE_MEDIA platform) {
             ToastUtils.showShort(DisPictureDetailActivity.this, "分享成功");
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(DisPictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            sharedialog.dismiss();
+            hideAlertDialog(sharedialog);
             ToastUtils.showShort(DisPictureDetailActivity.this, "分享取消");
         }
     };
@@ -667,6 +670,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             } else {
                 image = new UMImage(this, BitmapFactory.decodeFile(URL));
             }
+            UMImage thumb = new UMImage(this,URL);
+            image.setThumb(thumb);
             try {
                 new ShareAction(this).withMedia(image)
                         .setPlatform(share_media)
@@ -743,4 +748,18 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             }
         });
     }
+
+    public void hideAlertDialog(AlertDialog mProgressDialog) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            Context context = ((ContextWrapper) mProgressDialog.getContext()).getBaseContext();
+            if (context instanceof Activity) {
+                if (!((Activity) context).isFinishing())
+                    mProgressDialog.dismiss();
+            } else {
+                mProgressDialog.dismiss();
+            }
+            mProgressDialog = null;
+        }
+    }
+
 }

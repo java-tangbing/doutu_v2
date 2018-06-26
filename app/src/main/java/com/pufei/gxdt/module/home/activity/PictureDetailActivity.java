@@ -61,6 +61,7 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMEmoji;
 import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONException;
@@ -280,7 +281,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                                 e.printStackTrace();
                             }
                         } else {
-                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连结");
+                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连接");
                         }
 
                     } else {//取消收藏
@@ -295,7 +296,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                                 e.printStackTrace();
                             }
                         } else {
-                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连结");
+                            ToastUtils.showShort(PictureDetailActivity.this, "无网络连接");
                         }
                     }
                 } else {
@@ -350,7 +351,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             }
 
         } else {
-            ToastUtils.showShort(PictureDetailActivity.this, "无网络连结");
+            ToastUtils.showShort(PictureDetailActivity.this, "无网络连接");
         }
     }
 
@@ -533,23 +534,45 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     }
 
     private void WXshowShare(String URL, SHARE_MEDIA share_media) {//分享
-        if (URL != null) {
-            UMImage image = null;
+        if (share_media != null && URL != null) {
             if (URL.contains("http")) {
-                image = new UMImage(this, URL);
-            } else {
-                image = new UMImage(this, BitmapFactory.decodeFile(URL));
-            }
-            UMImage thumb = new UMImage(this, URL);
-            image.setThumb(thumb);
-            try {
+                UMEmoji image = new UMEmoji(this, URL);
+                image.compressStyle = UMEmoji.CompressStyle.SCALE;
+                image.compressStyle = UMEmoji.CompressStyle.QUALITY;
+                image.setThumb(new UMEmoji(this, URL));
                 new ShareAction(this).withMedia(image)
                         .setPlatform(share_media)
                         .setCallback(umShareListener).share();
-            } catch (NullPointerException e) {
-                ToastUtils.showShort(PictureDetailActivity.this, "选择的内容为空，请重试");
-                e.printStackTrace();
+            } else {
+                UMEmoji image = new UMEmoji(this, new File(URL));
+                image.setThumb(new UMEmoji(this, new File(URL)));
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
             }
+        } else {
+            if (URL.contains("http")) {
+                UMImage image = new UMImage(this, URL);
+                image.compressStyle = UMImage.CompressStyle.SCALE;
+                image.compressStyle = UMImage.CompressStyle.QUALITY;
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } else {
+                try {
+                    UMImage image = new UMImage(this, new File(URL));
+                    image.compressStyle = UMImage.CompressStyle.SCALE;
+                    image.compressStyle = UMImage.CompressStyle.QUALITY;
+                    image.setThumb(new UMEmoji(this, new File(URL)));
+                    new ShareAction(this).withMedia(image)
+                            .setPlatform(share_media)
+                            .setCallback(umShareListener).share();
+                } catch (Exception e) {
+                    ToastUtils.showLong(this, "选中图片错误，请重新选择");
+                    e.printStackTrace();
+                }
+            }
+
         }
 
     }
