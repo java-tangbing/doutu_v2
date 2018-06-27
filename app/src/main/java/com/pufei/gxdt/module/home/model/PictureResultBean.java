@@ -75,6 +75,24 @@ public class PictureResultBean{
         private String orgintable;
         private String orginid;
         private String isSaveImg;
+        private String is_show;
+        private String make_url;
+
+        public String getMake_url() {
+            return make_url;
+        }
+
+        public void setMake_url(String make_url) {
+            this.make_url = make_url;
+        }
+
+        public String getIs_show() {
+            return is_show;
+        }
+
+        public void setIs_show(String is_show) {
+            this.is_show = is_show;
+        }
 
         public String getId() {
             return id;

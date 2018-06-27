@@ -1,5 +1,6 @@
 package com.pufei.gxdt.api;
 
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.bean.SetAvatarResultBean;
@@ -29,5 +30,11 @@ public interface PersonalApi {
 
     @POST("User/getSets")
     Observable<SetsBean> getSets(@Body RequestBody body);
+
+    @POST("User/setMyDesignImages")
+    Observable<FavoriteBean> setMyDesignImages(@Body RequestBody body);
+
+    @POST("User/delMyDesignImages")
+    Observable<FavoriteBean> delMyDesignImages(@Body RequestBody body);
 
 }

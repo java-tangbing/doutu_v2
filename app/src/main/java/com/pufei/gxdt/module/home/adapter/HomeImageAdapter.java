@@ -41,13 +41,8 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
     }
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
-       // holder.iv2.setTag(position);
         holder.itemView.setTag(position);
         Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
-//        glide.load(AddHeader.buildGlideUrl()).crossFade().placeholder(R.mipmap.newloding).override(100,80)
-//                .diskCacheStrategy(DiskCacheStrategy.RESULT).fitCenter().dontAnimate()
-//                .into(holder.iv1);
-
     }
     @Override
     public void onViewDetachedFromWindow(MyHodler holder) {
@@ -78,16 +73,5 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
         void setOnItemClickListener(View itemview, View view, int postion);
     }
 
-   public void releaseImageViewResouce(ImageView imageView) {
-       if (imageView == null) return;
-       Drawable drawable = imageView.getDrawable();
-       if (drawable != null && drawable instanceof BitmapDrawable) {
-           BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-           Bitmap bitmap = bitmapDrawable.getBitmap();
-           if (bitmap != null && !bitmap.isRecycled()) {
-               bitmap.recycle();
-               System.gc();
-           }
-       }
-   }
+
 }
