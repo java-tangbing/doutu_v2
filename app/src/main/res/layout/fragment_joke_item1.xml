@@ -10,45 +10,43 @@
         android:layout_height="wrap_content">
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:gravity="left"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:textColor="#333"
             android:id="@+id/frgament_second_joke_tiltletv"
-            android:textSize="18sp"
-            android:text="中国小老板掌握美国大秘密!"
+            android:textSize="17sp"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-
+            <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:background="@drawable/border_shape"
                 android:layout_marginLeft="2dp"
                 android:id="@+id/fragment_second_joke_image1"
                 android:layout_weight="1"
-                android:src="@mipmap/nianqingren"
-                android:layout_width="103dp"
-                android:layout_height="93dp" />
-            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+            <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:background="@drawable/border_shape"
                 android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_second_joke_image2"
                 android:layout_weight="1"
-                android:src="@mipmap/nianqingren"
-                android:layout_width="103dp"
-                android:layout_height="93dp" />
-            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+            <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:background="@drawable/border_shape"
                 android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_second_joke_image3"
                 android:layout_weight="1"
-                android:src="@mipmap/nianqingren"
-                android:layout_width="103dp"
-                android:layout_height="93dp" />
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
           <!--  <ImageView
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"
@@ -133,6 +131,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:id="@+id/tv_eyes"
@@ -178,7 +177,7 @@
 
 <View
     android:background="@color/bg_invite_text"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="15dp"
     android:layout_width="match_parent"
     android:layout_height="1dp">
 

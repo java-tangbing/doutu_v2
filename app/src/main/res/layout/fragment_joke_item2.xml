@@ -5,24 +5,25 @@
     android:layout_marginRight="10dp"
     android:layout_height="wrap_content">
 <LinearLayout
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="15dp"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageView
-        android:scaleType="fitXY"
-        android:layout_marginBottom="10dp"
+    <com.pufei.gxdt.widgets.RoundImageView
         android:layout_marginRight="18dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/border_shape"
         android:id="@+id/fragment_joke_itme2_image"
-        android:layout_width="103dp"
-        android:layout_height="93dp" />
+        android:layout_width="110dp"
+        android:layout_height="110dp" />
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:layout_marginLeft="8dp"
             android:layout_marginRight="15dp"
             android:gravity="left"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textColor="#333"
             android:layout_weight="3"
+            android:text=""
             android:id="@+id/fragment_joke_itme2_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -31,6 +32,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:id="@+id/tv_eyes"
@@ -73,10 +75,10 @@
         </LinearLayout>
     </LinearLayout>
        <View
-           android:layout_marginTop="10dp"
+           android:layout_marginTop="15dp"
            android:background="@color/bg_invite_text"
            android:layout_width="match_parent"
-           android:layout_height="0.5dp">
+           android:layout_height="1dp">
        </View>
     <RelativeLayout
         android:visibility="gone"

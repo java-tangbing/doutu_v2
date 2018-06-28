@@ -68,7 +68,7 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
         rl_theme.setLayoutManager(layoutManager);
         adapter = new HotAdapter(PictureActivity.this, list);
         rl_theme.setPullRefreshEnabled(false);
-        rl_theme.addItemDecoration(new SpaceItemDecoration(dp2px(PictureActivity.this, 10)));
+        rl_theme.addItemDecoration(new SpaceItemDecoration(0,3));
         rl_theme.setAdapter(adapter);
         srl_theme_detail.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         srl_theme_detail.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));

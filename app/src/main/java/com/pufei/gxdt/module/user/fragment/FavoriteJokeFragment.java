@@ -63,7 +63,7 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
     public void initView() {
         jokeAdapter = new FavoriteJokeAdapter(getActivity(), jokeList,1);
         rl_joke_xryv.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        rl_joke_xryv.addItemDecoration(new SpaceItemDecoration(dp2px(getActivity(), 10)));
+        rl_joke_xryv.addItemDecoration(new SpaceItemDecoration(10,3));
         rl_joke_xryv.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));

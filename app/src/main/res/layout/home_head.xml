@@ -14,30 +14,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="horizontal">
-        <ImageView
+        <com.pufei.gxdt.widgets.RoundImageView
             android:id="@+id/tv_hot_face"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="66dp"
             android:layout_weight="1"
-            android:background="@mipmap/hone_bt_hotexpression"
-            android:layout_height="wrap_content" />
-        <ImageView
+            android:scaleType="fitXY"
+            android:background="@drawable/border_shape"
+            android:src="@mipmap/hone_bt_hotexpression"
+          />
+        <com.pufei.gxdt.widgets.RoundImageView
             android:id="@+id/tv_theme_face"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="66dp"
             android:layout_weight="1"
-            android:background="@mipmap/hone_bt_theme"
+            android:scaleType="fitXY"
+            android:background="@drawable/border_shape"
+            android:src="@mipmap/hone_bt_theme"
             android:layout_marginLeft="5dp"
-            android:layout_height="wrap_content"
             />
-        <ImageView
+        <com.pufei.gxdt.widgets.RoundImageView
             android:id="@+id/tv_joke"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="66dp"
             android:layout_weight="1"
-            android:background="@mipmap/hone_bt_joke"
+            android:scaleType="fitXY"
+            android:background="@drawable/border_shape"
+            android:src="@mipmap/hone_bt_joke"
             android:layout_marginLeft="5dp"
-            android:layout_height="wrap_content"
            />
 
     </LinearLayout>
@@ -45,7 +52,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:layout_marginTop="5dp"
-        android:background="#ececec"
-        />
+        android:layout_marginTop="15dp"
+        android:background="#ececec" />
 </LinearLayout>

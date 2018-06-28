@@ -1,51 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/common_title" />
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/line_color"/>
-    <TextView
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_top_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#333"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:layout_marginLeft="10dp"
-        android:maxLines="1"
-        android:text="标题"/>
-    <LinearLayout
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <com.pufei.gxdt.widgets.MyFrontTextView
-            android:id="@+id/tv_eyes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_normal"
-            android:textSize="12sp"
-            android:drawableLeft="@mipmap/con_ic_eyes"
-            android:drawablePadding="5dp"
-            android:text="0" />
 
-        <com.pufei.gxdt.widgets.MyFrontTextView
-            android:id="@+id/tv_hot"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="21dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/con_ic_hot"
-            android:textColor="@color/color_text_normal"
-            android:drawablePadding="5dp"
-            android:textSize="12sp"
-            android:text="0" />
-    </LinearLayout>
-    <include layout="@layout/adver_layout"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -55,6 +18,8 @@
             android:layout_height="match_parent">
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:focusableInTouchMode="true"
                 android:id="@+id/xrl_home_image"
                 android:layout_width="match_parent"

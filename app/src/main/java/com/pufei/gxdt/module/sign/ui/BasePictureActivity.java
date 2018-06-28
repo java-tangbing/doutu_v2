@@ -123,7 +123,7 @@ public class BasePictureActivity extends AppCompatActivity {
         dataEmptyTitle.setText(getDataEmpty());
         activityBasepictureRc.setPullRefreshEnabled(false);
         activityBasepictureRc.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-        activityBasepictureRc.addItemDecoration(new SpaceItemDecoration(DensityUtils.dp2px(this, 5)));
+        activityBasepictureRc.addItemDecoration(new SpaceItemDecoration(0,3));
         activityBasepictureRc.setAdapter(adapter1);
     }
 

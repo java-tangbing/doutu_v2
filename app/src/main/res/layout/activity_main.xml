@@ -12,7 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-
+    <View
+        android:background="@color/bg_invite_text"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp">
+    </View>
     <android.support.design.widget.TabLayout
         android:id="@+id/home_tab"
         android:layout_width="match_parent"

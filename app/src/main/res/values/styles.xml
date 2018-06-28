@@ -42,5 +42,7 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
-
+    <style name="TabText" parent="TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

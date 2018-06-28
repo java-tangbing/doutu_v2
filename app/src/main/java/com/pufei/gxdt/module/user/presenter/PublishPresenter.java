@@ -55,7 +55,7 @@ public class PublishPresenter extends BasePresenter<PublishView> {
                 .subscribe(new Consumer<FavoriteBean>() {
                     @Override
                     public void accept(FavoriteBean result) throws Exception {
-                        baseview.setMyDesignImagesResult(result);
+                        baseview.delMyDesignImagesResult(result);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
