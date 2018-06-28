@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
     android:focusableInTouchMode="true"
     android:layout_height="match_parent">
     <ScrollView
@@ -86,6 +88,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/line_image"
         android:id="@+id/iv_now_picture"
         android:layout_width="match_parent"
         android:layout_height="320dp">
@@ -202,7 +205,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="15dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="10dp">
             <View
                 android:layout_width="3dp"

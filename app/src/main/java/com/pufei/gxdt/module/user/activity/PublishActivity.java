@@ -104,6 +104,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
+    private int show = 1,index;
     private View headView;
     private AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
@@ -117,7 +118,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         jokeAdapter = new PublishAdapter(PublishActivity.this,jokeList);
         final GridLayoutManager layoutManager = new GridLayoutManager(PublishActivity.this, 3);
         rl_publish.setLayoutManager(layoutManager);
-        rl_publish.addItemDecoration(new SpaceItemDecoration(dp2px(PublishActivity.this, 10)));
+        rl_publish.addItemDecoration(new SpaceItemDecoration(10,3));
         rl_publish.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
@@ -191,6 +192,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
             @Override
             public void setOnItemLongClickListener(View itemview, View view, int postion) {
+                index = postion;
                 showDialog(jokeList.get(postion).getUrl(),Integer.parseInt(jokeList.get(postion).getIs_show()),jokeList.get(postion).getId());
             }
         });
@@ -206,7 +208,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                     @Override
                     public void getChildView(final View view, int layoutResId) {
                         MyFrontTextView textView =  view.findViewById(R.id.tv_isShow);
-                        final int show;
                         if(isShow == 1){
                             textView.setText("设为不可见 ");
                             show = 0;
@@ -342,8 +343,12 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     @Override
     public void setMyDesignImagesResult(FavoriteBean bean) {
         if(bean!=null){
-            page = 1;
-            requestJoke(page);
+            if(show == 1){
+                jokeList.get(index).setIs_show("1");
+            }else{
+                jokeList.get(index).setIs_show("0");
+            }
+            jokeAdapter.notifyDataSetChanged();
             ToastUtils.showShort(this,bean.getMsg());
         }
     }
@@ -351,7 +356,9 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     @Override
     public void delMyDesignImagesResult(FavoriteBean bean) {
         if(bean!=null){
-            requestJoke(1);
+            jokeList.remove(index);
+            jokeAdapter.notifyItemRemoved(index);
+            jokeAdapter.notifyDataSetChanged();
             ToastUtils.showShort(this,bean.getMsg());
         }
     }

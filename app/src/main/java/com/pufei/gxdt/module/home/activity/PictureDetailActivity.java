@@ -56,6 +56,7 @@ import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UrlString;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
@@ -121,6 +122,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         pictureList = (List<PictureResultBean.ResultBean>) bundle.getSerializable("picture_list");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        rl_picture.addItemDecoration(new SpaceItemDecoration(10,0));
         rl_picture.setLayoutManager(linearLayoutManager);
         adapter = new OtherPictureAdapter(PictureDetailActivity.this, pictureList);
         rl_picture.setAdapter(adapter);

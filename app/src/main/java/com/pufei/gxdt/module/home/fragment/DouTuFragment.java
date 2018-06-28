@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -63,7 +64,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
     public void initView() {
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
         xrl_doutu.setLayoutManager(layoutManager);
-        xrl_doutu.addItemDecoration(new SpaceItemDecoration(dp2px(getActivity(), 10)));
+        xrl_doutu.addItemDecoration(new SpaceItemDecoration(10,3));
         adapter = new ImageTypeAdapter(getActivity(),DouTuFragment.this, picturelist);
         xrl_doutu.setAdapter(adapter);
         srl_doutu.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
@@ -142,10 +143,6 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
         }
     }
 
-    private int dp2px(Context context, float dpVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context.getResources().getDisplayMetrics());
-    }
 
     @Override
     public int getLayout() {

@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
+import com.pufei.gxdt.utils.LogUtils;
+
 import java.util.List;
 
 /**
@@ -34,7 +36,7 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.MyHodler
         return list.size();
     }
     @Override
-    public void onBindViewHolder(final MyHodler holder, final int position) {
+    public void onBindViewHolder(MyHodler holder,  int position) {
         holder.itemView.setTag(position);
         holder.setIsRecyclable(false);
         if(list.get(position).getIs_show()!=null){
@@ -44,11 +46,31 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.MyHodler
                 holder.iv_black_bg.setImageResource(R.color.black);
                 Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
                 holder.hot_top.setBackgroundResource(R.mipmap.user_ic_myexpression_set_invisible);
+                holder.hot_top.setAlpha(0.7f);
             }else{
                 Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
             }
         }
     }
+//    @Override
+//    public void onBindViewHolder( MyHodler holder, int position, List<Object> payloads) {
+//        LogUtils.i("tb","局部刷新");
+//        if (payloads.isEmpty()) {
+//            onBindViewHolder(holder, position);
+//        } else {
+//            if(list.get(position).getIs_show()!=null){
+//                int isShow = Integer.parseInt(list.get(position).getIs_show());
+//                if(isShow == 0){
+//                    holder.iv_black_bg.setAlpha(0.5f);
+//                    holder.iv_black_bg.setImageResource(R.color.black);
+//                    Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
+//                    holder.hot_top.setBackgroundResource(R.mipmap.user_ic_myexpression_set_invisible);
+//                }else{
+//                    Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
+//                }
+//            }
+//        }
+//    }
     @Override
     public void onViewDetachedFromWindow(MyHodler holder) {
         super.onViewDetachedFromWindow(holder);
@@ -69,7 +91,9 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.MyHodler
         @Override
         public void onClick(View v) {
             if (mListener!=null){
-                mListener.setOnItemClickListener(itemView,v, (Integer) v.getTag());
+                if(v!=null) {
+                    mListener.setOnItemClickListener(itemView, v, (Integer) v.getTag());
+                }
             }
         }
 

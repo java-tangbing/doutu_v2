@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,21 +64,22 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     SmartRefreshLayout srf_home_image;
     @BindView(R.id.xrl_home_image)
     XRecyclerView xRecyclerView;
-    @BindView(R.id.tv_top_title)
-    TextView tv_top_title;
-    @BindView(R.id.tv_hot)
-    TextView tv_hot;
-    @BindView(R.id.tv_eyes)
-    TextView tv_eyes;
+//    @BindView(R.id.tv_top_title)
+//    TextView tv_top_title;
+//    @BindView(R.id.tv_hot)
+//    TextView tv_hot;
+//    @BindView(R.id.tv_eyes)
+//    TextView tv_eyes;
     private HomeImageAdapter adapter;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
-    @BindView(R.id.your_original_layout)
-    RelativeLayout your_original_layout;
+//    @BindView(R.id.your_original_layout)
+//    RelativeLayout your_original_layout;
     private List<PictureResultBean.ResultBean> list = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private PictureResultBean resultBean;
     private int page = 1;
+    View headView;
     @Override
     public void setPresenter(ThemeImagePresenter presenter) {
         if (presenter == null) {
@@ -90,16 +92,24 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     @Override
     public void initView() {
         tv_title.setText("");
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,2);
+        LayoutInflater lif = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        headView = lif.inflate(R.layout.theme_head, null);
+        xRecyclerView.addHeaderView(headView);
+        RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
+        AdvUtil.getInstance().getAdvHttp(this,relativeLayout,2);
+        TextView tv_top_title = headView.findViewById(R.id.tv_top_title);
+        TextView tv_hot = headView.findViewById(R.id.tv_hot);
+        TextView tv_eyes = headView.findViewById(R.id.tv_eyes);
         tv_top_title.setText(getIntent().getExtras().getString("title"));
         tv_hot.setText(getIntent().getExtras().getString("hot"));
         tv_eyes.setText(getIntent().getExtras().getString("eyes"));
+
         ll_left.setVisibility(View.VISIBLE);
         ll_right.setVisibility(View.VISIBLE);
         ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
         final GridLayoutManager layoutManager = new GridLayoutManager(HomeImageActivity.this, 3);
         xRecyclerView.setLayoutManager(layoutManager);
-        xRecyclerView.addItemDecoration(new SpaceItemDecoration(dp2px(HomeImageActivity.this, 10)));
+        xRecyclerView.addItemDecoration(new SpaceItemDecoration(10,3));
         adapter = new HomeImageAdapter(HomeImageActivity.this, list);
         xRecyclerView.setAdapter(adapter);
         srf_home_image.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
@@ -202,10 +212,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         }else{
                 request_failed.setVisibility(View.VISIBLE);
             }
-    }
-    private  int dp2px(Context context, float dpVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context.getResources().getDisplayMetrics());
     }
     @OnClick({R.id.ll_title_left,R.id.ll_title_right})
     public  void viewClicked(View view){
