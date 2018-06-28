@@ -30,5 +30,9 @@ public class TextDraft extends BaseModel {
     @Column
     public float rotation;
     @Column
+    public float width;
+    @Column
+    public float height;
+    @Column
     public boolean isDraft;
 }

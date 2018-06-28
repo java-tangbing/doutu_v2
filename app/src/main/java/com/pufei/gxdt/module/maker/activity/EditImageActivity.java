@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,22 +68,27 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
-import ja.burhanrashid52.photoeditor.PhotoEditor;
-import ja.burhanrashid52.photoeditor.PhotoEditorView;
-import ja.burhanrashid52.photoeditor.ViewType;
-import ja.burhanrashid52.photoeditor.bean.AddViewBean;
-import ja.burhanrashid52.photoeditor.bean.BitmapBean;
-import ja.burhanrashid52.photoeditor.bean.DraftImageBean;
-import ja.burhanrashid52.photoeditor.bean.DraftTextBean;
+import photoeditor.BrushDrawingView;
+import photoeditor.OnPhotoEditorListener;
+import photoeditor.PhotoEditor;
+import photoeditor.PhotoEditorView;
+import photoeditor.ViewType;
+import photoeditor.bean.AddViewBean;
+import photoeditor.bean.BitmapBean;
+import photoeditor.bean.DraftImageBean;
+import photoeditor.bean.DraftTextBean;
+
 
 public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> implements EditImageView, OnPhotoEditorListener, ImageStickerFragment.ShowBitmapCallback, ImageTextEditFragment.GetInputTextCallback,
         ImageStickerFragment.ShowGifCallback, ImageBlushFragment.SetBlushPropertiesListener {
@@ -138,11 +145,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private Typeface xindijianzhi;
     private Typeface xindixiaowanzixiaoxueban;
     private int colorMode;
+    private boolean isAddBrushImage = false;
+
 
     @Override
     public void initView() {
         addFragment();
-        defaultSelect();
 
         fangzhengjianzhi = Typeface.createFromAsset(getAssets(), "fangzhengjianzhi.ttf");
         fangzhengkatong = Typeface.createFromAsset(getAssets(), "fangzhengkatong.ttf");
@@ -158,8 +166,10 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
         mPhotoEditor.setOnPhotoEditorListener(this);
         mPhotoEditor.setBrushColor(ContextCompat.getColor(this, R.color.select_color1));
+        mPhotoEditor.setBrushDrawingMode(false);
         imageDrafts = new ArrayList<>();
         textDrafts = new ArrayList<>();
+        defaultSelect();
     }
 
     @Override
@@ -222,12 +232,14 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         for (int i = 0; i < beans.size(); i++) {
             final PictureDetailBean.ResultBean.DataBean dataBean = beans.get(i);
             if (dataBean.getUrl().isEmpty()) {
-                DraftTextBean bean = new DraftTextBean();
+                final DraftTextBean bean = new DraftTextBean();
                 bean.setTranslationX(Float.parseFloat(dataBean.getCenterX()));
                 bean.setTranslationY(Float.parseFloat(dataBean.getCenterY()));
                 bean.setScaleX(Float.parseFloat(dataBean.getZoom()));
                 bean.setScaleY(Float.parseFloat(dataBean.getZoom()));
                 bean.setRotation(Float.parseFloat(dataBean.getRolling()));
+                bean.setWidth(Float.parseFloat(dataBean.getWidth()));
+                bean.setHeight(Float.parseFloat(dataBean.getHeight()));
                 String text1 = "";
                 try {
                     text1 = URLDecoder.decode(dataBean.getTextName(), "utf-8");
@@ -251,7 +263,16 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     bean.setTextFont(xindixiaowanzixiaoxueban);
                 }
 //                bean.setTextSize(Integer.parseInt(dataBean.getTextFontSize()));
-                mPhotoEditor.reAddText(bean);
+                photoEditorView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        photoEditorView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        bean.setBgHeight(photoEditorView.getHeight());
+                        bean.setBgWidth(photoEditorView.getWidth());
+                        mPhotoEditor.reAddText(bean);
+                        Log.e("fsdfsd", photoEditorView.getWidth() + " " + photoEditorView.getHeight());
+                    }
+                });
             } else {
                 final DraftImageBean bean = new DraftImageBean();
                 bean.setTranslationX(Float.parseFloat(dataBean.getCenterX()));
@@ -259,15 +280,23 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 bean.setScaleX(Float.parseFloat(dataBean.getZoom()));
                 bean.setScaleY(Float.parseFloat(dataBean.getZoom()));
                 bean.setRotation(Float.parseFloat(dataBean.getRolling()));
-                float width = Float.parseFloat(dataBean.getWidth());
-                float height = Float.parseFloat(dataBean.getHeight());
-                SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>((int) width, (int) height) {
+                bean.setImageHeight(Float.parseFloat(dataBean.getHeight()));
+                bean.setImageWidth(Float.parseFloat(dataBean.getWidth()));
+                photoEditorView.post(new Runnable() {
                     @Override
-                    public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-                        mPhotoEditor.reAddImage(bean, resource, dataBean.getUrl());
+                    public void run() {
+                        bean.setBgHeight(photoEditorView.getHeight());
+                        bean.setBgWidth(photoEditorView.getWidth());
+                        SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                                mPhotoEditor.reAddImage(bean, resource, dataBean.getUrl());
+                            }
+                        };
+                        GlideApp.with(EditImageActivity.this).asBitmap().load(dataBean.getUrl()).into(simpleTarget);
                     }
-                };
-                GlideApp.with(this).asBitmap().load(dataBean.getUrl()).into(simpleTarget);
+                });
+
             }
         }
     }
@@ -316,7 +345,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setScaleX(draft.scaleX);
             bean.setScaleY(draft.scaleY);
             bean.setRotation(draft.rotation);
-            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(draft.imageWidth, draft.imageHeight) {
+            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
                     mPhotoEditor.reAddImage(bean, resource, draft.stickerImagePath);
@@ -398,6 +427,8 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.btn_next:
                 if (imagePath != null) {
+                    isAddBrushImage = false;
+                    addBrushImg();
                     saveToDraft(false);
                     if (imagePath.contains("gif") || imagePath.contains("GIF")) {
                         if (gifFile == null) {
@@ -417,9 +448,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     if (imagePath.contains("gif") || imagePath.contains("GIF")) {
                         if (gifFile == null) {
                             gifFile = new File(imagePath);
+                            gifFile = new File(imagePath);
                         }
+                        addBrushImg();
                         saveGif(true);
                     } else {
+                        addBrushImg();
                         saveImage(true);
                     }
                 }
@@ -454,7 +488,35 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         }
     }
 
-    private void saveToDraft(boolean isDraft) {
+    private void addBrushImg() {
+        List<AddViewBean> beans = mPhotoEditor.getAddedViews();
+        if(beans.size()> 0) {
+            for (int i = 0; i < beans.size(); i++) {
+                AddViewBean bean = beans.get(i);
+                if(bean.getType() == ViewType.BRUSH_DRAWING) {
+                    if (!isAddBrushImage) {
+                        BrushDrawingView brush = (BrushDrawingView) bean.getView();
+                        Bitmap map = brush.generateBimap();
+                        if (map != null) {
+                            try {
+                                File file = File.createTempFile(System.currentTimeMillis() +".png",null,getCacheDir());
+                                FileOutputStream outputStream = new FileOutputStream(file);
+                                map.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+                                outputStream.close();
+                                mPhotoEditor.addBrushImage(map,brush.getMinTouchX(),brush.getMinTouchY(),file.getPath());
+                                mPhotoEditor.clearBrushAllViews();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        isAddBrushImage = true;
+                    }
+                }
+            }
+        }
+    }
+
+    private void saveToDraft(final boolean isDraft) {
         if (!isDraft) {
             showLoading("保存中...");
         }
@@ -484,7 +546,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         info.insert();
         if (beans.size() != 0) {
             for (int i = 0; i < beans.size(); i++) {
-                AddViewBean bean = beans.get(i);
+                final AddViewBean bean = beans.get(i);
                 switch (bean.getType()) {
                     case TEXT:
                         TextDraft textDraft = new TextDraft();
@@ -507,8 +569,14 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         } else if (type == xindixiaowanzixiaoxueban) {
                             textDraft.textFont = "FZJZJW--GB1-0";
                         }
-                        textDraft.translationX = textRoot.getTranslationX();
-                        textDraft.translationY = textRoot.getTranslationY();
+                        float centerX = ((float) textRoot.getWidth() / 2 + ((float) textRoot.getLeft() + (float) textRoot.getTranslationX())) / (float) photoEditorView.getWidth();
+                        float centerY = ((float) textRoot.getHeight() / 2 + (((float) textRoot.getTop()) + (float) textRoot.getTranslationY())) / (float) photoEditorView.getHeight();
+                        float width = (float) tv.getWidth() / (float) photoEditorView.getWidth();
+                        float height = (float) tv.getHeight() / (float) photoEditorView.getHeight();
+                        textDraft.width = width;
+                        textDraft.height = height;
+                        textDraft.translationX = centerX;
+                        textDraft.translationY = centerY;
                         textDraft.scaleX = textRoot.getScaleX();
                         textDraft.scaleY = textRoot.getScaleY();
                         textDraft.rotation = textRoot.getRotation();
@@ -517,22 +585,38 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         textDraft.insert();
                         break;
                     case IMAGE:
-                        ImageDraft imageDraft = new ImageDraft();
-                        ImageView iv = (ImageView) bean.getAddView();
-                        FrameLayout rootview = (FrameLayout) bean.getView();
-                        imageDraft.translationX = rootview.getTranslationX();
-                        imageDraft.translationY = rootview.getTranslationY();
-                        imageDraft.scaleX = rootview.getScaleX();
-                        imageDraft.scaleY = rootview.getScaleY();
-                        imageDraft.rotation = rootview.getRotation();
-                        imageDraft.imageHeight = iv.getHeight();
-                        imageDraft.imageWidth = iv.getWidth();
-                        imageDraft.stickerImagePath = bean.getChildImagePath();
-                        imageDraft.imageId = imageId;
-                        imageDraft.isDraft = isDraft;
-                        imageDraft.insert();
+                        final ImageDraft imageDraft = new ImageDraft();
+                        final ImageView iv = (ImageView) bean.getAddView();
+                        final FrameLayout rootview = (FrameLayout) bean.getView();
+                        rootview.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageDraft.translationX = ((float) rootview.getWidth() / 2 + (float) rootview.getLeft() + rootview.getTranslationX()) / (float) photoEditorView.getWidth();
+                                imageDraft.translationY = ((float) rootview.getHeight() / 2 + (float) rootview.getTop() + (float) rootview.getTranslationY()) / (float) photoEditorView.getHeight();
+                                imageDraft.scaleX = rootview.getScaleX();
+                                imageDraft.scaleY = rootview.getScaleY();
+                                imageDraft.rotation = rootview.getRotation();
+                                imageDraft.stickerImagePath = bean.getChildImagePath();
+                                imageDraft.imageId = imageId;
+                                imageDraft.isDraft = isDraft;
+                                imageDraft.imageHeight = (float) iv.getHeight() / (float) photoEditorView.getHeight();
+                                imageDraft.imageWidth = (float) iv.getWidth() / (float) photoEditorView.getWidth();
+                                imageDraft.insert();
+                                Log.e("widht", iv.getWidth()  + " " +  iv.getHeight() );
+                            }
+                        });
                         break;
                     case BRUSH_DRAWING:
+
+
+//                        SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
+//                            @Override
+//                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                                Log.e("brush",resource.getWidth() +" " + resource.getHeight());
+//
+//                            }
+//                        };
+//                        GlideApp.with(this).asBitmap().load(brush.generateBimap()).into(simpleTarget);
 
                         break;
                 }
@@ -752,6 +836,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         } else {
             ft.show(showFragment).hide(hideFragment).commit();
         }
+
+        if (showIndex == 2) {
+            mPhotoEditor.setBrushDrawingMode(true);
+        } else {
+            mPhotoEditor.setBrushDrawingMode(false);
+        }
     }
 
     private void defaultSelect() {
@@ -778,6 +868,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         imagePath = path;
         mPhotoEditor.clearAllViews();
         resetOriginId();
+//        GlideApp.with(this).load(path).into(photoEditorView.getSource());
         photoEditorView.getSource().setImageBitmap(bitmap);
     }
 

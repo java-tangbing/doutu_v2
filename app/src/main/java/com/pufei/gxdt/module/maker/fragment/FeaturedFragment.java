@@ -34,11 +34,12 @@ import butterknife.BindView;
  * 精选
  */
 
-public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implements EditImageView, BaseQuickAdapter.OnItemClickListener {
+public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implements EditImageView, BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.rv_sticker)
     RecyclerView rvSticker;
     private StickerImageAdapter stickerImageAdapter;
     private List<MaterialBean.ResultBean> imgList;
+    private int page = 1;
 
     public static FeaturedFragment newInstance() {
         return new FeaturedFragment();
@@ -48,6 +49,11 @@ public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implem
     @Override
     public void initView() {
         rvSticker.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        imgList = new ArrayList<>();
+        stickerImageAdapter = new StickerImageAdapter(imgList);
+        stickerImageAdapter.setOnItemClickListener(this);
+        stickerImageAdapter.setOnLoadMoreListener(this,rvSticker);
+        rvSticker.setAdapter(stickerImageAdapter);
     }
 
     @Override
@@ -59,7 +65,7 @@ public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implem
         map.put("os", "1");
         map.put("sign", "sign");
         map.put("key", "key");
-        map.put("page", "1");
+        map.put("page", page +"");
         map.put("type", "1");
         presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map)), 1);
 
@@ -98,11 +104,14 @@ public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implem
     @Override
     public void materialResult(MaterialBean response, int type) {
         if (response.getCode() == 0) {
-            imgList = new ArrayList<>();
-            imgList.addAll(response.getResult());
-            stickerImageAdapter = new StickerImageAdapter(imgList);
-            stickerImageAdapter.setOnItemClickListener(this);
-            rvSticker.setAdapter(stickerImageAdapter);
+            if(response.getResult().size() > 0 ) {
+                page++;
+//            imgList.addAll(response.getResult());
+                stickerImageAdapter.addData(response.getResult());
+                stickerImageAdapter.loadMoreComplete();
+            }else {
+                stickerImageAdapter.loadMoreEnd();
+            }
 
         } else {
             ToastUtils.showShort(getActivity(), response.getMsg());
@@ -126,5 +135,19 @@ public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implem
             this.presenter = new EditImagePresenter();
             this.presenter.attachView(this);
         }
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        Map<String, String> map = new HashMap<>();
+        map.put("deviceid", SystemInfoUtils.deviced(getActivity()));
+        map.put("version", SystemInfoUtils.versionName(getActivity()));
+        map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
+        map.put("os", "1");
+        map.put("sign", "sign");
+        map.put("key", "key");
+        map.put("page", page +"");
+        map.put("type", "1");
+        presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map)), 1);
     }
 }

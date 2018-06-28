@@ -146,11 +146,15 @@ public class ImageBlushFragment extends BaseFragment implements BaseQuickAdapter
     }
 
 
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         if(hidden) {
             blushListener.setBlushMode(false);
+        }else {
+            blushListener.setBlushMode(true);
         }
+        Log.e("blushFragment","visible " + hidden);
     }
 
     public interface SetBlushPropertiesListener {
