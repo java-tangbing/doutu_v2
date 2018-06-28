@@ -270,7 +270,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         bean.setBgHeight(photoEditorView.getHeight());
                         bean.setBgWidth(photoEditorView.getWidth());
                         mPhotoEditor.reAddText(bean);
-                        Log.e("fsdfsd", photoEditorView.getWidth() + " " + photoEditorView.getHeight());
+//                        Log.e("fsdfsd", photoEditorView.getWidth() + " " + photoEditorView.getHeight());
                     }
                 });
             } else {
@@ -315,6 +315,16 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setScaleX(draft.scaleX);
             bean.setScaleY(draft.scaleY);
             bean.setRotation(draft.rotation);
+            bean.setHeight(draft.height);
+            bean.setWidth(draft.width);
+            photoEditorView.post(new Runnable() {
+                @Override
+                public void run() {
+                    bean.setBgHeight(photoEditorView.getHeight());
+                    bean.setBgWidth(photoEditorView.getWidth());
+                    mPhotoEditor.reAddText(bean);
+                }
+            });
             bean.setText(draft.text);
             bean.setTextColor(Color.parseColor("#" + draft.textColor));
             bean.setTextSize(draft.textSize);
@@ -332,7 +342,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             } else if (fontStyle.equals("FZJZJW--GB1-0")) {
                 bean.setTextFont(xindixiaowanzixiaoxueban);
             }
-            mPhotoEditor.reAddText(bean);
         }
     }
 
@@ -345,13 +354,23 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setScaleX(draft.scaleX);
             bean.setScaleY(draft.scaleY);
             bean.setRotation(draft.rotation);
-            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
+            bean.setImageHeight(draft.imageHeight);
+            bean.setImageWidth(draft.imageWidth);
+            photoEditorView.post(new Runnable() {
                 @Override
-                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-                    mPhotoEditor.reAddImage(bean, resource, draft.stickerImagePath);
+                public void run() {
+                    bean.setBgHeight(photoEditorView.getHeight());
+                    bean.setBgWidth(photoEditorView.getWidth());
+                    SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                            mPhotoEditor.reAddImage(bean, resource, draft.stickerImagePath);
+                        }
+                    };
+                    GlideApp.with(EditImageActivity.this).asBitmap().load(draft.stickerImagePath).into(simpleTarget);
                 }
-            };
-            GlideApp.with(this).asBitmap().load(draft.stickerImagePath).into(simpleTarget);
+            });
+
         }
     }
 
@@ -427,17 +446,21 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.btn_next:
                 if (imagePath != null) {
-                    isAddBrushImage = false;
-                    addBrushImg();
-                    saveToDraft(false);
-                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                        if (gifFile == null) {
-                            gifFile = new File(imagePath);
+                    if(mPhotoEditor.getIsContainsBrush()) {//判断是否包含画笔，如果包含画笔则要等view确定位置之后再进行其他操作
+                        isAddBrushImage = false;
+                        addBrushImg(false);
+                    }else {
+                        saveToDraft(false);
+                        if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                            if (gifFile == null) {
+                                gifFile = new File(imagePath);
+                            }
+                            saveGif(false);
+                        } else {
+                            saveImage(false);
                         }
-                        saveGif(false);
-                    } else {
-                        saveImage(false);
                     }
+
                 } else {
                     ToastUtils.showShort(this, "请选择背景图");
                 }
@@ -445,17 +468,21 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.tv_save_draft:
                 if (!TextUtils.isEmpty(imagePath)) {
-                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                        if (gifFile == null) {
-                            gifFile = new File(imagePath);
-                            gifFile = new File(imagePath);
+                    if(mPhotoEditor.getIsContainsBrush()) {//判断是否包含画笔，如果包含画笔则要等view确定位置之后再进行其他操作
+                        isAddBrushImage = false;
+                        addBrushImg(true);
+                    }else {
+                        if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                            if (gifFile == null) {
+                                gifFile = new File(imagePath);
+                            }
+                            saveGif(true);
+                        } else {
+                            saveImage(true);
                         }
-                        addBrushImg();
-                        saveGif(true);
-                    } else {
-                        addBrushImg();
-                        saveImage(true);
                     }
+
+
                 }
                 break;
             case R.id.tv_redo:
@@ -488,7 +515,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         }
     }
 
-    private void addBrushImg() {
+    private void addBrushImg(final boolean isDraft) {
         List<AddViewBean> beans = mPhotoEditor.getAddedViews();
         if(beans.size()> 0) {
             for (int i = 0; i < beans.size(); i++) {
@@ -503,10 +530,37 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                 FileOutputStream outputStream = new FileOutputStream(file);
                                 map.compress(Bitmap.CompressFormat.PNG,100,outputStream);
                                 outputStream.close();
-                                mPhotoEditor.addBrushImage(map,brush.getMinTouchX(),brush.getMinTouchY(),file.getPath());
+                                mPhotoEditor.addBrushImage(map, brush.getMinTouchX(), brush.getMinTouchY(), file.getPath(), new PhotoEditor.AddBrushImageListener() {
+                                    @Override
+                                    public void addBrushImageSuccess() {
+                                        if(!isDraft) {
+                                            saveToDraft(false);
+                                            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                                                if (gifFile == null) {
+                                                    gifFile = new File(imagePath);
+                                                }
+                                                saveGif(false);
+                                            } else {
+                                                saveImage(false);
+                                            }
+                                        }else {
+                                            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                                                if (gifFile == null) {
+                                                    gifFile = new File(imagePath);
+                                                    gifFile = new File(imagePath);
+                                                }
+                                                saveGif(true);
+                                            } else {
+                                                saveImage(true);
+                                            }
+                                        }
+
+                                    }
+                                });
                                 mPhotoEditor.clearBrushAllViews();
                             } catch (IOException e) {
                                 e.printStackTrace();
+                                Log.e("addBrushImage",e.getMessage());
                             }
                         }
                         isAddBrushImage = true;

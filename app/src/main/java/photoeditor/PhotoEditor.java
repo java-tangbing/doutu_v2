@@ -76,6 +76,7 @@ public class PhotoEditor implements BrushViewChangeListener {
     private Typeface mDefaultTextTypeface;
     private Typeface mDefaultEmojiTypeface;
     private List<TextBean> addTextViews;
+    private boolean isAddBrushImageFinish = false;
 
 
     private PhotoEditor(Builder builder) {
@@ -130,7 +131,18 @@ public class PhotoEditor implements BrushViewChangeListener {
 
     }
 
-    public void addBrushImage(Bitmap brushBitmap, final float x, final float y, String path) {
+    public boolean getIsContainsBrush() {
+        for (int i = 0; i < addedViews.size(); i++) {
+            if(addedViews.get(i).getType() == ViewType.BRUSH_DRAWING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public void addBrushImage(final Bitmap brushBitmap, final float x, final float y, String path, final AddBrushImageListener listener) {
         final View imageRootView = getLayout(ViewType.IMAGE,path);
         final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
         final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
@@ -141,13 +153,14 @@ public class PhotoEditor implements BrushViewChangeListener {
             public void run() {
                 imageRootView.setX(x);
                 imageRootView.setY(y);
+                listener.addBrushImageSuccess();
             }
         });
+        imageView.setImageBitmap(brushBitmap);
 //        Log.e("width",brushBitmap.getWidth() +" " + brushBitmap.getHeight());
 //        imageView.requestLayout();
 //        imageView.getLayoutParams().width = brushBitmap.getWidth();
 //        imageView.getLayoutParams().height = brushBitmap.getHeight();
-        imageView.setImageBitmap(brushBitmap);
         Log.e("test width",imageView.getWidth() + " " + imageView.getHeight());
         MultiTouchListener multiTouchListener = getMultiTouchListener();
         multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
@@ -838,6 +851,11 @@ public class PhotoEditor implements BrushViewChangeListener {
 
     public interface OnSaveFrameListener {
         void onSaveFrameSuccess();
+    }
+
+
+    public interface AddBrushImageListener {
+        void addBrushImageSuccess();
     }
 
     /**
