@@ -59,7 +59,7 @@ public class UploadImageUtil {
             final ImageDraft draft = imageDrafts.get(i);
             final Map<String, String> map1 = new HashMap<>();
             final int finalI = i;
-            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(draft.imageWidth, draft.imageHeight) {
+            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
                     map1.put("url", ImageUtils.bitmapToBase64(resource));
@@ -85,9 +85,9 @@ public class UploadImageUtil {
                             map1.put("textName", draft.text);
                             map1.put("centerX", draft.translationX + "");
                             map1.put("centerY", draft.translationY + "");
-                            map1.put("height", "");
-                            map1.put("width", "");
-                            map1.put("textFontSize", "12");
+                            map1.put("height", draft.height+"");
+                            map1.put("width", draft.width+"");
+                            map1.put("textFontSize", draft.textSize+"");
                             map1.put("textFont",draft.textFont);
                             map1.put("textFontColor", draft.textColor + "");
                             map1.put("zoom", draft.scaleX + "");
@@ -117,9 +117,9 @@ public class UploadImageUtil {
                 map1.put("textName", draft.text);
                 map1.put("centerX", draft.translationX + "");
                 map1.put("centerY", draft.translationY + "");
-                map1.put("height", "");
-                map1.put("width", "");
-                map1.put("textFontSize", "12");
+                map1.put("height", draft.height+"");
+                map1.put("width", draft.width+"");
+                map1.put("textFontSize", draft.textSize+"");
                 map1.put("textFont",draft.textFont);
                 map1.put("textFontColor", draft.textColor + "");
                 map1.put("zoom", draft.scaleX + "");

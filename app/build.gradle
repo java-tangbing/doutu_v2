@@ -10,7 +10,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 29
-        versionName "3.5.0"
+        versionName "3.5.2"
         flavorDimensions "versionCode"
         multiDexEnabled true
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -128,7 +128,7 @@ dependencies {
     implementation 'top.zibin:Luban:1.1.5'
     implementation files('libs/Baidu_MobAds_SDK.jar')
     implementation files('libs/GDTUnionSDK.4.17.568.min.jar')
-    implementation project(':photoeditor')
+//    implementation project(':photoeditor')
     implementation 'com.mylhyl:acp:1.2.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation 'com.github.donkingliang:ImageSelector:1.5.0'
@@ -149,5 +149,6 @@ dependencies {
     implementation files('libs/utdid4all-1.1.5.3_proguard.jar')
     implementation files('libs/SecurityEnvSDK-release-1.1.0.jar')
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
+    implementation('com.waynejo:androidndkgif:0.3.3')
 
 }

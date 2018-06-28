@@ -41,7 +41,7 @@
 
         </RelativeLayout>
 
-        <ja.burhanrashid52.photoeditor.PhotoEditorView
+        <photoeditor.PhotoEditorView
             android:id="@+id/photoEditorView"
             android:layout_width="280dp"
             android:layout_height="280dp"

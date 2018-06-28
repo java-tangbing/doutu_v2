@@ -42,6 +42,7 @@ import com.pufei.gxdt.module.discover.adapter.DisPictureAdapter;
 import com.pufei.gxdt.module.discover.bean.DisPicDetBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverEditImageBean;
 import com.pufei.gxdt.module.discover.bean.DiscoverListBean;
+import com.pufei.gxdt.module.discover.bean.IsSaveImgBean;
 import com.pufei.gxdt.module.discover.presenter.DisPicDetPresenter;
 import com.pufei.gxdt.module.discover.view.DisPicDetView;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
@@ -72,6 +73,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -112,7 +114,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     TextView tv_change_img;
     private String path;
 
-    private int index;
+    private int index, mindex;
     private String orginid, orgintable, id, uid, mcount, isSaveImg;
     private List<DiscoverListBean.ResultBean> pictureList = new ArrayList<>();
     //    private List<DiscoverListBean.ResultBean> sendpictureList = new ArrayList<>();
@@ -126,6 +128,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     private int type = 0;
     private static AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
+    private List<IsSaveImgBean> mbeanlist = new ArrayList<>();
 
     @Override
     public void initView() {
@@ -287,6 +290,34 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
     }
 
+    public void setResulits(String str) {
+        if (mbeanlist.size() > 0) {
+            List<IsSaveImgBean> isSaveImgBeanlist = new ArrayList<>();
+
+            for (int i = 0; i < mbeanlist.size(); i++) {
+                if (mbeanlist.get(i).getIndex() == index) {
+                    mbeanlist.get(i).setIsSaveImg(str);
+                } else {
+                    IsSaveImgBean isSaveImgBean = new IsSaveImgBean();
+                    isSaveImgBean.setIndex(index);
+                    isSaveImgBean.setIsSaveImg(str);
+                    isSaveImgBeanlist.add(isSaveImgBean);
+                }
+            }
+            mbeanlist.addAll(isSaveImgBeanlist);
+        } else {
+            IsSaveImgBean isSaveImgBean = new IsSaveImgBean();
+            isSaveImgBean.setIndex(index);
+            isSaveImgBean.setIsSaveImg(str);
+            mbeanlist.add(isSaveImgBean);
+        }
+        Intent i = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("IsSaveImgBeanList", (Serializable) mbeanlist);
+        i.putExtras(bundle);
+        setResult(10, i);
+    }
+
     @Override
     public void resultAddFavorite(FavoriteBean bean) {
         if (bean != null) {
@@ -296,12 +327,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                         pictureList.get(index).setIsSaveImg("1");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
                         ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
-                        Intent i = new Intent();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("index", index);
-                        bundle.putString("isSaveImg", "1");
-                        i.putExtras(bundle);
-                        setResult(10, i);
+                        setResulits("1");
                     } else {
                         pictureList.get(index).setIsSaveImg("0");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -333,12 +359,8 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                         pictureList.get(index).setIsSaveImg("0");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
                         ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
-                        Intent i = new Intent();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("index", index);
-                        bundle.putString("isSaveImg", "0");
-                        i.putExtras(bundle);
-                        setResult(10, i);
+                        setResulits("0");
+
                     } else {
                         pictureList.get(index).setIsSaveImg("1");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -370,6 +392,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
     public int getLayout() {
         return R.layout.activity_look;
     }
+
 
     @Override
     public void setPresenter(DisPicDetPresenter presenter) {

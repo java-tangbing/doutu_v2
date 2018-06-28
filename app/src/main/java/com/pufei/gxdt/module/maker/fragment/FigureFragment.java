@@ -34,12 +34,13 @@ import butterknife.BindView;
  * 形象
  */
 
-public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implements EditImageView, BaseQuickAdapter.OnItemClickListener {
+public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implements EditImageView, BaseQuickAdapter.OnItemClickListener,BaseQuickAdapter.RequestLoadMoreListener {
 
     @BindView(R.id.rv_sticker)
     RecyclerView rvSticker;
     private StickerImageAdapter stickerImageAdapter;
     private List<MaterialBean.ResultBean> imgList;
+    private int page = 1;
 
     public static FigureFragment newInstance() {
         return new FigureFragment();
@@ -49,6 +50,11 @@ public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implemen
     @Override
     public void initView() {
         rvSticker.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        imgList = new ArrayList<>();
+        stickerImageAdapter = new StickerImageAdapter(imgList);
+        stickerImageAdapter.setOnItemClickListener(this);
+        stickerImageAdapter.setOnLoadMoreListener(this,rvSticker);
+        rvSticker.setAdapter(stickerImageAdapter);
     }
 
     @Override
@@ -60,7 +66,7 @@ public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implemen
         map1.put("os", "1");
         map1.put("sign", "sign");
         map1.put("key", "key");
-        map1.put("page", "1");
+        map1.put("page", page+"");
         map1.put("type", "2");
         presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map1)), 2);
 
@@ -99,11 +105,13 @@ public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implemen
     @Override
     public void materialResult(MaterialBean response, int type) {
         if (response.getCode() == 0) {
-            imgList = new ArrayList<>();
-            imgList.addAll(response.getResult());
-            stickerImageAdapter = new StickerImageAdapter(imgList);
-            stickerImageAdapter.setOnItemClickListener(this);
-            rvSticker.setAdapter(stickerImageAdapter);
+            if(response.getResult().size() > 0) {
+                page++;
+                stickerImageAdapter.addData(response.getResult());
+                stickerImageAdapter.loadMoreComplete();
+            }else {
+                stickerImageAdapter.loadMoreEnd();
+            }
         } else {
             ToastUtils.showShort(getActivity(), response.getMsg());
         }
@@ -125,5 +133,19 @@ public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implemen
             this.presenter = new EditImagePresenter();
             this.presenter.attachView(this);
         }
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("deviceid", SystemInfoUtils.deviced(getActivity()));
+        map1.put("version", SystemInfoUtils.versionName(getActivity()));
+        map1.put("timestamp", (System.currentTimeMillis() / 1000) + "");
+        map1.put("os", "1");
+        map1.put("sign", "sign");
+        map1.put("key", "key");
+        map1.put("page", page+"");
+        map1.put("type", "2");
+        presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map1)), 2);
     }
 }
