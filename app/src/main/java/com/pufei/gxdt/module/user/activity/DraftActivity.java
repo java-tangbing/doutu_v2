@@ -74,6 +74,8 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
     TextView tvTitle;
     @BindView(R.id.rv_draft)
     RecyclerView rvDraft;
+    @BindView(R.id.no_data_failed)
+    LinearLayout no_data_failed;
     private DraftAdapter draftAdapter;
     private List<DraftInfo> datas;
     private int position;
@@ -116,6 +118,9 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
     @Override
     public void getData() {
         datas = new Select().from(DraftInfo.class).where(DraftInfo_Table.isDraft.is(true)).queryList();
+        if(datas !=null&&datas.size() == 0){
+            no_data_failed.setVisibility(View.VISIBLE);
+        }
         for (int i = 0; i < datas.size(); i++) {
             DraftInfo info = datas.get(i);
             if (!info.make_url.contains("http:") || !info.make_url.contains("https:")) {

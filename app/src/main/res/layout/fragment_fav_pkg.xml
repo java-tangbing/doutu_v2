@@ -25,7 +25,7 @@
                 android:layout_marginRight="10dp"
                 android:focusableInTouchMode="true" />
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
+        <include layout="@layout/no_data_fail" />
         <include layout="@layout/internet_fail" />
     </FrameLayout>
 </LinearLayout>
