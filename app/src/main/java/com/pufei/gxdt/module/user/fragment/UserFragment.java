@@ -225,7 +225,6 @@ public class UserFragment extends BaseFragment {
         Calendar cal = Calendar.getInstance();
         Date date = new Date(day);
         cal.setTime(date);
-        android.util.Log.e("两个时间", cal.get(Calendar.DAY_OF_YEAR) + "   " + pre.get(Calendar.DAY_OF_YEAR));
         if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
             int diffDay = cal.get(Calendar.DAY_OF_YEAR)
                     - pre.get(Calendar.DAY_OF_YEAR);
@@ -321,7 +320,6 @@ public class UserFragment extends BaseFragment {
         Calendar cal = Calendar.getInstance();
         Date date = new Date(day * 1000);
         cal.setTime(date);
-        android.util.Log.e("两个时间", cal.get(Calendar.DAY_OF_YEAR) + "   " + pre.get(Calendar.DAY_OF_YEAR));
         if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
             int diffDay = cal.get(Calendar.DAY_OF_YEAR)
                     - pre.get(Calendar.DAY_OF_YEAR);
