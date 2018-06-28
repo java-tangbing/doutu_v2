@@ -1,24 +1,22 @@
-package ja.burhanrashid52.photoeditor;
+package photoeditor;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.pufei.gxdt.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +43,7 @@ public class BrushDrawingView extends View {
     private Paint mDrawPaint;
 
     private Canvas mDrawCanvas;
-    private boolean mBrushDrawMode;
+    private boolean mBrushDrawMode = false;
 
     private Path mPath;
     private float mTouchX, mTouchY;
@@ -268,9 +266,14 @@ public class BrushDrawingView extends View {
             invalidate();
         }
         if (mBrushViewChangeListener != null) {
-            mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
+            mBrushViewChangeListener.onViewAdd(this, ViewType.BRUSH_DRAWING);
         }
         return mRedoLinePaths.size() != 0;
+    }
+
+    public void clearTouchPoint() {
+        mTouchXList.clear();
+        mTouchYList.clear();
     }
 
 
@@ -304,7 +307,7 @@ public class BrushDrawingView extends View {
         mPath = new Path();
         if (mBrushViewChangeListener != null) {
             mBrushViewChangeListener.onStopDrawing();
-            mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
+            mBrushViewChangeListener.onViewAdd(this, ViewType.BRUSH_DRAWING);
         }
     }
 
@@ -327,28 +330,33 @@ public class BrushDrawingView extends View {
         // 计算缩放比例.
 
         Bitmap map = null;
+        Bitmap newMap = null;
         if(bitmapList.size() > 0) {
             map = bitmapList.get(0);
+//            if((int)minTouchx + (int)(maxTouchx - minTouchx) < map.getWidth() && (int)minTouchY + (int)(maxTouchY - minTouchY) < map.getHeight() && minTouchx > 0 && minTouchY > 0 ) {
+//            }
+            try {
+                newMap = Bitmap.createBitmap(map,(int)minTouchx,(int)minTouchY,(int)(maxTouchx - minTouchx),(int)(maxTouchY - minTouchY));
+//                map.recycle();
+            }catch (Exception e) {
+                ToastUtils.showShort(getContext(),"画笔不能超过屏幕边界");
+            }
 //            float scaleWidth = ((float) width) / bitmapList.get(0).getWidth();
 //            float scaleHeight = ((float) height) / bitmapList.get(0).getHeight();
 //            Matrix matrix = new Matrix();
 //            matrix.postScale(scaleWidth, scaleHeight);
 //            map = Bitmap.createBitmap(bitmapList.get(0), 0, 0, bitmapList.get(0).getWidth(), bitmapList.get(0).getHeight(), matrix, true);
         }
-        return map;
+        return newMap;
     }
 
-    public float getBitmapHeight() {
-        float maxTouchY = Collections.max(mTouchYList);
-        float minTouchY = Collections.min(mTouchYList);
-        return maxTouchY - minTouchY;
+    public float getMinTouchX() {
+        return Collections.min(mTouchXList);
     }
 
 
-    public float getBitmapWidth() {
-        float maxTouchx = Collections.max(mTouchXList);
-        float minTouchx = Collections.min(mTouchXList);
-        return maxTouchx - minTouchx;
+    public float getMinTouchY() {
+        return Collections.min(mTouchYList);
     }
 
 }

@@ -1,10 +1,9 @@
-package ja.burhanrashid52.photoeditor;
+package photoeditor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -30,8 +29,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.pufei.gxdt.R;
+import com.pufei.gxdt.widgets.GlideApp;
 import com.waynejo.androidndkgif.GifDecoder;
-import com.waynejo.androidndkgif.GifEncoder;
 import com.waynejo.androidndkgif.GifImage;
 import com.waynejo.androidndkgif.GifImageIterator;
 
@@ -43,12 +43,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ja.burhanrashid52.photoeditor.bean.AddViewBean;
-import ja.burhanrashid52.photoeditor.bean.BitmapBean;
-import ja.burhanrashid52.photoeditor.bean.DraftImageBean;
-import ja.burhanrashid52.photoeditor.bean.DraftTextBean;
-import ja.burhanrashid52.photoeditor.bean.TextBean;
-import ja.burhanrashid52.photoeditor.gifmaker.AnimatedGifEncoder;
+import photoeditor.bean.AddViewBean;
+import photoeditor.bean.BitmapBean;
+import photoeditor.bean.DraftImageBean;
+import photoeditor.bean.DraftTextBean;
+import photoeditor.bean.TextBean;
+import photoeditor.gifmaker.AnimatedGifEncoder;
 
 /**
  * <p>
@@ -126,11 +126,11 @@ public class PhotoEditor implements BrushViewChangeListener {
 
         imageRootView.setOnTouchListener(multiTouchListener);
 
-        addViewToParent(imageRootView, imageView,path,ViewType.IMAGE);
+        addViewToParent(imageRootView, imageView,path, ViewType.IMAGE);
 
     }
 
-    public void reAddImage(final DraftImageBean bean, final Bitmap desiredImage, String path) {
+    public void addBrushImage(Bitmap brushBitmap, final float x, final float y, String path) {
         final View imageRootView = getLayout(ViewType.IMAGE,path);
         final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
         final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
@@ -139,25 +139,68 @@ public class PhotoEditor implements BrushViewChangeListener {
         imageRootView.post(new Runnable() {
             @Override
             public void run() {
-                final float centerX = bean.getBgWidth() * bean.getTranslationX() - imageRootView.getLeft() - imageRootView.getWidth() * bean.getImageWidth() / 2;
-                final float centerY = bean.getBgHeight() * bean.getTranslationY() - imageRootView.getTop() - imageRootView.getHeight() * bean.getImageHeight() / 2;
-                Log.e("center point",centerX +" " + centerY +" " + imageRootView.getLeft() +" " + imageRootView.getTop());
+                imageRootView.setX(x);
+                imageRootView.setY(y);
+            }
+        });
+//        Log.e("width",brushBitmap.getWidth() +" " + brushBitmap.getHeight());
+//        imageView.requestLayout();
+//        imageView.getLayoutParams().width = brushBitmap.getWidth();
+//        imageView.getLayoutParams().height = brushBitmap.getHeight();
+        imageView.setImageBitmap(brushBitmap);
+        Log.e("test width",imageView.getWidth() + " " + imageView.getHeight());
+        MultiTouchListener multiTouchListener = getMultiTouchListener();
+        multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
+            @Override
+            public void onClick() {
+                boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
+                frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
+                imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
+                frmBorder.setTag(!isBackgroundVisible);
+            }
+
+            @Override
+            public void onLongClick() {
+
+            }
+        });
+
+        imageRootView.setOnTouchListener(multiTouchListener);
+
+        addViewToParent(imageRootView, imageView,path, ViewType.IMAGE);
+    }
+
+    public void reAddImage(final DraftImageBean bean, final Bitmap desiredImage, final String path) {
+        final View imageRootView = getLayout(ViewType.IMAGE,path);
+        final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
+        final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
+        final ImageView imgClose = imageRootView.findViewById(R.id.imgPhotoEditorClose);
+        frmBorder.setTag(true);
+        imageRootView.post(new Runnable() {
+            @Override
+            public void run() {
+                final float centerX = bean.getBgWidth() * bean.getTranslationX() - imageRootView.getLeft() - imageView.getWidth() * bean.getImageWidth() / 2 - 120;
+                final float centerY = bean.getBgHeight() * bean.getTranslationY() - imageRootView.getTop() - imageView.getHeight() * bean.getImageHeight() / 2 - 110;
+                Log.e("center point",bean.getScaleX() +" " + bean.getScaleY() +" " + bean.getBgWidth() * bean.getImageWidth() +" " + bean.getBgHeight() * bean.getImageHeight());
                 imageRootView.setTranslationX(centerX);
                 imageRootView.setTranslationY(centerY);
                 imageRootView.setScaleX(bean.getScaleX());
                 imageRootView.setScaleY(bean.getScaleY());
                 imageRootView.setRotation(bean.getRotation());
-//                GlideApp.with(context).asBitmap().load(desiredImage).into(new SimpleTarget<Bitmap>((int)(imageRootView.getWidth() * bean.getImageWidth()),(int)(imageRootView.getHeight() * bean.getImageHeight())) {
+                imageView.requestLayout();
+                imageView.getLayoutParams().width = (int)(bean.getBgWidth() * bean.getImageWidth());
+                imageView.getLayoutParams().height = (int)(bean.getBgHeight() * bean.getImageHeight());
+//                GlideApp.with(context).asBitmap().load(desiredImage).into(new SimpleTarget<Bitmap>((int)(imageView.getWidth() * bean.getImageWidth()),(int)(imageView.getHeight() * bean.getImageHeight())) {
 //                    @Override
 //                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
 //                        imageView.setImageBitmap(resource);
-//
 //                    }
 //                });
+//                imageView.setImageBitmap(desiredImage);
+
+                GlideApp.with(context).load(path).into(imageView);
             }
         });
-
-
 
         MultiTouchListener multiTouchListener = getMultiTouchListener();
         multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
@@ -177,7 +220,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 
         imageRootView.setOnTouchListener(multiTouchListener);
 
-        addViewToParent(imageRootView, imageView,path,ViewType.IMAGE);
+        addViewToParent(imageRootView, imageView,path, ViewType.IMAGE);
     }
 
     /**
@@ -251,7 +294,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         });
 
         textRootView.setOnTouchListener(multiTouchListener);
-        addViewToParent(textRootView, textInputTv,"",ViewType.TEXT);
+        addViewToParent(textRootView, textInputTv,"", ViewType.TEXT);
 
         TextBean bean = new TextBean();
         bean.setFrameLayout(textRootView);
@@ -280,24 +323,23 @@ public class PhotoEditor implements BrushViewChangeListener {
         textRootView.post(new Runnable() {
             @Override
             public void run() {
-                final float centerX = reAdd.getBgWidth() * reAdd.getTranslationX() - textRootView.getLeft() - textRootView.getWidth() * reAdd.getWidth() / 2;
+                final float centerX = reAdd.getBgWidth() * reAdd.getTranslationX() - textRootView.getLeft() - textRootView.getWidth() * reAdd.getWidth() / 2 ;
                 final float centerY = reAdd.getBgHeight() * reAdd.getTranslationY() - textRootView.getTop() - textRootView.getHeight() * reAdd.getHeight() / 2;
-                Log.e("center point",centerX +" " + centerY +" " + textRootView.getLeft() +" " + textRootView.getTop());
+//                Log.e("center point",centerX +" " + centerY +" " + textInputTv.getLeft() +" " + textInputTv.getTop());
                 textRootView.setTranslationX(centerX);
                 textRootView.setTranslationY(centerY);
                 textRootView.setScaleX(reAdd.getScaleX());
                 textRootView.setScaleY(reAdd.getScaleY());
                 textRootView.setRotation(reAdd.getRotation());
+                textInputTv.setText(reAdd.getText());
+                textInputTv.setTextColor(reAdd.getTextColor());
+                textRootView.setDrawingCacheEnabled(true);
+                if (reAdd.getTextFont() != null) {
+                    textInputTv.setTypeface(reAdd.getTextFont());
+                }
             }
         });
 
-
-        textInputTv.setText(reAdd.getText());
-        textInputTv.setTextColor(reAdd.getTextColor());
-        textRootView.setDrawingCacheEnabled(true);
-        if (reAdd.getTextFont() != null) {
-            textInputTv.setTypeface(reAdd.getTextFont());
-        }
         MultiTouchListener multiTouchListener = getMultiTouchListener();
         multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
             @Override
@@ -330,7 +372,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         });
 
         textRootView.setOnTouchListener(multiTouchListener);
-        addViewToParent(textRootView, textInputTv,"",ViewType.TEXT);
+        addViewToParent(textRootView, textInputTv,"", ViewType.TEXT);
 
         TextBean bean = new TextBean();
         bean.setFrameLayout(textRootView);
@@ -379,7 +421,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 inputTextView.setTextColor(colorCode);
                 parentView.updateViewLayout(view, view.getLayoutParams());
 //                int i = addedViews.indexOf(view);
-                addedViews.set(i, new AddViewBean(view, inputTextView,"",ViewType.TEXT));
+                addedViews.set(i, new AddViewBean(view, inputTextView,"", ViewType.TEXT));
             }
         }
 
@@ -429,7 +471,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             }
         });
         emojiRootView.setOnTouchListener(multiTouchListener);
-        addViewToParent(emojiRootView,emojiTextView, "",ViewType.EMOJI);
+        addViewToParent(emojiRootView,emojiTextView, "", ViewType.EMOJI);
     }
 
 
@@ -438,7 +480,7 @@ public class PhotoEditor implements BrushViewChangeListener {
      *
      * @param rootView rootview of image,text and emoji
      */
-    private void addViewToParent(View rootView, View addView,String path,ViewType viewType) {
+    private void addViewToParent(View rootView, View addView, String path, ViewType viewType) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -640,7 +682,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         }
     }
 
-    private void viewUndo(View removedView, View addView,String path,ViewType type) {
+    private void viewUndo(View removedView, View addView, String path, ViewType type) {
         if (addedViews.size() > 0) {
             for (int i = 0; i < addedViews.size(); i++) {
                 if (addedViews.get(i).getView() == removedView) {
@@ -714,9 +756,17 @@ public class PhotoEditor implements BrushViewChangeListener {
         return redoViews.size() != 0;
     }
 
-    private void clearBrushAllViews() {
-        if (brushDrawingView != null)
+    public void clearBrushAllViews() {
+
+        if (brushDrawingView != null){
+            for (int i = 0; i < addedViews.size(); i++) {
+                if(addedViews.get(i).getType() == ViewType.BRUSH_DRAWING) {
+                    addedViews.remove(addedViews.get(i));
+                }
+            }
             brushDrawingView.clearAll();
+            brushDrawingView.clearTouchPoint();
+        }
     }
 
     /**
@@ -936,7 +986,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 
 
     @SuppressLint("StaticFieldLeak")
-    public void saveFrame( final List<BitmapBean> bitmap, final OnSaveFrameListener listener) {
+    public void saveFrame(final List<BitmapBean> bitmap, final OnSaveFrameListener listener) {
         new AsyncTask<String, String, Exception>() {
             @Override
             protected void onPreExecute() {

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -18,24 +17,18 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
-import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
-import com.pufei.gxdt.base.BaseFragment;
 import com.pufei.gxdt.base.BaseMvpFragment;
-import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.module.maker.bean.MaterialBean;
 import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
 import com.pufei.gxdt.module.maker.view.EditImageView;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.utils.ImageUtils;
-import com.pufei.gxdt.utils.RetrofitFactory;
-import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.soundcloud.android.crop.Crop;
 
@@ -43,14 +36,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.OnClick;
-import ja.burhanrashid52.photoeditor.PhotoEditor;
-import ja.burhanrashid52.photoeditor.bean.BitmapBean;
 
 import static android.app.Activity.RESULT_OK;
 

@@ -1,4 +1,4 @@
-package ja.burhanrashid52.photoeditor.bean;
+package photoeditor.bean;
 
 import android.graphics.Typeface;
 

@@ -16,9 +16,9 @@ public class ImageDraft extends BaseModel {
     @Column
     public String stickerImagePath;
     @Column
-    public int imageWidth;
+    public float imageWidth;
     @Column
-    public int imageHeight;
+    public float imageHeight;
 
     @Column
     public float translationX;
