@@ -44,6 +44,7 @@
     <string name="versions_detection">版本检</string>
     <string name="data_edit">资料编辑</string>
     <string name="setting">设置</string>
+    <string name="update">刷新试试</string>
     <string-array name="discover_title">
         <item>推荐</item>
         <item>全部</item>

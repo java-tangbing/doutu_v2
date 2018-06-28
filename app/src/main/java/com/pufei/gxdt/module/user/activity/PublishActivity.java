@@ -100,6 +100,8 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.no_data_failed)
+    LinearLayout no_data_failed;
     private PublishAdapter jokeAdapter;
     private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
@@ -322,15 +324,22 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
     @Override
     public void resultPublish(PictureResultBean bean) {
-        if(page == 1){
-            jokeList.clear();
-            jokeList.addAll(bean.getResult());
-            jokeAdapter.notifyDataSetChanged();
-            page++;
-            requestJoke(page);
-        }else{
-            cashList.clear();
-            cashList.addAll(bean.getResult());
+        if(bean != null){
+            if(page == 1){
+                jokeList.clear();
+                if(bean.getResult()!=null&&bean.getResult().size()==0){
+                    no_data_failed.setVisibility(View.VISIBLE);
+                }else{
+                    jokeList.addAll(bean.getResult());
+                    jokeAdapter.notifyDataSetChanged();
+                    page++;
+                    requestJoke(page);
+                }
+            }else{
+                cashList.clear();
+                cashList.addAll(bean.getResult());
+            }
+
         }
 
     }
