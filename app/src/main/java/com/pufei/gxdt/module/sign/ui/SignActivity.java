@@ -57,8 +57,9 @@ public class SignActivity extends AppCompatActivity {
     private SignView signView;
     private AppCompatButton btnSign;
     private List<SignEntity> data;
-    private ImageView imageView;
-    private MyFrontTextView tvbang;
+    private LinearLayout imageView;
+    private TextView tvbang;
+    private TextView tvTitle;
     List<String> timeList;
 
     @Override
@@ -66,6 +67,7 @@ public class SignActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
         initView();
+        AppManager.getAppManager().addActivity(this);
         onReady();
     }
 
@@ -85,16 +87,19 @@ public class SignActivity extends AppCompatActivity {
     private void initView() {
         timeList = new ArrayList<>();
         Intent intent = getIntent();
-        //Bundle bundle=intent.getExtras();
-        //getScore();
-        tvbang = (MyFrontTextView) findViewById(R.id.activity_sign_bangdan);
-        imageView = (ImageView) findViewById(R.id.activity_sign_cance);
+        tvbang = (TextView) findViewById(R.id.tv_right);
+        tvTitle = (TextView) findViewById(R.id.tv_title);
+        imageView = (LinearLayout) findViewById(R.id.ll_title_left);
         tvSignDay = (TextView) findViewById(R.id.activity_main_tv_main_day);
         tvScore = (TextView) findViewById(R.id.activity_main_tv_score);
         tvYear = (TextView) findViewById(R.id.activity_main_tv_year);
         tvMonth = (TextView) findViewById(R.id.activity_main_tv_month);
         signView = (SignView) findViewById(R.id.activity_main_cv);
         btnSign = (AppCompatButton) findViewById(R.id.activity_main_btn_sign);
+        tvTitle.setText("签到");
+        tvbang.setText("查看榜单");
+        tvbang.setVisibility(View.VISIBLE);
+        imageView.setVisibility(View.VISIBLE);
         if (signView != null) {
             signView.setOnTodayClickListener(onTodayClickListener);
         }
