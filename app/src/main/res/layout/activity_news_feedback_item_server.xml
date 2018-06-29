@@ -15,15 +15,16 @@
             android:id="@+id/news_feedback_item_server_dateline_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="日期" />
+            android:text="日期"
+            android:textColor="@color/hint_color" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/news_feedback_item_server_icon_cv"
@@ -34,7 +35,7 @@
             android:src="@mipmap/news_ic_opinion" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:background="@drawable/news_dialogue_left_normal">
