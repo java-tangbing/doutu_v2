@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
@@ -24,6 +25,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -48,6 +50,8 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
     XRecyclerView xrl_doutu;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     private ImageTypeAdapter adapter;
     private List<PictureResultBean.ResultBean> picturelist = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
@@ -82,7 +86,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
                         picturelist.addAll(cashList);
                         adapter.notifyDataSetChanged();
                         page++;
-                        requestData(page);
+                        requestData();
                     }
                 }
             }
@@ -110,7 +114,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
                     @Override
                     public void run() {
                         page = 1;
-                        requestData(page);
+                        requestData();
                         refreshlayout.finishRefresh();
                     }
                 }, 2000);
@@ -120,26 +124,46 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
 
     @Override
     public void getData() {
-        requestData(page);
-    }
-    private void requestData(int page) {
-        if (NetWorkUtil.isNetworkConnected(getActivity())) try {
-            Bundle arguments = getArguments();
-            String category_id = null;
-            if (arguments != null) {
-                category_id = arguments.getString("id");
-            }
-            JSONObject jsonObject = KeyUtil.getJson(getActivity());
-            jsonObject.put("category_id", category_id);
-            jsonObject.put("page", page + "");
-            jsonObject.put("net", NetWorkUtil.netType(getActivity()));
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-            presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        else {
+        if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            xrl_doutu.setVisibility(View.VISIBLE);
+            requestData();
+        } else {
+            xrl_doutu.setVisibility(View.GONE);
             request_failed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetWorkUtil.isNetworkConnected(getActivity())){
+                        xrl_doutu.setVisibility(View.VISIBLE);
+                        page = 1;
+                        requestData();
+                        request_failed.setVisibility(View.GONE);
+                    }else {
+                        ToastUtils.showShort(getActivity(),"请先打开网络连接");
+                    }
+                }
+            });
+        }
+    }
+    private void requestData() {
+        if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            try {
+                Bundle arguments = getArguments();
+                String category_id = null;
+                if (arguments != null) {
+                    category_id = arguments.getString("id");
+                }
+                JSONObject jsonObject = KeyUtil.getJson(getActivity());
+                jsonObject.put("category_id", category_id);
+                jsonObject.put("page", page + "");
+                jsonObject.put("net", NetWorkUtil.netType(getActivity()));
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
     }
 
@@ -170,7 +194,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
                 picturelist.addAll(bean.getResult());
                 adapter.notifyDataSetChanged();
                 page++;
-                requestData(page);
+                requestData();
             }else{
                 cashList.clear();
                 cashList.addAll(bean.getResult());
@@ -200,7 +224,7 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){
             page = 1;
-            requestData(page);
+            requestData();
         }
     }
 

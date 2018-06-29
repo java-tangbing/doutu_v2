@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -60,6 +62,8 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     TextView title;
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
     private List<PictureResultBean.ResultBean> picturelist = new ArrayList<>();
@@ -108,12 +112,17 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    if(cashList.size()>0){
-                        picturelist.addAll(cashList);
-                        adapter.notifyDataSetChanged();
-                        page++;
-                        requestHot(page);
+                    if(NetWorkUtil.isNetworkConnected(HotImageActivity.this)){
+                        if(cashList.size()>0){
+                            picturelist.addAll(cashList);
+                            adapter.notifyDataSetChanged();
+                            page++;
+                            requestHot();
+                        }
+                    }else{
+                        ToastUtils.showShort(HotImageActivity.this,"请检查网络设置");
                     }
+
                 }
             }
         });
@@ -137,7 +146,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                     public void run() {
                         page = 1;
                         adapter.notifyDataSetChanged();
-                        requestHot(page);
+                        requestHot();
                         refreshlayout.finishRefresh();
                     }
                 }, 2000);
@@ -148,12 +157,25 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     @Override
     public void getData() {
         if (NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
-            requestHot(page);
+            requestHot();
         }else{
             requestFailed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
+                        requestFailed.setVisibility(View.GONE);
+                        AdvUtil.getInstance().getAdvHttp(HotImageActivity.this, your_original_layout, 5);
+                        page = 1;
+                        requestHot();
+                    }else{
+                        ToastUtils.showShort(HotImageActivity.this,"请检查网络设置");
+                    }
+                }
+            });
         }
     }
-    private void requestHot(int page ){
+    private void requestHot(){
         if (NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -164,7 +186,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                 e.printStackTrace();
             }
         }else{
-            requestFailed.setVisibility(View.VISIBLE);
+            ToastUtils.showShort(this,"请检查网络设置");
         }
     }
 
@@ -189,7 +211,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                picturelist.addAll(bean.getResult());
                adapter.notifyDataSetChanged();
                page++;
-               requestHot(page);
+               requestHot();
            }else {
               cashList.clear();
               cashList.addAll(bean.getResult());
@@ -253,7 +275,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){
             page = 1;
-            requestHot(page);
+            requestHot();
         }
     }
 }
