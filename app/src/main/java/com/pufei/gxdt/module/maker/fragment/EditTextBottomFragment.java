@@ -33,6 +33,7 @@ import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
+import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private EditImagePresenter imagePresenter;
     private BottomSheetBehavior mBottomSheetBehavior;
     private Timer timer;
-
+    private Unregistrar unregistrar;
     @SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
@@ -121,7 +122,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
             }
         }, 300);
 
-        KeyboardVisibilityEvent.setEventListener(
+        unregistrar = KeyboardVisibilityEvent.registerEventListener(
                 getActivity(),
                 new KeyboardVisibilityEventListener() {
                     @Override
@@ -144,7 +145,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (!etInput.getText().toString().isEmpty()) {
                     inputTextListener.inputText(type, etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.select_color1));
-                    etInput.setText("");
+                    etInput.setText(null);
                 }
                 dismiss();
                 return false;
@@ -220,5 +221,13 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
         if(timer != null) {
             timer.cancel();
         }
+        if(inputTextListener != null) {
+            inputTextListener = null;
+        }
+
+        if(unregistrar != null) {
+            unregistrar.unregister();
+        }
+
     }
 }
