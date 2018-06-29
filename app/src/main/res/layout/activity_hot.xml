@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:layout_marginLeft="10dp"
+            android:paddingTop="15dp"
             android:layout_marginRight="10dp"
             android:focusableInTouchMode="true"
             android:id="@+id/hot_xryv"

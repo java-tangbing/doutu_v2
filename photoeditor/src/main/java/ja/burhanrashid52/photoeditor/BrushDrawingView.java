@@ -1,14 +1,17 @@
 package ja.burhanrashid52.photoeditor;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -18,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,7 +50,9 @@ public class BrushDrawingView extends View {
     private Path mPath;
     private float mTouchX, mTouchY;
     private static final float TOUCH_TOLERANCE = 4;
-
+    private List<Float> mTouchXList = new ArrayList<>();
+    private List<Float> mTouchYList = new ArrayList<>();
+    private List<Bitmap> bitmapList = new ArrayList<>();
     private BrushViewChangeListener mBrushViewChangeListener;
 
     public BrushDrawingView(Context context) {
@@ -167,6 +173,7 @@ public class BrushDrawingView extends View {
         if(w != 0 && h != 0) {
             Bitmap canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             mDrawCanvas = new Canvas(canvasBitmap);
+            bitmapList.add(canvasBitmap);
         }
     }
 
@@ -192,12 +199,18 @@ public class BrushDrawingView extends View {
             float touchY = event.getY();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    mTouchXList.add(touchX);
+                    mTouchYList.add(touchY);
                     touchStart(touchX, touchY);
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    mTouchXList.add(touchX);
+                    mTouchYList.add(touchY);
                     touchMove(touchX, touchY);
                     break;
                 case MotionEvent.ACTION_UP:
+                    mTouchXList.add(touchX);
+                    mTouchYList.add(touchY);
                     touchUp();
                     break;
             }
@@ -293,10 +306,49 @@ public class BrushDrawingView extends View {
             mBrushViewChangeListener.onStopDrawing();
             mBrushViewChangeListener.onViewAdd(this,ViewType.BRUSH_DRAWING);
         }
-        Log.e("fdsf",mTouchX +"   " + mTouchY);
     }
 
-    public void generateBimap(int left,int right,int top,int bottom) {
-        Log.e("fdsf",left + "  " + right + "  " + top + "  " + bottom);
+    public Bitmap generateBimap() {
+        float maxTouchx = Collections.max(mTouchXList);
+        float minTouchx = Collections.min(mTouchXList);
+        float maxTouchY = Collections.max(mTouchYList);
+        float minTouchY = Collections.min(mTouchYList);
+//        Bitmap bitmap = Bitmap.createBitmap((int)(maxTouchx - minTouchx),(int)(maxTouchY - minTouchY), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(bitmap);
+//        Log.e("linePath","line path size is " + mLinePaths.size());
+//        for (LinePath path : mLinePaths) {
+//            canvas.drawPath(path.getDrawPath(),path.getDrawPaint());
+//        }
+//        canvas.save(Canvas.ALL_SAVE_FLAG);
+//        canvas.restore();
+//        Log.e("fdsf",(int)(maxTouchx - minTouchx) + " " + (int)(maxTouchY - minTouchY));
+        int width = (int) (maxTouchx - minTouchx);
+        int height = (int) (maxTouchY - minTouchY);
+        // 计算缩放比例.
+
+        Bitmap map = null;
+        if(bitmapList.size() > 0) {
+            map = bitmapList.get(0);
+//            float scaleWidth = ((float) width) / bitmapList.get(0).getWidth();
+//            float scaleHeight = ((float) height) / bitmapList.get(0).getHeight();
+//            Matrix matrix = new Matrix();
+//            matrix.postScale(scaleWidth, scaleHeight);
+//            map = Bitmap.createBitmap(bitmapList.get(0), 0, 0, bitmapList.get(0).getWidth(), bitmapList.get(0).getHeight(), matrix, true);
+        }
+        return map;
     }
+
+    public float getBitmapHeight() {
+        float maxTouchY = Collections.max(mTouchYList);
+        float minTouchY = Collections.min(mTouchYList);
+        return maxTouchY - minTouchY;
+    }
+
+
+    public float getBitmapWidth() {
+        float maxTouchx = Collections.max(mTouchXList);
+        float minTouchx = Collections.min(mTouchXList);
+        return maxTouchx - minTouchx;
+    }
+
 }

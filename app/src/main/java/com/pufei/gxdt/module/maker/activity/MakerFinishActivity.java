@@ -212,7 +212,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
             }
 
         } else {
-            ToastUtils.showShort(this, "空");
+            ToastUtils.showShort(this, "图片加载失败!");
         }
 
     }

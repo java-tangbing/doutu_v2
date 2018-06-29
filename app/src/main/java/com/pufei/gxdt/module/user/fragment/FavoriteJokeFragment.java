@@ -55,6 +55,8 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.no_data_failed)
+    LinearLayout no_data_failed;
     private FavoriteJokeAdapter jokeAdapter;
     private List<MyImagesBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
@@ -63,7 +65,7 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
     public void initView() {
         jokeAdapter = new FavoriteJokeAdapter(getActivity(), jokeList,1);
         rl_joke_xryv.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        rl_joke_xryv.addItemDecoration(new SpaceItemDecoration(dp2px(getActivity(), 10)));
+        rl_joke_xryv.addItemDecoration(new SpaceItemDecoration(10,3));
         rl_joke_xryv.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
@@ -173,11 +175,17 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
 
     @Override
     public void resultJokeList(MyImagesBean bean) {
-        if (page == 1) {
-            jokeList.clear();
+        if(bean != null){
+            if (page == 1) {
+                jokeList.clear();
+                if(bean.getResult()!=null&&bean.getResult().size()==0){
+                    no_data_failed.setVisibility(View.VISIBLE);
+                }
+            }
+            jokeList.addAll(bean.getResult());
+            jokeAdapter.notifyDataSetChanged();
         }
-        jokeList.addAll(bean.getResult());
-        jokeAdapter.notifyDataSetChanged();
+
     }
     private  int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,

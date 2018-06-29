@@ -1,18 +1,39 @@
 package com.pufei.gxdt.module.user.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.mylhyl.acp.Acp;
+import com.mylhyl.acp.AcpListener;
+import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
@@ -22,30 +43,43 @@ import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
 import com.pufei.gxdt.module.home.adapter.HotAdapter;
 import com.pufei.gxdt.module.home.adapter.JokeAdapter;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.presenter.JokePresenter;
 import com.pufei.gxdt.module.user.adapter.FavoriteJokeAdapter;
+import com.pufei.gxdt.module.user.adapter.PublishAdapter;
 import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.presenter.PublishPresenter;
 import com.pufei.gxdt.module.user.view.PublishView;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
+import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
+import com.pufei.gxdt.widgets.MyFrontTextView;
 import com.pufei.gxdt.widgets.SpaceItemDecoration;
+import com.pufei.gxdt.widgets.popupwindow.CommonPopupWindow;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMEmoji;
+import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,37 +100,64 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
-    private HomeImageAdapter jokeAdapter;
+    @BindView(R.id.no_data_failed)
+    LinearLayout no_data_failed;
+    private PublishAdapter jokeAdapter;
     private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
+    private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
-
+    private int show = 1,index;
+    private View headView;
+    private AlertDialog sharedialog;
+    private CommonPopupWindow popupWindow;
     @Override
     public void initView() {
         tv_title.setText("我的发布");
         ll_left.setVisibility(View.VISIBLE);
-        jokeAdapter = new HomeImageAdapter(PublishActivity.this,jokeList);
-        rl_publish.setLayoutManager(new GridLayoutManager(PublishActivity.this, 3));
-        rl_publish.addItemDecoration(new SpaceItemDecoration(dp2px(PublishActivity.this, 10)));
+        LayoutInflater lif = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        headView = lif.inflate(R.layout.publish_head, null);
+        rl_publish.addHeaderView(headView);
+        jokeAdapter = new PublishAdapter(PublishActivity.this,jokeList);
+        final GridLayoutManager layoutManager = new GridLayoutManager(PublishActivity.this, 3);
+        rl_publish.setLayoutManager(layoutManager);
+        rl_publish.addItemDecoration(new SpaceItemDecoration(10,3));
         rl_publish.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
-        fragmentJokeSmart.setEnableLoadmore(true);
+        fragmentJokeSmart.setEnableLoadmore(false);
+        fragmentJokeSmart.setEnableLoadmoreWhenContentNotFull(true);
+        rl_publish.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    if(cashList.size()>0){
+                        jokeList.addAll(cashList);
+                        jokeAdapter.notifyDataSetChanged();
+                        page++;
+                        requestJoke(page);
+                    }
+                }
+            }
+        });
         fragmentJokeSmart.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestJoke(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestJoke(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 2000);
             }
 
             @Override
@@ -116,7 +177,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             }
         });
 
-        jokeAdapter.setOnItemClickListener(new HomeImageAdapter.MyItemClickListener() {
+        jokeAdapter.setOnItemClickListener(new PublishAdapter.MyItemClickListener() {
             @Override
             public void setOnItemClickListener(View itemview, View view, int postion) {
                 Intent intent = new Intent(PublishActivity.this, PictureDetailActivity.class);
@@ -128,6 +189,74 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
             }
         });
+        jokeAdapter.setOnItemLongClickListener(new PublishAdapter.MyItemLongClickListener() {
+
+
+            @Override
+            public void setOnItemLongClickListener(View itemview, View view, int postion) {
+                index = postion;
+                showDialog(jokeList.get(postion).getUrl(),Integer.parseInt(jokeList.get(postion).getIs_show()),jokeList.get(postion).getId());
+            }
+        });
+    }
+    private void showDialog(final String url ,final int isShow,final String imageId){
+        popupWindow = new CommonPopupWindow.Builder(this)
+                .setView(R.layout.publish_dialog)
+                .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setBackGroundLevel(0.5f)
+                .setAnimationStyle(R.style.anim_menu_pop)
+                .setViewOnclickListener(new CommonPopupWindow.ViewInterface() {
+                    @Override
+                    public void getChildView(final View view, int layoutResId) {
+                        MyFrontTextView textView =  view.findViewById(R.id.tv_isShow);
+                        if(isShow == 1){
+                            textView.setText("设为不可见 ");
+                            show = 0;
+                        }else{
+                            textView.setText("设为公开可见");
+                            show = 1;
+                        }
+                        view.findViewById(R.id.rl_is_see).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requstShowPublish(show,imageId);
+                                popupWindow.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.rl_delete).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requstDeletePublish(imageId);
+                                popupWindow.dismiss();
+                            }
+                        });
+                        view.findViewById(R.id.rl_share_wx).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (ActivityCompat.checkSelfPermission(PublishActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    openPermissin();
+                                } else {
+                                    WXshowShare(url, SHARE_MEDIA.WEIXIN);
+                                }
+                            }
+                        });
+                        view.findViewById(R.id.rl_share_qq).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (ActivityCompat.checkSelfPermission(PublishActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    openPermissin();
+                                } else {
+                                    QQshowShare(url, SHARE_MEDIA.QQ);
+                                }
+                            }
+                        });
+
+                    }
+                })
+                .setOutsideTouchable(true)
+                .create();
+        popupWindow.showAtLocation(this.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
     }
 
     @Override
@@ -140,17 +269,49 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     }
 
     private void requestJoke(int page) {
-        try {
-            JSONObject jsonObject = KeyUtil.getJson(this);
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-            presenter.getPublish(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                presenter.getPublish(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            ToastUtils.showShort(this,"请检查网络设置");
         }
 
     }
-
+    private void requstDeletePublish(String id){
+        if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                jsonObject.put("id", id);
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                presenter.delMyDesignImages(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            ToastUtils.showShort(this,"请检查网络设置");
+        }
+    }
+    private void requstShowPublish(int isShow,String id){
+        if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(this);
+                jsonObject.put("id", id);
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                jsonObject.put("is_show", isShow + "");
+                presenter.setMyDesignImages(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            ToastUtils.showShort(this,"请检查网络设置");
+        }
+    }
     @Override
     public int getLayout() {
         return R.layout.activity_publish;
@@ -163,16 +324,52 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
     @Override
     public void resultPublish(PictureResultBean bean) {
-        if(page == 1){
-            jokeList.clear();
+        if(bean != null){
+            if(page == 1){
+                jokeList.clear();
+                if(bean.getResult()!=null&&bean.getResult().size()==0){
+                    no_data_failed.setVisibility(View.VISIBLE);
+                }else{
+                    jokeList.addAll(bean.getResult());
+                    jokeAdapter.notifyDataSetChanged();
+                    page++;
+                    requestJoke(page);
+                }
+            }else{
+                cashList.clear();
+                cashList.addAll(bean.getResult());
+            }
+
         }
-        jokeList.addAll(bean.getResult());
-        jokeAdapter.notifyDataSetChanged();
+
     }
 
     @Override
     public void requestErrResult(String msg) {
         ToastUtils.showShort(this, msg);
+    }
+
+    @Override
+    public void setMyDesignImagesResult(FavoriteBean bean) {
+        if(bean!=null){
+            if(show == 1){
+                jokeList.get(index).setIs_show("1");
+            }else{
+                jokeList.get(index).setIs_show("0");
+            }
+            jokeAdapter.notifyDataSetChanged();
+            ToastUtils.showShort(this,bean.getMsg());
+        }
+    }
+
+    @Override
+    public void delMyDesignImagesResult(FavoriteBean bean) {
+        if(bean!=null){
+            jokeList.remove(index);
+            jokeAdapter.notifyItemRemoved(index);
+            jokeAdapter.notifyDataSetChanged();
+            ToastUtils.showShort(this,bean.getMsg());
+        }
     }
 
     @Override
@@ -186,6 +383,134 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
     }
+    private void openPermissin() {
+        Acp.getInstance(this)
+                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
+                        new AcpListener() {
+                            @Override
+                            public void onGranted() {
+
+                            }
+
+                            @Override
+                            public void onDenied(List<String> permissions) {
+                                ToastUtils.showShort(PublishActivity.this, "请求权限失败,请手动开启！");
+                            }
+                        });
+    }
+    private void QQshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
+            UmengStatisticsUtil.statisticsEvent(this, "16");
+        } else if (share_media.equals(SHARE_MEDIA.QQ)) {
+            UmengStatisticsUtil.statisticsEvent(this, "14");
+        }
+
+        if (URL != null) {
+            UMImage image = null;
+            if (URL.contains("http")) {
+                image = new UMImage(this, URL);
+            } else {
+                image = new UMImage(this, BitmapFactory.decodeFile(URL));
+            }
+            try {
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } catch (NullPointerException e) {
+                ToastUtils.showShort(PublishActivity.this, "选择的内容为空，请重试");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void WXshowShare(String URL, SHARE_MEDIA share_media) {//分享
+        if (share_media != null && URL != null) {
+            if (URL.contains("http")) {
+                UMEmoji image = new UMEmoji(this, URL);
+                image.compressStyle = UMEmoji.CompressStyle.SCALE;
+                image.compressStyle = UMEmoji.CompressStyle.QUALITY;
+                image.setThumb(new UMEmoji(this, URL));
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } else {
+                UMEmoji image = new UMEmoji(this, new File(URL));
+                image.setThumb(new UMEmoji(this, new File(URL)));
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            }
+        } else {
+            if (URL.contains("http")) {
+                UMImage image = new UMImage(this, URL);
+                image.compressStyle = UMImage.CompressStyle.SCALE;
+                image.compressStyle = UMImage.CompressStyle.QUALITY;
+                new ShareAction(this).withMedia(image)
+                        .setPlatform(share_media)
+                        .setCallback(umShareListener).share();
+            } else {
+                try {
+                    UMImage image = new UMImage(this, new File(URL));
+                    image.compressStyle = UMImage.CompressStyle.SCALE;
+                    image.compressStyle = UMImage.CompressStyle.QUALITY;
+                    image.setThumb(new UMEmoji(this, new File(URL)));
+                    new ShareAction(this).withMedia(image)
+                            .setPlatform(share_media)
+                            .setCallback(umShareListener).share();
+                } catch (Exception e) {
+                    ToastUtils.showLong(this, "选中图片错误，请重新选择");
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            shareDialog(PublishActivity.this);
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            hideAlertDialog(sharedialog);
+            ToastUtils.showShort(PublishActivity.this, "分享成功");
+            if (platform.equals(SHARE_MEDIA.WEIXIN)) {
+                UmengStatisticsUtil.statisticsEvent(PublishActivity.this, "17");
+            } else if (platform.equals(SHARE_MEDIA.QQ)) {
+                UmengStatisticsUtil.statisticsEvent(PublishActivity.this, "15");
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            hideAlertDialog(sharedialog);
+            ToastUtils.showShort(PublishActivity.this, "分享失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            hideAlertDialog(sharedialog);
+            ToastUtils.showShort(PublishActivity.this, "分享取消");
+        }
+    };
+
+    public void shareDialog(Activity activity) {
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.img_animation);
+        LinearInterpolator lin = new LinearInterpolator();
+        animation.setInterpolator(lin);
+        sharedialog = new AlertDialog.Builder(activity, R.style.TransDialogStyle).create();
+        if (!activity.isFinishing()) {
+            sharedialog.show();
+        }
+        Window window = sharedialog.getWindow();
+        window.setContentView(R.layout.share_dialog);
+        ImageView imageView = (ImageView) window.findViewById(R.id.share_dialog_image);
+        imageView.setAnimation(animation);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -193,5 +518,25 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             page = 1;
             requestJoke(page);
         }
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void hideAlertDialog(AlertDialog mProgressDialog) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            Context context = ((ContextWrapper) mProgressDialog.getContext()).getBaseContext();
+            if (context instanceof Activity) {
+                if (!((Activity) context).isFinishing())
+                    mProgressDialog.dismiss();
+            } else {
+                mProgressDialog.dismiss();
+            }
+            mProgressDialog = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideAlertDialog(sharedialog);
     }
 }

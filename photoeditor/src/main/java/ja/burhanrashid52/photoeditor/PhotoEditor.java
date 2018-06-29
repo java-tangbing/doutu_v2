@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.waynejo.androidndkgif.GifDecoder;
 import com.waynejo.androidndkgif.GifEncoder;
 import com.waynejo.androidndkgif.GifImage;
@@ -128,20 +130,34 @@ public class PhotoEditor implements BrushViewChangeListener {
 
     }
 
-    public void reAddImage(DraftImageBean bean, Bitmap desiredImage, String path) {
+    public void reAddImage(final DraftImageBean bean, final Bitmap desiredImage, String path) {
         final View imageRootView = getLayout(ViewType.IMAGE,path);
         final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
         final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
         final ImageView imgClose = imageRootView.findViewById(R.id.imgPhotoEditorClose);
         frmBorder.setTag(true);
+        imageRootView.post(new Runnable() {
+            @Override
+            public void run() {
+                final float centerX = bean.getBgWidth() * bean.getTranslationX() - imageRootView.getLeft() - imageRootView.getWidth() * bean.getImageWidth() / 2;
+                final float centerY = bean.getBgHeight() * bean.getTranslationY() - imageRootView.getTop() - imageRootView.getHeight() * bean.getImageHeight() / 2;
+                Log.e("center point",centerX +" " + centerY +" " + imageRootView.getLeft() +" " + imageRootView.getTop());
+                imageRootView.setTranslationX(centerX);
+                imageRootView.setTranslationY(centerY);
+                imageRootView.setScaleX(bean.getScaleX());
+                imageRootView.setScaleY(bean.getScaleY());
+                imageRootView.setRotation(bean.getRotation());
+//                GlideApp.with(context).asBitmap().load(desiredImage).into(new SimpleTarget<Bitmap>((int)(imageRootView.getWidth() * bean.getImageWidth()),(int)(imageRootView.getHeight() * bean.getImageHeight())) {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                        imageView.setImageBitmap(resource);
+//
+//                    }
+//                });
+            }
+        });
 
-        imageRootView.setTranslationX(bean.getTranslationX());
-        imageRootView.setTranslationY(bean.getTranslationY());
-        imageRootView.setScaleX(bean.getScaleX());
-        imageRootView.setScaleY(bean.getScaleY());
-        imageRootView.setRotation(bean.getRotation());
 
-        imageView.setImageBitmap(desiredImage);
 
         MultiTouchListener multiTouchListener = getMultiTouchListener();
         multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
@@ -260,11 +276,21 @@ public class PhotoEditor implements BrushViewChangeListener {
         final ImageView imgClose = textRootView.findViewById(R.id.imgPhotoEditorClose);
         final FrameLayout frmBorder = textRootView.findViewById(R.id.frmBorder);
         frmBorder.setTag(true);
-        textRootView.setTranslationX(reAdd.getTranslationX());
-        textRootView.setTranslationY(reAdd.getTranslationY());
-        textRootView.setScaleX(reAdd.getScaleX());
-        textRootView.setScaleY(reAdd.getScaleY());
-        textRootView.setRotation(reAdd.getRotation());
+
+        textRootView.post(new Runnable() {
+            @Override
+            public void run() {
+                final float centerX = reAdd.getBgWidth() * reAdd.getTranslationX() - textRootView.getLeft() - textRootView.getWidth() * reAdd.getWidth() / 2;
+                final float centerY = reAdd.getBgHeight() * reAdd.getTranslationY() - textRootView.getTop() - textRootView.getHeight() * reAdd.getHeight() / 2;
+                Log.e("center point",centerX +" " + centerY +" " + textRootView.getLeft() +" " + textRootView.getTop());
+                textRootView.setTranslationX(centerX);
+                textRootView.setTranslationY(centerY);
+                textRootView.setScaleX(reAdd.getScaleX());
+                textRootView.setScaleY(reAdd.getScaleY());
+                textRootView.setRotation(reAdd.getRotation());
+            }
+        });
+
 
         textInputTv.setText(reAdd.getText());
         textInputTv.setTextColor(reAdd.getTextColor());

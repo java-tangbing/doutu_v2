@@ -12,6 +12,42 @@ public class DraftTextBean {
     private float scaleX;
     private float scaleY;
     private float rotation;
+    private float width;
+    private float height;
+    private int bgWidth;
+    private int bgHeight;
+
+    public int getBgWidth() {
+        return bgWidth;
+    }
+
+    public void setBgWidth(int bgWidth) {
+        this.bgWidth = bgWidth;
+    }
+
+    public int getBgHeight() {
+        return bgHeight;
+    }
+
+    public void setBgHeight(int bgHeight) {
+        this.bgHeight = bgHeight;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
 
     public String getText() {
         return text;

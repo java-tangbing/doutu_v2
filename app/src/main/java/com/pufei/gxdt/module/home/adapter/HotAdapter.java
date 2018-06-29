@@ -66,7 +66,6 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     }
    static class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView iv1,hot_top;
-        private CheckBox  iv2;
         public MyHodler(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener=myItemClickListener;

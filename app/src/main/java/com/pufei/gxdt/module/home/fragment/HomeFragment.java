@@ -333,7 +333,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             RecyclerView home_xrl_image = headView.findViewById(R.id.home_xrl_image);
             ImageTypeAdapter adapter = new ImageTypeAdapter(getActivity(), homeTypeList);
             home_xrl_image.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-            home_xrl_image.addItemDecoration(new GridSpaceItemDecoration(dp2px(getActivity(), 10), dp2px(getActivity(), 10), true));
+            home_xrl_image.addItemDecoration(new GridSpaceItemDecoration(dp2px(getActivity(), 15), dp2px(getActivity(), 15), true));
             home_xrl_image.setAdapter(adapter);
             headView.findViewById(R.id.tv_hot_face).setOnClickListener(new View.OnClickListener() {
                 @Override

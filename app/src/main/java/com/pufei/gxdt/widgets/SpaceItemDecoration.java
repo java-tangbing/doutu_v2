@@ -8,20 +8,29 @@ import android.view.View;
  * Created by wangwenzhang on 2016/11/23.
  */
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-    private int space;
+    private int itemSpace;
+    private int itemNum;
 
-    public SpaceItemDecoration(int space) {
-        this.space = space;
+    /**
+     *
+     * @param itemSpace item间隔
+     * @param itemNum 每行item的个数
+     */
+    public SpaceItemDecoration(int itemSpace, int itemNum) {
+        this.itemSpace = itemSpace;
+        this.itemNum = itemNum;
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view,
-                               RecyclerView parent, RecyclerView.State state) {
-        outRect.left = space;
-        outRect.right = space;
-        outRect.bottom = space;
-        // Add top margin only for the first item to avoid double space between items
-        if (parent.getChildPosition(view) == 0)
-            outRect.top = space;
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        super.getItemOffsets(outRect, view, parent, state);
+        outRect.bottom = itemSpace;
+//        if (parent.getChildLayoutPosition(view)%itemNum == 0){  //parent.getChildLayoutPosition(view) 获取view的下标
+//            outRect.left = 0;
+//        } else {
+            outRect.left = itemSpace;
+//        }
+
     }
+
 }

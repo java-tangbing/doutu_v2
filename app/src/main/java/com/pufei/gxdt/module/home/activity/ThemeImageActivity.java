@@ -1,12 +1,16 @@
 package com.pufei.gxdt.module.home.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.module.home.adapter.ThemeImageAdpater;
@@ -45,7 +49,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     @BindView(R.id.tv_title)
     TextView tv_title;
     @BindView(R.id.rl_theme)
-    RecyclerView recyclerView;
+    XRecyclerView recyclerView;
     @BindView(R.id.refresh_theme)
     SmartRefreshLayout refresh_theme;
     @BindView(R.id.your_original_layout)

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+    <!-- <View
+         android:layout_width="match_parent"
+         android:layout_height="2dp"></View>-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.pufei.gxdt.widgets.RoundImageView
+            android:background="@drawable/shape"
+            android:scaleType="fitXY"
+            android:id="@+id/activity_picture_item_image"
+            android:layout_width="110dp"
+            android:layout_height="110dp" />
+        <ImageView
+            android:id="@+id/hot_top"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            />
+        <com.pufei.gxdt.widgets.RoundImageView
+            android:background="@drawable/shape"
+            android:scaleType="fitXY"
+            android:id="@+id/iv_black_bg"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            />
+    </FrameLayout>
+
+</LinearLayout>

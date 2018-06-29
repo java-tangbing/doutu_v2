@@ -16,12 +16,18 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/fragment_home_tb"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             app:tabIndicatorColor="@color/skin"
             app:tabIndicatorHeight="2dp"
+            app:tabTextAppearance="@style/TabText"
             app:tabSelectedTextColor="@color/skin"
             app:tabTextColor="@color/text_color"></android.support.design.widget.TabLayout>
-
+        <View
+            android:layout_marginTop="3dp"
+            android:background="@color/bg_invite_text"
+            android:layout_width="match_parent"
+            android:layout_height="1dp">
+        </View>
         <com.pufei.gxdt.widgets.viewpager.MyViewPager
             android:id="@+id/home_vp_type"
             android:layout_width="match_parent"

@@ -11,6 +11,7 @@
             android:layout_height="wrap_content">
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:focusableInTouchMode="true"
                 android:id="@+id/xrl_doutu"

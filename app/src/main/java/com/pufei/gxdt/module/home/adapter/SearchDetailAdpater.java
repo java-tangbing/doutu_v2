@@ -42,10 +42,17 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
-        holder.titletv.setText(list.get(position).getCategory_name());
-        GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv1);
-        GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv2);
-        GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv3);
+        if(list!=null){
+            holder.titletv.setText(list.get(position).getCategory_name());
+            if(list.get(position).getImgs() != null){
+                if(list.get(position).getImgs().size() == 3){
+                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv1);
+                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv2);
+                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv3);
+                }
+            }
+        }
+
     }
 
     static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {

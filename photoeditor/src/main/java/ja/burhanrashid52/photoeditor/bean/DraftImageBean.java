@@ -3,14 +3,31 @@ package ja.burhanrashid52.photoeditor.bean;
 public class DraftImageBean {
 
     private String stickerImagePath;
-    private int imageWidth;
-    private int imageHeight;
+    private float imageWidth;
+    private float imageHeight;
     private float translationX;
     private float translationY;
     private float scaleX;
     private float scaleY;
     private float rotation;
+    private float bgWidth;
+    private float bgHeight;
 
+    public float getBgWidth() {
+        return bgWidth;
+    }
+
+    public void setBgWidth(float bgWidth) {
+        this.bgWidth = bgWidth;
+    }
+
+    public float getBgHeight() {
+        return bgHeight;
+    }
+
+    public void setBgHeight(float bgHeight) {
+        this.bgHeight = bgHeight;
+    }
 
     public float getTranslationX() {
         return translationX;
@@ -60,19 +77,19 @@ public class DraftImageBean {
         this.stickerImagePath = stickerImagePath;
     }
 
-    public int getImageWidth() {
+    public float getImageWidth() {
         return imageWidth;
     }
 
-    public void setImageWidth(int imageWidth) {
+    public void setImageWidth(float imageWidth) {
         this.imageWidth = imageWidth;
     }
 
-    public int getImageHeight() {
+    public float getImageHeight() {
         return imageHeight;
     }
 
-    public void setImageHeight(int imageHeight) {
+    public void setImageHeight(float imageHeight) {
         this.imageHeight = imageHeight;
     }
 

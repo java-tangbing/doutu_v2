@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_top_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#333"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:text="标题"/>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:id="@+id/tv_eyes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_normal"
+            android:textSize="12sp"
+            android:drawableLeft="@mipmap/con_ic_eyes"
+            android:drawablePadding="5dp"
+            android:text="0" />
+
+        <com.pufei.gxdt.widgets.MyFrontTextView
+            android:id="@+id/tv_hot"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="21dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/con_ic_hot"
+            android:textColor="@color/color_text_normal"
+            android:drawablePadding="5dp"
+            android:textSize="12sp"
+            android:text="0" />
+    </LinearLayout>
+    <include layout="@layout/adver_layout"
+        />
+</LinearLayout>
