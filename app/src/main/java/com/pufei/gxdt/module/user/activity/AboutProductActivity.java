@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.jaeger.library.StatusBarUtil;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
+import com.pufei.gxdt.module.news.activity.NewsFeedBackActivity;
 import com.pufei.gxdt.utils.AppManager;
 
 import butterknife.BindView;
@@ -68,7 +69,7 @@ public class AboutProductActivity extends BaseActivity {
                 startActivity(new Intent(this, AgreeementActivity.class));
                 break;
             case R.id.tv_user_feedback:
-                startActivity(new Intent(this, FeedBackActivity.class));
+                startActivity(new Intent(this, NewsFeedBackActivity.class));
                 break;
             case R.id.tv_user_manage:
                 startActivity(new Intent(this, ManagerRulesActivity.class));

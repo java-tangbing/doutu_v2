@@ -2,22 +2,25 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fillViewport="true"
     android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/fm_head"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="210dp"
             android:background="@mipmap/user_bg_picture">
 
             <FrameLayout
                 android:id="@+id/id_sign"
+                android:layout_marginBottom="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -53,12 +56,14 @@
                     android:background="@drawable/find_tv" />
             </FrameLayout>
 
+
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/user"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/id_sign"
                 android:layout_gravity="left"
-                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp"
                 android:orientation="vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -101,21 +106,23 @@
                     android:layout_toRightOf="@id/user_head"
                     android:text="个性签名"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:id="@+id/user_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="9dp"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:src="@drawable/user_edit_selector"
-                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
             </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/user_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/user"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:src="@drawable/user_edit_selector"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
         </RelativeLayout>
 
 
@@ -123,7 +130,8 @@
             android:id="@+id/tv_user_publish"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="40dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/user_ic_list_release"
             android:drawablePadding="10dp"
             android:drawableRight="@mipmap/com_bt_next"
             android:gravity="center_vertical"
@@ -141,6 +149,8 @@
             android:id="@+id/tv_user_favorite"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/user_ic_list_collect"
             android:drawablePadding="10dp"
             android:drawableRight="@mipmap/com_bt_next"
             android:gravity="center_vertical"
@@ -158,6 +168,8 @@
             android:id="@+id/tv_user_draft"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/user_ic_list_drafts"
             android:drawablePadding="10dp"
             android:drawableRight="@mipmap/com_bt_next"
             android:gravity="center_vertical"
@@ -181,6 +193,8 @@
             android:id="@+id/tv_douqi"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/user_ic_list_ranking"
             android:drawablePadding="10dp"
             android:drawableRight="@mipmap/com_bt_next"
             android:gravity="center_vertical"
@@ -198,6 +212,8 @@
             android:id="@+id/tv_setting"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/user_ic_list_set"
             android:drawablePadding="10dp"
             android:drawableRight="@mipmap/com_bt_next"
             android:gravity="center_vertical"

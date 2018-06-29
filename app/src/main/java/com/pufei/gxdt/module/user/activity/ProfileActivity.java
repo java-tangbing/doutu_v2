@@ -87,6 +87,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             }
             userdataname.setText(App.userBean.getName());
             tvSex.setText(App.userBean.getGender());
+            userdata_dec.setText(App.userBean.getMind());
             loginstate.setText(R.string.log_out);
         }
     }
