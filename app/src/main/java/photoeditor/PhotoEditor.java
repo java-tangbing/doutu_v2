@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.waynejo.androidndkgif.GifDecoder;
+import com.waynejo.androidndkgif.GifEncoder;
 import com.waynejo.androidndkgif.GifImage;
 import com.waynejo.androidndkgif.GifImageIterator;
 
@@ -929,14 +931,16 @@ public class PhotoEditor implements BrushViewChangeListener {
             protected void onPreExecute() {
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @SuppressLint("MissingPermission")
             @Override
             protected Exception doInBackground(String... strings) {
 //                GifEncoder gifEncoder = new GifEncoder();
 //                try {
-//                    gifEncoder.init(220, 220, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
+//                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
 //                    for (int i = 0; i < bitmap.size(); i++) {
-//                        gifEncoder.setDither(true);
+////                        gifEncoder.setDither(true);
+////                        Bitmap resizeBm = resizeImage(bitmap.get(i).getBitmap(), 220, 220);
 //                        gifEncoder.encodeFrame(bitmap.get(i).getBitmap(),bitmap.get(i).getDelay());
 //                    }
 //                    gifEncoder.close();
@@ -951,6 +955,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                     for (int i = 0; i < bitmap.size(); i++) {
                         localAnimatedGifEncoder.setDelay(bitmap.get(i).getDelay());
                         Bitmap resizeBm = resizeImage(bitmap.get(i).getBitmap(), 220, 220);
+                        localAnimatedGifEncoder.setTransparent(Color.BLACK);
                         localAnimatedGifEncoder.addFrame(resizeBm);
                     }
                 localAnimatedGifEncoder.finish();
@@ -981,6 +986,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private  Bitmap resizeImage(Bitmap bitmap, int w, int h)
     {
         Bitmap BitmapOrg = bitmap;
@@ -998,6 +1004,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         // matrix.postRotate(45);
         Bitmap resizedBitmap = Bitmap.createBitmap(BitmapOrg, 0, 0, width,
                 height, matrix, true);
+        resizedBitmap.setConfig(Bitmap.Config.ARGB_8888);
         return resizedBitmap;
     }
 
@@ -1018,7 +1025,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                     File file = new File(bitmap.get(i).getPath());
                     try {
                         FileOutputStream stream = new FileOutputStream(file);
-                        bitmap.get(i).getBitmap().compress(Bitmap.CompressFormat.JPEG,20,stream);
+                        bitmap.get(i).getBitmap().compress(Bitmap.CompressFormat.PNG,100,stream);
                         stream.flush();
                         stream.close();
                     } catch (FileNotFoundException e) {

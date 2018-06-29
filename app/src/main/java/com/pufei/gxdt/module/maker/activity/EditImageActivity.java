@@ -754,6 +754,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                             public void onEncodeSuccess(String path) {
                                                 hideLoading();
                                                 if (!isDraft) {
+//                                                    GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
                                                     startToMakerFinish(path);
                                                 } else {
                                                     draftImgPath = path;
