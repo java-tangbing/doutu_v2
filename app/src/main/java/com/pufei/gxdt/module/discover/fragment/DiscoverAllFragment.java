@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -52,6 +53,9 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
     RecyclerView recyclerView;
     @BindView(R.id.dis_all_refreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.request_failed)
+    LinearLayout requestFailed;
     private List<DiscoverListBean.ResultBean> mlist;
     private DiscoverAdapter discoverAdapter;
     private int page;
@@ -64,6 +68,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void initView() {
+        requestFailed.setVisibility(View.GONE);
         final GridLayoutManager layoutManage = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
@@ -90,6 +95,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @Override
     public void getData() {
+
         mlist = new ArrayList<>();
         discoverAdapter = new DiscoverAdapter(mlist);
 
@@ -149,19 +155,22 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //        if (App.userBean == null) {
 //            startActivity(new Intent(activity, LoginActivity.class));
 //        } else {
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
-        JSONObject jsonObject = KeyUtil.getJson(getContext());
-        try {
-            jsonObject.put("order", "");
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", auth);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            requestFailed.setVisibility(View.GONE);
+            auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
+            JSONObject jsonObject = KeyUtil.getJson(getContext());
+            try {
+                jsonObject.put("order", "");
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", auth);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
+            requestFailed.setVisibility(View.VISIBLE);
+//            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
         }
 //        }
     }
