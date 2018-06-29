@@ -74,10 +74,10 @@ public class AppManager {
      * 结束指定的Activity
      */
     public void finishActivity(WeakReference<Activity> activity) {
-        if (activity != null) {
+        if (activity.get() != null) {
             activityStack.remove(activity);
             activity.get().finish();
-            activity = null;
+//            activity = null;
         }
     }
 
