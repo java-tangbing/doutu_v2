@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -54,6 +56,8 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     SmartRefreshLayout refresh_theme;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     private ThemeImageAdpater adpater;
     private List<ThemeResultBean.ResultBean> list = new ArrayList<>();
     private List<ThemeResultBean.ResultBean> cashList = new ArrayList<>();
@@ -77,11 +81,15 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    if(cashList.size()>0){
-                        list.addAll(cashList);
-                        adpater.notifyDataSetChanged();
-                        page++;
-                        requestTheme(page);
+                    if (NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
+                        if (cashList.size() > 0) {
+                            list.addAll(cashList);
+                            adpater.notifyDataSetChanged();
+                            page++;
+                            requestTheme();
+                        }
+                    }else{
+                        ToastUtils.showShort(ThemeImageActivity.this,"请检查网络设置");
                     }
                 }
             }
@@ -112,7 +120,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                     @Override
                     public void run() {
                         page = 1;
-                        requestTheme(page);
+                        requestTheme();
                         refreshlayout.finishRefresh();
                     }
                 }, 2000);
@@ -149,9 +157,27 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     }
     @Override
     public void getData() {
-        requestTheme(page);
+        if(NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)){
+            requestTheme();
+        }else {
+            request_failed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
+                        request_failed.setVisibility(View.GONE);
+                        AdvUtil.getInstance().getAdvHttp(ThemeImageActivity.this, your_original_layout, 6);
+                        page = 1;
+                        requestTheme();
+                    }else{
+                        ToastUtils.showShort(ThemeImageActivity.this,"请检查网络设置");
+                    }
+                }
+            });
+        }
+
     }
-    private void requestTheme(int page){
+    private void requestTheme(){
         if (NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
             try{
                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -161,7 +187,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                 e.printStackTrace();
             }
         }else{
-            request_failed.setVisibility(View.VISIBLE);
+            ToastUtils.showShort(this,"请检查网络设置");
         }
 
 
@@ -188,7 +214,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                 list.addAll(bean.getResult());
                 adpater.notifyDataSetChanged();
                 page++;
-                requestTheme(page);
+                requestTheme();
             }else{
                 cashList.clear();;
                 cashList.addAll(bean.getResult());

@@ -72,38 +72,35 @@
         android:layout_marginBottom="24dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="95dp">
-        <ImageView
-            android:padding="1dp"
+        android:layout_height="wrap_content">
+            <com.pufei.gxdt.widgets.RoundImageView
             android:background="@drawable/shape"
             android:scaleType="fitXY"
             android:id="@+id/fragment_pager_item_image1"
             android:src="@mipmap/newloding"
             android:layout_weight="1"
-            android:layout_width="103dp"
-            android:layout_height="95dp" />
+            android:layout_width="110dp"
+            android:layout_height="110dp"/>
 
-        <ImageView
+        <com.pufei.gxdt.widgets.RoundImageView
             android:id="@+id/fragment_pager_item_image2"
-            android:layout_width="103dp"
-            android:layout_height="95dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:layout_marginLeft="7dp"
             android:layout_weight="1"
-            android:background="@drawable/shape"
-            android:padding="1dp"
+            android:background="@drawable/share_border"
             android:scaleType="fitXY"
             android:src="@mipmap/newloding" />
 
-        <ImageView
-            android:background="@drawable/shape"
-            android:padding="1dp"
+        <com.pufei.gxdt.widgets.RoundImageView
+            android:background="@drawable/share_border"
             android:scaleType="fitXY"
             android:id="@+id/fragment_pager_item_image3"
             android:layout_marginLeft="7dp"
             android:src="@mipmap/newloding"
             android:layout_weight="1"
-            android:layout_width="103dp"
-            android:layout_height="95dp" />
+            android:layout_width="110dp"
+            android:layout_height="110dp" />
     </LinearLayout>
     <View
         android:background="@color/background"
