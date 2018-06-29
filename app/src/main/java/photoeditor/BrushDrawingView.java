@@ -312,42 +312,25 @@ public class BrushDrawingView extends View {
     }
 
     public Bitmap generateBimap() {
-        float maxTouchx = Collections.max(mTouchXList);
-        float minTouchx = Collections.min(mTouchXList);
-        float maxTouchY = Collections.max(mTouchYList);
-        float minTouchY = Collections.min(mTouchYList);
-//        Bitmap bitmap = Bitmap.createBitmap((int)(maxTouchx - minTouchx),(int)(maxTouchY - minTouchY), Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(bitmap);
-//        Log.e("linePath","line path size is " + mLinePaths.size());
-//        for (LinePath path : mLinePaths) {
-//            canvas.drawPath(path.getDrawPath(),path.getDrawPaint());
-//        }
-//        canvas.save(Canvas.ALL_SAVE_FLAG);
-//        canvas.restore();
-//        Log.e("fdsf",(int)(maxTouchx - minTouchx) + " " + (int)(maxTouchY - minTouchY));
-        int width = (int) (maxTouchx - minTouchx);
-        int height = (int) (maxTouchY - minTouchY);
-        // 计算缩放比例.
-
-        Bitmap map = null;
-        Bitmap newMap = null;
-        if(bitmapList.size() > 0) {
-            map = bitmapList.get(0);
-//            if((int)minTouchx + (int)(maxTouchx - minTouchx) < map.getWidth() && (int)minTouchY + (int)(maxTouchY - minTouchY) < map.getHeight() && minTouchx > 0 && minTouchY > 0 ) {
-//            }
-            try {
-                newMap = Bitmap.createBitmap(map,(int)minTouchx,(int)minTouchY,(int)(maxTouchx - minTouchx),(int)(maxTouchY - minTouchY));
+        if(mTouchYList.size() > 0 && mTouchXList.size() > 0) {
+            float maxTouchx = Collections.max(mTouchXList);
+            float minTouchx = Collections.min(mTouchXList);
+            float maxTouchY = Collections.max(mTouchYList);
+            float minTouchY = Collections.min(mTouchYList);
+            Bitmap map = null;
+            Bitmap newMap = null;
+            if(bitmapList.size() > 0) {
+                map = bitmapList.get(0);
+                try {
+                    newMap = Bitmap.createBitmap(map,(int)minTouchx,(int)minTouchY,(int)(maxTouchx - minTouchx) + 10,(int)(maxTouchY - minTouchY) + 10);
 //                map.recycle();
-            }catch (Exception e) {
-                ToastUtils.showShort(getContext(),"画笔不能超过屏幕边界");
+                }catch (Exception e) {
+                    ToastUtils.showShort(getContext(),"画笔不能超过屏幕边界");
+                }
             }
-//            float scaleWidth = ((float) width) / bitmapList.get(0).getWidth();
-//            float scaleHeight = ((float) height) / bitmapList.get(0).getHeight();
-//            Matrix matrix = new Matrix();
-//            matrix.postScale(scaleWidth, scaleHeight);
-//            map = Bitmap.createBitmap(bitmapList.get(0), 0, 0, bitmapList.get(0).getWidth(), bitmapList.get(0).getHeight(), matrix, true);
+            return newMap;
         }
-        return newMap;
+        return null;
     }
 
     public float getMinTouchX() {

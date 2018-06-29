@@ -98,20 +98,26 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     PhotoEditorView photoEditorView;
     @BindView(R.id.tv_save_draft)
     TextView tvSaveDraft;
-    @BindView(R.id.tv_redo)
-    ImageView tvUndeo;
-    @BindView(R.id.tv_undo)
-    ImageView tvUndo;
-    @BindView(R.id.tv_delete)
-    ImageView tvDelete;
+    @BindView(R.id.ll_redo)
+    LinearLayout llUndeo;
+    @BindView(R.id.ll_undo)
+    LinearLayout llUndo;
+    @BindView(R.id.ll_delete)
+    LinearLayout llDelete;
     @BindView(R.id.ll_guide)
     LinearLayout llGuide;
-    @BindView(R.id.tv_pic_mode)
-    TextView tvPicMode;
-    @BindView(R.id.tv_text_mode)
-    TextView tvTextMode;
-    @BindView(R.id.tv_blush_mode)
-    TextView tvBlushMode;
+    @BindView(R.id.ll_pic_mode)
+    LinearLayout llPicMode;
+    @BindView(R.id.ll_text_mode)
+    LinearLayout llTextMode;
+    @BindView(R.id.ll_blush_mode)
+    LinearLayout llBlushMode;
+    @BindView(R.id.iv_pic_mode)
+    ImageView ivPicMode;
+    @BindView(R.id.iv_text_mode)
+    ImageView ivTextMode;
+    @BindView(R.id.iv_blush_mode)
+    ImageView ivBlushMode;
     @BindView(R.id.mode_content)
     FrameLayout modeContent;
 
@@ -151,7 +157,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Override
     public void initView() {
         addFragment();
-
         fangzhengjianzhi = Typeface.createFromAsset(getAssets(), "fangzhengjianzhi.ttf");
         fangzhengkatong = Typeface.createFromAsset(getAssets(), "fangzhengkatong.ttf");
         fangzhengyasong = Typeface.createFromAsset(getAssets(), "fangzhengyasong.TTF");
@@ -161,9 +166,8 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
         mPhotoEditor = new PhotoEditor.Builder(this, photoEditorView)
                 .setPinchTextScalable(true) // set flag to make text scalable when pinch
-                .setDefaultTextTypeface(fangzhengjianzhi)
+                .setDefaultTextTypeface(lantingdahei)
                 .build(); // build photo editor sdk
-
         mPhotoEditor.setOnPhotoEditorListener(this);
         mPhotoEditor.setBrushColor(ContextCompat.getColor(this, R.color.select_color1));
         mPhotoEditor.setBrushDrawingMode(false);
@@ -270,7 +274,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         bean.setBgHeight(photoEditorView.getHeight());
                         bean.setBgWidth(photoEditorView.getWidth());
                         mPhotoEditor.reAddText(bean);
-                        Log.e("fsdfsd", photoEditorView.getWidth() + " " + photoEditorView.getHeight());
+//                        Log.e("fsdfsd", photoEditorView.getWidth() + " " + photoEditorView.getHeight());
                     }
                 });
             } else {
@@ -315,6 +319,16 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setScaleX(draft.scaleX);
             bean.setScaleY(draft.scaleY);
             bean.setRotation(draft.rotation);
+            bean.setHeight(draft.height);
+            bean.setWidth(draft.width);
+            photoEditorView.post(new Runnable() {
+                @Override
+                public void run() {
+                    bean.setBgHeight(photoEditorView.getHeight());
+                    bean.setBgWidth(photoEditorView.getWidth());
+                    mPhotoEditor.reAddText(bean);
+                }
+            });
             bean.setText(draft.text);
             bean.setTextColor(Color.parseColor("#" + draft.textColor));
             bean.setTextSize(draft.textSize);
@@ -332,7 +346,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             } else if (fontStyle.equals("FZJZJW--GB1-0")) {
                 bean.setTextFont(xindixiaowanzixiaoxueban);
             }
-            mPhotoEditor.reAddText(bean);
         }
     }
 
@@ -345,13 +358,23 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             bean.setScaleX(draft.scaleX);
             bean.setScaleY(draft.scaleY);
             bean.setRotation(draft.rotation);
-            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
+            bean.setImageHeight(draft.imageHeight);
+            bean.setImageWidth(draft.imageWidth);
+            photoEditorView.post(new Runnable() {
                 @Override
-                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-                    mPhotoEditor.reAddImage(bean, resource, draft.stickerImagePath);
+                public void run() {
+                    bean.setBgHeight(photoEditorView.getHeight());
+                    bean.setBgWidth(photoEditorView.getWidth());
+                    SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                            mPhotoEditor.reAddImage(bean, resource, draft.stickerImagePath);
+                        }
+                    };
+                    GlideApp.with(EditImageActivity.this).asBitmap().load(draft.stickerImagePath).into(simpleTarget);
                 }
-            };
-            GlideApp.with(this).asBitmap().load(draft.stickerImagePath).into(simpleTarget);
+            });
+
         }
     }
 
@@ -376,6 +399,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(final MakerEventMsg msg) {
         if (msg.getType() == 0) {//替换背景图
+            type = 0;
             mPhotoEditor.clearAllViews();
             imagePath = msg.getUrl();
             resetOriginId();
@@ -419,7 +443,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
 
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_redo, R.id.tv_undo, R.id.tv_delete, R.id.tv_pic_mode, R.id.tv_text_mode, R.id.tv_blush_mode, R.id.ll_title_back})
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_back:
@@ -427,17 +451,21 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.btn_next:
                 if (imagePath != null) {
-                    isAddBrushImage = false;
-                    addBrushImg();
-                    saveToDraft(false);
-                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                        if (gifFile == null) {
-                            gifFile = new File(imagePath);
+                    if(mPhotoEditor.getIsContainsBrush()) {//判断是否包含画笔，如果包含画笔则要等view确定位置之后再进行其他操作
+                        isAddBrushImage = false;
+                        addBrushImg(false);
+                    }else {
+                        saveToDraft(false);
+                        if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                            if (gifFile == null) {
+                                gifFile = new File(imagePath);
+                            }
+                            saveGif(false);
+                        } else {
+                            saveImage(false);
                         }
-                        saveGif(false);
-                    } else {
-                        saveImage(false);
                     }
+
                 } else {
                     ToastUtils.showShort(this, "请选择背景图");
                 }
@@ -445,50 +473,51 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.tv_save_draft:
                 if (!TextUtils.isEmpty(imagePath)) {
-                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                        if (gifFile == null) {
-                            gifFile = new File(imagePath);
-                            gifFile = new File(imagePath);
+                    if(mPhotoEditor.getIsContainsBrush()) {//判断是否包含画笔，如果包含画笔则要等view确定位置之后再进行其他操作
+                        isAddBrushImage = false;
+                        addBrushImg(true);
+                    }else {
+                        if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                            if (gifFile == null) {
+                                gifFile = new File(imagePath);
+                            }
+                            saveGif(true);
+                        } else {
+                            saveImage(true);
                         }
-                        addBrushImg();
-                        saveGif(true);
-                    } else {
-                        addBrushImg();
-                        saveImage(true);
                     }
+
+
                 }
                 break;
-            case R.id.tv_redo:
+            case R.id.ll_redo:
                 mPhotoEditor.redo();
                 break;
-            case R.id.tv_undo:
+            case R.id.ll_undo:
                 mPhotoEditor.undo();
                 break;
-            case R.id.tv_delete:
+            case R.id.ll_delete:
                 mPhotoEditor.clearAllViews();
                 break;
-            case R.id.tv_pic_mode:
-                setSelectedItemState(tvPicMode);
-                setUnSelectedItemState(tvTextMode, tvBlushMode);
+            case R.id.ll_pic_mode:
+                setSelectedItemState(0);
                 showFragment(0, previousIndex);
                 previousIndex = 0;
                 break;
-            case R.id.tv_text_mode:
-                setSelectedItemState(tvTextMode);
-                setUnSelectedItemState(tvPicMode, tvBlushMode);
+            case R.id.ll_text_mode:
+                setSelectedItemState(1);
                 showFragment(1, previousIndex);
                 previousIndex = 1;
                 break;
-            case R.id.tv_blush_mode:
-                setSelectedItemState(tvBlushMode);
-                setUnSelectedItemState(tvPicMode, tvTextMode);
+            case R.id.ll_blush_mode:
+                setSelectedItemState(2);
                 showFragment(2, previousIndex);
                 previousIndex = 2;
                 break;
         }
     }
 
-    private void addBrushImg() {
+    private void addBrushImg(final boolean isDraft) {
         List<AddViewBean> beans = mPhotoEditor.getAddedViews();
         if(beans.size()> 0) {
             for (int i = 0; i < beans.size(); i++) {
@@ -503,10 +532,37 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                 FileOutputStream outputStream = new FileOutputStream(file);
                                 map.compress(Bitmap.CompressFormat.PNG,100,outputStream);
                                 outputStream.close();
-                                mPhotoEditor.addBrushImage(map,brush.getMinTouchX(),brush.getMinTouchY(),file.getPath());
+                                mPhotoEditor.addBrushImage(map, brush.getMinTouchX(), brush.getMinTouchY(), file.getPath(), new PhotoEditor.AddBrushImageListener() {
+                                    @Override
+                                    public void addBrushImageSuccess() {
+                                        if(!isDraft) {
+                                            saveToDraft(false);
+                                            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                                                if (gifFile == null) {
+                                                    gifFile = new File(imagePath);
+                                                }
+                                                saveGif(false);
+                                            } else {
+                                                saveImage(false);
+                                            }
+                                        }else {
+                                            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
+                                                if (gifFile == null) {
+                                                    gifFile = new File(imagePath);
+                                                    gifFile = new File(imagePath);
+                                                }
+                                                saveGif(true);
+                                            } else {
+                                                saveImage(true);
+                                            }
+                                        }
+
+                                    }
+                                });
                                 mPhotoEditor.clearBrushAllViews();
                             } catch (IOException e) {
                                 e.printStackTrace();
+                                Log.e("addBrushImage",e.getMessage());
                             }
                         }
                         isAddBrushImage = true;
@@ -697,6 +753,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                                             public void onEncodeSuccess(String path) {
                                                 hideLoading();
                                                 if (!isDraft) {
+//                                                    GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
                                                     startToMakerFinish(path);
                                                 } else {
                                                     draftImgPath = path;
@@ -845,22 +902,33 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     private void defaultSelect() {
-        setSelectedItemState(tvPicMode);
-        setUnSelectedItemState(tvTextMode, tvBlushMode);
+        setSelectedItemState(0);
         showFragment(0, previousIndex);
         previousIndex = 0;
     }
 
-    private void setSelectedItemState(TextView tv) {
-        tv.setTextColor(ContextCompat.getColor(this, R.color.black));
-        tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-    }
+//    private void setSelectedItemState(ImageView iv) {
+//        GlideApp.with(this).load(R.mipmap.made_ic_picture_pressed).into(iv);
+//    }
 
-    private void setUnSelectedItemState(TextView tv1, TextView tv2) {
-        tv1.setTextColor(ContextCompat.getColor(this, R.color.text_default_color));
-        tv1.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        tv2.setTextColor(ContextCompat.getColor(this, R.color.text_default_color));
-        tv2.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+    private void setSelectedItemState(int mode) {
+        switch (mode) {
+            case 0:
+                GlideApp.with(this).load(R.mipmap.made_ic_picture_pressed).into(ivPicMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_character_normal).into(ivTextMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_pen_normal).into(ivBlushMode);
+                break;
+            case 1:
+                GlideApp.with(this).load(R.mipmap.made_ic_picture_normal).into(ivPicMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_character_pressed).into(ivTextMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_pen_normal).into(ivBlushMode);
+                break;
+            case 2:
+                GlideApp.with(this).load(R.mipmap.made_ic_picture_normal).into(ivPicMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_character_normal).into(ivTextMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_pen_pressed).into(ivBlushMode);
+                break;
+        }
     }
 
     @Override
@@ -881,7 +949,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     @Override
     public void onEditTextChangeListener(View rootView, String text, int colorCode) {
-        this.rootView = rootView;
         if (rootView == null) {
             type = 0;
         } else {

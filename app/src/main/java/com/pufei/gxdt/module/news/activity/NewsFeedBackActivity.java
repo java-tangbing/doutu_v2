@@ -27,6 +27,7 @@ import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.widgets.GlideApp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> implements NewsView {
     @BindView(R.id.news_feedback_rv)
@@ -87,7 +89,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.newsNoticeContentTypeTwo(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this,  getResources().getString(R.string.check_the_network_please));
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -121,7 +123,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         if (NetWorkUtil.isNetworkConnected(this)) {
             presenter.sendAdvice(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
-            ToastUtils.showShort(this,  getResources().getString(R.string.check_the_network_please));
+            ToastUtils.showShort(this, getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -156,14 +158,14 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         if (bean != null) {
 //            if (bean.getCode() == "0") {
             NewsTypeTwoBean.ResultBean resultBean = new NewsTypeTwoBean.ResultBean();
-                resultBean.setContent(advice);
-                SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                String date = sDateFormat.format(new java.util.Date());
-                resultBean.setDateline(date);
-                resultBean.setUrl(App.userBean.getHead());
-                resultBean.setOrgin("1");
-                mlist.add(resultBean);
-                newsFeedBackAdapter.notifyDataSetChanged();
+            resultBean.setContent(advice);
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            String date = sDateFormat.format(new java.util.Date());
+            resultBean.setDateline(date);
+            resultBean.setUrl(App.userBean.getHead());
+            resultBean.setOrgin("1");
+            mlist.add(resultBean);
+            newsFeedBackAdapter.notifyDataSetChanged();
 //            }else {
 //                ToastUtils.showShort(this, "发送失败");
 //            }
