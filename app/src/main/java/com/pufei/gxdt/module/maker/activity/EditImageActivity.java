@@ -401,6 +401,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(final MakerEventMsg msg) {
         if (msg.getType() == 0) {//替换背景图
+            type = 0;
             mPhotoEditor.clearAllViews();
             imagePath = msg.getUrl();
             resetOriginId();
@@ -950,7 +951,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     @Override
     public void onEditTextChangeListener(View rootView, String text, int colorCode) {
-        this.rootView = rootView;
         if (rootView == null) {
             type = 0;
         } else {

@@ -4,8 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -954,8 +956,8 @@ public class PhotoEditor implements BrushViewChangeListener {
                 localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
                     for (int i = 0; i < bitmap.size(); i++) {
                         localAnimatedGifEncoder.setDelay(bitmap.get(i).getDelay());
-                        Bitmap resizeBm = resizeImage(bitmap.get(i).getBitmap(), 220, 220);
-                        localAnimatedGifEncoder.setTransparent(Color.BLACK);
+                        Bitmap resizeBm = drawBg4Bitmap(Color.WHITE,resizeImage(bitmap.get(i).getBitmap(), 220, 220));
+//                        localAnimatedGifEncoder.setTransparent(Color.BLACK);
                         localAnimatedGifEncoder.addFrame(resizeBm);
                     }
                 localAnimatedGifEncoder.finish();
@@ -986,6 +988,19 @@ public class PhotoEditor implements BrushViewChangeListener {
 
 
     }
+
+    public static Bitmap drawBg4Bitmap(int color, Bitmap orginBitmap) {
+        Paint paint = new Paint();
+        paint.setColor(color);
+        Bitmap bitmap = Bitmap.createBitmap(orginBitmap.getWidth(),
+                orginBitmap.getHeight(), orginBitmap.getConfig());
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawRect(0, 0, orginBitmap.getWidth(), orginBitmap.getHeight(), paint);
+        canvas.drawBitmap(orginBitmap, 0, 0, paint);
+        return bitmap;
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private  Bitmap resizeImage(Bitmap bitmap, int w, int h)
     {
