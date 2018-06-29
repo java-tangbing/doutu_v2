@@ -2,27 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="日期"
-            android:visibility="gone" />
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="日期"-->
+        <!--android:visibility="gone" />-->
 
         <TextView
             android:id="@+id/tv_dateLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="时间" />
+            android:text="时间"
+            android:textColor="@color/hint_color" />
     </LinearLayout>
 
     <LinearLayout
@@ -35,7 +38,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:src="@mipmap/news_ic_assistant" />
 
@@ -43,7 +46,7 @@
             android:id="@+id/news_picture_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/news_dialogue_left_normal"
             android:orientation="vertical">
 
@@ -59,7 +62,9 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                     />
+                    android:background="@drawable/shape_gray_square_bg"
+                    android:padding="1dp"
+                    android:scaleType="fitXY" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

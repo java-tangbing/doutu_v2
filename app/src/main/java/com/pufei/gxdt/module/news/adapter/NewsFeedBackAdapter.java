@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.news.adapter;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.module.news.bean.NewsBean;
 import com.pufei.gxdt.module.news.bean.NewsTypeTwoBean;
 import com.pufei.gxdt.widgets.GlideApp;
@@ -33,7 +34,7 @@ public class NewsFeedBackAdapter extends BaseMultiItemQuickAdapter<NewsTypeTwoBe
             case 1:
                 helper.setText(R.id.news_feedback_item_user_dateline_tv, item.getDateline())
                         .setText(R.id.news_feedback_item_user_content_tv, item.getContent());
-                GlideApp.with(mContext).load(item.getUrl())
+                GlideApp.with(mContext).load(App.userBean.getHead())
                         .placeholder(R.mipmap.my_uer_picture)
                         .into((CircleImageView) helper.getView(R.id.news_feedback_item_user_icon_cv));
                 break;
