@@ -91,25 +91,46 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/tv_undo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:src="@mipmap/bt_made_tool_return_normal" />
+                <LinearLayout
+                    android:id="@+id/ll_undo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/bt_made_tool_return_normal" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/tv_redo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:src="@mipmap/bt_made_tool_advance_normal" />
+                <LinearLayout
+                    android:id="@+id/ll_redo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/bt_made_tool_advance_normal" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/tv_delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/bt_made_tool_delete_normal" />
+                <LinearLayout
+                    android:id="@+id/ll_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/bt_made_tool_delete_normal" />
+                </LinearLayout>
 
             </LinearLayout>
 

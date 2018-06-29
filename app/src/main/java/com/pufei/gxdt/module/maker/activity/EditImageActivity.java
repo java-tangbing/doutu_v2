@@ -98,12 +98,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     PhotoEditorView photoEditorView;
     @BindView(R.id.tv_save_draft)
     TextView tvSaveDraft;
-    @BindView(R.id.tv_redo)
-    ImageView tvUndeo;
-    @BindView(R.id.tv_undo)
-    ImageView tvUndo;
-    @BindView(R.id.tv_delete)
-    ImageView tvDelete;
+    @BindView(R.id.ll_redo)
+    LinearLayout llUndeo;
+    @BindView(R.id.ll_undo)
+    LinearLayout llUndo;
+    @BindView(R.id.ll_delete)
+    LinearLayout llDelete;
     @BindView(R.id.ll_guide)
     LinearLayout llGuide;
     @BindView(R.id.ll_pic_mode)
@@ -444,7 +444,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
 
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_redo, R.id.tv_undo, R.id.tv_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back})
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_back:
@@ -491,13 +491,13 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
                 }
                 break;
-            case R.id.tv_redo:
+            case R.id.ll_redo:
                 mPhotoEditor.redo();
                 break;
-            case R.id.tv_undo:
+            case R.id.ll_undo:
                 mPhotoEditor.undo();
                 break;
-            case R.id.tv_delete:
+            case R.id.ll_delete:
                 mPhotoEditor.clearAllViews();
                 break;
             case R.id.ll_pic_mode:
