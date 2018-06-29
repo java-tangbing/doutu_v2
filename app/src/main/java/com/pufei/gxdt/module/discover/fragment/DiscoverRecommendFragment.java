@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
         , SwipeRefreshLayout.OnRefreshListener
@@ -190,6 +191,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 //                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
             }
             if (isfirst) {
+                page = page + 1;
                 isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
@@ -296,9 +298,18 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         setMyadapter();
     }
 
+    @OnClick({R.id.btn_publish})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_publish:
+                refresh();
+                break;
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+//        refresh();
     }
 }
