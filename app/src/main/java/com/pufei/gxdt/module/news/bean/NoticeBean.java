@@ -55,6 +55,15 @@ public class NoticeBean {
         private String os;
         private String content;
         private String title;
+        private String is_read;
+
+        public String getIs_read() {
+            return is_read;
+        }
+
+        public void setIs_read(String is_read) {
+            this.is_read = is_read;
+        }
 
         public String getId() {
             return id;
