@@ -323,4 +323,11 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
         void showBitmap(Bitmap bitmap, String path);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(activity != null) {
+            activity = null;
+        }
+    }
 }

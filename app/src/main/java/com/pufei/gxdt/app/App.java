@@ -14,6 +14,7 @@ import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
@@ -40,6 +41,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
         LogUtils.isShow = true;
         AppContext = getApplicationContext();
         ResolutionUtil.getInstance().init(this);
