@@ -55,7 +55,7 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
 
     }
 
-    static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
+     class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private TextView titletv;
         private ImageView iv1, iv2, iv3;
         public MyHodler(View itemView, MyItemClickListener myItemClickListener) {
@@ -75,7 +75,7 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
             }
         }
     }
-    private static MyItemClickListener mListener=null;//设置点击接口
+    private  MyItemClickListener mListener=null;//设置点击接口
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;
     }

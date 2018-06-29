@@ -48,7 +48,7 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
     public void onViewDetachedFromWindow(MyHodler holder) {
         super.onViewDetachedFromWindow(holder);
     }
-   static class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView iv1;
         private CheckBox  iv2;
         public MyHodler(View itemView,MyItemClickListener myItemClickListener) {
@@ -65,7 +65,7 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
             }
         }
     }
-    private static MyItemClickListener mListener=null;//设置点击接口
+    private  MyItemClickListener mListener=null;//设置点击接口
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;
     }

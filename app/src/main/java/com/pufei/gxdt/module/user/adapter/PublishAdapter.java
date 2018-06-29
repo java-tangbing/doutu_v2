@@ -75,7 +75,7 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.MyHodler
     public void onViewDetachedFromWindow(MyHodler holder) {
         super.onViewDetachedFromWindow(holder);
     }
-   static class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+    class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         private ImageView iv1,hot_top,iv_black_bg;
         public MyHodler(View itemView,MyItemClickListener myItemClickListener,MyItemLongClickListener myItemLongClickListener) {
             super(itemView);
@@ -107,8 +107,8 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.MyHodler
            return true;
        }
    }
-    private static MyItemClickListener mListener = null;//设置点击接口
-    private static MyItemLongClickListener mListener2 =null;//设置点击接口
+    private  MyItemClickListener mListener = null;//设置点击接口
+    private  MyItemLongClickListener mListener2 =null;//设置点击接口
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;

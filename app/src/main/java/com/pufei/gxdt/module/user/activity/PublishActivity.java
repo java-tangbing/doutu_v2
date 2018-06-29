@@ -440,29 +440,8 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                         .setPlatform(share_media)
                         .setCallback(umShareListener).share();
             }
-        } else {
-            if (URL.contains("http")) {
-                UMImage image = new UMImage(this, URL);
-                image.compressStyle = UMImage.CompressStyle.SCALE;
-                image.compressStyle = UMImage.CompressStyle.QUALITY;
-                new ShareAction(this).withMedia(image)
-                        .setPlatform(share_media)
-                        .setCallback(umShareListener).share();
-            } else {
-                try {
-                    UMImage image = new UMImage(this, new File(URL));
-                    image.compressStyle = UMImage.CompressStyle.SCALE;
-                    image.compressStyle = UMImage.CompressStyle.QUALITY;
-                    image.setThumb(new UMEmoji(this, new File(URL)));
-                    new ShareAction(this).withMedia(image)
-                            .setPlatform(share_media)
-                            .setCallback(umShareListener).share();
-                } catch (Exception e) {
-                    ToastUtils.showLong(this, "选中图片错误，请重新选择");
-                    e.printStackTrace();
-                }
-            }
-
+        } else{
+            ToastUtils.showLong(this, "选中图片错误，请重新选择");
         }
 
     }

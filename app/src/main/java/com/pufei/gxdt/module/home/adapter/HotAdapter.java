@@ -64,7 +64,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
     public void onViewDetachedFromWindow(MyHodler holder) {
         super.onViewDetachedFromWindow(holder);
     }
-   static class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
+   class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView iv1,hot_top;
         public MyHodler(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
@@ -81,26 +81,12 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyHodler> {
             }
         }
     }
-    private static MyItemClickListener mListener=null;//设置点击接口
+    private  MyItemClickListener mListener=null;//设置点击接口
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;
     }
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
-        void onDelete(int position);
-        void onAdd(int position);
     }
 
-   public void releaseImageViewResouce(ImageView imageView) {
-       if (imageView == null) return;
-       Drawable drawable = imageView.getDrawable();
-       if (drawable != null && drawable instanceof BitmapDrawable) {
-           BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-           Bitmap bitmap = bitmapDrawable.getBitmap();
-           if (bitmap != null && !bitmap.isRecycled()) {
-               bitmap.recycle();
-               System.gc();
-           }
-       }
-   }
 }

@@ -94,13 +94,6 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                 startActivityForResult(intent,1);
             }
 
-            @Override
-            public void onDelete(int position) {
-            }
-
-            @Override
-            public void onAdd(int position) {
-            }
         });
         fragmentHotSmart.setRefreshHeader(new ClassicsHeader(HotImageActivity.this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentHotSmart.setRefreshFooter(new ClassicsFooter(HotImageActivity.this).setSpinnerStyle(SpinnerStyle.Translate));
