@@ -66,7 +66,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         int spacing = 30; // px
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        recyclerView.addItemDecoration(new DividerGridItemDecoration(activity));
+//        recyclerView.addItemDecoration(new DividerGridItemDecoration(activity));
 
 
     }

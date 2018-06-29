@@ -70,7 +70,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         int spacing = 30; // px
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        recyclerView.addItemDecoration(new DividerGridItemDecoration(activity));
+//        recyclerView.addItemDecoration(new DividerGridItemDecoration(activity));
 
 //        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
