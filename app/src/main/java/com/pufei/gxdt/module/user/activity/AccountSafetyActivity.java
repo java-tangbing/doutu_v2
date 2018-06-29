@@ -77,13 +77,6 @@ public class AccountSafetyActivity extends BaseActivity {
             }
             tvPhone.setText(sb);
         }
-        Log.e("LoginActivity", App.userBean.isPwd()+"");
-
-        if (App.userBean.isPwd()) {
-            tvSetPassword.setText("修改密码");
-        } else {
-            tvSetPassword.setText("设置密码");
-        }
     }
 
     @Override

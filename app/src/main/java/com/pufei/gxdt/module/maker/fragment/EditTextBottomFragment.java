@@ -57,7 +57,6 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private List<String> hotTextList;
     private HotTextAdapter hotTextAdapter;
     private InputMethodManager inputManager;
-    private EditImagePresenter imagePresenter;
     private BottomSheetBehavior mBottomSheetBehavior;
     private Timer timer;
     private Unregistrar unregistrar;
@@ -224,6 +223,8 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
         if(inputTextListener != null) {
             inputTextListener = null;
         }
+
+        etInput = null;
 
         if(unregistrar != null) {
             unregistrar.unregister();
