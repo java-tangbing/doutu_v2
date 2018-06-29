@@ -58,6 +58,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     private InputMethodManager inputManager;
     private EditImagePresenter imagePresenter;
     private BottomSheetBehavior mBottomSheetBehavior;
+    private Timer timer;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -112,7 +113,7 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
             });
         }
 
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -213,4 +214,11 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(timer != null) {
+            timer.cancel();
+        }
+    }
 }
