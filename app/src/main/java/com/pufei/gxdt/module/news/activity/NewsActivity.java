@@ -92,11 +92,11 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     @Override
     public void initView() {
 
-        ViewGroup.LayoutParams lp;
-        lp = common_title.getLayoutParams();
-        lp.height = DensityUtils.dp2px(this, 44);
-
-        common_title.setLayoutParams(lp);
+//        ViewGroup.LayoutParams lp;
+//        lp = common_title.getLayoutParams();
+//        lp.height = DensityUtils.dp2px(this, 44);
+//
+//        common_title.setLayoutParams(lp);
         textViewtitle.setText(getResources().getString(R.string.news));
         backlinearLayout.setVisibility(View.VISIBLE);
 //        LinearLayoutManager layoutManage = new LinearLayoutManager(this);
