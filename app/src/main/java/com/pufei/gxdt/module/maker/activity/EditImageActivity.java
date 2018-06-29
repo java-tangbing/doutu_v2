@@ -157,7 +157,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Override
     public void initView() {
         addFragment();
-
         fangzhengjianzhi = Typeface.createFromAsset(getAssets(), "fangzhengjianzhi.ttf");
         fangzhengkatong = Typeface.createFromAsset(getAssets(), "fangzhengkatong.ttf");
         fangzhengyasong = Typeface.createFromAsset(getAssets(), "fangzhengyasong.TTF");
@@ -169,7 +168,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 .setPinchTextScalable(true) // set flag to make text scalable when pinch
                 .setDefaultTextTypeface(lantingdahei)
                 .build(); // build photo editor sdk
-
         mPhotoEditor.setOnPhotoEditorListener(this);
         mPhotoEditor.setBrushColor(ContextCompat.getColor(this, R.color.select_color1));
         mPhotoEditor.setBrushDrawingMode(false);
