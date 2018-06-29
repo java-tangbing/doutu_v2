@@ -98,20 +98,26 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     PhotoEditorView photoEditorView;
     @BindView(R.id.tv_save_draft)
     TextView tvSaveDraft;
-    @BindView(R.id.tv_redo)
-    ImageView tvUndeo;
-    @BindView(R.id.tv_undo)
-    ImageView tvUndo;
-    @BindView(R.id.tv_delete)
-    ImageView tvDelete;
+    @BindView(R.id.ll_redo)
+    LinearLayout llUndeo;
+    @BindView(R.id.ll_undo)
+    LinearLayout llUndo;
+    @BindView(R.id.ll_delete)
+    LinearLayout llDelete;
     @BindView(R.id.ll_guide)
     LinearLayout llGuide;
-    @BindView(R.id.tv_pic_mode)
-    TextView tvPicMode;
-    @BindView(R.id.tv_text_mode)
-    TextView tvTextMode;
-    @BindView(R.id.tv_blush_mode)
-    TextView tvBlushMode;
+    @BindView(R.id.ll_pic_mode)
+    LinearLayout llPicMode;
+    @BindView(R.id.ll_text_mode)
+    LinearLayout llTextMode;
+    @BindView(R.id.ll_blush_mode)
+    LinearLayout llBlushMode;
+    @BindView(R.id.iv_pic_mode)
+    ImageView ivPicMode;
+    @BindView(R.id.iv_text_mode)
+    ImageView ivTextMode;
+    @BindView(R.id.iv_blush_mode)
+    ImageView ivBlushMode;
     @BindView(R.id.mode_content)
     FrameLayout modeContent;
 
@@ -161,7 +167,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
         mPhotoEditor = new PhotoEditor.Builder(this, photoEditorView)
                 .setPinchTextScalable(true) // set flag to make text scalable when pinch
-                .setDefaultTextTypeface(fangzhengjianzhi)
+                .setDefaultTextTypeface(lantingdahei)
                 .build(); // build photo editor sdk
 
         mPhotoEditor.setOnPhotoEditorListener(this);
@@ -438,7 +444,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
 
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.tv_redo, R.id.tv_undo, R.id.tv_delete, R.id.tv_pic_mode, R.id.tv_text_mode, R.id.tv_blush_mode, R.id.ll_title_back})
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_back:
@@ -485,30 +491,27 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
                 }
                 break;
-            case R.id.tv_redo:
+            case R.id.ll_redo:
                 mPhotoEditor.redo();
                 break;
-            case R.id.tv_undo:
+            case R.id.ll_undo:
                 mPhotoEditor.undo();
                 break;
-            case R.id.tv_delete:
+            case R.id.ll_delete:
                 mPhotoEditor.clearAllViews();
                 break;
-            case R.id.tv_pic_mode:
-                setSelectedItemState(tvPicMode);
-                setUnSelectedItemState(tvTextMode, tvBlushMode);
+            case R.id.ll_pic_mode:
+                setSelectedItemState(0);
                 showFragment(0, previousIndex);
                 previousIndex = 0;
                 break;
-            case R.id.tv_text_mode:
-                setSelectedItemState(tvTextMode);
-                setUnSelectedItemState(tvPicMode, tvBlushMode);
+            case R.id.ll_text_mode:
+                setSelectedItemState(1);
                 showFragment(1, previousIndex);
                 previousIndex = 1;
                 break;
-            case R.id.tv_blush_mode:
-                setSelectedItemState(tvBlushMode);
-                setUnSelectedItemState(tvPicMode, tvTextMode);
+            case R.id.ll_blush_mode:
+                setSelectedItemState(2);
                 showFragment(2, previousIndex);
                 previousIndex = 2;
                 break;
@@ -899,22 +902,33 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     private void defaultSelect() {
-        setSelectedItemState(tvPicMode);
-        setUnSelectedItemState(tvTextMode, tvBlushMode);
+        setSelectedItemState(0);
         showFragment(0, previousIndex);
         previousIndex = 0;
     }
 
-    private void setSelectedItemState(TextView tv) {
-        tv.setTextColor(ContextCompat.getColor(this, R.color.black));
-        tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-    }
+//    private void setSelectedItemState(ImageView iv) {
+//        GlideApp.with(this).load(R.mipmap.made_ic_picture_pressed).into(iv);
+//    }
 
-    private void setUnSelectedItemState(TextView tv1, TextView tv2) {
-        tv1.setTextColor(ContextCompat.getColor(this, R.color.text_default_color));
-        tv1.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        tv2.setTextColor(ContextCompat.getColor(this, R.color.text_default_color));
-        tv2.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+    private void setSelectedItemState(int mode) {
+        switch (mode) {
+            case 0:
+                GlideApp.with(this).load(R.mipmap.made_ic_picture_pressed).into(ivPicMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_character_normal).into(ivTextMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_pen_normal).into(ivBlushMode);
+                break;
+            case 1:
+                GlideApp.with(this).load(R.mipmap.made_ic_picture_normal).into(ivPicMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_character_pressed).into(ivTextMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_pen_normal).into(ivBlushMode);
+                break;
+            case 2:
+                GlideApp.with(this).load(R.mipmap.made_ic_picture_normal).into(ivPicMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_character_normal).into(ivTextMode);
+                GlideApp.with(this).load(R.mipmap.made_ic_pen_pressed).into(ivBlushMode);
+                break;
+        }
     }
 
     @Override

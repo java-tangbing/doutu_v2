@@ -43,12 +43,19 @@
 
         <photoeditor.PhotoEditorView
             android:id="@+id/photoEditorView"
-            android:layout_width="280dp"
-            android:layout_height="280dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:background="@color/white" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_guide"
             android:layout_width="match_parent"
@@ -61,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/text_white_bg"
                 android:drawableLeft="@mipmap/bt_made_tool_drafts_normal"
                 android:drawablePadding="10dp"
@@ -81,112 +87,170 @@
                 android:layout_width="148dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/text_white_bg"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/tv_undo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:src="@mipmap/bt_made_tool_return_normal" />
+                <LinearLayout
+                    android:id="@+id/ll_undo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/bt_made_tool_return_normal" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/tv_redo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:src="@mipmap/bt_made_tool_advance_normal" />
+                <LinearLayout
+                    android:id="@+id/ll_redo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/bt_made_tool_advance_normal" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/tv_delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/bt_made_tool_delete_normal" />
+                <LinearLayout
+                    android:id="@+id/ll_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/bt_made_tool_delete_normal" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:background="@color/white"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="170dp"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_pic_mode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:gravity="center"
-                android:text="图片"
-                android:textColor="@color/text_default_color"
-                android:textSize="14sp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_text_mode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="文字"
-                android:textColor="@color/text_default_color"
-                android:textSize="14sp" />
+                <LinearLayout
+                    android:id="@+id/ll_pic_mode"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/iv_pic_mode"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@mipmap/made_ic_picture_normal"/>
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_blush_mode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="画笔"
-                android:textColor="@color/text_default_color"
-                android:textSize="14sp" />
+                <LinearLayout
+                    android:id="@+id/ll_text_mode"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/iv_text_mode"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@mipmap/made_ic_character_normal"/>
+                </LinearLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text=""
-                android:visibility="invisible" />
+                <LinearLayout
+                    android:id="@+id/ll_blush_mode"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/iv_blush_mode"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@mipmap/made_ic_pen_normal"/>
+                </LinearLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/text_default_color"
-                android:visibility="invisible" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="图片"
+                    android:textColor="@color/text_default_color"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="文字"
+                    android:textColor="@color/text_default_color"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="画笔"
+                    android:textColor="@color/text_default_color"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text=""
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/text_default_color"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_color" />
+
+            <FrameLayout
+                android:id="@+id/mode_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_color" />
-
-        <FrameLayout
-            android:id="@+id/mode_content"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
     </LinearLayout>
+
+
 
 </RelativeLayout>
