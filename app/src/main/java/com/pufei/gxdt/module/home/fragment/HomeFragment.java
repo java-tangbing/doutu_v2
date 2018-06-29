@@ -1,9 +1,12 @@
 package com.pufei.gxdt.module.home.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,6 +28,7 @@ import com.pufei.gxdt.module.home.activity.HomeImageActivity;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeActivity;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.activity.SearchActivity;
 import com.pufei.gxdt.module.home.activity.ThemeImageActivity;
 import com.pufei.gxdt.module.home.adapter.HomeListAdapter;
@@ -66,6 +71,8 @@ import butterknife.OnClick;
 public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements HomeListView {
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     @BindView(R.id.srf_home_list)
     SmartRefreshLayout srf_home_lisyt;
     @BindView(R.id.rl_home_list)
@@ -237,11 +244,36 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            requestHomeList(page);
         }else{
             headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
-            ToastUtils.showShort(getActivity(),"请检查网络设置");
+            request_failed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetWorkUtil.isNetworkConnected(getActivity())) {
+                        headView.findViewById(R.id.ll_head_view).setVisibility(View.VISIBLE);
+                        request_failed.setVisibility(View.GONE);
+                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                                &&ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                            AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
+                        }else{
+                            your_original_layout.setVisibility(View.GONE);
+                        }
+                        try {
+                            JSONObject getHomeTypeObj = KeyUtil.getJson(getActivity());
+                            getHomeTypeObj.put("net", NetWorkUtil.netType(getActivity()));
+                            presenter.getHomeTypeList(RetrofitFactory.getRequestBody(getHomeTypeObj.toString()));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        requestHomeList(page);
+                    }else {
+                        ToastUtils.showShort(getActivity(),"请先打开网络连接");
+                    }
+                }
+            });
         }
-        requestHomeList(page);
     }
 
     private void requestHomeList(int page) {

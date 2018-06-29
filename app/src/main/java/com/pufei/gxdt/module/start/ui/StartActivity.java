@@ -62,7 +62,6 @@ public class StartActivity extends Activity {
                     }
                     break;
             }
-            AppManager.getAppManager().finishActivity();
             super.handleMessage(msg);
         }
     };

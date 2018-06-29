@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -64,17 +65,11 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     SmartRefreshLayout srf_home_image;
     @BindView(R.id.xrl_home_image)
     XRecyclerView xRecyclerView;
-//    @BindView(R.id.tv_top_title)
-//    TextView tv_top_title;
-//    @BindView(R.id.tv_hot)
-//    TextView tv_hot;
-//    @BindView(R.id.tv_eyes)
-//    TextView tv_eyes;
-    private HomeImageAdapter adapter;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
-//    @BindView(R.id.your_original_layout)
-//    RelativeLayout your_original_layout;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
+    private HomeImageAdapter adapter;
     private List<PictureResultBean.ResultBean> list = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private PictureResultBean resultBean;
@@ -122,12 +117,17 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    if(cashList.size()>0){
-                        list.addAll(cashList);
-                        adapter.notifyDataSetChanged();
-                        page++;
-                        requestHomeImage(page);
+                    if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)){
+                        if(cashList.size()>0){
+                            list.addAll(cashList);
+                            adapter.notifyDataSetChanged();
+                            page++;
+                            requestHomeImage();
+                        }
+                    }else{
+                        ToastUtils.showShort(HomeImageActivity.this,"请检查网络设置");
                     }
+
                 }
             }
         });
@@ -155,7 +155,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                     @Override
                     public void run() {
                         page = 1;
-                        requestHomeImage(page);
+                        requestHomeImage();
                         try {
                             refreshlayout.finishRefresh();
                         } catch (Exception e) {
@@ -196,9 +196,27 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     }
     @Override
     public void getData() {
-        requestHomeImage(page);
+        if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)){
+            requestHomeImage();
+        }else{
+            request_failed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)) {
+                        request_failed.setVisibility(View.GONE);
+                        RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
+                        AdvUtil.getInstance().getAdvHttp(HomeImageActivity.this,relativeLayout,2);
+                        page = 1;
+                        requestHomeImage();
+                    }else{
+                        ToastUtils.showShort(HomeImageActivity.this,"请检查网络设置");
+                    }
+                }
+            });
+        }
     }
-    private void requestHomeImage(int page){
+    private void requestHomeImage(){
         if (NetWorkUtil.isNetworkConnected(HomeImageActivity.this)) {
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -210,8 +228,8 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 e.printStackTrace();
             }
         }else{
-                request_failed.setVisibility(View.VISIBLE);
-            }
+            ToastUtils.showShort(HomeImageActivity.this,"请检查网络设置");
+        }
     }
     @OnClick({R.id.ll_title_left,R.id.ll_title_right})
     public  void viewClicked(View view){
@@ -278,7 +296,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 list.addAll(bean.getResult());
                 adapter.notifyDataSetChanged();
                 page++;
-                requestHomeImage(page);
+                requestHomeImage();
             }else{
                 cashList.clear();
                 cashList.addAll(bean.getResult());
@@ -329,7 +347,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1){
             page = 1;
-            requestHomeImage(page);
+            requestHomeImage();
         }
     }
 }
