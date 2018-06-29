@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
             <com.pufei.gxdt.widgets.RoundImageView
-            android:background="@drawable/shape"
+            android:background="@drawable/border_shape"
             android:scaleType="fitXY"
             android:id="@+id/fragment_pager_item_image1"
             android:src="@mipmap/newloding"
@@ -88,12 +88,12 @@
             android:layout_height="110dp"
             android:layout_marginLeft="7dp"
             android:layout_weight="1"
-            android:background="@drawable/share_border"
+            android:background="@drawable/border_shape"
             android:scaleType="fitXY"
             android:src="@mipmap/newloding" />
 
         <com.pufei.gxdt.widgets.RoundImageView
-            android:background="@drawable/share_border"
+            android:background="@drawable/border_shape"
             android:scaleType="fitXY"
             android:id="@+id/fragment_pager_item_image3"
             android:layout_marginLeft="7dp"
