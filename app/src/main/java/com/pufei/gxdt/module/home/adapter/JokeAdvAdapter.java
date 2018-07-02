@@ -107,7 +107,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
             refreshAd();
         }
     }
-   static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private TextView  titletv,tv_eyes,tv_hot;
         private ImageView iv1, iv2, iv3;
         private RelativeLayout container;
@@ -132,7 +132,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
         }
     }
 
-   static class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tv2,tv_eyes,tv_hot;
         private ImageView iv11;
        private RelativeLayout container;
@@ -154,7 +154,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
             }
         }
     }
-    private static MyItemClickListener mListener = null;//设置点击接口
+    private  MyItemClickListener mListener = null;//设置点击接口
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;

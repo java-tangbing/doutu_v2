@@ -60,7 +60,7 @@ public class FavoriteJokeAdapter extends XRecyclerView.Adapter<XRecyclerView.Vie
         }
     }
 
-   static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private TextView   titletv;
         private ImageView iv1, iv2, iv3;
 
@@ -102,7 +102,7 @@ public class FavoriteJokeAdapter extends XRecyclerView.Adapter<XRecyclerView.Vie
         }
     }
 
-   static class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView iv11;
         public OneHolder(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
@@ -119,7 +119,7 @@ public class FavoriteJokeAdapter extends XRecyclerView.Adapter<XRecyclerView.Vie
         }
     }
 
-    private static MyItemClickListener mListener = null;//设置点击接口
+    private  MyItemClickListener mListener = null;//设置点击接口
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;

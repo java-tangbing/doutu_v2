@@ -134,16 +134,6 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
-
-            @Override
-            public void onDelete(int position) {
-
-            }
-
-            @Override
-            public void onAdd(int position) {
-
-            }
         });
 
     }
