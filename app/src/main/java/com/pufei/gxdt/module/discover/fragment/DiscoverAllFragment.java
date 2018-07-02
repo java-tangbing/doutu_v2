@@ -172,9 +172,11 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
             }
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
+            mlist.clear();
+            discoverAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
             requestFailed.setVisibility(View.VISIBLE);
-
-//            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
+            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
         }
 //        }
     }
