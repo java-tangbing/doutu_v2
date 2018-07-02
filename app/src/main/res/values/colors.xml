@@ -30,6 +30,7 @@
     <color name="bgCircleColor">#9D9EFF</color>
     <color name="log_divider_tab_selector">#FF0000</color>
     <color name="circle_color">#929292</color>
+    <color name="tab_text_color">#929292</color>
     <color name="light_grey">#a5a5a5</color>
     <color name="possible_result_points">#c0ffff00</color>
     <color name="color_text_normal">#9c9c9c</color>
