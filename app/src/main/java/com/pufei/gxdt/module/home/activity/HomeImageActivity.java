@@ -199,11 +199,13 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)){
             requestHomeImage();
         }else{
+            headView.setVisibility(View.GONE);
             request_failed.setVisibility(View.VISIBLE);
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)) {
+                        headView.setVisibility(View.VISIBLE);
                         request_failed.setVisibility(View.GONE);
                         RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
                         AdvUtil.getInstance().getAdvHttp(HomeImageActivity.this,relativeLayout,2);

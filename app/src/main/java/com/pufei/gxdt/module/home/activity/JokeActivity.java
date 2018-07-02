@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +58,8 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
     private JokeAdvAdapter jokeAdapter;
@@ -83,13 +86,19 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
         rl_joke.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1)) {
-                    if(cashList.size()>0){
-                        jokeList.addAll(cashList);
-                        jokeAdapter.notifyDataSetChanged();
-                        page++;
-                        requestJoke(page);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1)) {
+                    if(NetWorkUtil.isNetworkConnected(JokeActivity.this)){
+                        if(cashList.size()>0){
+                            jokeList.addAll(cashList);
+                            jokeAdapter.notifyDataSetChanged();
+                            page++;
+                            requestJoke();
+                        }
+                    }else{
+                        ToastUtils.showShort(JokeActivity.this,"请检查网络设置");
                     }
+
                 }
             }
         });
@@ -117,7 +126,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
                     @Override
                     public void run() {
                           page = 1;
-                          requestJoke(page);
+                          requestJoke();
                         try {
                             refreshlayout.finishRefresh();
                         } catch (Exception e) {
@@ -165,12 +174,25 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     @Override
     public void getData() {
         if (NetWorkUtil.isNetworkConnected(JokeActivity.this)) {
-            requestJoke(page);
+            requestJoke();
         }else{
             request_failed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(NetWorkUtil.isNetworkConnected(JokeActivity.this)) {
+                        request_failed.setVisibility(View.GONE);
+                        AdvUtil.getInstance().getAdvHttp(JokeActivity.this,your_original_layout,4);
+                        page = 1;
+                        requestJoke();
+                    }else{
+                        ToastUtils.showShort(JokeActivity.this,"请检查网络设置");
+                    }
+                }
+            });
         }
     }
-    private void requestJoke(int page) {
+    private void requestJoke() {
         if (NetWorkUtil.isNetworkConnected(JokeActivity.this)) {
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -179,7 +201,6 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }else {
             ToastUtils.showShort(this,"请检查网络设置");
         }
@@ -209,7 +230,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             jokeList.addAll(bean.getResult());
             jokeAdapter.notifyDataSetChanged();
             page++;
-            requestJoke(page);
+            requestJoke();
         }else{
             cashList.clear();
             cashList.addAll(bean.getResult());
@@ -254,7 +275,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
 
     @Override
     public void onNoAD(AdError adError) {
-        Log.i("tb", "onError: " + adError.getErrorMsg()+"..."+adError.getErrorCode());
+
     }
 
     @Override

@@ -57,6 +57,8 @@ public class FavoriteAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
         holder.itemView.setTag(position);
         if (holder instanceof MyHodler){
             ((MyHodler) holder).titletv.setText(list.get(position).getCategory_name());
+            ((MyHodler) holder).tv_eyes.setText(list.get(position).getView());
+            ((MyHodler) holder).tv_hot.setText(list.get(position).getHot());
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv1);
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv2);
             GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv3);
@@ -65,39 +67,21 @@ public class FavoriteAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
         }
     }
 
-   static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView   titletv;
+    class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView   titletv,tv_eyes,tv_hot;
         private ImageView iv1, iv2, iv3;
 
         public MyHodler(View itemView, MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener = myItemClickListener;
             titletv = (TextView) itemView.findViewById(R.id.frgament_second_joke_tiltletv);
-            /*shanchutv = (TextView) itemView.findViewById(R.id.fragment_second_joke_fenxiang);*/
-            /*tvxihuan = (TextView) itemView.findViewById(R.id.fragment_second_joke_xihuan);*/
+            tv_eyes = (TextView) itemView.findViewById(R.id.tv_eyes);
+            tv_hot = (TextView) itemView.findViewById(R.id.tv_hot);
             iv1 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image1);
             iv2 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image2);
             iv3 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image3);
-          /*  iv4= (ImageView) itemView.findViewById(R.id.fragment_second_joke_image4);*/
-           /* iv5 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_fenxiang_image);*/
-           /* ll1 = (LinearLayout) itemView.findViewById(R.id.fragment_joke_fenxiang);
-            ll2 = (LinearLayout) itemView.findViewById(R.id.fragment_joke_shoucang);*/
             itemView.setOnClickListener(this);//单项点击
-           /* ll2.setOnClickListener(new View.OnClickListener() {//点击删除
-                @Override
-                public void onClick(View v) {
-                    *//*list.get((Integer) v.getTag()).setChick(true);*//*
-                    mListener.OnBtDelete((Integer) v.getTag());
-                    notifyDataSetChanged();
-                }
-            });
-            ll1.setOnClickListener(new View.OnClickListener() {//点击喜欢
-                @Override
-                public void onClick(View v) {
-                    mListener.OnLike((Integer) v.getTag());
 
-                }
-            });*/
         }
         @Override
         public void onClick(View v) {
@@ -107,7 +91,7 @@ public class FavoriteAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
         }
     }
 
-   static class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView iv11;
         public OneHolder(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
@@ -124,7 +108,7 @@ public class FavoriteAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
         }
     }
 
-    private static MyItemClickListener mListener = null;//设置点击接口
+    private  MyItemClickListener mListener = null;//设置点击接口
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;

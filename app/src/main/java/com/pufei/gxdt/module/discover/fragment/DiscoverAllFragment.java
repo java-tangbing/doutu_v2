@@ -336,10 +336,10 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //        refresh();
     }
 
-    @OnClick({R.id.btn_publish})
+    @OnClick({R.id.btn_refresh})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_publish:
+            case R.id.btn_refresh:
                 refresh();
                 break;
         }

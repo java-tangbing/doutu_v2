@@ -329,5 +329,12 @@ public class ImageStickerFragment extends BaseMvpFragment<EditImagePresenter> im
         if(activity != null) {
             activity = null;
         }
+        if(callback != null) {
+            callback = null;
+        }
+
+        if(gifCallback != null) {
+            gifCallback = null;
+        }
     }
 }
