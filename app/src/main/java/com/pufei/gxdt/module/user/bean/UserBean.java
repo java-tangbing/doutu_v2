@@ -11,7 +11,6 @@ public class UserBean {
     private String address;
     private String auth;
     private String phone;
-    private boolean pwd;
     private String mind;
     private String uid;
     private String wechat;
@@ -24,7 +23,6 @@ public class UserBean {
         this.address = address;
         this.auth = auth;
         this.phone = phone;
-        this.pwd = pwd;
         this.uid = uid;
     }
 
@@ -37,7 +35,6 @@ public class UserBean {
                 ", address='" + address + '\'' +
                 ", auth='" + auth + '\'' +
                 ", phone='" + phone + '\'' +
-                ", pwd=" + pwd +
                 ", mind='" + mind + '\'' +
                 ", uid='" + uid + '\'' +
                 '}';
@@ -51,13 +48,6 @@ public class UserBean {
         this.uid = uid;
     }
 
-    public boolean isPwd() {
-        return pwd;
-    }
-
-    public void setPwd(boolean pwd) {
-        this.pwd = pwd;
-    }
 
     public String getPhone() {
         return phone;

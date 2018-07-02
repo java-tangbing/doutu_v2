@@ -22,7 +22,6 @@ public class UserUtils {
                 jsonObject.put("address", user.getAddress());
                 jsonObject.put("auth", user.getAuth());
                 jsonObject.put("phone", user.getPhone());
-                jsonObject.put("pwd", user.isPwd());
                 jsonObject.put("uid",user.getUid());
                 jsonObject.put("wechat",user.getWechat());
                 jsonObject.put("qq",user.getQq());
