@@ -12,6 +12,7 @@
     <com.pufei.gxdt.widgets.RoundImageView
         android:layout_marginRight="18dp"
         android:scaleType="fitXY"
+        android:padding="1dp"
         android:background="@drawable/border_shape"
         android:id="@+id/fragment_joke_itme2_image"
         android:layout_width="110dp"

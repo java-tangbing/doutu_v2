@@ -46,9 +46,9 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
             holder.titletv.setText(list.get(position).getCategory_name());
             if(list.get(position).getImgs() != null){
                 if(list.get(position).getImgs().size() == 3){
-                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv1);
-                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv2);
-                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.newloding).into(holder.iv3);
+                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.ic_default_picture).into(holder.iv1);
+                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(1).getUrl()).placeholder(R.mipmap.ic_default_picture).into(holder.iv2);
+                    GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl()).placeholder(R.mipmap.ic_default_picture).into(holder.iv3);
                 }
             }
         }

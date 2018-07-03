@@ -10,6 +10,7 @@
          <com.pufei.gxdt.widgets.RoundImageView
              android:background="@drawable/border_shape"
              android:scaleType="fitXY"
+             android:padding="1dp"
              android:id="@+id/activity_picture_item_image"
              android:layout_width="110dp"
              android:layout_height="110dp" />

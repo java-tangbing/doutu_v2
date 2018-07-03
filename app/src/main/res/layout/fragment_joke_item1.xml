@@ -25,6 +25,7 @@
             android:layout_height="wrap_content">
             <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:padding="1dp"
                 android:background="@drawable/border_shape"
                 android:layout_marginLeft="2dp"
                 android:id="@+id/fragment_second_joke_image1"
@@ -33,6 +34,7 @@
                 android:layout_height="110dp" />
             <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:padding="1dp"
                 android:background="@drawable/border_shape"
                 android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_second_joke_image2"
@@ -41,6 +43,7 @@
                 android:layout_height="110dp" />
             <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:padding="1dp"
                 android:background="@drawable/border_shape"
                 android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_second_joke_image3"

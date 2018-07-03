@@ -43,6 +43,7 @@ public class SearchDetailActivity extends BaseActivity {
     private String name;
     @Override
     public void initView() {
+        classiList = new ArrayList<>();
         adapter = new SearchDetailAdpater(this, classiList, Glide.with(this));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -76,10 +77,9 @@ public class SearchDetailActivity extends BaseActivity {
         RecommendBean classiFicationBean = new Gson().fromJson(result, RecommendBean.class);
         if(classiFicationBean != null){
             classiList.addAll(classiFicationBean.getResult());
-        }else{
-            classiList = new ArrayList<>();
+        }else {
+            classiList.clear();
         }
-
         if (classiList!=null&&classiList.size()==0){
             requestFailed.setVisibility(View.VISIBLE);
         }
