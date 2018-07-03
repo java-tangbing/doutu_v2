@@ -234,7 +234,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAdv(EvenMsg type) {
         if(type.getTYPE() == 1){
-            AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
+            AdvUtil.getInstance(getActivity()).getAdvHttp(getActivity(),your_original_layout,1);
         }
     }
     @Override
@@ -261,7 +261,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                         main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                                 &&ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                            AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
+                            AdvUtil.getInstance(getActivity()).getAdvHttp(getActivity(),your_original_layout,1);
                         }else{
                             your_original_layout.setVisibility(View.GONE);
                         }

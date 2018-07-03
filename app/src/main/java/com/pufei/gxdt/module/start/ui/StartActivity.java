@@ -105,7 +105,7 @@ public class StartActivity extends Activity {
             this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         if(NetWorkUtil.isNetworkConnected(this)){
-            AdvUtil.getInstance().getAdvHttp(this,rl_adv,7);
+            AdvUtil.getInstance(this).getAdvHttp(this,rl_adv,7);
         }else{
             ToastUtils.showShort(this,"请检查网络设置");
             handler.sendEmptyMessage(1);

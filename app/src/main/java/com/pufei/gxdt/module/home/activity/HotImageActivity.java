@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -37,14 +35,11 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -76,7 +71,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
 
     @Override
     public void initView() {
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,5);
+        AdvUtil.getInstance(this).getAdvHttp(this,your_original_layout,5);
         title.setText("热门表情");
         ll_left.setVisibility(View.VISIBLE);
         final GridLayoutManager layoutManager = new GridLayoutManager(HotImageActivity.this, 3);
@@ -163,7 +158,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                     if(NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
                         requestFailed.setVisibility(View.GONE);
                         main_bg.setBackgroundColor(getResources().getColor(R.color.white));
-                        AdvUtil.getInstance().getAdvHttp(HotImageActivity.this, your_original_layout, 5);
+                        AdvUtil.getInstance(HotImageActivity.this).getAdvHttp(HotImageActivity.this, your_original_layout, 5);
                         page = 1;
                         requestHot();
                     }else{

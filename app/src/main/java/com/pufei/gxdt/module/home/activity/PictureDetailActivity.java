@@ -116,7 +116,7 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
     @Override
     public void initView() {
-        AdvUtil.getInstance().getAdvHttp(this, your_original_layout, 3);
+        AdvUtil.getInstance(this).getAdvHttp(this, your_original_layout, 3);
         Bundle bundle = this.getIntent().getExtras();
         index = bundle.getInt("picture_index");
         pictureList = (List<PictureResultBean.ResultBean>) bundle.getSerializable("picture_list");

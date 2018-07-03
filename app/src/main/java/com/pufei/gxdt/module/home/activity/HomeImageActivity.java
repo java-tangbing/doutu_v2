@@ -93,7 +93,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         headView = lif.inflate(R.layout.theme_head, null);
         xRecyclerView.addHeaderView(headView);
         RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
-        AdvUtil.getInstance().getAdvHttp(this,relativeLayout,2);
+        AdvUtil.getInstance(this).getAdvHttp(this,relativeLayout,2);
         TextView tv_top_title = headView.findViewById(R.id.tv_top_title);
         TextView tv_hot = headView.findViewById(R.id.tv_hot);
         TextView tv_eyes = headView.findViewById(R.id.tv_eyes);
@@ -212,7 +212,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         request_failed.setVisibility(View.GONE);
                         main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
-                        AdvUtil.getInstance().getAdvHttp(HomeImageActivity.this,relativeLayout,2);
+                        AdvUtil.getInstance(HomeImageActivity.this).getAdvHttp(HomeImageActivity.this,relativeLayout,2);
                         page = 1;
                         requestHomeImage();
                     }else{

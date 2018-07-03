@@ -3,10 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:background="@color/white"
+        android:background="@color/yellow"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="44dp">
         <ImageView
             android:id="@+id/activity_searchdetail_cancel"
             android:layout_marginLeft="15dp"

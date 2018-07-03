@@ -75,7 +75,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     public void initView() {
         refreshAd();
         tv_title.setText("笑话段子");
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,4);
+        AdvUtil.getInstance(this).getAdvHttp(this,your_original_layout,4);
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdvAdapter(JokeActivity.this,jokeList,adLists);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
@@ -186,7 +186,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
                     if(NetWorkUtil.isNetworkConnected(JokeActivity.this)) {
                         request_failed.setVisibility(View.GONE);
                         main_bg.setBackgroundColor(getResources().getColor(R.color.white));
-                        AdvUtil.getInstance().getAdvHttp(JokeActivity.this,your_original_layout,4);
+                        AdvUtil.getInstance(JokeActivity.this).getAdvHttp(JokeActivity.this,your_original_layout,4);
                         page = 1;
                         requestJoke();
                     }else{

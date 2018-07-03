@@ -67,7 +67,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     @Override
     public void initView() {
         tv_title.setText("主题表情");
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,6);
+        AdvUtil.getInstance(this).getAdvHttp(this,your_original_layout,6);
         ll_left.setVisibility(View.VISIBLE);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -170,7 +170,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                     if(NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
                         request_failed.setVisibility(View.GONE);
                         main_bg.setBackgroundColor(getResources().getColor(R.color.white));
-                        AdvUtil.getInstance().getAdvHttp(ThemeImageActivity.this, your_original_layout, 6);
+                        AdvUtil.getInstance(ThemeImageActivity.this).getAdvHttp(ThemeImageActivity.this, your_original_layout, 6);
                         page = 1;
                         requestTheme();
                     }else{
