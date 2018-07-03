@@ -343,8 +343,13 @@ public class PhotoEditor implements BrushViewChangeListener {
                 final float centerX = reAdd.getBgWidth() * reAdd.getTranslationX() - textRootView.getLeft() - textRootView.getWidth() * reAdd.getWidth() / 2 ;
                 final float centerY = reAdd.getBgHeight() * reAdd.getTranslationY() - textRootView.getTop() - textRootView.getHeight() * reAdd.getHeight() / 2;
 //                Log.e("center point",centerX +" " + centerY +" " + textInputTv.getLeft() +" " + textInputTv.getTop());
-                textRootView.setTranslationX(centerX);
-                textRootView.setTranslationY(centerY);
+                if(reAdd.getHeight() == 0 && reAdd.getWidth() == 0) {
+                    textRootView.setTranslationX(reAdd.getTranslationX());
+                    textRootView.setTranslationY(reAdd.getTranslationY());
+                }else {
+                    textRootView.setTranslationX(centerX);
+                    textRootView.setTranslationY(centerY);
+                }
                 textRootView.setScaleX(reAdd.getScaleX());
                 textRootView.setScaleY(reAdd.getScaleY());
                 textRootView.setRotation(reAdd.getRotation());

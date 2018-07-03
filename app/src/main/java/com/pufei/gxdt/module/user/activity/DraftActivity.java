@@ -118,18 +118,27 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
     @Override
     public void getData() {
         datas = new Select().from(DraftInfo.class).where(DraftInfo_Table.isDraft.is(true)).queryList();
-        if(datas !=null&&datas.size() == 0){
+        if(datas.size() == 0){
             no_data_failed.setVisibility(View.VISIBLE);
         }
-        for (int i = 0; i < datas.size(); i++) {
-            DraftInfo info = datas.get(i);
-            if (!info.make_url.contains("http:") || !info.make_url.contains("https:")) {
-                File file = new File(info.make_url);
-                if (!file.exists()) {
-                    datas.remove(info);
+        if(datas != null) {
+            for (int i = 0; i < datas.size(); i++) {
+                DraftInfo info = datas.get(i);
+                if(info != null) {
+                    if(!TextUtils.isEmpty(info.make_url)) {
+                        if (!info.make_url.contains("http:") || !info.make_url.contains("https:")) {
+                            File file = new File(info.make_url);
+                            if (!file.exists()) {
+                                datas.remove(info);
+                            }
+                        }
+                    }
                 }
+
+
             }
         }
+
         draftAdapter = new DraftAdapter(datas);
         draftAdapter.setOnItemChildClickListener(this);
         rvDraft.setAdapter(draftAdapter);

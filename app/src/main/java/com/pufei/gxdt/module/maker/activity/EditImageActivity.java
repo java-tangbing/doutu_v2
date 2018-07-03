@@ -242,8 +242,14 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 bean.setScaleX(Float.parseFloat(dataBean.getZoom()));
                 bean.setScaleY(Float.parseFloat(dataBean.getZoom()));
                 bean.setRotation(Float.parseFloat(dataBean.getRolling()));
-                bean.setWidth(Float.parseFloat(dataBean.getWidth()));
-                bean.setHeight(Float.parseFloat(dataBean.getHeight()));
+                if(!TextUtils.isEmpty(dataBean.getWidth()) && !TextUtils.isEmpty(dataBean.getHeight())) {
+                    bean.setWidth(Float.parseFloat(dataBean.getWidth()));
+                    bean.setHeight(Float.parseFloat(dataBean.getHeight()));
+                }else {
+                    bean.setWidth(0);
+                    bean.setHeight(0);
+                }
+
                 String text1 = "";
                 try {
                     text1 = URLDecoder.decode(dataBean.getTextName(), "utf-8");

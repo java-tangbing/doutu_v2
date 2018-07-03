@@ -66,7 +66,8 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     TextView textView_feedback_dateline;
     @BindView(R.id.feedback_line)
     View feedback_line;
-
+    @BindView(R.id.news_item_feedback_is_read)
+    ImageView iv_fd_is_read;
 
     @BindView(R.id.news_item_picture_message)
     LinearLayout linearLayout_picture;
@@ -76,6 +77,8 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     TextView textView_picture_dateline;
     @BindView(R.id.picture_line)
     View picture_line;
+    @BindView(R.id.news_item_picture_is_read)
+    ImageView iv_pic_is_read;
 
     @BindView(R.id.news_item_system_message)
     LinearLayout linearLayout_system;
@@ -85,6 +88,9 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
     TextView textView_system_dateline;
     @BindView(R.id.system_line)
     View system_line;
+    @BindView(R.id.news_item_system_is_read)
+    ImageView iv_sys_is_read;
+
 //    private NewsAdapter newsAdapter;
 //    private List<NoticeBean.ResultBean> mlist;
 
@@ -162,14 +168,29 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
                     for (int i = 0; i < bean.getResult().size(); i++) {
                         switch (bean.getResult().get(i).getType()) {
                             case "1":
+                                if (bean.getResult().get(i).getIs_read().equals("0")) {
+                                    iv_sys_is_read.setVisibility(View.VISIBLE);
+                                } else {
+                                    iv_sys_is_read.setVisibility(View.GONE);
+                                }
                                 textView_system_dateline.setText(bean.getResult().get(i).getDateline());
                                 textView_system_content.setText(bean.getResult().get(i).getContent());
                                 break;
                             case "2":
+                                if (bean.getResult().get(i).getIs_read().equals("0")) {
+                                    iv_pic_is_read.setVisibility(View.VISIBLE);
+                                } else {
+                                    iv_pic_is_read.setVisibility(View.GONE);
+                                }
                                 textView_picture_dateline.setText(bean.getResult().get(i).getDateline());
                                 textView_picture_content.setText(bean.getResult().get(i).getContent());
                                 break;
                             case "3":
+                                if (bean.getResult().get(i).getIs_read().equals("0")) {
+                                    iv_fd_is_read.setVisibility(View.VISIBLE);
+                                } else {
+                                    iv_fd_is_read.setVisibility(View.GONE);
+                                }
                                 textView_feedback_dateline.setText(bean.getResult().get(i).getDateline());
                                 textView_feedback_content.setText(bean.getResult().get(i).getContent());
 
@@ -229,14 +250,17 @@ public class NewsActivity extends BaseMvpActivity<NewsPresenter> implements News
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.news_item_system_message:
+                iv_sys_is_read.setVisibility(View.GONE);
                 Intent intent = new Intent(this, NewsSystemActivity.class);
                 startActivity(intent);
                 break;
             case R.id.news_item_picture_message:
+                iv_pic_is_read.setVisibility(View.GONE);
                 Intent intent1 = new Intent(this, NewsPictureActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.news_item_feedback_message:
+                iv_fd_is_read.setVisibility(View.GONE);
                 Intent intent2 = new Intent(this, NewsFeedBackActivity.class);
                 startActivity(intent2);
                 break;

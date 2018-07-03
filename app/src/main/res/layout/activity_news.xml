@@ -20,15 +20,27 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/news_item_feedback_icon_cv"
+        <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_margin="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/news_item_feedback_icon_cv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/news_item_feedback_is_read"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/news_ic_new"
+                android:visibility="gone" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,15 +97,27 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/news_item_picture_icon_cv"
+        <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_margin="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/news_item_picture_icon_cv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/news_item_picture_is_read"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/news_ic_new"
+                android:visibility="gone" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -169,15 +193,26 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/news_item_system_icon_cv"
+        <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_margin="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/news_item_system_icon_cv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/news_item_system_is_read"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/news_ic_new"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -208,6 +243,7 @@
                     android:layout_marginRight="15dp"
                     android:singleLine="true"
                     android:textSize="16sp" />
+
 
             </RelativeLayout>
 
