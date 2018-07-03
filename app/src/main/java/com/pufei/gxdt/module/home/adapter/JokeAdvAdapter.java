@@ -26,17 +26,14 @@ import java.util.List;
 public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>{
     private List<JokeResultBean.ResultBean> list;
     private Context mcontext;
-    private Activity activity;
     private int FIST_IMAGE = 1;
     private int THREE_IMAGE = 3;
     private List<NativeExpressADView> adLists;
-    private NativeExpressADView nativeExpressADView;
     private NativeExpressAD nativeExpressAD;
     public JokeAdvAdapter(Context context, List<JokeResultBean.ResultBean> list,List<NativeExpressADView> adLists) {//获取数据源
         this.mcontext = context;
         this.list = list;
         this.adLists = adLists;
-        activity = (Activity) mcontext;
     }
 
     @Override
