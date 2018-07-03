@@ -167,8 +167,8 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
     private void setUserData(PictureDetailBean pictureDetailBeans) {
         if (pictureDetailBeans != null) {
-            tv_eyes.setText(pictureDetailBeans.getResult().getView());
-            tv_hot.setText(pictureDetailBeans.getResult().getHot());
+//            tv_eyes.setText(pictureDetailBeans.getResult().getView());
+//            tv_hot.setText(pictureDetailBeans.getResult().getHot());
             tv_change_img.setText(pictureDetailBeans.getResult().getCount());
         }
     }

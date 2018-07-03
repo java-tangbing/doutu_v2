@@ -1,9 +1,11 @@
 package com.pufei.gxdt.module.user.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +55,10 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
     LinearLayout request_failed;
     @BindView(R.id.no_data_failed)
     LinearLayout no_data_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     private FavoriteAdapter jokeAdapter;
     private List<MyImagesBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
@@ -112,15 +118,6 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
                 FavoritePkgFragment.this.startActivityForResult(intent, 1);
             }
 
-            @Override
-            public void OnLike(int position) {
-
-            }
-
-            @Override
-            public void OnBtDelete(int position) {
-
-            }
         });
     }
 
@@ -129,21 +126,38 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
             requestJoke(page);
         } else {
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             request_failed.setVisibility(View.VISIBLE);
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetWorkUtil.isNetworkConnected(getActivity())) {
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        request_failed.setVisibility(View.GONE);
+                        page = 1;
+                        requestJoke(page);
+                    }else{
+                        ToastUtils.showShort(getActivity(),"请先打开网络连接");
+                    }
+                }
+            });
         }
     }
 
     private void requestJoke(int page) {
-        try {
-            JSONObject jsonObject = KeyUtil.getJson(getActivity());
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-            jsonObject.put("type", 2);
-            presenter.getFavoritePkgList(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(getActivity());
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                jsonObject.put("type", 2);
+                presenter.getFavoritePkgList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
-
     }
 
     @Override
@@ -167,6 +181,7 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
                 jokeList.clear();
                 if(bean.getResult()!=null&&bean.getResult().size()==0){
                     no_data_failed.setVisibility(View.VISIBLE);
+                    main_bg.setBackgroundColor(Color.parseColor("#F0F0F0"));
                 }
             }
             jokeList.addAll(bean.getResult());

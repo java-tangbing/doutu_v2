@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -62,6 +63,8 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     TextView title;
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     @BindView(R.id.your_original_layout)
@@ -153,11 +156,13 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
             requestHot();
         }else{
             requestFailed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
                         requestFailed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         AdvUtil.getInstance().getAdvHttp(HotImageActivity.this, your_original_layout, 5);
                         page = 1;
                         requestHot();

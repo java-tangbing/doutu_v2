@@ -67,6 +67,8 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     XRecyclerView xRecyclerView;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     private HomeImageAdapter adapter;
@@ -201,12 +203,14 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         }else{
             headView.setVisibility(View.GONE);
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)) {
                         headView.setVisibility(View.VISIBLE);
                         request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
                         AdvUtil.getInstance().getAdvHttp(HomeImageActivity.this,relativeLayout,2);
                         page = 1;

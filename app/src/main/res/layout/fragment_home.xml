@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/main_bg"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -104,7 +105,6 @@
             android:layout_height="match_parent">
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:focusableInTouchMode="true"
-                android:background="#FFFFFF"
                 android:id="@+id/rl_home_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

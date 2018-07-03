@@ -25,6 +25,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -100,8 +101,12 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     @BindView(R.id.no_data_failed)
     LinearLayout no_data_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     private PublishAdapter jokeAdapter;
     private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
@@ -265,6 +270,20 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             requestJoke(page);
         }else{
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
+                        request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        page = 1;
+                        requestJoke(page);
+                    }else {
+                        ToastUtils.showShort(PublishActivity.this,"请先打开网络连接");
+                    }
+                }
+            });
         }
     }
 
@@ -329,6 +348,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 jokeList.clear();
                 if(bean.getResult()!=null&&bean.getResult().size()==0){
                     no_data_failed.setVisibility(View.VISIBLE);
+                    main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
                 }else{
                     jokeList.addAll(bean.getResult());
                     jokeAdapter.notifyDataSetChanged();

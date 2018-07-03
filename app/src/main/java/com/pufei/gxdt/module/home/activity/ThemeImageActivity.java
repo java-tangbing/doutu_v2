@@ -56,6 +56,8 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     SmartRefreshLayout refresh_theme;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     private ThemeImageAdpater adpater;
@@ -161,11 +163,13 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
             requestTheme();
         }else {
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
                         request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         AdvUtil.getInstance().getAdvHttp(ThemeImageActivity.this, your_original_layout, 6);
                         page = 1;
                         requestTheme();
