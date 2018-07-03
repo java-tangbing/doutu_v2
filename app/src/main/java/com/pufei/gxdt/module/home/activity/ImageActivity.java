@@ -147,7 +147,7 @@ public class ImageActivity extends FragmentActivity {
         list = new ArrayList<>();
         for (int i = 0; i < jsonObject.length(); i++) {
             try {
-                fragmentList.add(new ImageFragment(i, jsonObject.get(i).toString(), jsonObject.length()));
+                fragmentList.add(new ImageFragment(jsonObject.get(i).toString()));
                 list.add(jsonObject.get(i).toString());
             } catch (JSONException e) {
                 e.printStackTrace();

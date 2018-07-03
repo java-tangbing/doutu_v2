@@ -25,8 +25,6 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
     private Context mcontext;
     private List<String> list;
     private List<String> imagelist;
-    private int a;
-    private String SHARE_APP_TAG = "frist";
 
     public JokeDetalAdpater(Context context, List<String> list, List<String> list1) {
         this.mcontext = context;

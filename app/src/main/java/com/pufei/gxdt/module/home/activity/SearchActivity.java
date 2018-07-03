@@ -226,8 +226,9 @@ public class SearchActivity extends BaseMvpActivity  implements TextView.OnEdito
                         // 这将让键盘在所有的情况下都被隐藏，但是一般我们在点击搜索按钮后，输入法都会乖乖的自动隐藏的。
                         imm.hideSoftInputFromWindow(activitySearchSv.getWindowToken(), 0); // 输入法如果是显示状态，那么就隐藏输入法
                     }
+                    activitySearchSv.clearFocus();
                 }
-                activitySearchSv.clearFocus();
+
             }
             return true;
         }

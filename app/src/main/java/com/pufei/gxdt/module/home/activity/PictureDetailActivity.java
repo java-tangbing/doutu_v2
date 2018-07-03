@@ -323,7 +323,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String result = response.body().string();
                     PictureDetailActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

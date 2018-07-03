@@ -78,19 +78,7 @@ public class ThemeImageAdpater extends XRecyclerView.Adapter<XRecyclerView.ViewH
             }
         }
     }
-     class AdvertHodler extends XRecyclerView.ViewHolder{
-        private ImageView image;
-        public AdvertHodler(final View itemView, MyItemClickListener listener) {
-            super(itemView);
-            //image= (ImageView) itemView.findViewById(R.id.fragment_pager_advert_image);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.setOnItemClickListener(itemView,v, (Integer) v.getTag());
-                }
-            });
-        }
-    }
+
     private  MyItemClickListener mListener=null;//设置点击接口
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;

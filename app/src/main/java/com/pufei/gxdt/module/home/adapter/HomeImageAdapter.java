@@ -50,7 +50,6 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
     }
     class MyHodler extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView iv1;
-        private CheckBox  iv2;
         public MyHodler(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener=myItemClickListener;
