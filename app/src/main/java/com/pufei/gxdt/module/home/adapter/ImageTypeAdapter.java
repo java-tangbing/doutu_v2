@@ -66,9 +66,8 @@ public class ImageTypeAdapter extends RecyclerView.Adapter<ImageTypeAdapter.MyHo
     public void onViewDetachedFromWindow(MyHodler holder) {
         super.onViewDetachedFromWindow(holder);
     }
-   static class MyHodler extends RecyclerView.ViewHolder {
+    class MyHodler extends RecyclerView.ViewHolder {
         private ImageView iv1;
-        private CheckBox  iv2;
         public MyHodler(View itemView) {
             super(itemView);
             iv1= (ImageView) itemView.findViewById(R.id.activity_picture_item_image);

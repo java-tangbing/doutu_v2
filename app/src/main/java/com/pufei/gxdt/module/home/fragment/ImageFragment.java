@@ -30,17 +30,13 @@ public class ImageFragment extends Fragment {
     /* @InjectView(R.id.fragment_image_iv)
         ImageView fragmentImageIv;
     */
-    private int position;
     private String URL;
-    private int size;
 
     public ImageFragment() {
     }
 
-    public ImageFragment(int position, String URL, int size) {
-        this.position = position;
+    public ImageFragment( String URL) {
         this.URL = URL;
-        this.size = size;
     }
 
     @Nullable

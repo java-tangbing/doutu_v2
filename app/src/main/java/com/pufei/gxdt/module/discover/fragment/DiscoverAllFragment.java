@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 
@@ -44,6 +45,7 @@ import java.util.List;
 
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
         , SwipeRefreshLayout.OnRefreshListener
@@ -56,6 +58,8 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
+
+
     private List<DiscoverListBean.ResultBean> mlist;
     private DiscoverAdapter discoverAdapter;
     private int page;
@@ -156,6 +160,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //            startActivity(new Intent(activity, LoginActivity.class));
 //        } else {
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
             requestFailed.setVisibility(View.GONE);
             auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
             JSONObject jsonObject = KeyUtil.getJson(getContext());
@@ -166,11 +171,14 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
+            swipeRefreshLayout.setVisibility(View.GONE);
+//            mlist.clear();
+//            discoverAdapter.notifyDataSetChanged();
+//            swipeRefreshLayout.setRefreshing(false);
             requestFailed.setVisibility(View.VISIBLE);
-//            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
+            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
         }
 //        }
     }
@@ -217,6 +225,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
 //                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
             }
             if (isfirst) {
+                page = page + 1;
                 isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
@@ -318,17 +327,25 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         }
     }
 
-//    public void refresh() {
-//        mlist.get(1).setIsSaveImg("");
-////        page = 1;
-////        isRefreshing = true;
-////        isLoadMore = false;
-////        setMyadapter();
-//    }
+    public void refresh() {
+        page = 1;
+        isRefreshing = true;
+        isLoadMore = false;
+        setMyadapter();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
 //        refresh();
+    }
+
+    @OnClick({R.id.btn_refresh})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_refresh:
+                refresh();
+                break;
+        }
     }
 }

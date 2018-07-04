@@ -112,27 +112,32 @@ public class FaceTypeActivity extends BaseMvpActivity implements TabLayout.OnTab
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-        tabStrip.setAccessible(true);
+        if(tabStrip != null){
+            tabStrip.setAccessible(true);
+        }
         LinearLayout llTab = null;
         try {
-            llTab = (LinearLayout) tabStrip.get(tabs);
+            if(tabStrip != null){
+                llTab = (LinearLayout) tabStrip.get(tabs);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
         int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
         int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
-
-        for (int i = 0; i < llTab.getChildCount(); i++) {
-            View child = llTab.getChildAt(i);
-            child.setPadding(0, 0, 0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-            params.leftMargin = left;
-            params.rightMargin = right;
-            child.setLayoutParams(params);
-            child.invalidate();
+        if(llTab != null){
+            for (int i = 0; i < llTab.getChildCount(); i++) {
+                View child = llTab.getChildAt(i);
+                child.setPadding(0, 0, 0, 0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                params.leftMargin = left;
+                params.rightMargin = right;
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
         }
+
     }
     @OnClick(R.id.ll_title_left)
     public void viewClick(){

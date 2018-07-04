@@ -26,17 +26,14 @@ import java.util.List;
 public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>{
     private List<JokeResultBean.ResultBean> list;
     private Context mcontext;
-    private Activity activity;
     private int FIST_IMAGE = 1;
     private int THREE_IMAGE = 3;
     private List<NativeExpressADView> adLists;
-    private NativeExpressADView nativeExpressADView;
     private NativeExpressAD nativeExpressAD;
     public JokeAdvAdapter(Context context, List<JokeResultBean.ResultBean> list,List<NativeExpressADView> adLists) {//获取数据源
         this.mcontext = context;
         this.list = list;
         this.adLists = adLists;
-        activity = (Activity) mcontext;
     }
 
     @Override
@@ -107,7 +104,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
             refreshAd();
         }
     }
-   static class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private TextView  titletv,tv_eyes,tv_hot;
         private ImageView iv1, iv2, iv3;
         private RelativeLayout container;
@@ -132,7 +129,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
         }
     }
 
-   static class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
+    class OneHolder extends XRecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tv2,tv_eyes,tv_hot;
         private ImageView iv11;
        private RelativeLayout container;
@@ -154,7 +151,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
             }
         }
     }
-    private static MyItemClickListener mListener = null;//设置点击接口
+    private  MyItemClickListener mListener = null;//设置点击接口
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;

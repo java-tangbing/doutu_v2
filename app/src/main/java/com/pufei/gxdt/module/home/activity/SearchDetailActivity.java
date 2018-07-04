@@ -38,7 +38,7 @@ public class SearchDetailActivity extends BaseActivity {
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
     private SearchDetailAdpater adapter;
-    private List<RecommendBean.ResultBean> classiList = new ArrayList<>();
+    private List<RecommendBean.ResultBean> classiList ;
     private String result;
     private String name;
     @Override
@@ -74,7 +74,12 @@ public class SearchDetailActivity extends BaseActivity {
         result = bundle.getString("search_detail");
         name = bundle.getString("name");
         RecommendBean classiFicationBean = new Gson().fromJson(result, RecommendBean.class);
-        classiList.addAll(classiFicationBean.getResult());
+        if(classiFicationBean != null){
+            classiList.addAll(classiFicationBean.getResult());
+        }else{
+            classiList = new ArrayList<>();
+        }
+
         if (classiList!=null&&classiList.size()==0){
             requestFailed.setVisibility(View.VISIBLE);
         }

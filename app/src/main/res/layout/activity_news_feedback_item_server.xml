@@ -40,13 +40,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_10"
-            android:background="@drawable/news_dialogue_left_normal">
+            android:background="@drawable/news_dialogue_left_normal2"
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/news_feedback_item_server_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sfd" />
+                android:text="" />
 
 
         </LinearLayout>

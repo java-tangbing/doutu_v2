@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter> implements DiscoverView
         , SwipeRefreshLayout.OnRefreshListener
@@ -132,6 +133,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 
     private void setMyadapter() {
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
             requestFailed.setVisibility(View.GONE);
             auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
             JSONObject jsonObject = KeyUtil.getJson(getContext());
@@ -145,8 +147,12 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 
             presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
+            swipeRefreshLayout.setVisibility(View.GONE);
+//            mlist.clear();
+//            discoverAdapter.notifyDataSetChanged();
+//            swipeRefreshLayout.setRefreshing(false);
             requestFailed.setVisibility(View.VISIBLE);
-//            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
+            ToastUtils.showShort(getActivity(), getResources().getString(R.string.check_the_network_please));
         }
     }
 
@@ -190,6 +196,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
 //                ToastUtils.showShort(getActivity(), getResources().getString(R.string.msg_refresh_success));
             }
             if (isfirst) {
+                page = page + 1;
                 isfirst = false;
                 isLoadMore = true;
                 isRefreshing = true;
@@ -296,9 +303,18 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         setMyadapter();
     }
 
+    @OnClick({R.id.btn_refresh})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_refresh:
+                refresh();
+                break;
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+//        refresh();
     }
 }
