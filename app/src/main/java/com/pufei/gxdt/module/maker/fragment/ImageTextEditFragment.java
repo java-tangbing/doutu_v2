@@ -58,7 +58,7 @@ public class ImageTextEditFragment extends BaseMvpFragment<EditImagePresenter> i
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (EditImageActivity)context;
-        if(activity  != null) {
+        if(activity != null) {
             callback = (GetInputTextCallback)activity;
         }
     }

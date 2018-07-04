@@ -164,9 +164,8 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_confirm:
-                if (!etInput.getText().toString().isEmpty()) {
+                if (!etInput.getText().toString().isEmpty() && inputTextListener != null) {
                     inputTextListener.inputText(type, etInput.getText().toString(), ContextCompat.getColor(getActivity(), R.color.select_color17));
-                    etInput.setText("");
                 }
                 dismiss();
                 break;
@@ -220,11 +219,6 @@ public class EditTextBottomFragment extends BottomSheetDialogFragment implements
         if(timer != null) {
             timer.cancel();
         }
-        if(inputTextListener != null) {
-            inputTextListener = null;
-        }
-
-        etInput = null;
 
         if(unregistrar != null) {
             unregistrar.unregister();
