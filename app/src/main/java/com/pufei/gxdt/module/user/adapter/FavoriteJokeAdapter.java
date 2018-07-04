@@ -68,31 +68,10 @@ public class FavoriteJokeAdapter extends XRecyclerView.Adapter<XRecyclerView.Vie
             super(itemView);
             mListener = myItemClickListener;
             titletv = (TextView) itemView.findViewById(R.id.frgament_second_joke_tiltletv);
-            /*shanchutv = (TextView) itemView.findViewById(R.id.fragment_second_joke_fenxiang);*/
-            /*tvxihuan = (TextView) itemView.findViewById(R.id.fragment_second_joke_xihuan);*/
             iv1 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image1);
             iv2 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image2);
             iv3 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image3);
-          /*  iv4= (ImageView) itemView.findViewById(R.id.fragment_second_joke_image4);*/
-           /* iv5 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_fenxiang_image);*/
-           /* ll1 = (LinearLayout) itemView.findViewById(R.id.fragment_joke_fenxiang);
-            ll2 = (LinearLayout) itemView.findViewById(R.id.fragment_joke_shoucang);*/
             itemView.setOnClickListener(this);//单项点击
-           /* ll2.setOnClickListener(new View.OnClickListener() {//点击删除
-                @Override
-                public void onClick(View v) {
-                    *//*list.get((Integer) v.getTag()).setChick(true);*//*
-                    mListener.OnBtDelete((Integer) v.getTag());
-                    notifyDataSetChanged();
-                }
-            });
-            ll1.setOnClickListener(new View.OnClickListener() {//点击喜欢
-                @Override
-                public void onClick(View v) {
-                    mListener.OnLike((Integer) v.getTag());
-
-                }
-            });*/
         }
         @Override
         public void onClick(View v) {
@@ -127,16 +106,6 @@ public class FavoriteJokeAdapter extends XRecyclerView.Adapter<XRecyclerView.Vie
 
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
-        void OnLike(int position);
+    }
 
-        void OnBtDelete(int position);
-    }
-   /* private OnCountClickListener onCountClickListener;
-    public void setOnCountClickListener(OnCountClickListener listener){
-        this.onCountClickListener=listener;
-    }
-    public interface OnCountClickListener{
-        void OnLike(int position);
-        void OnBtDelete(int position);
-    }*/
 }
