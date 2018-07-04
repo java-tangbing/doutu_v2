@@ -240,7 +240,12 @@ public class DraftActivity extends BaseMvpActivity<EditImagePresenter> implement
             if (path.contains(".gif") || path.contains("GIF")) {
                 presenter.downloadImage(path, 1);
             } else {
-                presenter.downloadGif(path, App.path1 + "/" + System.currentTimeMillis() + ".png");
+                try {
+                    File file = File.createTempFile(System.currentTimeMillis() +".png",null,getCacheDir());
+                    presenter.downloadGif(path, file.getPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             if (path.contains("gif") || path.contains("GIF")) {
