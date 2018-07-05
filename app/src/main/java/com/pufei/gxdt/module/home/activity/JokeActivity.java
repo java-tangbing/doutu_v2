@@ -94,6 +94,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
                         if(cashList.size()>0){
                             jokeList.addAll(cashList);
                             jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestJoke();
                         }
@@ -236,7 +237,6 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             page++;
             requestJoke();
         }else{
-            cashList.clear();
             cashList.addAll(bean.getResult());
         }
 

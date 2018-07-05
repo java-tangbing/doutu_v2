@@ -87,6 +87,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                         if (cashList.size() > 0) {
                             list.addAll(cashList);
                             adpater.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestTheme();
                         }
@@ -220,7 +221,6 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                 page++;
                 requestTheme();
             }else{
-                cashList.clear();;
                 cashList.addAll(bean.getResult());
             }
 

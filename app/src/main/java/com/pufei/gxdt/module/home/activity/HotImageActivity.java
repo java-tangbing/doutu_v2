@@ -107,6 +107,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                         if(cashList.size()>0){
                             picturelist.addAll(cashList);
                             adapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestHot();
                         }
@@ -206,7 +207,6 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                page++;
                requestHot();
            }else {
-              cashList.clear();
               cashList.addAll(bean.getResult());
            }
 

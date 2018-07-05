@@ -123,6 +123,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         if(cashList.size()>0){
                             list.addAll(cashList);
                             adapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestHomeImage();
                         }
@@ -304,7 +305,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 page++;
                 requestHomeImage();
             }else{
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
 

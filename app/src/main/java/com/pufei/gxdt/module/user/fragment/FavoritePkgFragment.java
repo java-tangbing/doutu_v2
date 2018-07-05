@@ -86,6 +86,7 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
                         if(cashList.size()>0){
                             jokeList.addAll(cashList);
                             jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestJoke(page);
                         }
@@ -212,7 +213,6 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
                     requestJoke(page);
                 }
             }else {
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
         }
