@@ -83,6 +83,7 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
                     if(cashList.size()>0){
                         list.addAll(cashList);
                         adapter.notifyDataSetChanged();
+                        cashList.clear();
                         page++;
                         requestThemeDetail(page);
                     }
@@ -192,7 +193,6 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
                 page++;
                 requestThemeDetail(page);
             }else{
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
 

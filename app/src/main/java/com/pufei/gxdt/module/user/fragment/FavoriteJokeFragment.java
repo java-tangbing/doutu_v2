@@ -90,6 +90,7 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
                         if(cashList.size()>0){
                             jokeList.addAll(cashList);
                             jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestJoke(page);
                         }
@@ -236,7 +237,6 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
                     requestJoke(page);
                 }
             }else{
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
 

@@ -38,12 +38,11 @@ public class SearchDetailActivity extends BaseActivity {
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
     private SearchDetailAdpater adapter;
-    private List<RecommendBean.ResultBean> classiList ;
+    private List<RecommendBean.ResultBean> classiList = new ArrayList<>(); ;
     private String result;
     private String name;
     @Override
     public void initView() {
-        classiList = new ArrayList<>();
         adapter = new SearchDetailAdpater(this, classiList, Glide.with(this));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

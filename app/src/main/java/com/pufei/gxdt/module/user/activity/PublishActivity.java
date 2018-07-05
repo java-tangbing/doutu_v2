@@ -123,6 +123,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                         if(cashList.size()>0){
                             jokeList.addAll(cashList);
                             jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestJoke(page);
                         }
@@ -345,7 +346,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                     requestJoke(page);
                 }
             }else{
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
 
