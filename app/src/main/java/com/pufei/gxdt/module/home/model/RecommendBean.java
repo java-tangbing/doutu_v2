@@ -56,7 +56,24 @@ public class RecommendBean {
         private String advert_url;
         private String advert_image_url;
         private String down_url;
+        private String view;
+        private String hot;
 
+        public String getView() {
+            return view;
+        }
+
+        public void setView(String view) {
+            this.view = view;
+        }
+
+        public String getHot() {
+            return hot;
+        }
+
+        public void setHot(String hot) {
+            this.hot = hot;
+        }
 
         /**
 

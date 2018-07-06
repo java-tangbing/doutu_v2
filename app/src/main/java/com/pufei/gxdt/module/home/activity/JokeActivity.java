@@ -58,6 +58,8 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     @BindView(R.id.your_original_layout)
@@ -73,7 +75,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
     public void initView() {
         refreshAd();
         tv_title.setText("笑话段子");
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,4);
+        AdvUtil.getInstance(this).getAdvHttp(this,your_original_layout,4);
         ll_left.setVisibility(View.VISIBLE);
         jokeAdapter = new JokeAdvAdapter(JokeActivity.this,jokeList,adLists);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);//布局管理器
@@ -92,6 +94,7 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
                         if(cashList.size()>0){
                             jokeList.addAll(cashList);
                             jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestJoke();
                         }
@@ -177,12 +180,14 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             requestJoke();
         }else{
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(JokeActivity.this)) {
                         request_failed.setVisibility(View.GONE);
-                        AdvUtil.getInstance().getAdvHttp(JokeActivity.this,your_original_layout,4);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        AdvUtil.getInstance(JokeActivity.this).getAdvHttp(JokeActivity.this,your_original_layout,4);
                         page = 1;
                         requestJoke();
                     }else{
@@ -232,7 +237,6 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
             page++;
             requestJoke();
         }else{
-            cashList.clear();
             cashList.addAll(bean.getResult());
         }
 

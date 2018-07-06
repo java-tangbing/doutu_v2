@@ -56,6 +56,8 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     SmartRefreshLayout refresh_theme;
     @BindView(R.id.your_original_layout)
     RelativeLayout your_original_layout;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     private ThemeImageAdpater adpater;
@@ -65,7 +67,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
     @Override
     public void initView() {
         tv_title.setText("主题表情");
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,6);
+        AdvUtil.getInstance(this).getAdvHttp(this,your_original_layout,6);
         ll_left.setVisibility(View.VISIBLE);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -85,6 +87,7 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                         if (cashList.size() > 0) {
                             list.addAll(cashList);
                             adpater.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestTheme();
                         }
@@ -161,12 +164,14 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
             requestTheme();
         }else {
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(ThemeImageActivity.this)) {
                         request_failed.setVisibility(View.GONE);
-                        AdvUtil.getInstance().getAdvHttp(ThemeImageActivity.this, your_original_layout, 6);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        AdvUtil.getInstance(ThemeImageActivity.this).getAdvHttp(ThemeImageActivity.this, your_original_layout, 6);
                         page = 1;
                         requestTheme();
                     }else{
@@ -216,7 +221,6 @@ public class ThemeImageActivity extends BaseMvpActivity<ThemeImagePresenter> imp
                 page++;
                 requestTheme();
             }else{
-                cashList.clear();;
                 cashList.addAll(bean.getResult());
             }
 

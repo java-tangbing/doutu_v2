@@ -7,15 +7,11 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,11 +21,10 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
@@ -37,24 +32,14 @@ import com.mylhyl.acp.AcpOptions;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
-import com.pufei.gxdt.module.home.activity.HomeImageActivity;
-import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
 import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
-import com.pufei.gxdt.module.home.adapter.HomeImageAdapter;
-import com.pufei.gxdt.module.home.adapter.HotAdapter;
-import com.pufei.gxdt.module.home.adapter.JokeAdapter;
 import com.pufei.gxdt.module.home.model.FavoriteBean;
-import com.pufei.gxdt.module.home.model.JokeResultBean;
 import com.pufei.gxdt.module.home.model.PictureResultBean;
-import com.pufei.gxdt.module.home.presenter.JokePresenter;
-import com.pufei.gxdt.module.user.adapter.FavoriteJokeAdapter;
 import com.pufei.gxdt.module.user.adapter.PublishAdapter;
-import com.pufei.gxdt.module.user.bean.MyImagesBean;
 import com.pufei.gxdt.module.user.presenter.PublishPresenter;
 import com.pufei.gxdt.module.user.view.PublishView;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
-import com.pufei.gxdt.utils.LogUtils;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
@@ -75,15 +60,12 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMEmoji;
 import com.umeng.socialize.media.UMImage;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -100,8 +82,12 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     SmartRefreshLayout fragmentJokeSmart;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     @BindView(R.id.no_data_failed)
     LinearLayout no_data_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     private PublishAdapter jokeAdapter;
     private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
@@ -125,7 +111,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setEnableLoadmore(false);
-        fragmentJokeSmart.setEnableLoadmoreWhenContentNotFull(true);
+//        fragmentJokeSmart.setEnableLoadmoreWhenContentNotFull(true);
         rl_publish.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -133,12 +119,18 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    if(cashList.size()>0){
-                        jokeList.addAll(cashList);
-                        jokeAdapter.notifyDataSetChanged();
-                        page++;
-                        requestJoke(page);
+                    if(NetWorkUtil.isNetworkConnected(PublishActivity.this)){
+                        if(cashList.size()>0){
+                            jokeList.addAll(cashList);
+                            jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
+                            page++;
+                            requestJoke(page);
+                        }
+                    }else{
+                        ToastUtils.showShort(PublishActivity.this,"请检查网络设置");
                     }
+
                 }
             }
         });
@@ -264,7 +256,23 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
             requestJoke(page);
         }else{
+            headView.setVisibility(View.GONE);
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
+                        headView.setVisibility(View.VISIBLE);
+                        request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        page = 1;
+                        requestJoke(page);
+                    }else {
+                        ToastUtils.showShort(PublishActivity.this,"请先打开网络连接");
+                    }
+                }
+            });
         }
     }
 
@@ -329,6 +337,8 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 jokeList.clear();
                 if(bean.getResult()!=null&&bean.getResult().size()==0){
                     no_data_failed.setVisibility(View.VISIBLE);
+                    headView.setVisibility(View.GONE);
+                    main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
                 }else{
                     jokeList.addAll(bean.getResult());
                     jokeAdapter.notifyDataSetChanged();
@@ -336,7 +346,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                     requestJoke(page);
                 }
             }else{
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
 
@@ -369,6 +378,11 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             jokeAdapter.notifyItemRemoved(index);
             jokeAdapter.notifyDataSetChanged();
             ToastUtils.showShort(this,bean.getMsg());
+            if(jokeList.size() == 0){
+                headView.setVisibility(View.GONE);
+                no_data_failed.setVisibility(View.VISIBLE);
+                main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
+            }
         }
     }
 

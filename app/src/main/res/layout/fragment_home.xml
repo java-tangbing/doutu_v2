@@ -3,12 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/main_bg"
     android:orientation="vertical">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@color/yellow"
+       >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -80,13 +86,13 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_color"
-        android:layout_marginTop="10dp"
-        />
+    </LinearLayout>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:background="@color/line_color"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--/>-->
     <include layout="@layout/adver_layout"/>
 
 
@@ -99,7 +105,6 @@
             android:layout_height="match_parent">
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:focusableInTouchMode="true"
-                android:background="#FFFFFF"
                 android:id="@+id/rl_home_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

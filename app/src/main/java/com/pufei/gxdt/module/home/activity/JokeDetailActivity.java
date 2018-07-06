@@ -64,7 +64,7 @@ public class JokeDetailActivity extends BaseMvpActivity<JokePresenter> implement
         time = (TextView) headerView.findViewById(R.id.title_time_time);
         View  footView = lif.inflate(R.layout.adv_layout_joke,null);
         RelativeLayout relativeLayout = (RelativeLayout)footView.findViewById(R.id.your_original_layout);
-        AdvUtil.getInstance().getAdvHttp(this,relativeLayout,8);
+        AdvUtil.getInstance(this).getAdvHttp(this,relativeLayout,8);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT );
         headerView.setLayoutParams(layoutParams);
         footView.setLayoutParams(layoutParams);

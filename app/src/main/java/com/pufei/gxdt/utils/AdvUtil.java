@@ -50,12 +50,15 @@ import okhttp3.Response;
 
 public class AdvUtil {
     private static AdvUtil mInstance;
-
-    public static AdvUtil getInstance() {
+    private Context mContext;
+    private AdvUtil(Context context) {
+        this.mContext = context.getApplicationContext();
+    }
+    public static AdvUtil getInstance(Context context) {
         if (mInstance == null)
             synchronized (AdvUtil.class) {
                 if (mInstance == null) {
-                    mInstance = new AdvUtil();
+                    mInstance = new AdvUtil(context);
                 }
             }
         return mInstance;

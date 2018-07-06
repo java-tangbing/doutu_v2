@@ -25,6 +25,7 @@
             android:layout_height="wrap_content">
             <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:padding="1dp"
                 android:background="@drawable/border_shape"
                 android:layout_marginLeft="2dp"
                 android:id="@+id/fragment_second_joke_image1"
@@ -33,6 +34,7 @@
                 android:layout_height="110dp" />
             <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:padding="1dp"
                 android:background="@drawable/border_shape"
                 android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_second_joke_image2"
@@ -41,6 +43,7 @@
                 android:layout_height="110dp" />
             <com.pufei.gxdt.widgets.RoundImageView
                 android:scaleType="fitXY"
+                android:padding="1dp"
                 android:background="@drawable/border_shape"
                 android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_second_joke_image3"
@@ -133,6 +136,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:background="@drawable/text_hot_bg">
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:id="@+id/tv_eyes"
             android:layout_width="wrap_content"
@@ -142,20 +153,29 @@
             android:drawableLeft="@mipmap/con_ic_eyes"
             android:drawablePadding="5dp"
             android:text="0" />
-
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_marginLeft="21dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/text_hot_bg">
         <com.pufei.gxdt.widgets.MyFrontTextView
             android:id="@+id/tv_hot"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="21dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/con_ic_hot"
             android:textColor="@color/color_text_normal"
             android:drawablePadding="5dp"
             android:textSize="12sp"
             android:text="0" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:gravity="right"
+            android:gravity="right|center"
             android:paddingRight="10dp"
             android:layout_height="wrap_content">
             <com.pufei.gxdt.widgets.MyFrontTextView

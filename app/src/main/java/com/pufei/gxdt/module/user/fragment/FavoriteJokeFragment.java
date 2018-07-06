@@ -2,11 +2,14 @@ package com.pufei.gxdt.module.user.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,35 +60,63 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
     LinearLayout request_failed;
     @BindView(R.id.no_data_failed)
     LinearLayout no_data_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
+    @BindView(R.id.btn_refresh)
+    Button btn_refresh;
     private FavoriteJokeAdapter jokeAdapter;
+    private List<MyImagesBean.ResultBean> cashList = new ArrayList<>();
     private List<MyImagesBean.ResultBean> jokeList = new ArrayList<>();
     private int page = 1;
 
     @Override
     public void initView() {
         jokeAdapter = new FavoriteJokeAdapter(getActivity(), jokeList,1);
-        rl_joke_xryv.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        final  GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        rl_joke_xryv.setLayoutManager(layoutManager);
         rl_joke_xryv.addItemDecoration(new SpaceItemDecoration(10,3));
         rl_joke_xryv.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
-        fragmentJokeSmart.setEnableLoadmore(true);
+        fragmentJokeSmart.setEnableLoadmore(false);
+        rl_joke_xryv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findLastVisibleItemPosition() ==
+                                layoutManager.getItemCount() - 1)
+                        ) {
+                    if(NetWorkUtil.isNetworkConnected(getActivity())){
+                        if(cashList.size()>0){
+                            jokeList.addAll(cashList);
+                            jokeAdapter.notifyDataSetChanged();
+                            cashList.clear();
+                            page++;
+                            requestJoke(page);
+                        }
+                    }else{
+                        ToastUtils.showShort(getActivity(),"请检查网络设置");
+                    }
+
+                }
+            }
+        });
         fragmentJokeSmart.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        page++;
-                        requestJoke(page);
-                        try {
-                            refreshlayout.finishLoadmore();
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, 2000);
+//                refreshlayout.getLayout().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        page++;
+//                        requestJoke(page);
+//                        try {
+//                            refreshlayout.finishLoadmore();
+//                        } catch (NullPointerException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }, 2000);
             }
 
             @Override
@@ -139,18 +170,36 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
             requestJoke(page);
         } else {
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
+            btn_refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetWorkUtil.isNetworkConnected(getActivity())) {
+                        request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        page = 1;
+                        requestJoke(page);
+                    }else{
+                        ToastUtils.showShort(getActivity(),"请先打开网络连接");
+                    }
+                }
+            });
         }
     }
 
     private void requestJoke(int page) {
-        try {
-            JSONObject jsonObject = KeyUtil.getJson(getActivity());
-            jsonObject.put("page", page + "");
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-            jsonObject.put("type", 1);
-            presenter.getFavoriteJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (NetWorkUtil.isNetworkConnected(getActivity())) {
+            try {
+                JSONObject jsonObject = KeyUtil.getJson(getActivity());
+                jsonObject.put("page", page + "");
+                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
+                jsonObject.put("type", 1);
+                presenter.getFavoriteJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+            ToastUtils.showShort(getActivity(),"请检查网络设置");
         }
 
     }
@@ -180,10 +229,17 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
                 jokeList.clear();
                 if(bean.getResult()!=null&&bean.getResult().size()==0){
                     no_data_failed.setVisibility(View.VISIBLE);
+                    main_bg.setBackgroundColor(Color.parseColor("#F0F0F0"));
+                }else{
+                    jokeList.addAll(bean.getResult());
+                    jokeAdapter.notifyDataSetChanged();
+                    page++;
+                    requestJoke(page);
                 }
+            }else{
+                cashList.addAll(bean.getResult());
             }
-            jokeList.addAll(bean.getResult());
-            jokeAdapter.notifyDataSetChanged();
+
         }
 
     }

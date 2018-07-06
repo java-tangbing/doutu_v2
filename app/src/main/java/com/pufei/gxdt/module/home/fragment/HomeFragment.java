@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -71,6 +72,8 @@ import butterknife.OnClick;
 public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements HomeListView {
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     @BindView(R.id.srf_home_list)
@@ -231,7 +234,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAdv(EvenMsg type) {
         if(type.getTYPE() == 1){
-            AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
+            AdvUtil.getInstance(getActivity()).getAdvHttp(getActivity(),your_original_layout,1);
         }
     }
     @Override
@@ -248,15 +251,17 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
         }else{
             headView.findViewById(R.id.ll_head_view).setVisibility(View.INVISIBLE);
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetWorkUtil.isNetworkConnected(getActivity())) {
                         headView.findViewById(R.id.ll_head_view).setVisibility(View.VISIBLE);
                         request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                                 &&ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                            AdvUtil.getInstance().getAdvHttp(getActivity(),your_original_layout,1);
+                            AdvUtil.getInstance(getActivity()).getAdvHttp(getActivity(),your_original_layout,1);
                         }else{
                             your_original_layout.setVisibility(View.GONE);
                         }

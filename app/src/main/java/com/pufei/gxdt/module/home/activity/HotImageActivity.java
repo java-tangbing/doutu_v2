@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -36,14 +35,11 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -62,6 +58,8 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
     TextView title;
     @BindView(R.id.request_failed)
     LinearLayout requestFailed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     @BindView(R.id.your_original_layout)
@@ -73,7 +71,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
 
     @Override
     public void initView() {
-        AdvUtil.getInstance().getAdvHttp(this,your_original_layout,5);
+        AdvUtil.getInstance(this).getAdvHttp(this,your_original_layout,5);
         title.setText("热门表情");
         ll_left.setVisibility(View.VISIBLE);
         final GridLayoutManager layoutManager = new GridLayoutManager(HotImageActivity.this, 3);
@@ -109,6 +107,7 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                         if(cashList.size()>0){
                             picturelist.addAll(cashList);
                             adapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestHot();
                         }
@@ -153,12 +152,14 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
             requestHot();
         }else{
             requestFailed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(HotImageActivity.this)) {
                         requestFailed.setVisibility(View.GONE);
-                        AdvUtil.getInstance().getAdvHttp(HotImageActivity.this, your_original_layout, 5);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
+                        AdvUtil.getInstance(HotImageActivity.this).getAdvHttp(HotImageActivity.this, your_original_layout, 5);
                         page = 1;
                         requestHot();
                     }else{
@@ -206,7 +207,6 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
                page++;
                requestHot();
            }else {
-              cashList.clear();
               cashList.addAll(bean.getResult());
            }
 

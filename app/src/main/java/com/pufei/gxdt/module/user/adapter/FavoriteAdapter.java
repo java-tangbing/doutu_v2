@@ -116,9 +116,6 @@ public class FavoriteAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
 
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
-        void OnLike(int position);
-
-        void OnBtDelete(int position);
     }
    /* private OnCountClickListener onCountClickListener;
     public void setOnCountClickListener(OnCountClickListener listener){

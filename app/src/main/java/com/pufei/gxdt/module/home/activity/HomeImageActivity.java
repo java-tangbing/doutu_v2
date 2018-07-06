@@ -67,6 +67,8 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
     XRecyclerView xRecyclerView;
     @BindView(R.id.request_failed)
     LinearLayout request_failed;
+    @BindView(R.id.main_bg)
+    LinearLayout main_bg;
     @BindView(R.id.btn_refresh)
     Button btn_refresh;
     private HomeImageAdapter adapter;
@@ -91,7 +93,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         headView = lif.inflate(R.layout.theme_head, null);
         xRecyclerView.addHeaderView(headView);
         RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
-        AdvUtil.getInstance().getAdvHttp(this,relativeLayout,2);
+        AdvUtil.getInstance(this).getAdvHttp(this,relativeLayout,2);
         TextView tv_top_title = headView.findViewById(R.id.tv_top_title);
         TextView tv_hot = headView.findViewById(R.id.tv_hot);
         TextView tv_eyes = headView.findViewById(R.id.tv_eyes);
@@ -121,6 +123,7 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         if(cashList.size()>0){
                             list.addAll(cashList);
                             adapter.notifyDataSetChanged();
+                            cashList.clear();
                             page++;
                             requestHomeImage();
                         }
@@ -201,14 +204,16 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         }else{
             headView.setVisibility(View.GONE);
             request_failed.setVisibility(View.VISIBLE);
+            main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
             btn_refresh.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(NetWorkUtil.isNetworkConnected(HomeImageActivity.this)) {
                         headView.setVisibility(View.VISIBLE);
                         request_failed.setVisibility(View.GONE);
+                        main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         RelativeLayout  relativeLayout = headView.findViewById(R.id.your_original_layout);
-                        AdvUtil.getInstance().getAdvHttp(HomeImageActivity.this,relativeLayout,2);
+                        AdvUtil.getInstance(HomeImageActivity.this).getAdvHttp(HomeImageActivity.this,relativeLayout,2);
                         page = 1;
                         requestHomeImage();
                     }else{
@@ -300,7 +305,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 page++;
                 requestHomeImage();
             }else{
-                cashList.clear();
                 cashList.addAll(bean.getResult());
             }
 

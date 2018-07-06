@@ -42,7 +42,7 @@ public class HomeImageAdapter extends RecyclerView.Adapter<HomeImageAdapter.MyHo
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
-        Glide.with(mcontext).load(list.get(position).getUrl()).into(holder.iv1);
+        GlideApp.with(mcontext).load(list.get(position).getUrl()).placeholder(R.mipmap.ic_default_picture).into(holder.iv1);
     }
     @Override
     public void onViewDetachedFromWindow(MyHodler holder) {
