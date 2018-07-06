@@ -532,7 +532,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             mPhotoEditor.generateImage(photoEditorView.getWidth(), photoEditorView.getHeight(), imagePath, new PhotoEditor.OnDecodeImageListener() {
                 @Override
                 public void onDecodeSuccess(List<String> path) {
-                    if(path.size() == 1) {
+                    if(path.size() > 0) {
                         draftImgPath = path.get(0);
                         saveToDraft(isdraft,media);
                         Log.e("path",draftImgPath);
