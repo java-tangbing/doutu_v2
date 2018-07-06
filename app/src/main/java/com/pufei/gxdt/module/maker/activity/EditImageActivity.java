@@ -81,6 +81,7 @@ import com.pufei.gxdt.utils.UploadImageUtil;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.umeng.qq.handler.UmengQQHandler;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -96,6 +97,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Target;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
@@ -510,7 +512,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 previousIndex = 2;
                 break;
             case R.id.ll_down_load:
-                Log.e("fdsf","fsdf");
                 doneImage(true,null);
                 break;
             case R.id.tv_share_qq:
@@ -522,6 +523,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         }
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("MissingPermission")
     private void doneImage(final boolean isdraft, final SHARE_MEDIA media) {
@@ -529,9 +531,13 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             showLoading("保存中...");
             mPhotoEditor.generateImage(photoEditorView.getWidth(), photoEditorView.getHeight(), imagePath, new PhotoEditor.OnDecodeImageListener() {
                 @Override
-                public void onDecodeSuccess(String path) {
-                    draftImgPath = path;
-                    saveToDraft(isdraft,media);
+                public void onDecodeSuccess(List<String> path) {
+                    if(path.size() == 1) {
+                        draftImgPath = path.get(0);
+                        saveToDraft(isdraft,media);
+                        Log.e("path",draftImgPath);
+                    }
+
                 }
 
                 @Override
@@ -654,9 +660,8 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         }
         hideLoading();
         if (isDraft) {
-            String result = ImageUtils.saveImageToGallery(this, BitmapFactory.decodeFile(draftImgPath));
-            if(!TextUtils.isEmpty(result)) {
-                ToastUtils.showShort(this, "图片已保存到:" + result);
+            if(!TextUtils.isEmpty(draftImgPath)) {
+                ToastUtils.showShort(this, "图片已保存到:" + draftImgPath);
             }
         } else {
             share(draftImgPath,media);
@@ -669,18 +674,20 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     private void share(String path,SHARE_MEDIA media) {
-//        if(path.contains(".gif")) {
-            UMEmoji emoji = new UMEmoji(this,new File(path));
-            emoji.setThumb(new UMImage(this, new File(path)));
-            new ShareAction(EditImageActivity.this).setCallback(umShareListener)
+        if(path.contains(".gif")) {
+            UMEmoji emoji = new UMEmoji(this,"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3866688388,3662000895&fm=27&gp=0.jpg");
+//            emoji.setThumb(new UMImage(this, new File(path)));
+            new ShareAction(EditImageActivity.this).setCallback(umShareListener).withText("hello")
                     .withMedia(emoji).setPlatform(media).share();
-//        }else {
-//            UMImage image = new UMImage(EditImageActivity.this, new File(path));//本地文件
-//            image.compressStyle = UMImage.CompressStyle.SCALE;
-//            UMImage thumb =  new UMImage(this, new File(path));
+        }else {
+            UMImage image = new UMImage(EditImageActivity.this, "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3866688388,3662000895&fm=27&gp=0.jpg");//本地文件
+            image.compressStyle = UMImage.CompressStyle.SCALE;
+            image.compressStyle = UMImage.CompressStyle.QUALITY;
+            UMImage thumb =  new UMImage(this, new File(path));
+            image.setTitle("title");
 //            image.setThumb(thumb);
-//            new ShareAction(EditImageActivity.this).withText("斗图大师").withMedia(image).setPlatform(media).setCallback(umShareListener).share();
-//        }
+            new ShareAction(EditImageActivity.this).withText("hello").withMedia(image).setPlatform(media).setCallback(umShareListener).share();
+        }
 
     }
 
@@ -702,7 +709,10 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            ToastUtils.showShort(EditImageActivity.this, "分享失败:"+ t.getMessage());
+            for (int i = 0; i < t.getStackTrace().length; i++) {
+                Log.e("share error",t.getStackTrace()[i]+"");
+            }
+            ToastUtils.showShort(EditImageActivity.this, platform.getName()+"分享失败:"+ t.getMessage());
         }
 
         @Override

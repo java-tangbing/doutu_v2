@@ -3,6 +3,7 @@ package photoeditor;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -254,7 +256,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 //                    }
 //                });
 //                imageView.setImageBitmap(desiredImage);
-                Log.e("path",path);
+                Log.e("path", path);
                 GlideApp.with(context).load(path).into(imageView);
             }
         });
@@ -879,7 +881,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 
 
     public interface OnDecodeImageListener {
-        void onDecodeSuccess(String path);
+        void onDecodeSuccess(List<String> path);
 
         void onDecodeFailed(Exception e);
     }
@@ -933,9 +935,7 @@ public class PhotoEditor implements BrushViewChangeListener {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void generateImage(final int width, final int height, final String bgImagePath, final OnDecodeImageListener listener) {
-        final List<Integer> frameList = new ArrayList<>();
-        final String gifPath = App.path1 + "/"
-                + System.currentTimeMillis() + ".gif";
+        final List<String> pathList = new ArrayList<>();
         new AsyncTask<String, String, Exception>() {
             @Override
             protected void onPreExecute() {
@@ -948,12 +948,14 @@ public class PhotoEditor implements BrushViewChangeListener {
             @Override
             protected Exception doInBackground(String... strings) {
                 Log.v("photoEditor", "==================== start to merge ===================================");
-                List<AddViewBean> gifImageBeans = new ArrayList<>();//gif贴图集合
-                List<AddViewBean> staticImageBeans = new ArrayList<>();//静态贴图集合
-                List<AddViewBean> textBeans = new ArrayList<>();//文本集合
-                List<AddViewBean> brushBeans = new ArrayList<>();//画笔集合
-                List<BitmapBean> bgFrames = new ArrayList<>();//gif背景帧视图
-                List<List<BitmapBean>> stickerFrmaes = new ArrayList<>();//gif贴图帧视图
+                final List<Integer> frameList = new ArrayList<>();
+                final List<Integer> delayList = new ArrayList<>();
+                final List<AddViewBean> gifImageBeans = new ArrayList<>();//gif贴图集合
+                final List<AddViewBean> staticImageBeans = new ArrayList<>();//静态贴图集合
+                final List<AddViewBean> textBeans = new ArrayList<>();//文本集合
+                final List<AddViewBean> brushBeans = new ArrayList<>();//画笔集合
+                final List<BitmapBean> bgFrames = new ArrayList<>();//gif背景帧视图
+                final List<List<BitmapBean>> stickerFrmaes = new ArrayList<>();//gif贴图帧视图
                 for (int i = 0; i < addedViews.size(); i++) {
                     AddViewBean addViewBean = addedViews.get(i);
                     if (addViewBean.getType() == ViewType.IMAGE) {
@@ -972,32 +974,32 @@ public class PhotoEditor implements BrushViewChangeListener {
                 if (bgImagePath.contains(".gif") || bgImagePath.contains(".GIF") || gifImageBeans.size() > 0) {//包含gif
                     if ((bgImagePath.contains(".gif") || bgImagePath.contains(".GIF")) && gifImageBeans.size() > 0) {
                         //bg 解码
-                        bgFrames.addAll(decodeGifImage(bgImagePath, null, null));
+                        bgFrames.addAll(decodeGifImage(bgImagePath, null, null, delayList));
                         frameList.add(bgFrames.size());
                         //sticker 解码
                         for (int i = 0; i < gifImageBeans.size(); i++) {
                             List<BitmapBean> tempBean = new ArrayList<>();
-                            tempBean.addAll(decodeGifImage(gifImageBeans.get(i).getChildImagePath(), gifImageBeans.get(i).getView(), (ImageView) gifImageBeans.get(i).getAddView()));
+                            tempBean.addAll(decodeGifImage(gifImageBeans.get(i).getChildImagePath(), gifImageBeans.get(i).getView(), (ImageView) gifImageBeans.get(i).getAddView(), delayList));
                             stickerFrmaes.add(tempBean);
                             frameList.add(tempBean.size());
                         }
 
                     } else if ((bgImagePath.contains(".gif") || bgImagePath.contains(".GIF")) && gifImageBeans.size() == 0) {
                         //bg 解码
-                        bgFrames.addAll(decodeGifImage(bgImagePath, null, null));
+                        bgFrames.addAll(decodeGifImage(bgImagePath, null, null, delayList));
                         frameList.add(bgFrames.size());
                     } else if (!(bgImagePath.contains(".gif") || bgImagePath.contains(".GIF")) && gifImageBeans.size() > 0) {
                         //sticker解码
                         bgFrames.addAll(decodeStaticImage(bgImagePath, null, null));
                         for (int i = 0; i < gifImageBeans.size(); i++) {
                             List<BitmapBean> tempBean = new ArrayList<>();
-                            tempBean.addAll(decodeGifImage(gifImageBeans.get(i).getChildImagePath(), gifImageBeans.get(i).getView(), (ImageView) gifImageBeans.get(i).getAddView()));
+                            tempBean.addAll(decodeGifImage(gifImageBeans.get(i).getChildImagePath(), gifImageBeans.get(i).getView(), (ImageView) gifImageBeans.get(i).getAddView(), delayList));
                             stickerFrmaes.add(tempBean);
                             frameList.add(tempBean.size());
                         }
                     }
-                }else {//无gif图
-                    bgFrames.addAll(decodeStaticImage(bgImagePath,null,null));
+                } else {//无gif图
+                    bgFrames.addAll(decodeStaticImage(bgImagePath, null, null));
                 }
                 for (int i = 0; i < staticImageBeans.size(); i++) {//静态贴图
                     stickerFrmaes.add(decodeStaticImage(staticImageBeans.get(i).getChildImagePath(), staticImageBeans.get(i).getView(), (ImageView) staticImageBeans.get(i).getAddView()));
@@ -1008,25 +1010,33 @@ public class PhotoEditor implements BrushViewChangeListener {
                 }
 
                 for (int i = 0; i < brushBeans.size(); i++) {
-                    BrushDrawingView view = (BrushDrawingView)brushBeans.get(i).getView();
-                        Bitmap bitmap = view.generateBimap();
-                        if(bitmap != null) {
-                            EventBus.getDefault().post(new MakerEventMsg(4,view.getMinTouchX(),view.getMinTouchY(),bitmap));
-                            stickerFrmaes.add(decodeBrushImage(bitmap,view));
-                        }else {
-                            return new Exception();
-                        }
+                    BrushDrawingView view = (BrushDrawingView) brushBeans.get(i).getView();
+                    Bitmap bitmap = view.generateBimap();
+                    if (bitmap != null) {
+                        EventBus.getDefault().post(new MakerEventMsg(4, view.getMinTouchX(), view.getMinTouchY(), bitmap));
+                        stickerFrmaes.add(decodeBrushImage(bitmap, view));
+                    } else {
+                        return new Exception();
+                    }
+                }
+                if(delayList.size()> 0) {
+                    String gifPath = App.path1 + "/"
+                            + System.currentTimeMillis() + ".gif";
+                    pathList.add(gifPath);
+                    generateGif(mergeGifStickerBitmap(bgFrames, stickerFrmaes, width, height, frameList), gifPath, Collections.min(delayList));
+                }else {
+                    String staticPath = App.path1 + "/" + System.currentTimeMillis() + ".png";
+                    pathList.add(staticPath);
+                    generateGif(mergeGifStickerBitmap(bgFrames, stickerFrmaes, width, height, frameList), staticPath, 0);
                 }
 
-                //生成图片
-                generateGif(mergeGifStickerBitmap(bgFrames, stickerFrmaes, width, height,frameList), gifPath);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Exception e) {
                 if (e == null) {
-                    listener.onDecodeSuccess(gifPath);
+                    listener.onDecodeSuccess(pathList);
                 } else {
                     listener.onDecodeFailed(e);
                 }
@@ -1035,13 +1045,13 @@ public class PhotoEditor implements BrushViewChangeListener {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private String generateGif(List<BitmapBean> bitmap, String path) {
+    private String generateGif(List<BitmapBean> bitmap, String path, int delay) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
         localAnimatedGifEncoder.start(baos);//start
         localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
         for (int i = 0; i < bitmap.size(); i++) {
-            localAnimatedGifEncoder.setDelay(bitmap.get(i).getDelay());
+            localAnimatedGifEncoder.setDelay(delay);
             Bitmap resizeBm = drawBg4Bitmap(Color.WHITE, resizeImage(bitmap.get(i).getBitmap(), 220, 220));
 //                        localAnimatedGifEncoder.setTransparent(Color.BLACK);
             localAnimatedGifEncoder.addFrame(resizeBm);
@@ -1062,12 +1072,12 @@ public class PhotoEditor implements BrushViewChangeListener {
         return path;
     }
 
-    private List<BitmapBean> mergeGifStickerBitmap(List<BitmapBean> bgFrame, List<List<BitmapBean>> stickerFrame,int width, int height,List<Integer> frame) {
+    private List<BitmapBean> mergeGifStickerBitmap(List<BitmapBean> bgFrame, List<List<BitmapBean>> stickerFrame, int width, int height, List<Integer> frame) {
         List<BitmapBean> bitmapList = new ArrayList<>();
         int maxFrame = 1;
-        if(frame.size() > 0) {
+        if (frame.size() > 0) {
             maxFrame = Collections.max(frame);
-            if(maxFrame == 1 || maxFrame == 0) {
+            if (maxFrame == 1 || maxFrame == 0) {
                 maxFrame = 1;
             }
         }
@@ -1078,11 +1088,11 @@ public class PhotoEditor implements BrushViewChangeListener {
             if (bgFrame.size() == 1) {
                 bgBitmap = bgFrame.get(0);
             } else {
-                if(bgFrame.size() > 0) {
+                if (bgFrame.size() > 0) {
                     bgBitmap = bgFrame.get(i % bgFrame.size());
                 }
             }
-            if(bgBitmap != null) {
+            if (bgBitmap != null) {
                 float scaleWidth = ((float) width) / bgBitmap.getBitmap().getWidth();
                 float scaleHeight = ((float) height) / bgBitmap.getBitmap().getHeight();
                 Matrix matrix = new Matrix();
@@ -1090,7 +1100,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 Bitmap bmOverlay = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bmOverlay);
                 canvas.drawBitmap(bgBitmap.getBitmap(), matrix, null);
-                if(stickerFrame.size() > 0) {
+                if (stickerFrame.size() > 0) {
                     for (int j = 0; j < stickerFrame.size(); j++) {
                         List<BitmapBean> beans = stickerFrame.get(j);
                         BitmapBean bean = null;
@@ -1105,16 +1115,16 @@ public class PhotoEditor implements BrushViewChangeListener {
                         frontMx.postRotate(bean.getRotation());
                         frontMx.postScale(ftscaleWidth, ftscaleHeight);
                         Bitmap ftBitmap = Bitmap.createBitmap(bean.getBitmap(), 0, 0, bean.getBitmap().getWidth(), bean.getBitmap().getHeight(), frontMx, true);
-                        if(bean.getType() == ViewType.BRUSH_DRAWING) {
+                        if (bean.getType() == ViewType.BRUSH_DRAWING) {
                             canvas.drawBitmap(ftBitmap, bean.getCenterX(), bean.getCenterY(), null);
-                        }else {
+                        } else {
                             canvas.drawBitmap(ftBitmap, bean.getCenterX() - ftBitmap.getWidth() / 2, bean.getCenterY() - ftBitmap.getHeight() / 2, null);
                         }
                         tb.setBitmap(bmOverlay);
                         tb.setDelay(bean.getDelay());
                         bitmapList.add(tb);
                     }
-                }else {
+                } else {
                     tb.setBitmap(bmOverlay);
                     tb.setDelay(bgBitmap.getDelay());
                     bitmapList.add(tb);
@@ -1192,7 +1202,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         return bitmaps;
     }
 
-    private List<BitmapBean> decodeGifImage(String path, View parent, ImageView child) {
+    private List<BitmapBean> decodeGifImage(String path, View parent, ImageView child, List<Integer> integers) {
         RequestManager rc = GlideApp.with(context);
         FutureTarget<File> cacheFile = null;
         File tf = null;
@@ -1230,12 +1240,13 @@ public class PhotoEditor implements BrushViewChangeListener {
                             bean.setType(ViewType.IMAGE);
                         }
                         bitmaps.add(bean);
+                        integers.add(next.delayMs);
                     }
                 }
                 iterator.close();
             }
 
-            if(bitmaps.size() == 0) {
+            if (bitmaps.size() == 0) {
                 BitmapBean bean = new BitmapBean();
                 Bitmap bitmap = BitmapFactory.decodeFile(tf.getPath());
                 bean.setBitmap(bitmap);
