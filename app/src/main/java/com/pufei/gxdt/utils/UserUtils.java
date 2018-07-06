@@ -26,6 +26,8 @@ public class UserUtils {
                 jsonObject.put("wechat",user.getWechat());
                 jsonObject.put("qq",user.getQq());
                 jsonObject.put("state",user.getState());
+                jsonObject.put("openid",user.getOpenid());
+                jsonObject.put("orgin",user.getOrgin());
                 return jsonObject.toString();
             } catch (JSONException e) {
                 e.printStackTrace();

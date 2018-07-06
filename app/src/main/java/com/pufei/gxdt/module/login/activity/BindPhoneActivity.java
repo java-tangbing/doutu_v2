@@ -195,9 +195,9 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
                     if (NetWorkUtil.isNetworkConnected(BindPhoneActivity.this)) {
                         JSONObject jsonObject = KeyUtil.getJson(BindPhoneActivity.this);
                         jsonObject.put("mobile", loginIphone.getText().toString());
-                        jsonObject.put("openid", openid);
+                        jsonObject.put("openid", App.userBean.getOpenid());
                         jsonObject.put("code", loginCode.getText().toString());
-                        jsonObject.put("orgin", orgin);
+                        jsonObject.put("orgin", App.userBean.getOrgin());
                         presenter.bindPhone(RetrofitFactory.getRequestBody(jsonObject.toString()));
                     } else {
                         ToastUtils.showShort(BindPhoneActivity.this, "请检查网络设置");

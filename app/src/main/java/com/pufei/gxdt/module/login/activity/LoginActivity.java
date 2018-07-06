@@ -161,7 +161,24 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             } else {
                 address = "未知";
             }
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
+            App.userBean.setState(bean.getState());
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
+            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            if (AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
+                if (user_detail != null) {
+                    App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+                }
+            }
             if (TextUtils.isEmpty(bean.getMobile())) {
+                App.userBean.setOpenid(openid);
+                App.userBean.setOrgin(orgin);
+                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
                 Intent intent = new Intent(this, BindPhoneActivity.class);
                 intent.putExtra("openId", openid);
                 intent.putExtra("iconUrl", header);
@@ -176,20 +193,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                     UmengStatisticsUtil.statisticsEvent(this, "34");
                 }
             }
-            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
-            App.userBean.setState(bean.getState());
-            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-            EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
-            if (AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else {
-                String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
-                if (user_detail != null) {
-                    App.userBean = new Gson().fromJson(user_detail, UserBean.class);
-                }
-            }
-            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
             AppManager.getAppManager().finishActivity();
         } else {
             Toast.makeText(LoginActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
@@ -342,10 +345,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                    Log.e("LoginActivity", "key:" + entry.getKey() + "; value:" + entry.getValue());
-                }
-
                 nickName = map.get("name");
                 openid = map.get("uid");
                 province = map.get("province");
@@ -371,7 +370,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                     } else {
                         ToastUtils.showShort(LoginActivity.this, "请检查网络设置");
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

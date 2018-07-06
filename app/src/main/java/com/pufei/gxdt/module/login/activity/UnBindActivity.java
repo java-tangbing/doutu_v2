@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.login.activity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pufei.gxdt.R;
@@ -29,6 +30,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class UnBindActivity extends BaseMvpActivity<UnBindPresenter> implements UnBindView {
+    @BindView(R.id.ll_title_left)
+    LinearLayout ll_left;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+
     @BindView(R.id.setting_log_out)
     Button unBindBtn;
     @BindView(R.id.unbind_key)
@@ -40,20 +46,24 @@ public class UnBindActivity extends BaseMvpActivity<UnBindPresenter> implements 
 
     @Override
     public void initView() {
+        ll_left.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void getData() {
         orgin = getIntent().getStringExtra("orgin");
         if ("mobile".equals(orgin)) {
+            tv_title.setText("手机号码");
             unBindKey.setText("手机号码");
             unBindBtn.setText("解绑手机号");
             unBindValue.setText(App.userBean.getPhone());
         } else if ("qq".equals(orgin)) {
+            tv_title.setText("解绑QQ");
             unBindKey.setText("QQ");
             unBindBtn.setText("解绑QQ");
             unBindValue.setText(App.userBean.getQq());
         } else {
+            tv_title.setText("解绑微信");
             unBindKey.setText("微信");
             unBindBtn.setText("解绑微信");
             unBindValue.setText(App.userBean.getWechat());

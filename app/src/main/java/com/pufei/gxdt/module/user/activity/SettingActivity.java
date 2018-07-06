@@ -106,7 +106,12 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         ll_left.setVisibility(View.VISIBLE);
         filepath = FileUtil.getCachePath(getApplicationContext());
         if (App.userBean != null) {
-            settingLogOut.setText(R.string.log_out);
+            if (Contents.CODE_ZERO.equals(App.userBean.getState()) || TextUtils.isEmpty(App.userBean.getState())) {
+                settingLogOut.setText(R.string.log_out);
+                settingLogOut.setVisibility(View.VISIBLE);
+            } else {
+                settingLogOut.setVisibility(View.GONE);
+            }
         }
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.onAppStart();
@@ -201,12 +206,19 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 UmengStatisticsUtil.statisticsEvent(SettingActivity.this, "35");
                 if (TextUtils.isEmpty(mobile)) {
                     if (App.userBean.getState().equals(Contents.CODE_ZERO)) {
-                        startActivity(new Intent(SettingActivity.this, BindPhoneActivity.class));
+                        Intent intent = new Intent(this, BindPhoneActivity.class);
+                        intent.putExtra("openId", openid);
+                        intent.putExtra("iconUrl", header);
+                        intent.putExtra("nickName", nickName);
+                        intent.putExtra("gender", gender);
+                        intent.putExtra("type", type);
+                        intent.putExtra("orgin", orgin);
+                        startActivity(intent);
                     } else {
                         startActivity(new Intent(SettingActivity.this, BindPhoneNewActivity.class));
                     }
                 } else {
-                    startActivity(getSetIntent("mobile"));
+                    startActivity(setIntent("mobile"));
                 }
                 break;
             case R.id.setting_update_version:
@@ -287,7 +299,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 if (TextUtils.isEmpty(wechat)) {
                     bindAccount(SHARE_MEDIA.WEIXIN);
                 } else {
-                    startActivity(getSetIntent("wechat"));
+                    startActivity(setIntent("wechat"));
                 }
                 break;
             case R.id.userdata_name_qq:
@@ -295,7 +307,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 if (TextUtils.isEmpty(qq)) {
                     bindAccount(SHARE_MEDIA.QQ);
                 } else {
-                    startActivity(getSetIntent("qq"));
+                    startActivity(setIntent("qq"));
                 }
                 break;
             default:
@@ -436,7 +448,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         builder.create().show();
     }
 
-    private Intent getSetIntent(String orgin) {
+    private Intent setIntent(String orgin) {
         Intent intent = new Intent(SettingActivity.this, UnBindActivity.class);
         intent.putExtra("orgin", orgin);
         return intent;
