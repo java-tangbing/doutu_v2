@@ -76,8 +76,8 @@ public class ImageActivity extends FragmentActivity {
     private MyfourPagerAdapder adapder;
     private List<String> list;
     private String URL;
-    private static String path = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
-    private static AlertDialog sharedialog;
+    private String path = Environment.getExternalStorageDirectory().getPath() + "/斗图大师";
+    private AlertDialog sharedialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -359,5 +359,11 @@ public class ImageActivity extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UMShareAPI.get(this).release();//防止内存泄漏
     }
 }
