@@ -22,11 +22,11 @@ public class DraftAdapter extends BaseQuickAdapter<DraftInfo,BaseViewHolder> {
     protected void convert(BaseViewHolder helper, DraftInfo item) {
 //        Log.e("fdsf",item.imagePath+"");
         if(item.make_url.contains("http:") || item.make_url.contains("https:")) {
-            GlideApp.with(mContext).load(item.make_url).placeholder(R.mipmap.newloding).into((ImageView) helper.getView(R.id.iv_preview));
+            GlideApp.with(mContext).load(item.make_url).placeholder(R.mipmap.ic_default_picture).into((ImageView) helper.getView(R.id.iv_preview));
         }else {
             File file = new File(item.make_url);
             if(file.exists()) {
-                GlideApp.with(mContext).load(new File(item.make_url)).placeholder(R.mipmap.newloding).into((ImageView) helper.getView(R.id.iv_preview));
+                GlideApp.with(mContext).load(new File(item.make_url)).placeholder(R.mipmap.ic_default_picture).into((ImageView) helper.getView(R.id.iv_preview));
 
             }else {
                 Log.e("draft","文件不存在");

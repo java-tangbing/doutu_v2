@@ -42,7 +42,7 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
         holder.itemView.setTag(position);
-        if(list!=null){
+        if(list!=null&&list.size()>0){
             holder.titletv.setText(list.get(position).getCategory_name());
             if(list.get(position).getImgs() != null){
                 if(list.get(position).getImgs().size() == 3){
