@@ -76,7 +76,7 @@ public class SignActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
-        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.yellow),0);
+        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.yellow), 0);
         setLightMode(this);
         initView();
         AppManager.getAppManager().addActivity(this);
@@ -311,7 +311,6 @@ public class SignActivity extends AppCompatActivity {
     private void signIn() {
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", App.userBean.getAuth());
             jsonObject.put("type", "1");
             OkhttpUtils.post(UrlString.SIGN_IN, jsonObject.toString(), new Callback() {
                 @Override
@@ -356,7 +355,6 @@ public class SignActivity extends AppCompatActivity {
         timeList.clear();
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", App.userBean.getAuth());
             OkhttpUtils.post(UrlString.GETSCORE, jsonObject.toString(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -383,10 +381,11 @@ public class SignActivity extends AppCompatActivity {
                     }
                 }
             });
-        } catch (JSONException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @TargetApi(Build.VERSION_CODES.M)
     public static void setLightMode(Activity activity) {
         setMIUIStatusBarDarkIcon(activity, true);
@@ -395,6 +394,7 @@ public class SignActivity extends AppCompatActivity {
 //            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 //        }
     }
+
     /**
      * 修改 MIUI V6  以上状态栏颜色
      */

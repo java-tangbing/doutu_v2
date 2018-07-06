@@ -45,6 +45,7 @@ public class KeyUtil {
             jsonObject.put("os", os);
             jsonObject.put("version", vresion);
             jsonObject.put("timestamp", timestamp);
+            jsonObject.put("auth", (App.userBean != null) ? App.userBean.getAuth() : "");
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -8,7 +8,6 @@ package com.pufei.gxdt.contents;
 public class Contents {
     public static final String CODE_ZERO = "0";
     public static final String CODE_ONE = "1";
-    public static final String STRING_AUTH = "string_auth";
     public static final int SleepTime = 1500;
     public static final String BASE_URL = "http://erp.xianwan.com/api/v5/android/";
     //public static final String Update ="http://erp.xianwan.com/api/apiStart/version";

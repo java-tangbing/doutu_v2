@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.discover.activity.DisPictureDetailActivity;
@@ -135,12 +136,10 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
             swipeRefreshLayout.setVisibility(View.VISIBLE);
             requestFailed.setVisibility(View.GONE);
-            auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
             JSONObject jsonObject = KeyUtil.getJson(getContext());
             try {
                 jsonObject.put("order", "hot");
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", auth);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

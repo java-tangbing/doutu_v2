@@ -24,12 +24,14 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
+import com.pufei.gxdt.module.home.model.LoginNewBean;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
 import com.pufei.gxdt.module.login.presenter.LoginPresenter;
 import com.pufei.gxdt.module.login.view.LoginView;
 import com.pufei.gxdt.module.user.activity.AgreeementActivity;
 import com.pufei.gxdt.module.user.activity.SettingActivity;
+import com.pufei.gxdt.module.user.bean.BindAccountBean;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.module.user.bean.UserBean;
 import com.pufei.gxdt.utils.AppManager;
@@ -159,23 +161,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             } else {
                 address = "未知";
             }
-            SharedPreferencesUtil.getInstance().putString(Contents.STRING_AUTH, bean.getAuth());
-            if (!TextUtils.isEmpty(bean.getMobile())) {
-                App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
-                EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
-                SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                if (AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
-                    if (user_detail != null) {
-                        App.userBean = new Gson().fromJson(user_detail, UserBean.class);
-                    }
-                }
-                AppManager.getAppManager().finishActivity();
-            } else {
+            if (TextUtils.isEmpty(bean.getMobile())) {
                 Intent intent = new Intent(this, BindPhoneActivity.class);
                 intent.putExtra("openId", openid);
                 intent.putExtra("iconUrl", header);
@@ -184,13 +170,27 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 intent.putExtra("type", type);
                 intent.putExtra("orgin", orgin);
                 startActivity(intent);
-                if (type == 1){
-                    UmengStatisticsUtil.statisticsEvent(this,"32");
-                }else {
-                    UmengStatisticsUtil.statisticsEvent(this,"34");
+                if (type == 1) {
+                    UmengStatisticsUtil.statisticsEvent(this, "32");
+                } else {
+                    UmengStatisticsUtil.statisticsEvent(this, "34");
                 }
             }
-
+            App.userBean = new UserBean(name, header, gender, address, bean.getAuth(), bean.getMobile(), bean.getUid());
+            App.userBean.setState(bean.getState());
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            EventBus.getDefault().postSticky(new EventMsg(MsgType.LOGIN_SUCCESS));
+            if (AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
+                if (user_detail != null) {
+                    App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+                }
+            }
+            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            AppManager.getAppManager().finishActivity();
         } else {
             Toast.makeText(LoginActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
@@ -198,6 +198,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void bindResult(SendCodeBean sendCodeBean) {
+
+    }
+
+    @Override
+    public void unBindResult(BindAccountBean sendCodeBean) {
 
     }
 
@@ -253,7 +258,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                             break;
                         }
                         UmengStatisticsUtil.statisticsEvent(this, "Login", "vcodeLogin", "验证码登录");
-                        UmengStatisticsUtil.statisticsEvent(this,"30");
+                        UmengStatisticsUtil.statisticsEvent(this, "30");
                         try {
                             JSONObject jsonObject = KeyUtil.getJson(this);
                             jsonObject.put("mobile", loginIphone.getText().toString());
@@ -305,13 +310,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 type = 1;
                 thirdLogin(SHARE_MEDIA.WEIXIN, 1);
                 UmengStatisticsUtil.statisticsEvent(this, "Login", "weChatLogin", "微信登录");
-                UmengStatisticsUtil.statisticsEvent(this,"31");
+                UmengStatisticsUtil.statisticsEvent(this, "31");
                 //ToastUtils.showShort(this, "敬请期待...");
                 break;
             case R.id.iv_login_qq:
                 type = 2;
                 UmengStatisticsUtil.statisticsEvent(this, "Login", "QQLogin", "QQ登录");
-                UmengStatisticsUtil.statisticsEvent(this,"33");
+                UmengStatisticsUtil.statisticsEvent(this, "33");
                 thirdLogin(SHARE_MEDIA.QQ, 2);
                 break;
             case R.id.tv_agreement:

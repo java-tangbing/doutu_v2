@@ -1,6 +1,11 @@
-package com.pufei.gxdt.module.login.model;
+package com.pufei.gxdt.module.home.model;
 
-public class LoginResultBean {
+/**
+ * Created by tb on 2018/6/1.
+ */
+
+public class LoginNewBean {
+
 
     /**
      * code : 0
@@ -60,7 +65,6 @@ public class LoginResultBean {
         private String header;
         private String orgin;
         private String mind;
-        private String state;
 
         public String getAuth() {
             return auth;
@@ -140,14 +144,6 @@ public class LoginResultBean {
 
         public void setMind(String mind) {
             this.mind = mind;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
         }
     }
 }

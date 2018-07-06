@@ -252,7 +252,6 @@ public class UserFragment extends BaseFragment {
     private void getScore() {
         JSONObject jsonObject = KeyUtil.getJson(getActivity());
         try {
-            jsonObject.put("auth", App.userBean.getAuth());
             OkhttpUtils.post(UrlString.GETSCORE, jsonObject.toString(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -290,7 +289,6 @@ public class UserFragment extends BaseFragment {
                                         }
                                     }
                                     try {
-                                        android.util.Log.e("StoreActivity", App.Total_score + "----");
                                         App.Total_score = getScoreBean.getResult().getTotal_score();
 //                                        EventBus.getDefault().post(new EventBean(Contents.USER_EXCHANGE, null));
 //                                        fragmentCollectFenshu.setText(App.Total_score);
@@ -303,11 +301,8 @@ public class UserFragment extends BaseFragment {
                     } catch (JsonSyntaxException e) {
                         e.printStackTrace();
                     }
-                    android.util.Log.e("获取的积", result);
                 }
             });
-        } catch (JSONException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

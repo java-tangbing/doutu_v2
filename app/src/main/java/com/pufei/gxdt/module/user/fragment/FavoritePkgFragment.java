@@ -173,7 +173,6 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
             try {
                 JSONObject jsonObject = KeyUtil.getJson(getActivity());
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 jsonObject.put("type", 2);
                 presenter.getFavoritePkgList(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {

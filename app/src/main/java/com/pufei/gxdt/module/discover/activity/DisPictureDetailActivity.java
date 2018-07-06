@@ -557,7 +557,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             if (NetWorkUtil.isNetworkConnected(this)) {
                 try {
                     JSONObject jsonObject = KeyUtil.getJson(this);
-                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                     jsonObject.put("type", 1 + "");
                     jsonObject.put("url", URL);
                     presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
@@ -572,7 +571,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             if (NetWorkUtil.isNetworkConnected(this)) {
                 try {
                     JSONObject jsonObject = KeyUtil.getJson(this);
-                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                     jsonObject.put("type", 1 + "");
                     jsonObject.put("id", URL);
 
@@ -592,7 +590,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             if (NetWorkUtil.isNetworkConnected(this)) {
                 try {
                     JSONObject jsonObject = KeyUtil.getJson(this);
-                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                     jsonObject.put("type", 1 + "");
                     jsonObject.put("url", URL);
                     presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
@@ -607,7 +604,6 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             if (NetWorkUtil.isNetworkConnected(this)) {
                 try {
                     JSONObject jsonObject = KeyUtil.getJson(this);
-                    jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                     jsonObject.put("type", 1 + "");
                     jsonObject.put("id", URL);
 //                    jsonObject.put("id", pictureList.get(index).getId());

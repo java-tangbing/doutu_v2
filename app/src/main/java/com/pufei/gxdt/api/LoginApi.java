@@ -1,6 +1,7 @@
 package com.pufei.gxdt.api;
 
 import com.pufei.gxdt.base.BaseBean;
+import com.pufei.gxdt.module.home.model.LoginNewBean;
 import com.pufei.gxdt.module.login.model.LoginResultBean;
 import com.pufei.gxdt.module.login.model.SendCodeBean;
 import com.pufei.gxdt.module.user.bean.BindAccountBean;
@@ -26,8 +27,14 @@ public interface LoginApi {
     @POST("User/login")
     Observable<LoginResultBean> thirdLogin(@Body RequestBody body);
 
+    @POST("User/loginNew")
+    Observable<LoginNewBean> loginNew(@Body RequestBody body);
+
     @POST("User/bindAccount")
     Observable<BindAccountBean> bindAccount(@Body RequestBody body);
+
+    @POST("User/unbind")
+    Observable<BindAccountBean> unbindAccount(@Body RequestBody body);
 
     @POST("login/qq")
     Observable<LoginResultBean> loginWithQQ(@Body RequestBody body);
@@ -37,6 +44,9 @@ public interface LoginApi {
 
     @POST("User/mobileBind")
     Observable<SendCodeBean> bindPhone(@Body RequestBody body);
+
+    @POST("User/mobileBindNew")
+    Observable<SendCodeBean> bindPhoneNew(@Body RequestBody body);
 
     @POST("login/pwd")
     Observable<LoginResultBean> loginWithPwd(@Body RequestBody request);

@@ -47,7 +47,6 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
     NewsSystemAdapter newsSystemAdapter;
     private List<NewsTypeTwoBean.ResultBean> mlist;
     private View viewHeader;
-    private String auth = "";
     private String type = "";
     private boolean isbdphone = false;
 //    private HeaderViewBind headerViewBind;
@@ -80,10 +79,8 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
 
 
     public void setMyAdapter() {
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", auth);
             jsonObject.put("type", "1");
         } catch (JSONException e) {
             e.printStackTrace();

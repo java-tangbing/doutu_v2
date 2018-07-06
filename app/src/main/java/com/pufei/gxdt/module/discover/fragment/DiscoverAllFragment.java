@@ -162,12 +162,10 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
         if (NetWorkUtil.isNetworkConnected(getActivity())) {
             swipeRefreshLayout.setVisibility(View.VISIBLE);
             requestFailed.setVisibility(View.GONE);
-            auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
             JSONObject jsonObject = KeyUtil.getJson(getContext());
             try {
                 jsonObject.put("order", "");
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", auth);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

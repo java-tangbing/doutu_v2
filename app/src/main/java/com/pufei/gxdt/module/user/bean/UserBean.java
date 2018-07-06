@@ -9,12 +9,13 @@ public class UserBean {
     private String head;
     private String gender;
     private String address;
-    private String auth;
+    private String auth = "";
     private String phone;
     private String mind;
     private String uid;
     private String wechat;
     private String qq;
+    private String state = "";
 
     public UserBean(String name, String head, String gender, String address, String auth, String phone,String uid) {
         this.name = name;
@@ -121,4 +122,13 @@ public class UserBean {
     public void setQq(String qq) {
         this.qq = qq;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
 }

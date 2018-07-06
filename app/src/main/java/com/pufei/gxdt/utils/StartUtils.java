@@ -108,7 +108,6 @@ public class StartUtils {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
-                    Log.i("axaiskajsia", result);
                     UpdateBean updateBean = null;
                     try {
                         updateBean = new Gson().fromJson(result, UpdateBean.class);
