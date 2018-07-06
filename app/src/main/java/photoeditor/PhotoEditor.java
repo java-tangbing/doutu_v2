@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.support.annotation.RequiresApi;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.UiThread;
 import android.text.TextUtils;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +38,8 @@ import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.pufei.gxdt.R;
+import com.pufei.gxdt.app.App;
+import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.waynejo.androidndkgif.GifDecoder;
@@ -43,12 +47,16 @@ import com.waynejo.androidndkgif.GifEncoder;
 import com.waynejo.androidndkgif.GifImage;
 import com.waynejo.androidndkgif.GifImageIterator;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -104,20 +112,19 @@ public class PhotoEditor implements BrushViewChangeListener {
         addTextViews = new ArrayList<>();
     }
 
+
     /**
      * This will add image on {@link PhotoEditorView} which you drag,rotate and scale using pinch
      * if {@link PhotoEditor.Builder#setPinchTextScalable(boolean)} enabled
-     *
-     * @param desiredImage bitmap image you want to add
      */
-    public void addImage(Bitmap desiredImage, String path) {
+    public void addImage(String path) {
         final View imageRootView = getLayout(ViewType.IMAGE, path);
         final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
         final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
         final ImageView imgClose = imageRootView.findViewById(R.id.imgPhotoEditorClose);
         frmBorder.setTag(true);
-        imageView.setImageBitmap(desiredImage);
-
+//        imageView.setImageBitmap(desiredImage);
+        GlideApp.with(context).load(path).into(imageView);
         MultiTouchListener multiTouchListener = getMultiTouchListener();
         multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
             @Override
@@ -139,6 +146,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         addViewToParent(imageRootView, imageView, path, ViewType.IMAGE);
 
     }
+
 
     public boolean getIsContainsBrush() {
         for (int i = 0; i < addedViews.size(); i++) {
@@ -178,7 +186,7 @@ public class PhotoEditor implements BrushViewChangeListener {
     }
 
 
-    public void addBrushImage(final Bitmap brushBitmap, final float x, final float y, String path, final AddBrushImageListener listener) {
+    public void addBrushImage(final Bitmap brushBitmap, final float x, final float y, String path) {
         final View imageRootView = getLayout(ViewType.IMAGE, path);
         final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
         final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
@@ -189,35 +197,36 @@ public class PhotoEditor implements BrushViewChangeListener {
             public void run() {
                 imageRootView.setX(x);
                 imageRootView.setY(y);
-                listener.addBrushImageSuccess();
             }
         });
+        imageRootView.setVisibility(View.VISIBLE);
         imageView.setImageBitmap(brushBitmap);
 //        Log.e("width",brushBitmap.getWidth() +" " + brushBitmap.getHeight());
 //        imageView.requestLayout();
 //        imageView.getLayoutParams().width = brushBitmap.getWidth();
 //        imageView.getLayoutParams().height = brushBitmap.getHeight();
 //        Log.e("test width",imageView.getWidth() + " " + imageView.getHeight());
-        MultiTouchListener multiTouchListener = getMultiTouchListener();
-        multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
-            @Override
-            public void onClick() {
-                boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
-                frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
-                imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
-                frmBorder.setTag(!isBackgroundVisible);
-            }
-
-            @Override
-            public void onLongClick() {
-
-            }
-        });
-
-        imageRootView.setOnTouchListener(multiTouchListener);
+//        MultiTouchListener multiTouchListener = getMultiTouchListener();
+//        multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
+//            @Override
+//            public void onClick() {
+//                boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
+//                frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
+//                imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
+//                frmBorder.setTag(!isBackgroundVisible);
+//            }
+//
+//            @Override
+//            public void onLongClick() {
+//
+//            }
+//        });
+//
+//        imageRootView.setOnTouchListener(multiTouchListener);
 
         addViewToParent(imageRootView, imageView, path, ViewType.IMAGE);
     }
+
 
     public void reAddImage(final DraftImageBean bean, final Bitmap desiredImage, final String path) {
         final View imageRootView = getLayout(ViewType.IMAGE, path);
@@ -230,7 +239,6 @@ public class PhotoEditor implements BrushViewChangeListener {
             public void run() {
                 final float centerX = bean.getBgWidth() * bean.getTranslationX() - imageRootView.getLeft() - imageView.getWidth() * bean.getImageWidth() / 2 - 120;
                 final float centerY = bean.getBgHeight() * bean.getTranslationY() - imageRootView.getTop() - imageView.getHeight() * bean.getImageHeight() / 2 - 110;
-                Log.e("center point", bean.getScaleX() + " " + bean.getScaleY() + " " + bean.getBgWidth() * bean.getImageWidth() + " " + bean.getBgHeight() * bean.getImageHeight());
                 imageRootView.setTranslationX(centerX);
                 imageRootView.setTranslationY(centerY);
                 imageRootView.setScaleX(bean.getScaleX());
@@ -246,7 +254,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 //                    }
 //                });
 //                imageView.setImageBitmap(desiredImage);
-
+                Log.e("path",path);
                 GlideApp.with(context).load(path).into(imageView);
             }
         });
@@ -301,6 +309,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         final ImageView imgClose = textRootView.findViewById(R.id.imgPhotoEditorClose);
         final FrameLayout frmBorder = textRootView.findViewById(R.id.frmBorder);
         frmBorder.setTag(true);
+        textInputTv.setDrawingCacheEnabled(true);
         textInputTv.setText(text);
         textInputTv.setTextColor(colorCodeTextView);
         textRootView.setDrawingCacheEnabled(true);
@@ -388,6 +397,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 textInputTv.setText(reAdd.getText());
                 textInputTv.setTextColor(reAdd.getTextColor());
                 textRootView.setDrawingCacheEnabled(true);
+                textInputTv.setDrawingCacheEnabled(true);
                 if (reAdd.getTextFont() != null) {
                     textInputTv.setTypeface(reAdd.getTextFont());
                 }
@@ -465,7 +475,7 @@ public class PhotoEditor implements BrushViewChangeListener {
      * @param colorCode    color to update on {@link TextView}
      */
     public void editText(View view, Typeface textTypeface, String inputText, int colorCode) {
-        if(view != null) {
+        if (view != null) {
             TextView inputTextView = view.findViewById(R.id.tvPhotoEditorText);
             for (int i = 0; i < addedViews.size(); i++) {
                 if (inputTextView != null && addedViews.get(i).getView() == view && !TextUtils.isEmpty(inputText)) {
@@ -479,8 +489,8 @@ public class PhotoEditor implements BrushViewChangeListener {
                     addedViews.set(i, new AddViewBean(view, inputTextView, "", ViewType.TEXT));
                 }
             }
-        }else {
-            ToastUtils.showShort(context,"view is null");
+        } else {
+            ToastUtils.showShort(context, "view is null");
         }
 
 
@@ -615,7 +625,9 @@ public class PhotoEditor implements BrushViewChangeListener {
                 imgClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewUndo(finalRootView, finalAddView, path, viewType);
+                        if (!TextUtils.isEmpty(path)) {
+                            viewUndo(finalRootView, finalAddView, path, viewType);
+                        }
                     }
                 });
             }
@@ -865,177 +877,22 @@ public class PhotoEditor implements BrushViewChangeListener {
         }
     }
 
-    /**
-     * A callback to save the edited image asynchronously
-     */
-    public interface OnSaveListener {
 
-        /**
-         * Call when edited image is saved successfully on given path
-         *
-         * @param imagePath path on which image is saved
-         */
-        void onSuccess(@NonNull String imagePath);
-
-        /**
-         * Call when failed to saved image on given path
-         *
-         * @param exception exception thrown while saving image
-         */
-        void onFailure(@NonNull Exception exception);
-    }
-
-    public interface OnDecodeGifStickerListener {
-        void onDecodeStickerSuccess(List<List<BitmapBean>> decodeList,List<Bitmap> bgBitmapList);
-        void onDecodeStickerFailed(Exception e);
-    }
-
-    public interface OnDecodeGifListener {
-        void onDecodeSuccess(List<BitmapBean> frameBitmaps, List<Bitmap> bitmaps);
+    public interface OnDecodeImageListener {
+        void onDecodeSuccess(String path);
 
         void onDecodeFailed(Exception e);
     }
 
-    public interface OnEncodeGifListener {
-        void onEncodeSuccess(String path);
+    public interface OnDecodeGifStickerListener {
+        void onDecodeStickerSuccess(List<List<BitmapBean>> decodeList, List<Bitmap> bgBitmapList);
 
-        void onEncodeFailed(Exception e);
-    }
-
-    public interface OnSaveFrameListener {
-        void onSaveFrameSuccess();
+        void onDecodeStickerFailed(Exception e);
     }
 
 
     public interface AddBrushImageListener {
         void addBrushImageSuccess();
-    }
-
-    /**
-     * Save the edited image on given path
-     *
-     * @param imagePath      path on which image to be saved
-     * @param onSaveListener callback for saving image
-     * @see OnSaveListener
-     */
-    @SuppressLint("StaticFieldLeak")
-    @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void saveImage(@NonNull final String imagePath, @NonNull final OnSaveListener onSaveListener) {
-//        Log.d(TAG, "Image Path: " + imagePath);
-        new AsyncTask<String, String, Exception>() {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                clearTextHelperBox();
-                parentView.setDrawingCacheEnabled(false);
-            }
-
-            @SuppressLint("MissingPermission")
-            @Override
-            protected Exception doInBackground(String... strings) {
-                File file = new File(imagePath);
-                if (!file.exists()) {
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                try {
-                    FileOutputStream out = new FileOutputStream(file, false);
-                    if (parentView != null) {
-                        parentView.setDrawingCacheEnabled(true);
-                        Bitmap drawingCache = parentView.getDrawingCache();
-                        drawingCache.compress(Bitmap.CompressFormat.PNG, 100, out);
-                    }
-                    out.flush();
-                    out.close();
-                    Log.d(TAG, "Filed Saved Successfully");
-                    return null;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "Failed to save File");
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception e) {
-                super.onPostExecute(e);
-                if (e == null) {
-//                    clearAllViews();
-                    onSaveListener.onSuccess(imagePath);
-                } else {
-                    onSaveListener.onFailure(e);
-                }
-            }
-
-        }.execute();
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    public void encodeGif(final int width, final int height, final String path, final List<BitmapBean> bitmap, final OnEncodeGifListener listener) {
-
-        new AsyncTask<String, String, Exception>() {
-            @Override
-            protected void onPreExecute() {
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @SuppressLint("MissingPermission")
-            @Override
-            protected Exception doInBackground(String... strings) {
-//                GifEncoder gifEncoder = new GifEncoder();
-//                try {
-//                    gifEncoder.init(width, height, path, GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST  );
-//                    for (int i = 0; i < bitmap.size(); i++) {
-////                        gifEncoder.setDither(true);
-////                        Bitmap resizeBm = resizeImage(bitmap.get(i).getBitmap(), 220, 220);
-//                        gifEncoder.encodeFrame(bitmap.get(i).getBitmap(),bitmap.get(i).getDelay());
-//                    }
-//                    gifEncoder.close();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
-                localAnimatedGifEncoder.start(baos);//start
-                localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
-                for (int i = 0; i < bitmap.size(); i++) {
-                    localAnimatedGifEncoder.setDelay(bitmap.get(i).getDelay());
-                    Bitmap resizeBm = drawBg4Bitmap(Color.WHITE, resizeImage(bitmap.get(i).getBitmap(), 220, 220));
-//                        localAnimatedGifEncoder.setTransparent(Color.BLACK);
-                    localAnimatedGifEncoder.addFrame(resizeBm);
-                }
-                localAnimatedGifEncoder.finish();
-
-                try {
-                    FileOutputStream fos = new FileOutputStream(path);
-                    baos.writeTo(fos);
-                    baos.flush();
-                    fos.flush();
-                    baos.close();
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Exception e) {
-                if (e == null) {
-                    listener.onEncodeSuccess(path);
-                } else {
-                    listener.onEncodeFailed(e);
-                }
-            }
-        }.execute();
-
-
     }
 
     public static Bitmap drawBg4Bitmap(int color, Bitmap orginBitmap) {
@@ -1073,52 +930,16 @@ public class PhotoEditor implements BrushViewChangeListener {
 
 
     @SuppressLint("StaticFieldLeak")
-    public void saveFrame(final List<BitmapBean> bitmap, final OnSaveFrameListener listener) {
-        new AsyncTask<String, String, Exception>() {
-            @Override
-            protected void onPreExecute() {
-            }
-
-            @SuppressLint("MissingPermission")
-            @Override
-            protected Exception doInBackground(String... strings) {
-
-                for (int i = 0; i < bitmap.size(); i++) {
-                    File file = new File(bitmap.get(i).getPath());
-                    try {
-                        FileOutputStream stream = new FileOutputStream(file);
-                        bitmap.get(i).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        stream.flush();
-                        stream.close();
-                    } catch (FileNotFoundException e) {
-                        Log.e("exception", e.getMessage());
-                    } catch (IOException e) {
-                        Log.e("exception", e.getMessage());
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Exception e) {
-                if (e == null) {
-                    listener.onSaveFrameSuccess();
-                }
-            }
-        }.execute();
-
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void saveGif(final File file, @NonNull final OnDecodeGifListener onDecodeListener) {
-        final List<Bitmap> bitmaps = new ArrayList<>();
-        final List<BitmapBean> frameBitmaps = new ArrayList<>();
+    public void generateImage(final int width, final int height, final String bgImagePath, final OnDecodeImageListener listener) {
+        final List<Integer> frameList = new ArrayList<>();
+        final String gifPath = App.path1 + "/"
+                + System.currentTimeMillis() + ".gif";
         new AsyncTask<String, String, Exception>() {
             @Override
             protected void onPreExecute() {
+                Log.v("photoEditor", "==================== pre to merge ===================================");
                 clearTextHelperBox();
                 parentView.setDrawingCacheEnabled(false);
             }
@@ -1126,47 +947,323 @@ public class PhotoEditor implements BrushViewChangeListener {
             @SuppressLint("MissingPermission")
             @Override
             protected Exception doInBackground(String... strings) {
-                if (parentView != null) {
-                    parentView.setDrawingCacheEnabled(true);
-                    Bitmap bitmap = parentView.getDrawingCache();
-                    bitmaps.add(bitmap);
+                Log.v("photoEditor", "==================== start to merge ===================================");
+                List<AddViewBean> gifImageBeans = new ArrayList<>();//gif贴图集合
+                List<AddViewBean> staticImageBeans = new ArrayList<>();//静态贴图集合
+                List<AddViewBean> textBeans = new ArrayList<>();//文本集合
+                List<AddViewBean> brushBeans = new ArrayList<>();//画笔集合
+                List<BitmapBean> bgFrames = new ArrayList<>();//gif背景帧视图
+                List<List<BitmapBean>> stickerFrmaes = new ArrayList<>();//gif贴图帧视图
+                for (int i = 0; i < addedViews.size(); i++) {
+                    AddViewBean addViewBean = addedViews.get(i);
+                    if (addViewBean.getType() == ViewType.IMAGE) {
+                        if (addViewBean.getChildImagePath().contains(".gif") || addViewBean.getChildImagePath().contains(".GIF")) {//贴图是否包含gif
+                            gifImageBeans.add(addViewBean);
+                        } else {
+                            staticImageBeans.add(addViewBean);
+                        }
+                    } else if (addViewBean.getType() == ViewType.TEXT) {
+                        textBeans.add(addViewBean);
+                    } else {
+                        brushBeans.add(addViewBean);
+                    }
                 }
 
-                GifDecoder gifDecoder = new GifDecoder();
-                final GifImageIterator iterator = gifDecoder.loadUsingIterator(file.getPath());
-                if (iterator != null) {
-                    while (iterator.hasNext()) {
-                        GifImage next = iterator.next();
-                        if (null != next) {
-                            BitmapBean bean = new BitmapBean();
-                            bean.setBitmap(next.bitmap);
-                            bean.setDelay(next.delayMs);
-                            frameBitmaps.add(bean);
+                if (bgImagePath.contains(".gif") || bgImagePath.contains(".GIF") || gifImageBeans.size() > 0) {//包含gif
+                    if ((bgImagePath.contains(".gif") || bgImagePath.contains(".GIF")) && gifImageBeans.size() > 0) {
+                        //bg 解码
+                        bgFrames.addAll(decodeGifImage(bgImagePath, null, null));
+                        frameList.add(bgFrames.size());
+                        //sticker 解码
+                        for (int i = 0; i < gifImageBeans.size(); i++) {
+                            List<BitmapBean> tempBean = new ArrayList<>();
+                            tempBean.addAll(decodeGifImage(gifImageBeans.get(i).getChildImagePath(), gifImageBeans.get(i).getView(), (ImageView) gifImageBeans.get(i).getAddView()));
+                            stickerFrmaes.add(tempBean);
+                            frameList.add(tempBean.size());
+                        }
+
+                    } else if ((bgImagePath.contains(".gif") || bgImagePath.contains(".GIF")) && gifImageBeans.size() == 0) {
+                        //bg 解码
+                        bgFrames.addAll(decodeGifImage(bgImagePath, null, null));
+                        frameList.add(bgFrames.size());
+                    } else if (!(bgImagePath.contains(".gif") || bgImagePath.contains(".GIF")) && gifImageBeans.size() > 0) {
+                        //sticker解码
+                        bgFrames.addAll(decodeStaticImage(bgImagePath, null, null));
+                        for (int i = 0; i < gifImageBeans.size(); i++) {
+                            List<BitmapBean> tempBean = new ArrayList<>();
+                            tempBean.addAll(decodeGifImage(gifImageBeans.get(i).getChildImagePath(), gifImageBeans.get(i).getView(), (ImageView) gifImageBeans.get(i).getAddView()));
+                            stickerFrmaes.add(tempBean);
+                            frameList.add(tempBean.size());
                         }
                     }
-                    iterator.close();
+                }else {//无gif图
+                    bgFrames.addAll(decodeStaticImage(bgImagePath,null,null));
+                }
+                for (int i = 0; i < staticImageBeans.size(); i++) {//静态贴图
+                    stickerFrmaes.add(decodeStaticImage(staticImageBeans.get(i).getChildImagePath(), staticImageBeans.get(i).getView(), (ImageView) staticImageBeans.get(i).getAddView()));
                 }
 
+                for (int i = 0; i < textBeans.size(); i++) {//文本
+                    stickerFrmaes.add(decodeTextImage(textBeans.get(i).getAddView().getDrawingCache(), textBeans.get(i).getView(), (TextView) textBeans.get(i).getAddView()));
+                }
+
+                for (int i = 0; i < brushBeans.size(); i++) {
+                    BrushDrawingView view = (BrushDrawingView)brushBeans.get(i).getView();
+                        Bitmap bitmap = view.generateBimap();
+                        if(bitmap != null) {
+                            EventBus.getDefault().post(new MakerEventMsg(4,view.getMinTouchX(),view.getMinTouchY(),bitmap));
+                            stickerFrmaes.add(decodeBrushImage(bitmap,view));
+                        }else {
+                            return new Exception();
+                        }
+                }
+
+                //生成图片
+                generateGif(mergeGifStickerBitmap(bgFrames, stickerFrmaes, width, height,frameList), gifPath);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Exception e) {
                 if (e == null) {
-                    onDecodeListener.onDecodeSuccess(frameBitmaps, bitmaps);
+                    listener.onDecodeSuccess(gifPath);
                 } else {
-                    onDecodeListener.onDecodeFailed(e);
+                    listener.onDecodeFailed(e);
                 }
             }
         }.execute();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private String generateGif(List<BitmapBean> bitmap, String path) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+        localAnimatedGifEncoder.start(baos);//start
+        localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
+        for (int i = 0; i < bitmap.size(); i++) {
+            localAnimatedGifEncoder.setDelay(bitmap.get(i).getDelay());
+            Bitmap resizeBm = drawBg4Bitmap(Color.WHITE, resizeImage(bitmap.get(i).getBitmap(), 220, 220));
+//                        localAnimatedGifEncoder.setTransparent(Color.BLACK);
+            localAnimatedGifEncoder.addFrame(resizeBm);
+        }
+        localAnimatedGifEncoder.finish();
+
+        try {
+            FileOutputStream fos = new FileOutputStream(path);
+            baos.writeTo(fos);
+            baos.flush();
+            fos.flush();
+            baos.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("photoEditor", "==================== merge error =================================== \n" + e.getMessage());
+        }
+        return path;
+    }
+
+    private List<BitmapBean> mergeGifStickerBitmap(List<BitmapBean> bgFrame, List<List<BitmapBean>> stickerFrame,int width, int height,List<Integer> frame) {
+        List<BitmapBean> bitmapList = new ArrayList<>();
+        int maxFrame = 1;
+        if(frame.size() > 0) {
+            maxFrame = Collections.max(frame);
+            if(maxFrame == 1 || maxFrame == 0) {
+                maxFrame = 1;
+            }
+        }
+
+        for (int i = 0; i < maxFrame; i++) {
+            BitmapBean tb = new BitmapBean();
+            BitmapBean bgBitmap = null;
+            if (bgFrame.size() == 1) {
+                bgBitmap = bgFrame.get(0);
+            } else {
+                if(bgFrame.size() > 0) {
+                    bgBitmap = bgFrame.get(i % bgFrame.size());
+                }
+            }
+            if(bgBitmap != null) {
+                float scaleWidth = ((float) width) / bgBitmap.getBitmap().getWidth();
+                float scaleHeight = ((float) height) / bgBitmap.getBitmap().getHeight();
+                Matrix matrix = new Matrix();
+                matrix.postScale(scaleWidth, scaleHeight);
+                Bitmap bmOverlay = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bmOverlay);
+                canvas.drawBitmap(bgBitmap.getBitmap(), matrix, null);
+                if(stickerFrame.size() > 0) {
+                    for (int j = 0; j < stickerFrame.size(); j++) {
+                        List<BitmapBean> beans = stickerFrame.get(j);
+                        BitmapBean bean = null;
+                        if (beans.size() == 1) {
+                            bean = beans.get(0);
+                        } else {
+                            bean = beans.get(i % beans.size());
+                        }
+                        float ftscaleWidth = ((float) bean.getWidth()) / bean.getBitmap().getWidth();
+                        float ftscaleHeight = ((float) bean.getHeight()) / bean.getBitmap().getHeight();
+                        Matrix frontMx = new Matrix();
+                        frontMx.postRotate(bean.getRotation());
+                        frontMx.postScale(ftscaleWidth, ftscaleHeight);
+                        Bitmap ftBitmap = Bitmap.createBitmap(bean.getBitmap(), 0, 0, bean.getBitmap().getWidth(), bean.getBitmap().getHeight(), frontMx, true);
+                        if(bean.getType() == ViewType.BRUSH_DRAWING) {
+                            canvas.drawBitmap(ftBitmap, bean.getCenterX(), bean.getCenterY(), null);
+                        }else {
+                            canvas.drawBitmap(ftBitmap, bean.getCenterX() - ftBitmap.getWidth() / 2, bean.getCenterY() - ftBitmap.getHeight() / 2, null);
+                        }
+                        tb.setBitmap(bmOverlay);
+                        tb.setDelay(bean.getDelay());
+                        bitmapList.add(tb);
+                    }
+                }else {
+                    tb.setBitmap(bmOverlay);
+                    tb.setDelay(bgBitmap.getDelay());
+                    bitmapList.add(tb);
+                }
+            }
+
+        }
+        return bitmapList;
+    }
+
+    private List<BitmapBean> decodeBrushImage(Bitmap bitmap, BrushDrawingView parent) {
+        List<BitmapBean> bitmaps = new ArrayList<>();
+        BitmapBean bean = new BitmapBean();
+        bean.setBitmap(bitmap);
+        bean.setWidth(bitmap.getWidth());
+        bean.setHeight(bitmap.getHeight());
+        bean.setRotation(parent.getRotation());
+        bean.setCenterX(parent.getMinTouchX());
+        bean.setCenterY(parent.getMinTouchY());
+        bean.setType(ViewType.BRUSH_DRAWING);
+        bitmaps.add(bean);
+        return bitmaps;
+    }
+
+    private List<BitmapBean> decodeTextImage(Bitmap bitmap, View parent, TextView child) {
+        List<BitmapBean> bitmaps = new ArrayList<>();
+        BitmapBean bean = new BitmapBean();
+        bean.setBitmap(bitmap);
+        float centerX = ((float) parent.getWidth()) / 2 + parent.getLeft() + parent.getTranslationX();
+        float centerY = ((float) parent.getHeight()) / 2 + parent.getTop() + parent.getTranslationY();
+        bean.setWidth((int) (child.getWidth() * parent.getScaleX()));
+        bean.setHeight((int) (child.getHeight() * parent.getScaleY()));
+        bean.setRotation(parent.getRotation());
+        bean.setCenterX(centerX);
+        bean.setCenterY(centerY);
+        bean.setType(ViewType.TEXT);
+        bitmaps.add(bean);
+        return bitmaps;
+    }
 
 
+    private List<BitmapBean> decodeStaticImage(String path, View parent, ImageView child) {
+        RequestManager rc = GlideApp.with(context);
+        FutureTarget<File> cacheFile = null;
+        File tf = null;
+        List<BitmapBean> bitmaps = new ArrayList<>();
+        if (path.contains("http:") || path.contains("https:")) {
+            cacheFile = rc.downloadOnly().load(path).submit();
+        } else {
+            cacheFile = rc.downloadOnly().load(new File(path)).submit();
+        }
+
+        try {
+            tf = cacheFile.get();
+            Bitmap bitmap = BitmapFactory.decodeFile(tf.getPath());
+            BitmapBean bean = new BitmapBean();
+            bean.setBitmap(bitmap);
+            bean.setDelay(0);
+            if (parent != null && child != null) {
+                float centerX = ((float) parent.getWidth()) / 2 + parent.getLeft() + parent.getTranslationX();
+                float centerY = ((float) parent.getHeight()) / 2 + parent.getTop() + parent.getTranslationY();
+                bean.setWidth((int) (child.getWidth() * parent.getScaleX()));
+                bean.setHeight((int) (child.getHeight() * parent.getScaleY()));
+                bean.setRotation(parent.getRotation());
+                bean.setCenterX(centerX);
+                bean.setCenterY(centerY);
+                bean.setType(ViewType.IMAGE);
+            }
+            bitmaps.add(bean);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return bitmaps;
+    }
+
+    private List<BitmapBean> decodeGifImage(String path, View parent, ImageView child) {
+        RequestManager rc = GlideApp.with(context);
+        FutureTarget<File> cacheFile = null;
+        File tf = null;
+        List<BitmapBean> bitmaps = new ArrayList<>();
+        if (path.contains("http") || path.contains("https")) {
+            cacheFile = rc.downloadOnly().load(path).submit();
+        } else {
+            cacheFile = rc.downloadOnly().load(new File(path)).submit();
+        }
+
+        try {
+            tf = cacheFile.get();
+            GifDecoder gifDecoder = new GifDecoder();
+            final GifImageIterator iterator = gifDecoder.loadUsingIterator(tf.getPath());
+            float centerX = 0;
+            float centerY = 0;
+            if (parent != null && child != null) {
+                centerX = ((float) parent.getWidth()) / 2 + parent.getLeft() + parent.getTranslationX();
+                centerY = ((float) parent.getHeight()) / 2 + parent.getTop() + parent.getTranslationY();
+            }
+
+            if (iterator != null) {
+                while (iterator.hasNext()) {
+                    GifImage next = iterator.next();
+                    if (null != next) {
+                        BitmapBean bean = new BitmapBean();
+                        bean.setBitmap(next.bitmap);
+                        bean.setDelay(next.delayMs);
+                        if (parent != null && child != null) {
+                            bean.setWidth((int) (child.getWidth() * parent.getScaleX()));
+                            bean.setHeight((int) (child.getHeight() * parent.getScaleY()));
+                            bean.setRotation(parent.getRotation());
+                            bean.setCenterX(centerX);
+                            bean.setCenterY(centerY);
+                            bean.setType(ViewType.IMAGE);
+                        }
+                        bitmaps.add(bean);
+                    }
+                }
+                iterator.close();
+            }
+
+            if(bitmaps.size() == 0) {
+                BitmapBean bean = new BitmapBean();
+                Bitmap bitmap = BitmapFactory.decodeFile(tf.getPath());
+                bean.setBitmap(bitmap);
+                bean.setDelay(0);
+                if (parent != null && child != null) {
+                    bean.setWidth((int) (child.getWidth() * parent.getScaleX()));
+                    bean.setHeight((int) (child.getHeight() * parent.getScaleY()));
+                    bean.setRotation(parent.getRotation());
+                    bean.setCenterX(centerX);
+                    bean.setCenterY(centerY);
+                    bean.setType(ViewType.IMAGE);
+                }
+                bitmaps.add(bean);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
+        }
+        return bitmaps;
     }
 
     @SuppressLint("StaticFieldLeak")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void decodeGif(final String bgPath, @NonNull final OnDecodeGifStickerListener onDecodeListener) {
+    public void decodeGif(final String bgPath, final int bgWidth, final int bgHeight, @NonNull final OnDecodeGifStickerListener onDecodeListener) {
         final List<Bitmap> bitmaps = new ArrayList<>();
         final List<BitmapBean> frameBitmaps = new ArrayList<>();
         final List<List<BitmapBean>> decodeGifResultList = new ArrayList<>();
@@ -1189,12 +1286,11 @@ public class PhotoEditor implements BrushViewChangeListener {
                     bitmaps.add(BitmapFactory.decodeFile(bgFile.getPath()));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    Log.e("PhotoEditor","Gif decode error " + e.getMessage());
+                    Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
                 } catch (ExecutionException e) {
                     e.printStackTrace();
-                    Log.e("PhotoEditor","Gif decode error " + e.getMessage());
+                    Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
                 }
-
 
                 if (addedViews.size() > 0) {
                     for (AddViewBean beans : addedViews) {
@@ -1207,18 +1303,20 @@ public class PhotoEditor implements BrushViewChangeListener {
                                 file = cacheFile.get();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                                Log.e("PhotoEditor","Gif decode error " + e.getMessage());
+                                Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
                             } catch (ExecutionException e) {
                                 e.printStackTrace();
-                                Log.e("PhotoEditor","Gif decode error " + e.getMessage());
+                                Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
                             }
                             if (beans.getChildImagePath().contains(".gif")) {
-                                if(file != null) {
+                                if (file != null) {
                                     GifDecoder gifDecoder = new GifDecoder();
                                     final GifImageIterator iterator = gifDecoder.loadUsingIterator(file.getPath());
                                     if (iterator != null) {
                                         int[] loaction = new int[2];
                                         beans.getAddView().getLocationOnScreen(loaction);
+                                        float centerX = ((float) beans.getView().getWidth()) / 2 + beans.getView().getLeft() + beans.getView().getTranslationX();
+                                        float centerY = ((float) beans.getView().getHeight()) / 2 + beans.getView().getTop() + beans.getView().getTranslationY();
 //                                        Log.e("z",loaction[0] + " " +loaction[1]);
                                         while (iterator.hasNext()) {
                                             GifImage next = iterator.next();
@@ -1226,14 +1324,13 @@ public class PhotoEditor implements BrushViewChangeListener {
                                                 BitmapBean bean = new BitmapBean();
                                                 bean.setBitmap(next.bitmap);
                                                 bean.setDelay(next.delayMs);
-                                                bean.setX(loaction[0]);
-                                                bean.setY(loaction[1]);
-                                                bean.setWidth((int)(beans.getAddView().getWidth() * beans.getView().getScaleX()));
-                                                bean.setHeight((int)(beans.getAddView().getHeight() * beans.getView().getScaleY()));
+                                                bean.setWidth((int) (beans.getAddView().getWidth() * beans.getView().getScaleX()));
+                                                bean.setHeight((int) (beans.getAddView().getHeight() * beans.getView().getScaleY()));
                                                 bean.setRotation(beans.getView().getRotation());
                                                 bean.setScale(beans.getView().getScaleX());
+                                                bean.setCenterX(centerX);
+                                                bean.setCenterY(centerY);
                                                 frameBitmaps.add(bean);
-
                                             }
                                         }
                                         decodeGifResultList.add(frameBitmaps);
@@ -1250,7 +1347,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             @Override
             protected void onPostExecute(Exception e) {
                 if (e == null) {
-                    onDecodeListener.onDecodeStickerSuccess(decodeGifResultList,bitmaps);
+                    onDecodeListener.onDecodeStickerSuccess(decodeGifResultList, bitmaps);
                 } else {
                     onDecodeListener.onDecodeStickerFailed(e);
                 }

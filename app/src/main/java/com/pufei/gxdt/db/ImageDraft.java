@@ -32,4 +32,6 @@ public class ImageDraft extends BaseModel {
     public float rotation;
     @Column
     public boolean isDraft;
+    @Column
+    public int type;//0--图片,1---画笔
 }

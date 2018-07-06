@@ -1,8 +1,9 @@
 package com.pufei.gxdt.module.maker.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -12,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.FutureTarget;
 import com.google.gson.Gson;
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
@@ -53,6 +54,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,127 +96,14 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     @Override
     public void getData() {
         Intent intent = getIntent();
-        path = intent.getStringExtra(IMAGE_PATH).trim();
+        path = intent.getStringExtra(IMAGE_PATH);
         imageId = intent.getStringExtra(IMAGE_ID);
         type = intent.getIntExtra(TYPE, 0);
         id = intent.getStringExtra("Id");
         uid = intent.getStringExtra("uid");
         originTable = intent.getStringExtra("originTable");
-        Log.e("make finish  path",path+" ");
         info = new Select().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(false)).querySingle();
-        if (info != null) {
-            if (path.contains("http:") || path.contains("https:")) {//合成图
-                GlideApp.with(this).load(path).into(ivFaceImage);
-                presenter.downloadImage(path, 0);
-            } else {
-                if (path.contains(".gif") || path.contains(".GIF")) {
-                    GlideApp.with(this).load(new File(path)).into(ivFaceImage);
-                    InputStream inputStream = null;
-                    try {
-                        inputStream = new FileInputStream(new File(path));
-                        byte[] inputData = getBytes(inputStream);
-                        imageBase64 = Base64.encodeToString(inputData, Base64.NO_WRAP);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Luban.with(this)
-                            .load(new File(path))
-                            .ignoreBy(100)
-                            .setTargetDir(App.path1 + "/")
-                            .filter(new CompressionPredicate() {
-                                @Override
-                                public boolean apply(String path) {
-                                    return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                                }
-                            })
-                            .setCompressListener(new OnCompressListener() {
-                                @Override
-                                public void onStart() {
-                                }
-
-                                @Override
-                                public void onSuccess(File file) {
-                                    SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(info.width, info.height) {
-                                        @Override
-                                        public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-                                            ivFaceImage.setImageBitmap(resource);
-                                            imageBase64 = ImageUtils.bitmapToBase64(resource);
-                                        }
-                                    };
-                                    GlideApp.with(MakerFinishActivity.this).asBitmap().load(file).into(simpleTarget);
-                                }
-                                @Override
-                                public void onError(Throwable e) {
-                                    Log.e("exception",e.getMessage());
-                                }
-                            }).launch();
-
-
-                }
-            }
-
-
-            if (info.imagePath.contains("http:") || info.imagePath.contains("https:")) {//背景图
-                    if(info.imagePath.contains(".gif") || info.imagePath.contains(".GIF")) {
-                        presenter.downloadImage(info.imagePath,1);
-                    }else {
-                        presenter.downloadGif(info.imagePath,App.path1 + "/" + System.currentTimeMillis() +".png");
-                    }
-                } else {
-                    if (info.imagePath.contains(".gif") || info.imagePath.contains(".GIF")) {
-                        try {
-                            InputStream inputStream = new FileInputStream(new File(info.imagePath));
-                            byte[] inputData = getBytes(inputStream);
-                            bgImageBase64 = Base64.encodeToString(inputData, Base64.NO_WRAP);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Luban.with(this)
-                                .load(new File(info.imagePath))
-                                .ignoreBy(100)
-                                .setTargetDir(App.path1 + "/")
-                                .filter(new CompressionPredicate() {
-                                    @Override
-                                    public boolean apply(String path) {
-                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                                    }
-                                })
-                                .setCompressListener(new OnCompressListener() {
-                                    @Override
-                                    public void onStart() {
-                                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
-                                    }
-
-                                    @Override
-                                    public void onSuccess(File file) {
-                                        SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(info.width, info.height) {
-                                            @Override
-                                            public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-                                                bgImageBase64 = ImageUtils.bitmapToBase64(resource);
-                                            }
-                                        };
-                                        GlideApp.with(MakerFinishActivity.this).asBitmap().load(file).into(simpleTarget);
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-                                    }
-                                }).launch();
-
-                    }
-
-            }
-
-        } else {
-            ToastUtils.showShort(this, "图片加载失败!");
-        }
-
+        GlideApp.with(this).load(new File(path)).placeholder(R.mipmap.newloding).into(ivFaceImage);
     }
 
     public byte[] getBytes(InputStream inputStream) throws IOException {
@@ -268,7 +157,6 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
-//                    ToastUtils.showShort(this, "请先登录");
                 }
 
                 break;
@@ -276,13 +164,30 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
     }
 
     private void setRequestData() {
-        if (imageBase64 != null && bgImageBase64 != null) {
-            showLoading("上传中...");
-            final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
-            final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
-            UploadImageUtil.uploadImage(this, info, path, imageBase64, bgImageBase64, imageDrafts, textDrafts);
-        }
+
+        UploadImageUtil.getImageBase64(this,info.imagePath, path, new UploadImageUtil.OnGetBase64Listener() {
+            @Override
+            public void getBase64Success(List<String> base64List) {
+                if (!TextUtils.isEmpty(base64List.get(0)) && !TextUtils.isEmpty(base64List.get(1))) {
+                    showLoading("上传中...");
+                    final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
+                    final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
+                    UploadImageUtil.uploadImage(MakerFinishActivity.this, info, path, base64List.get(1), base64List.get(0), imageDrafts, textDrafts);
+                }else {
+                    ToastUtils.showShort(MakerFinishActivity.this,"图片解析错误,请稍后重试!");
+                }
+            }
+
+            @Override
+            public void getBase64Failed(Exception e) {
+                ToastUtils.showShort(MakerFinishActivity.this,"图片解析错误,请稍后重试!");
+            }
+        });
+
+
     }
+
+
 
     @Override
     public void upLoadImageResult(ModifyResultBean response) {

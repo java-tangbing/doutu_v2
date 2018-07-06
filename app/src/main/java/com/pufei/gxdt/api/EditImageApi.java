@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Url;
 
 public interface EditImageApi {
-    @POST("User/uploadImage")
+    @POST("User/uploadImageNew")
     Observable<ModifyResultBean> upLoad(@Body RequestBody body);
     @GET
     Call <ResponseBody> getImage(@Url String url);

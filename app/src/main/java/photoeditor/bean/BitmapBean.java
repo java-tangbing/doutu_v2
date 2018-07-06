@@ -2,6 +2,8 @@ package photoeditor.bean;
 
 import android.graphics.Bitmap;
 
+import photoeditor.ViewType;
+
 public class BitmapBean {
     private Bitmap bitmap;
     private int delay;
@@ -12,6 +14,33 @@ public class BitmapBean {
     private int height;
     private float scale;
     private float rotation;
+    private float centerX;
+    private float centerY;
+    private ViewType type;
+
+    public ViewType getType() {
+        return type;
+    }
+
+    public void setType(ViewType type) {
+        this.type = type;
+    }
+
+    public float getCenterX() {
+        return centerX;
+    }
+
+    public void setCenterX(float centerX) {
+        this.centerX = centerX;
+    }
+
+    public float getCenterY() {
+        return centerY;
+    }
+
+    public void setCenterY(float centerY) {
+        this.centerY = centerY;
+    }
 
     public float getScale() {
         return scale;

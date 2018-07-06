@@ -1,11 +1,13 @@
 package com.pufei.gxdt.module.maker.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -27,7 +29,9 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,10 +42,12 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
+import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -53,7 +59,9 @@ import com.pufei.gxdt.db.ImageDraft;
 import com.pufei.gxdt.db.ImageDraft_Table;
 import com.pufei.gxdt.db.TextDraft;
 import com.pufei.gxdt.db.TextDraft_Table;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.model.PictureDetailBean;
+import com.pufei.gxdt.module.login.activity.LoginActivity;
 import com.pufei.gxdt.module.maker.bean.MaterialBean;
 import com.pufei.gxdt.module.maker.bean.RecommendTextBean;
 import com.pufei.gxdt.module.maker.common.MakerEventMsg;
@@ -64,10 +72,21 @@ import com.pufei.gxdt.module.maker.presenter.EditImagePresenter;
 import com.pufei.gxdt.module.maker.view.EditImageView;
 import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.ImageUtils;
+import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UmengStatisticsUtil;
+import com.pufei.gxdt.utils.UploadImageUtil;
 import com.pufei.gxdt.widgets.GlideApp;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMEmoji;
+import com.umeng.socialize.media.UMImage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,7 +100,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
@@ -129,6 +150,8 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     FrameLayout modeContent;
     @BindView(R.id.rl_title)
     RelativeLayout rlTitle;
+    @BindView(R.id.cx_publish)
+    CheckBox cxPublish;
     public static String IMAGE_ID = "IMAGE_ID";
     public static String IMAGE_PATH = "IMAGE_PATH";
     public static String EDIT_TYPE = "TYPE";
@@ -160,6 +183,9 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private Typeface xindixiaowanzixiaoxueban;
     private int colorMode;
     private boolean isAddBrushImage = false;
+    private Bitmap brushBitmap;
+    private float brushX;
+    private float brushY;
 
 
     @Override
@@ -196,7 +222,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             if (bundle != null) {
                 PictureDetailBean.ResultBean bean = (PictureDetailBean.ResultBean) bundle.getSerializable("picture_bean");
                 if (bean != null) {
-                    imagePath = bean.getUrl();
                     if (TextUtils.isEmpty(bean.getOrginid())) {
                         imageId = System.currentTimeMillis() + "";
                     } else {
@@ -205,20 +230,11 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     id = bean.getId();
                     uid = bean.getUid();
                     originTable = bean.getOrgintable();
+                    imagePath = bean.getUrl();
                     GlideApp.with(this).load(imagePath).placeholder(R.mipmap.newloding).into(photoEditorView.getSource());
                     attachMentList = new ArrayList<>();
                     attachMentList.addAll(bean.getData());
                     initEditStatus(attachMentList);
-                    if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-//                        String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
-                        try {
-                            File file = File.createTempFile(System.currentTimeMillis() + ".gif", null, getCacheDir());
-                            presenter.downloadGif(imagePath, file.getPath());
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
 
             }
@@ -227,17 +243,9 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             imageId = intent.getStringExtra(IMAGE_ID);
             imagePath = intent.getStringExtra(IMAGE_PATH);
             if (imagePath.contains("http:") || imagePath.contains("https:")) {
-                GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
-//                String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
-                try {
-                    File file = File.createTempFile(System.currentTimeMillis() + ".gif", null, getCacheDir());
-                    presenter.downloadGif(imagePath, file.getPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                GlideApp.with(this).load(imagePath).placeholder(R.mipmap.newloding).into(photoEditorView.getSource());
             } else {
-                GlideApp.with(this).load(new File(imagePath)).into(photoEditorView.getSource());
+                GlideApp.with(this).load(new File(imagePath)).placeholder(R.mipmap.newloding).into(photoEditorView.getSource());
             }
             imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(true)).queryList();
             textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(true)).queryList();
@@ -292,7 +300,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 } else if (fontStyle.equals("FZJZJW--GB1-0")) {
                     bean.setTextFont(xindixiaowanzixiaoxueban);
                 }
-//                bean.setTextSize(Integer.parseInt(dataBean.getTextFontSize()));
                 photoEditorView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
@@ -300,7 +307,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         bean.setBgHeight(photoEditorView.getHeight());
                         bean.setBgWidth(photoEditorView.getWidth());
                         mPhotoEditor.reAddText(bean);
-//                        Log.e("fsdfsd", photoEditorView.getWidth() + " " + photoEditorView.getHeight());
                     }
                 });
             } else {
@@ -429,20 +435,10 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             mPhotoEditor.clearAllViews();
             imagePath = msg.getUrl();
             resetOriginId();
-            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                String filePath = App.path1 + "/" + System.currentTimeMillis() + ".gif";
-                presenter.downloadGif(imagePath, filePath);
-            }
-            GlideApp.with(this).load(imagePath).into(photoEditorView.getSource());
+            GlideApp.with(this).load(imagePath).placeholder(R.mipmap.newloding).into(photoEditorView.getSource());
         } else if (msg.getType() == 1) {//贴图
-            mPhotoEditor.addGifImage("http://img3.duitang.com/uploads/item/201411/12/20141112224456_xyc4P.gif");
-//            SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>(240, 240) {
-//                @Override
-//                public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
-//                    mPhotoEditor.addImage(resource, msg.getUrl());
-//                }
-//            };
-//            GlideApp.with(this).asBitmap().load(msg.getUrl()).into(simpleTarget);
+//            mPhotoEditor.addGifImage("http://img3.duitang.com/uploads/item/201411/12/20141112224456_xyc4P.gif");
+            mPhotoEditor.addImage(msg.getUrl());
         } else if (msg.getType() == 2) {//更改文本颜色
             this.colorMode = msg.getColor();
             mPhotoEditor.editText(rootView, text, msg.getColor());
@@ -460,6 +456,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             } else if (msg.getTextFontStyle() == 5) {
                 mPhotoEditor.editText(rootView, xindixiaowanzixiaoxueban, text, colorMode);
             }
+        } else if (msg.getType() == 4) {//添加画笔
+            brushBitmap = msg.getBitmap();
+            brushX = msg.getX();
+            brushY = msg.getY();
+        }else if (msg.getType() == 12) {
+            presenter.upLoadImage(RetrofitFactory.getRequestBody(msg.getUrl()));
         }
     }
 
@@ -471,106 +473,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back})
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back,R.id.ll_down_load,R.id.tv_share_qq,R.id.tv_share_wx})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_back:
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.btn_next:
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                mPhotoEditor.decodeGif(imagePath, new PhotoEditor.OnDecodeGifStickerListener() {
-
-                    @Override
-                    public void onDecodeStickerSuccess(List<List<BitmapBean>> decodeList, List<Bitmap> bgBitmapList) {
-                        List<BitmapBean> tempBean = new ArrayList<>();
-                        for (Bitmap bgBitmap : bgBitmapList) {
-                            for (List<BitmapBean> beanList : decodeList) {
-                                for (BitmapBean bean : beanList) {
-                                    BitmapBean bean1 = new BitmapBean();
-                                    Bitmap mergeBitmap = mergeGifStickerBitmap(bgBitmap,bean.getBitmap(),bean.getX(),bean.getY(),bean.getRotation(),bean1.getScale(),bean.getWidth(),bean.getHeight());
-                                    bean1.setBitmap(mergeBitmap);
-                                    bean1.setDelay(bean.getDelay());
-                                    bean1.setPath(App.path1 +"/" + System.currentTimeMillis()+".png");
-                                    tempBean.add(bean1);
-                                }
-                            }
-                        }
-
-                        final String gifPath = App.path1 + "/"
-                                + System.currentTimeMillis() + ".gif";
-                        mPhotoEditor.encodeGif(photoEditorView.getWidth(),photoEditorView.getHeight(),gifPath, tempBean, new PhotoEditor.OnEncodeGifListener() {
-                            @Override
-                            public void onEncodeSuccess(String path) {
-                                mPhotoEditor.clearAllViews();
-                                GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
-                            }
-
-                            @Override
-                            public void onEncodeFailed(Exception e) {
-
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onDecodeStickerFailed(Exception e) {
-
-                    }
-                });
-
-//                if (imagePath != null) {
-//                    if (mPhotoEditor.getIsContainsBrush()) {//判断是否包含画笔，如果包含画笔则要等view确定位置之后再进行其他操作
-//                        isAddBrushImage = false;
-//                        addBrushImg(false);
-//                    } else {
-//                        saveToDraft(false);
-//                        if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-//                            if (gifFile == null) {
-//                                try {
-//                                    gifFile = File.createTempFile(imagePath, "", getCacheDir());
-//                                    saveGif(false);
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                    Log.e(getClass().getSimpleName(), e.getMessage()+"");
-//                                }
-//                            }
-//                        } else {
-//                            saveImage(false);
-//                        }
-//                    }
-//
-//                } else {
-//                    ToastUtils.showShort(this, "请选择背景图");
-//                }
-
+//                doneImage(false);
                 break;
             case R.id.tv_save_draft:
-                if (!TextUtils.isEmpty(imagePath)) {
-                    if (mPhotoEditor.getIsContainsBrush()) {//判断是否包含画笔，如果包含画笔则要等view确定位置之后再进行其他操作
-                        isAddBrushImage = false;
-                        addBrushImg(true);
-                    } else {
-                        if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                            if (gifFile == null) {
-                                try {
-                                    gifFile = File.createTempFile(imagePath,null,getCacheDir());
-                                    saveGif(true);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    Log.e(getClass().getSimpleName(), e.getMessage()+"");
-                                }
-                            }
-                        } else {
-                            saveImage(true);
-                        }
-                    }
-
-
-                }
+//                doneImage(true);
                 break;
             case R.id.ll_redo:
                 mPhotoEditor.redo();
@@ -596,77 +509,47 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 showFragment(2, previousIndex);
                 previousIndex = 2;
                 break;
+            case R.id.ll_down_load:
+                Log.e("fdsf","fsdf");
+                doneImage(true,null);
+                break;
+            case R.id.tv_share_qq:
+                doneImage(false,SHARE_MEDIA.QQ);
+                break;
+            case R.id.tv_share_wx:
+                doneImage(false,SHARE_MEDIA.WEIXIN);
+                break;
         }
     }
 
-    private void addBrushImg(final boolean isDraft) {
-        List<AddViewBean> beans = mPhotoEditor.getAddedViews();
-        if (beans.size() > 0) {
-            for (int i = 0; i < beans.size(); i++) {
-                AddViewBean bean = beans.get(i);
-                if (bean.getType() == ViewType.BRUSH_DRAWING) {
-                    if (!isAddBrushImage) {
-                        BrushDrawingView brush = (BrushDrawingView) bean.getView();
-                        Bitmap map = brush.generateBimap();
-                        if (map != null) {
-                            try {
-                                File file = File.createTempFile(System.currentTimeMillis() + ".png", null, getCacheDir());
-                                FileOutputStream outputStream = new FileOutputStream(file);
-                                map.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                                outputStream.close();
-                                mPhotoEditor.addBrushImage(map, brush.getMinTouchX(), brush.getMinTouchY(), file.getPath(), new PhotoEditor.AddBrushImageListener() {
-                                    @Override
-                                    public void addBrushImageSuccess() {
-                                        if (!isDraft) {
-                                            saveToDraft(false);
-                                            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                                                if (gifFile == null) {
-                                                    try {
-                                                        gifFile = File.createTempFile(imagePath,null,getCacheDir());
-                                                        saveGif(false);
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                        Log.e(getClass().getSimpleName(), e.getMessage()+"");
-                                                    }
-                                                }
-                                            } else {
-                                                saveImage(false);
-                                            }
-                                        } else {
-                                            if (imagePath.contains("gif") || imagePath.contains("GIF")) {
-                                                if (gifFile == null) {
-                                                    try {
-                                                        gifFile = File.createTempFile(imagePath,null,getCacheDir());
-                                                        saveGif(true);
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                        Log.e(getClass().getSimpleName(), e.getMessage()+"");
-                                                    }
-                                                }
-                                            } else {
-                                                saveImage(true);
-                                            }
-                                        }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @SuppressLint("MissingPermission")
+    private void doneImage(final boolean isdraft, final SHARE_MEDIA media) {
+        if (!TextUtils.isEmpty(imagePath)) {
+            showLoading("保存中...");
+            mPhotoEditor.generateImage(photoEditorView.getWidth(), photoEditorView.getHeight(), imagePath, new PhotoEditor.OnDecodeImageListener() {
+                @Override
+                public void onDecodeSuccess(String path) {
+                    draftImgPath = path;
+                    saveToDraft(isdraft,media);
+                }
 
-                                    }
-                                });
-                                mPhotoEditor.clearBrushAllViews();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                Log.e("addBrushImage", e.getMessage());
-                            }
-                        }
-                        isAddBrushImage = true;
+                @Override
+                public void onDecodeFailed(Exception e) {
+                    if (e.getMessage() == null) {
+                        ToastUtils.showShort(EditImageActivity.this, "画笔不能超出画布!");
+                    } else {
+                        ToastUtils.showShort(EditImageActivity.this, "生成表情失败!!");
+
                     }
                 }
-            }
+            });
+        } else {
+            ToastUtils.showShort(this, "背景图不能为空!");
         }
     }
 
-    private void saveToDraft(final boolean isDraft) {
-        if (!isDraft) {
-            showLoading("保存中...");
-        }
+    private void saveToDraft(final boolean isDraft,SHARE_MEDIA media) {
         SQLite.delete().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(isDraft)).execute();
@@ -687,7 +570,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             info.originImageId = "";
             info.originTable = "design_images";
         }
-//        info.originImageId = imageId;
         info.make_url = draftImgPath;
         info.isDraft = isDraft;
         info.insert();
@@ -732,49 +614,124 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         textDraft.insert();
                         break;
                     case IMAGE:
+                        isAddBrushImage = true;
                         final ImageDraft imageDraft = new ImageDraft();
                         final ImageView iv = (ImageView) bean.getAddView();
                         final FrameLayout rootview = (FrameLayout) bean.getView();
-                        rootview.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageDraft.translationX = ((float) rootview.getWidth() / 2 + (float) rootview.getLeft() + rootview.getTranslationX()) / (float) photoEditorView.getWidth();
-                                imageDraft.translationY = ((float) rootview.getHeight() / 2 + (float) rootview.getTop() + (float) rootview.getTranslationY()) / (float) photoEditorView.getHeight();
-                                imageDraft.scaleX = rootview.getScaleX();
-                                imageDraft.scaleY = rootview.getScaleY();
-                                imageDraft.rotation = rootview.getRotation();
-                                imageDraft.stickerImagePath = bean.getChildImagePath();
-                                imageDraft.imageId = imageId;
-                                imageDraft.isDraft = isDraft;
-                                imageDraft.imageHeight = (float) iv.getHeight() / (float) photoEditorView.getHeight();
-                                imageDraft.imageWidth = (float) iv.getWidth() / (float) photoEditorView.getWidth();
-                                imageDraft.insert();
-                                Log.e("widht", iv.getWidth() + " " + iv.getHeight());
-                            }
-                        });
+                        imageDraft.translationX = ((float) rootview.getWidth() / 2 + (float) rootview.getLeft() + rootview.getTranslationX()) / (float) photoEditorView.getWidth();
+                        imageDraft.translationY = ((float) rootview.getHeight() / 2 + (float) rootview.getTop() + (float) rootview.getTranslationY()) / (float) photoEditorView.getHeight();
+                        imageDraft.scaleX = rootview.getScaleX();
+                        imageDraft.scaleY = rootview.getScaleY();
+                        imageDraft.rotation = rootview.getRotation();
+                        imageDraft.stickerImagePath = bean.getChildImagePath();
+                        imageDraft.imageId = imageId;
+                        imageDraft.isDraft = isDraft;
+                        imageDraft.imageHeight = (float) iv.getHeight() / (float) photoEditorView.getHeight();
+                        imageDraft.imageWidth = (float) iv.getWidth() / (float) photoEditorView.getWidth();
+                        imageDraft.type = 0;
+                        imageDraft.insert();
+                        isAddBrushImage = false;
                         break;
                     case BRUSH_DRAWING:
-
-
-//                        SimpleTarget<Bitmap> simpleTarget = new SimpleTarget<Bitmap>() {
-//                            @Override
-//                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                                Log.e("brush",resource.getWidth() +" " + resource.getHeight());
-//
-//                            }
-//                        };
-//                        GlideApp.with(this).asBitmap().load(brush.generateBimap()).into(simpleTarget);
-
+                        ImageDraft draft = new ImageDraft();
+                        float brushCenterX = (brushBitmap.getWidth() / 2 + brushX) / photoEditorView.getWidth();
+                        float brushCenterY = (brushBitmap.getHeight() / 2 + brushY) / photoEditorView.getHeight();
+                        draft.translationX = brushCenterX;
+                        draft.translationY = brushCenterY;
+                        draft.scaleX = 1;
+                        draft.scaleY = 1;
+                        draft.rotation = 0;
+                        draft.stickerImagePath = ImageUtils.bitmapToBase64(brushBitmap);
+                        draft.imageId = imageId;
+                        draft.isDraft = isDraft;
+                        draft.imageWidth = (float)brushBitmap.getWidth() / photoEditorView.getWidth();
+                        draft.imageHeight = (float) brushBitmap.getHeight() / photoEditorView.getHeight();
+                        draft.type = 1;
+                        draft.insert();
                         break;
                 }
             }
         }
-        if (!isDraft) {
-            hideLoading();
-        }
+        hideLoading();
         if (isDraft) {
-            ToastUtils.showShort(this, "保存成功");
+            String result = ImageUtils.saveImageToGallery(this, BitmapFactory.decodeFile(draftImgPath));
+            if(!TextUtils.isEmpty(result)) {
+                ToastUtils.showShort(this, "图片已保存到:" + result);
+            }
+        } else {
+            share(draftImgPath,media);
+            if(cxPublish.isChecked()) {
+                if (App.userBean != null) {
+                    setRequestData(info,draftImgPath,imagePath);
+                }
+            }
         }
+    }
+
+    private void share(String path,SHARE_MEDIA media) {
+//        if(path.contains(".gif")) {
+            UMEmoji emoji = new UMEmoji(this,new File(path));
+            emoji.setThumb(new UMImage(this, new File(path)));
+            new ShareAction(EditImageActivity.this).setCallback(umShareListener)
+                    .withMedia(emoji).setPlatform(media).share();
+//        }else {
+//            UMImage image = new UMImage(EditImageActivity.this, new File(path));//本地文件
+//            image.compressStyle = UMImage.CompressStyle.SCALE;
+//            UMImage thumb =  new UMImage(this, new File(path));
+//            image.setThumb(thumb);
+//            new ShareAction(EditImageActivity.this).withText("斗图大师").withMedia(image).setPlatform(media).setCallback(umShareListener).share();
+//        }
+
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            ToastUtils.showShort(EditImageActivity.this, "开始分享");
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            ToastUtils.showShort(EditImageActivity.this, "分享成功");
+            if (platform.equals(SHARE_MEDIA.WEIXIN)) {
+                UmengStatisticsUtil.statisticsEvent(EditImageActivity.this, "17");
+            } else if (platform.equals(SHARE_MEDIA.QQ)) {
+                UmengStatisticsUtil.statisticsEvent(EditImageActivity.this, "15");
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            ToastUtils.showShort(EditImageActivity.this, "分享失败:"+ t.getMessage());
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtils.showShort(EditImageActivity.this, "分享取消");
+        }
+    };
+
+    private void setRequestData(final DraftInfo info, final String makeUrl, String bgPath) {
+        UploadImageUtil.getImageBase64(this,bgPath, makeUrl, new UploadImageUtil.OnGetBase64Listener() {
+            @Override
+            public void getBase64Success(List<String> base64List) {
+                if (!TextUtils.isEmpty(base64List.get(0)) && !TextUtils.isEmpty(base64List.get(1))) {
+//                    showLoading("上传中...");
+                    final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
+                    final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
+                    UploadImageUtil.uploadImage(EditImageActivity.this, info, makeUrl, base64List.get(1), base64List.get(0), imageDrafts, textDrafts);
+                }else {
+                    ToastUtils.showShort(EditImageActivity.this,"图片解析错误,请稍后重试!");
+                }
+            }
+
+            @Override
+            public void getBase64Failed(Exception e) {
+                ToastUtils.showShort(EditImageActivity.this,"图片解析错误,请稍后重试!");
+            }
+        });
+
+
     }
 
     private void startToMakerFinish(String path) {
@@ -788,198 +745,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         startActivity(intent);
     }
 
-    private void saveGif(final boolean isDraft) {
-        Acp.getInstance(this)
-                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
-                        new AcpListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                            @Override
-                            public void onGranted() {
-                                if (ActivityCompat.checkSelfPermission(EditImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                                    return;
-                                }
-                                showLoading("保存中...");
-                                final String gifPath = App.path1 + "/"
-                                        + System.currentTimeMillis() + ".gif";
-
-                                photoEditorView.setBackgroundColor(Color.TRANSPARENT);
-                                photoEditorView.getSource().setBackgroundColor(Color.TRANSPARENT);
-                                photoEditorView.getSource().setImageAlpha(0);
-                                final List<BitmapBean> gifEncodeBitmap = new ArrayList<>();
-                                mPhotoEditor.saveGif(gifFile, new PhotoEditor.OnDecodeGifListener() {
-                                    @Override
-                                    public void onDecodeSuccess(List<BitmapBean> frameBitmaps, List<Bitmap> bitmaps) {
-                                        photoEditorView.getSource().setImageAlpha(255);
-                                        photoEditorView.setBackgroundColor(Color.WHITE);
-                                        photoEditorView.getSource().setBackgroundColor(Color.WHITE);
-                                        for (int i = 0; i < frameBitmaps.size(); i++) {
-                                            Bitmap bitmap = mergeBitmap(frameBitmaps.get(i).getBitmap(), bitmaps.get(0));
-                                            BitmapBean bean = new BitmapBean();
-                                            bean.setPath(App.path1 + "/" + System.currentTimeMillis() + ".png");
-                                            bean.setBitmap(bitmap);
-                                            bean.setDelay(frameBitmaps.get(i).getDelay());
-                                            gifEncodeBitmap.add(bean);
-                                        }
-
-                                        mPhotoEditor.saveFrame(gifEncodeBitmap, new PhotoEditor.OnSaveFrameListener() {
-                                            @Override
-                                            public void onSaveFrameSuccess() {
-                                                for (int i = 0; i < gifEncodeBitmap.size(); i++) {
-                                                    BitmapBean bean = gifEncodeBitmap.get(i);
-                                                    bean.setBitmap(gifEncodeBitmap.get(i).getBitmap());
-                                                    gifEncodeBitmap.set(i, bean);
-                                                }
-                                            }
-                                        });
-
-                                        mPhotoEditor.encodeGif(photoEditorView.getWidth(), photoEditorView.getHeight(), gifPath, gifEncodeBitmap, new PhotoEditor.OnEncodeGifListener() {
-                                            @Override
-                                            public void onEncodeSuccess(String path) {
-                                                hideLoading();
-                                                if (!isDraft) {
-//                                                    GlideApp.with(EditImageActivity.this).load(new File(path)).into(photoEditorView.getSource());
-                                                    startToMakerFinish(path);
-                                                } else {
-                                                    draftImgPath = path;
-                                                    saveToDraft(true);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onEncodeFailed(Exception e) {
-
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void onDecodeFailed(Exception e) {
-                                        hideLoading();
-                                    }
-                                });
-
-                            }
-
-                            @Override
-                            public void onDenied(List<String> permissions) {
-                                ToastUtils.showShort(EditImageActivity.this, "请求权限失败,请手动开启！");
-                            }
-                        });
-    }
-
-    private void saveImage(final boolean isDraft) {
-        Acp.getInstance(this)
-                .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
-                        new AcpListener() {
-                            @Override
-                            public void onGranted() {
-                                if (ActivityCompat.checkSelfPermission(EditImageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    return;
-                                }
-                                showLoading("保存中...");
-                                final String path1 = App.path1 + "/"
-                                        + System.currentTimeMillis() + ".png";
-
-                                mPhotoEditor.saveImage(path1, new PhotoEditor.OnSaveListener() {
-                                    @Override
-                                    public void onSuccess(@NonNull String imagePath) {
-                                        hideLoading();
-                                        if (!isDraft) {
-                                            startToMakerFinish(imagePath);
-                                        } else {
-                                            draftImgPath = imagePath;
-                                            saveToDraft(true);
-                                            Log.e("draftImagepath", imagePath);
-                                        }
-//                                        photoEditorView.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        hideLoading();
-                                    }
-                                });
-
-
-                            }
-
-                            @Override
-                            public void onDenied(List<String> permissions) {
-                                ToastUtils.showShort(EditImageActivity.this, "请求权限失败,请手动开启！");
-                            }
-                        });
-    }
-
-    public Bitmap setImgSize(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
-    }
-
-    public Bitmap mergeGifStickerBitmap(Bitmap backBitmap, Bitmap frontBitmap,float x,float y,float rotate,float scale,int width,int height) {
-
-        if (backBitmap == null || backBitmap.isRecycled()
-                || frontBitmap == null || frontBitmap.isRecycled()) {
-            Log.e(TAG, "backBitmap=" + backBitmap + ";frontBitmap=" + frontBitmap);
-            return null;
-        }
-        float ftscaleWidth = ((float)width) / frontBitmap.getWidth();
-        float ftscaleHeight = ((float)height) / frontBitmap.getHeight();
-        int[] loaction = new int[2];
-        photoEditorView.getLocationOnScreen(loaction);
-        Matrix frontMx = new Matrix();
-        frontMx.postRotate(rotate);
-        frontMx.postScale(ftscaleWidth,ftscaleHeight);
-        Bitmap ftBitmap = Bitmap.createBitmap(frontBitmap,0,0,frontBitmap.getWidth(),frontBitmap.getHeight(),frontMx,true);
-
-
-        float scaleWidth = ((float)photoEditorView.getWidth()) / backBitmap.getWidth();
-        float scaleHeight = ((float)photoEditorView.getHeight()) / backBitmap.getHeight();
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth,scaleHeight);
-        Bitmap bmOverlay = Bitmap.createBitmap(photoEditorView.getWidth(), photoEditorView.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bmOverlay);
-        canvas.drawBitmap(backBitmap, matrix, null);
-
-        canvas.drawBitmap(ftBitmap, x - photoEditorView.getLeft(),  y - loaction[1], null);
-        return bmOverlay;
-    }
-
-    private static int getStatusBarHeight(Context context) {
-        // 获得状态栏高度
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        return context.getResources().getDimensionPixelSize(resourceId);
-    }
-
-
-    public Bitmap mergeBitmap(Bitmap backBitmap, Bitmap frontBitmap) {
-        int bgWidth = photoEditorView.getWidth();
-        int bgHeight = photoEditorView.getHeight();
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        Bitmap newbmp = Bitmap.createBitmap(bgWidth, bgHeight, Bitmap.Config.ARGB_8888);
-        Canvas cv = new Canvas(newbmp);
-        cv.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
-        backBitmap = setImgSize(backBitmap, bgWidth, bgHeight);
-        cv.drawBitmap(backBitmap, 0, 0, paint);
-        cv.drawBitmap(frontBitmap, 0, 0, paint);
-        cv.save(Canvas.ALL_SAVE_FLAG);
-        cv.restore();
-        return newbmp;
-    }
 
     void showLoading(@NonNull String message) {
         mProgressDialog = new ProgressDialog(this);
@@ -1062,12 +827,11 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     public void showGif(File gif, String path) {
         imagePath = path;
         resetOriginId();
-        GlideApp.with(this).load(gif).into(photoEditorView.getSource());
+        GlideApp.with(this).load(gif).placeholder(R.mipmap.newloding).into(photoEditorView.getSource());
     }
 
     @Override
     public void onEditTextChangeListener(View rootView, String text, int colorCode) {
-//        Log.e("onEditTextChange",text);
         if (rootView == null) {
             type = 0;
         } else {
@@ -1100,7 +864,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     @Override
     public void getInputTextCallback(int type, String text, int color) {
-//        Log.e("InputTextCallback",text +" "+type);
         if (type == 0) {
             mPhotoEditor.addText(fangzhengjianzhi, text, color);
         } else {
@@ -1134,7 +897,25 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     @Override
     public void upLoadImageResult(ModifyResultBean response) {
-
+        if(response.getCode() == 0 ) {
+            if(!TextUtils.isEmpty(id)) {
+                Map<String,String> map = new HashMap<>();
+                map.put("deviceid", SystemInfoUtils.deviced(this));
+                map.put("version", SystemInfoUtils.versionName(this));
+                map.put("sign","sign");
+                map.put("key","key");
+                map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
+                map.put("os", "1");
+                map.put("id",id);
+                map.put("type","3");
+                map.put("orgintable",originTable);
+                map.put("option","edit");
+                presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
+            }
+            ToastUtils.showShort(this, "发布成功");
+        }else {
+            ToastUtils.showShort(this, response.getMsg());
+        }
     }
 
     @Override
@@ -1145,10 +926,10 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     @Override
     public void downloadGifResult(String path) {
         try {
-            gifFile = File.createTempFile(path,null,getCacheDir());
+            gifFile = File.createTempFile(path, null, getCacheDir());
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(getClass().getSimpleName(),e.getMessage()+"");
+            Log.e(getClass().getSimpleName(), e.getMessage() + "");
         }
     }
 
@@ -1182,11 +963,16 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (editType == 2) {
 //            EventBus.getDefault().postSticky(new MakerEventMsg(5, imagePath));
-
         } else {
             EventBus.getDefault().postSticky(new EventMsg(MsgType.MAKER_IMAGE));
         }
