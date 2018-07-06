@@ -624,4 +624,10 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         super.onResume();
         hideAlertDialog(sharedialog);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UMShareAPI.get(this).release();//防止内存泄漏
+    }
 }

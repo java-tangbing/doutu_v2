@@ -792,5 +792,10 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
             mProgressDialog = null;
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UMShareAPI.get(this).release();//防止内存泄漏
+    }
 
 }
