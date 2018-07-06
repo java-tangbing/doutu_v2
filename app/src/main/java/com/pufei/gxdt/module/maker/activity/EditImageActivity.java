@@ -535,7 +535,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     if(path.size() > 0) {
                         draftImgPath = path.get(0);
                         saveToDraft(isdraft,media);
-                        Log.e("path",draftImgPath);
+//                        Log.e("path",draftImgPath);
                     }
 
                 }
@@ -664,12 +664,12 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 ToastUtils.showShort(this, "图片已保存到:" + draftImgPath);
             }
         } else {
-            share(draftImgPath,media);
             if(cxPublish.isChecked()) {
                 if (App.userBean != null) {
                     setRequestData(info,draftImgPath,imagePath);
                 }
             }
+            share(draftImgPath,media);
         }
     }
 
