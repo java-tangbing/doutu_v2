@@ -13,12 +13,24 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.base.BaseActivity;
+import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.EventBean;
 import com.pufei.gxdt.module.home.adapter.SearchDetailAdpater;
+import com.pufei.gxdt.module.home.model.FavoriteBean;
+import com.pufei.gxdt.module.home.model.PictureResultBean;
 import com.pufei.gxdt.module.home.model.RecommendBean;
+import com.pufei.gxdt.module.home.model.ThemeResultBean;
+import com.pufei.gxdt.module.home.presenter.ThemeImagePresenter;
+import com.pufei.gxdt.module.home.view.ThemeImageView;
 import com.pufei.gxdt.utils.AppManager;
+import com.pufei.gxdt.utils.KeyUtil;
+import com.pufei.gxdt.utils.NetWorkUtil;
+import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -28,7 +40,7 @@ import butterknife.OnClick;
  * Created by tb on 2018/5/30.
  */
 
-public class SearchDetailActivity extends BaseActivity {
+public class SearchDetailActivity extends BaseMvpActivity<ThemeImagePresenter> implements ThemeImageView {
     @BindView(R.id.activity_searchdetail_cancel)
     ImageView activitySearchdetailCancel;
     @BindView(R.id.activity_searchdetail_title)
@@ -53,6 +65,7 @@ public class SearchDetailActivity extends BaseActivity {
             public void setOnItemClickListener(View itemview, View view, int postion) {
                 Intent intent = new Intent(SearchDetailActivity.this, HomeImageActivity.class);
                 Bundle bundle = new Bundle();
+                countView(classiList.get(postion).getId(),1,"","click");
                 try {
                     bundle.putString("category_id", classiList.get(postion).getId());
                     bundle.putString("hot",classiList.get(postion).getHot());
@@ -117,5 +130,59 @@ public class SearchDetailActivity extends BaseActivity {
     @Override
     public int getLayout() {
         return R.layout.activity_searchdetail;
+    }
+
+    @Override
+    public void setPresenter(ThemeImagePresenter presenter) {
+        if (presenter == null) {
+            this.presenter = new ThemeImagePresenter();
+            this.presenter.attachView(this);
+        }
+    }
+
+    @Override
+    public void resultThemeImage(ThemeResultBean bean) {
+
+    }
+
+    @Override
+    public void resultThemeImageDetail(PictureResultBean bean) {
+
+    }
+
+    @Override
+    public void resultAddFavorite(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void resultCancleFavorite(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void resultCountView(FavoriteBean bean) {
+
+    }
+
+    @Override
+    public void requestErrResult(String msg) {
+
+    }
+    private void countView(String id,int type,String orgintable,String option){
+        if(NetWorkUtil.isNetworkConnected(this)){
+            try {
+                JSONObject countViewObj = KeyUtil.getJson(this);
+                countViewObj.put("id", id);
+                countViewObj.put("type", type+"");
+                countViewObj.put("orgintable", orgintable+"");
+                countViewObj.put("option", option+"");
+                countViewObj.put("url", "");
+                presenter.getCountView(RetrofitFactory.getRequestBody(countViewObj.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

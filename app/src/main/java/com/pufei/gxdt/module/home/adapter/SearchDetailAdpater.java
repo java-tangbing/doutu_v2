@@ -31,7 +31,7 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
     }
     @Override
     public MyHodler onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(mcontext).inflate(R.layout.fragment_pager_itme,parent,false);
+        View view= LayoutInflater.from(mcontext).inflate(R.layout.fragment_joke_item1,parent,false);
         MyHodler hodler=new MyHodler(view,mListener);
         return hodler;
     }
@@ -44,6 +44,8 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
         holder.itemView.setTag(position);
         if(list!=null&&list.size()>0){
             holder.titletv.setText(list.get(position).getCategory_name());
+            holder.tv_hot.setText(list.get(position).getHot());
+            holder.tv_eyes.setText(list.get(position).getView());
             if(list.get(position).getImgs() != null){
                 if(list.get(position).getImgs().size() == 3){
                     GlideApp.with(mcontext).load(list.get(position).getImgs().get(0).getUrl()).placeholder(R.mipmap.ic_default_picture).into(holder.iv1);
@@ -56,16 +58,18 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
     }
 
      class MyHodler extends XRecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView titletv;
+        private TextView titletv,tv_hot,tv_eyes;
         private ImageView iv1, iv2, iv3;
         public MyHodler(View itemView, MyItemClickListener myItemClickListener) {
             super(itemView);
             mListener=myItemClickListener;
             itemView.setOnClickListener(this);
-            titletv = (TextView) itemView.findViewById(R.id.fragment_pager_itme_title);
-            iv1 = (ImageView) itemView.findViewById(R.id.fragment_pager_item_image1);
-            iv2 = (ImageView) itemView.findViewById(R.id.fragment_pager_item_image2);
-            iv3 = (ImageView) itemView.findViewById(R.id.fragment_pager_item_image3);
+            titletv = (TextView) itemView.findViewById(R.id.frgament_second_joke_tiltletv);
+            tv_hot = (TextView) itemView.findViewById(R.id.tv_hot);
+            tv_eyes = (TextView) itemView.findViewById(R.id.tv_eyes);
+            iv1 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image1);
+            iv2 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image2);
+            iv3 = (ImageView) itemView.findViewById(R.id.fragment_second_joke_image3);
         }
 
         @Override

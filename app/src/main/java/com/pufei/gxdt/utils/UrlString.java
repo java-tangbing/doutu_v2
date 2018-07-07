@@ -35,7 +35,7 @@ public class UrlString {
     public static final String LOADING = TAG + "/api/v3/User/login";
     public static final String down = "http://android.myapp.com/myapp/detail.htm?apkName=com.pufei.gxdt";
     public static final String Flash = TAG + "/api/v4/Category/getSliders";
-    public static final String Search = TAG + "/api/v4/Category/categorySearch";
+    public static final String Search = TAG + "/api/v5/android/Category/categorySearch";
     public static final String QQUrl = TAG + "/api/v3/ConnectUs/getQQ";
     public static final String Send = "http://erp.xianwan.com/api/v5/android/Piece/getAdvice";
     public static final String Template = TAG + "/api/v4/AmuseImages/makeList";
