@@ -73,10 +73,16 @@ public class SearchActivity extends BaseMvpActivity  implements TextView.OnEdito
     public void setPresenter(BasePresenter presenter) {
 
     }
+    @Override
+    public void onStart() {
+        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+            EventBus.getDefault().register(this);
+        }
+        super.onStart();
+    }
 
     @Override
     public void initView() {
-        EventBus.getDefault().register(this);
         list=new ArrayList<>();
         sharedPreferences=getSharedPreferences(SHARE_TAG,0);
         editor=sharedPreferences.edit();
@@ -187,6 +193,11 @@ public class SearchActivity extends BaseMvpActivity  implements TextView.OnEdito
             }
 
         }
+        if (EventBus.getDefault().isRegistered(this)){
+            //加上判断
+            EventBus.getDefault().unregister(this);
+        }
+
         super.onDestroy();
     }
     @Override
