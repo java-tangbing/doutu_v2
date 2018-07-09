@@ -15,9 +15,11 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -74,11 +76,13 @@ import com.pufei.gxdt.module.user.bean.ModifyResultBean;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.ImageUtils;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.SystemInfoUtils;
 import com.pufei.gxdt.utils.ToastUtils;
 import com.pufei.gxdt.utils.UmengStatisticsUtil;
 import com.pufei.gxdt.utils.UploadImageUtil;
 import com.pufei.gxdt.widgets.GlideApp;
+import com.pufei.gxdt.widgets.GuideView;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.umeng.qq.handler.UmengQQHandler;
@@ -94,6 +98,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -210,6 +215,31 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         imageDrafts = new ArrayList<>();
         textDrafts = new ArrayList<>();
         defaultSelect();
+        initGuideView();
+    }
+
+    private void initGuideView() {
+        int isShowGuideView = SharedPreferencesUtil.getInstance().getInt("GuideView",0);//0---show,1--hide
+        if (isShowGuideView == 0) {
+            SharedPreferencesUtil.getInstance().putInt("GuideView",1);
+            ImageView iv = new ImageView(this);
+            iv.setImageResource(R.mipmap.ic_picture_hint);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            iv.setLayoutParams(params);
+            GuideView.Builder
+                    .newInstance(this)
+                    .setTargetView(cxPublish)
+                    .setCustomGuideView(iv)
+                    .setDirction(GuideView.Direction.LEFT_TOP)
+                    .setShape(GuideView.MyShape.RECTANGULAR)
+                    .setBgColor(getResources().getColor(R.color.shadow))
+                    .setOnclickExit(true)
+                    .setRadius(32)
+                    .build()
+                    .show();
+        }
+
     }
 
     @Override
@@ -661,7 +691,15 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         hideLoading();
         if (isDraft) {
             if(!TextUtils.isEmpty(draftImgPath)) {
-                ToastUtils.showShort(this, "图片已保存到:" + draftImgPath);
+                try {
+                    File file = new File(draftImgPath);
+                    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), "斗图大师", "");
+                    Uri uri = Uri.fromFile(file);
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                    ToastUtils.showShort(this, "图片已保存到:" + draftImgPath);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             if(cxPublish.isChecked()) {
@@ -675,18 +713,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     private void share(String path,SHARE_MEDIA media) {
         if(path.contains(".gif")) {
-            UMEmoji emoji = new UMEmoji(this,"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3866688388,3662000895&fm=27&gp=0.jpg");
-//            emoji.setThumb(new UMImage(this, new File(path)));
-            new ShareAction(EditImageActivity.this).setCallback(umShareListener).withText("hello")
+            UMEmoji emoji = new UMEmoji(this,new File(path));
+            emoji.setThumb(new UMImage(this, new File(path)));
+            new ShareAction(EditImageActivity.this).setCallback(umShareListener)
                     .withMedia(emoji).setPlatform(media).share();
         }else {
-            UMImage image = new UMImage(EditImageActivity.this, "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3866688388,3662000895&fm=27&gp=0.jpg");//本地文件
+            UMImage image = new UMImage(EditImageActivity.this, new File(path));//本地文件
             image.compressStyle = UMImage.CompressStyle.SCALE;
             image.compressStyle = UMImage.CompressStyle.QUALITY;
             UMImage thumb =  new UMImage(this, new File(path));
-            image.setTitle("title");
-//            image.setThumb(thumb);
-            new ShareAction(EditImageActivity.this).withText("hello").withMedia(image).setPlatform(media).setCallback(umShareListener).share();
+            image.setThumb(thumb);
+            new ShareAction(EditImageActivity.this).withMedia(image).setPlatform(media).setCallback(umShareListener).share();
         }
 
     }
