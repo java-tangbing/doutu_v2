@@ -15,6 +15,7 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
     private List<HomeResultBean.ResultBean> list;
     private Context mcontext;
     private int FIST_IMAGE = 2;
+    private  MyItemClickListener mListener = null;//设置点击接口
     public HomeListAdapter(Context context, List<HomeResultBean.ResultBean> list) {//获取数据源
         this.mcontext = context;
         this.list = list;
@@ -59,7 +60,7 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
                     GlideApp.with(mcontext).load(list.get(position).getImgs().get(2).getUrl() ).placeholder(R.mipmap.ic_default_picture).into(((MyHodler) holder).iv3);
                 }
             }
-        }else if(holder instanceof OneHolder){
+        }else {
             ((OneHolder) holder).tv2.setText(list.get(position).getTitle());
             ((OneHolder) holder).tv_eyes.setText(list.get(position).getView());
             ((OneHolder) holder).tv_hot.setText(list.get(position).getHot());
@@ -109,12 +110,12 @@ public class HomeListAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHol
         @Override
         public void onClick(View v) {
             if (mListener != null) {
-                mListener.setOnItemClickListener(itemView, v, (Integer) v.getTag());
+                if(v != null){
+                    mListener.setOnItemClickListener(itemView, v, (Integer) v.getTag());
+                }
             }
         }
     }
-
-    private  MyItemClickListener mListener = null;//设置点击接口
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;
