@@ -14,6 +14,8 @@
     <uses-permission android:name="Android.permission.WRITE_APN_SETTINGS" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -75,6 +77,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.login.activity.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.login.activity.BindPhoneNewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.login.activity.UnBindActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".module.user.activity.AboutProductActivity"

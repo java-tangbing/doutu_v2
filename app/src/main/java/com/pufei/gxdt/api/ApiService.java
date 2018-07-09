@@ -35,24 +35,7 @@ public class ApiService {
         return imageTypeApi;
     }
 
-
-    public static LoginApi getSendCode() {
-        if (loginApi == null) {
-            Retrofit retrofit = RetrofitFactory.getRetrofit();
-            loginApi = retrofit.create(LoginApi.class);
-        }
-        return loginApi;
-    }
-
-    public static LoginApi loginQQApi() {
-        if (loginApi == null) {
-            Retrofit retrofit = RetrofitFactory.getRetrofit();
-            loginApi = retrofit.create(LoginApi.class);
-        }
-        return loginApi;
-    }
-
-    public static LoginApi bindPhone() {
+    public static LoginApi getLoginApi() {
         if (loginApi == null) {
             Retrofit retrofit = RetrofitFactory.getRetrofit();
             loginApi = retrofit.create(LoginApi.class);

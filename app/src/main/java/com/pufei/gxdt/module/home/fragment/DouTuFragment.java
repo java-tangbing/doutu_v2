@@ -161,7 +161,6 @@ public class DouTuFragment extends BaseMvpFragment<HomeListPresenter> implements
                 jsonObject.put("category_id", category_id);
                 jsonObject.put("page", page + "");
                 jsonObject.put("net", NetWorkUtil.netType(getActivity()));
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.getHomeDetailList(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();

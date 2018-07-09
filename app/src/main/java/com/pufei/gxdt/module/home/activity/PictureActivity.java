@@ -155,7 +155,6 @@ public class PictureActivity extends BaseMvpActivity <ThemeImagePresenter> imple
             try {
                 jsonObject.put("category_id", id);
                 jsonObject.put("page", String.valueOf(page));
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -9,37 +9,29 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
-import com.pufei.gxdt.base.BaseActivity;
 import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
 import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
-import com.pufei.gxdt.module.login.activity.LoginActivity;
-import com.pufei.gxdt.module.login.model.LoginResultBean;
+import com.pufei.gxdt.module.login.activity.BindPhoneNewActivity;
+import com.pufei.gxdt.module.login.activity.UnBindActivity;
 import com.pufei.gxdt.module.update.model.UpdateBean;
 import com.pufei.gxdt.module.user.bean.BindAccountBean;
 import com.pufei.gxdt.module.user.bean.SetsBean;
-import com.pufei.gxdt.module.user.bean.UserBean;
-import com.pufei.gxdt.module.user.presenter.PublishPresenter;
 import com.pufei.gxdt.module.user.presenter.SettingPresenter;
-import com.pufei.gxdt.module.user.view.PublishView;
 import com.pufei.gxdt.module.user.view.SettingView;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.DataCleanManager;
 import com.pufei.gxdt.utils.DialogUtil;
-import com.pufei.gxdt.utils.EvenMsg;
 import com.pufei.gxdt.utils.FileUtil;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
@@ -53,12 +45,13 @@ import com.pufei.gxdt.utils.UserUtils;
 import com.suke.widget.SwitchButton;
 import com.umeng.message.IUmengCallback;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,11 +101,17 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
 
     @Override
     public void initView() {
+        AppManager.getAppManager().addActivity(this);
         tv_title.setText("设置");
         ll_left.setVisibility(View.VISIBLE);
         filepath = FileUtil.getCachePath(getApplicationContext());
         if (App.userBean != null) {
-            settingLogOut.setText(R.string.log_out);
+            if (Contents.CODE_ZERO.equals(App.userBean.getState()) || TextUtils.isEmpty(App.userBean.getState())) {
+                settingLogOut.setText(R.string.log_out);
+                settingLogOut.setVisibility(View.VISIBLE);
+            } else {
+                settingLogOut.setVisibility(View.GONE);
+            }
         }
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.onAppStart();
@@ -157,6 +156,42 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(EventMsg type) {
+        if (type.getTYPE() == MsgType.UNBIND_NEW || type.getTYPE() == MsgType.BIND_NEW) {
+            mobile = App.userBean.getPhone();
+            qq = App.userBean.getQq();
+            wechat = App.userBean.getWechat();
+            if (TextUtils.isEmpty(mobile)) {
+                phoneBind.setText("未绑定");
+            } else {
+                phoneBind.setText("已绑定");
+            }
+            if (TextUtils.isEmpty(qq)) {
+                qqBind.setText("未绑定");
+            } else {
+                qqBind.setText(qq);
+            }
+            if (TextUtils.isEmpty(wechat)) {
+                wechatBind.setText("未绑定");
+            } else {
+                wechatBind.setText(wechat);
+            }
+        }
+    }
+
+    @Override
     public int getLayout() {
         return R.layout.activity_setting;
     }
@@ -168,9 +203,22 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 AppManager.getAppManager().finishActivity();
                 break;
             case R.id.setting_data_editor:
-                    UmengStatisticsUtil.statisticsEvent(SettingActivity.this,"35");
-                if ((TextUtils.isEmpty(mobile))) {
-                    startActivity(new Intent(SettingActivity.this, BindPhoneActivity.class));
+                UmengStatisticsUtil.statisticsEvent(SettingActivity.this, "35");
+                if (TextUtils.isEmpty(mobile)) {
+                    if (App.userBean.getState().equals(Contents.CODE_ZERO)) {
+                        Intent intent = new Intent(this, BindPhoneActivity.class);
+                        intent.putExtra("openId", openid);
+                        intent.putExtra("iconUrl", header);
+                        intent.putExtra("nickName", nickName);
+                        intent.putExtra("gender", gender);
+                        intent.putExtra("type", type);
+                        intent.putExtra("orgin", orgin);
+                        startActivity(intent);
+                    } else {
+                        startActivity(new Intent(SettingActivity.this, BindPhoneNewActivity.class));
+                    }
+                } else {
+                    startActivity(setIntent("mobile"));
                 }
                 break;
             case R.id.setting_update_version:
@@ -250,12 +298,16 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 type = 1;
                 if (TextUtils.isEmpty(wechat)) {
                     bindAccount(SHARE_MEDIA.WEIXIN);
+                } else {
+                    startActivity(setIntent("wechat"));
                 }
                 break;
             case R.id.userdata_name_qq:
                 type = 2;
                 if (TextUtils.isEmpty(qq)) {
                     bindAccount(SHARE_MEDIA.QQ);
+                } else {
+                    startActivity(setIntent("qq"));
                 }
                 break;
             default:
@@ -264,14 +316,8 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     }
 
     private void requestSets() {
-        try {
-            JSONObject jsonObject = KeyUtil.getJson(this);
-            jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
-            presenter.getPublish(RetrofitFactory.getRequestBody(jsonObject.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        JSONObject jsonObject = KeyUtil.getJson(this);
+        presenter.getPublish(RetrofitFactory.getRequestBody(jsonObject.toString()));
     }
 
     @Override
@@ -280,17 +326,17 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             mobile = bean.getResult().getMobile();
             qq = bean.getResult().getQq();
             wechat = bean.getResult().getWechat();
-            if ((TextUtils.isEmpty(mobile))) {
+            if (TextUtils.isEmpty(mobile)) {
                 phoneBind.setText("未绑定");
             } else {
                 phoneBind.setText("已绑定");
             }
-            if ((TextUtils.isEmpty(qq))) {
+            if (TextUtils.isEmpty(qq)) {
                 qqBind.setText("未绑定");
             } else {
                 qqBind.setText(qq);
             }
-            if ((TextUtils.isEmpty(wechat))) {
+            if (TextUtils.isEmpty(wechat)) {
                 wechatBind.setText("未绑定");
             } else {
                 wechatBind.setText(wechat);
@@ -354,7 +400,6 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 try {
                     if (NetWorkUtil.isNetworkConnected(SettingActivity.this)) {
                         JSONObject jsonObject = KeyUtil.getJson(SettingActivity.this);
-                        jsonObject.put("auth", App.userBean.getAuth());
                         jsonObject.put("openid", openid);
                         jsonObject.put("orgin", orgin);
                         jsonObject.put("nickname", nickName);
@@ -401,5 +446,11 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         });
         builder.setNegativeButton(getString(R.string.cancel), null);
         builder.create().show();
+    }
+
+    private Intent setIntent(String orgin) {
+        Intent intent = new Intent(SettingActivity.this, UnBindActivity.class);
+        intent.putExtra("orgin", orgin);
+        return intent;
     }
 }

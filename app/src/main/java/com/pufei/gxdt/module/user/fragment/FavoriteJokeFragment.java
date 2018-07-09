@@ -192,7 +192,6 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
             try {
                 JSONObject jsonObject = KeyUtil.getJson(getActivity());
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 jsonObject.put("type", 1);
                 presenter.getFavoriteJokeList(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {

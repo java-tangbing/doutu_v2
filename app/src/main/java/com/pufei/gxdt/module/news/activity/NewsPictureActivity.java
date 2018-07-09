@@ -51,7 +51,6 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
     @BindView(R.id.tv_title)
     TextView tvTitle;
     private List<NewsBean.ResultBean> mlist;
-    private String auth;
     private String orginid, orgintable, id, uid, mcount;
 
     @Override
@@ -75,10 +74,8 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
     }
 
     private void getContent() {
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", auth);
             jsonObject.put("type", "2");
         } catch (JSONException e) {
             e.printStackTrace();

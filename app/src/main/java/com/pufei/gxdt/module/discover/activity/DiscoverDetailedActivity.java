@@ -54,7 +54,6 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
     private List<DiscoverEditImageBean.ResultBean.DataBean> mlist;
     private DiscoverDetailedAdapter discoverDetailedAdapter;
     private String orginid, orgintable, id, uid;
-    private String auth = "";
 
     @Override
     public void initView() {
@@ -63,7 +62,6 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
         orginid = intent.getStringExtra("orginid");
         orgintable = intent.getStringExtra("orgintable");
         uid = intent.getStringExtra("uid");
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManage);
         int spanCount = 2; //  columns
@@ -101,7 +99,7 @@ public class DiscoverDetailedActivity extends BaseMvpActivity<DiscoverPresenter>
             jsonObject.put("orginid", orginid);//orginid 原始图id
             jsonObject.put("orgintable", orgintable);//orgintable 数据
             jsonObject.put("uid", uid);
-            jsonObject.put("auth", auth);
+            jsonObject.put("auth", App.userBean.getAuth());
         } catch (JSONException e) {
             e.printStackTrace();
         }

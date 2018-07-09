@@ -174,7 +174,6 @@ public class HotImageActivity extends BaseMvpActivity<ImageTypePresenter> implem
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.getHotImage(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
