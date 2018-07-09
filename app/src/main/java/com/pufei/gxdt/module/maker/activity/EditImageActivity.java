@@ -179,7 +179,6 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private String imagePath;
     private List<ImageDraft> imageDrafts;
     private List<TextDraft> textDrafts;
-    private List<PictureDetailBean.ResultBean.DataBean> attachMentList;
     private int editType = 0;
     private String draftImgPath = "";//制成图的路径
     private Typeface fangzhengjianzhi;
@@ -264,9 +263,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     originTable = bean.getOrgintable();
                     imagePath = bean.getUrl();
                     GlideApp.with(this).load(imagePath).placeholder(R.mipmap.newloding).into(photoEditorView.getSource());
-                    attachMentList = new ArrayList<>();
-                    attachMentList.addAll(bean.getData());
-                    initEditStatus(attachMentList);
+                    initEditStatus(bean.getData());
                 }
 
             }
@@ -314,7 +311,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 try {
                     text1 = URLDecoder.decode(dataBean.getTextName(), "utf-8");
                 } catch (UnsupportedEncodingException e) {
-                    Log.e("encodeErr", e.getMessage());
+                    Log.e(getClass().getSimpleName(),"encodeErr "+e.getMessage());
                 }
                 bean.setText(text1);
                 bean.setTextColor(Color.parseColor("#" + dataBean.getTextFontColor()));
@@ -712,7 +709,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     }
 
     private void share(String path,SHARE_MEDIA media) {
-        if(path.contains(".gif")) {
+        if(path.contains(".gif") && media.equals(SHARE_MEDIA.WEIXIN)) {
             UMEmoji emoji = new UMEmoji(this,new File(path));
             emoji.setThumb(new UMImage(this, new File(path)));
             new ShareAction(EditImageActivity.this).setCallback(umShareListener)
