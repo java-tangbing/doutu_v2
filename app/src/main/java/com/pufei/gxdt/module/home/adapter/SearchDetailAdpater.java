@@ -41,8 +41,8 @@ public class SearchDetailAdpater extends XRecyclerView.Adapter<SearchDetailAdpat
     }
     @Override
     public void onBindViewHolder(final MyHodler holder, final int position) {
-        holder.itemView.setTag(position);
         if(list!=null&&list.size()>0){
+            holder.itemView.setTag(position);
             holder.titletv.setText(list.get(position).getCategory_name());
             holder.tv_hot.setText(list.get(position).getHot());
             holder.tv_eyes.setText(list.get(position).getView());
