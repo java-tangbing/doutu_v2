@@ -61,12 +61,12 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                         baseview.getsNoticeContentTypeTwo(newsTypeTwoBean);
                     }
                 }
-//                , new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-////                        baseview.requestErrResult(throwable.getMessage()+"");
-//                    }
-//                }
+                , new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+//                        baseview.requestErrResult(throwable.getMessage()+"");
+                    }
+                }
                 );
         addSubscription(disposable);
     }
