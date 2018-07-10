@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
     @BindView(R.id.news_feedback_user_message_et)
     EditText editTextMessage;
 
+
     NewsFeedBackAdapter newsFeedBackAdapter;
     private List<NewsTypeTwoBean.ResultBean> mlist;
     private String advice = "";
@@ -61,6 +63,8 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         textViewTitle.setText(getResources().getString(R.string.news_feedback));
         backlinearLayout.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
+        layoutManage.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
+        layoutManage.setReverseLayout(true);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
     }
@@ -104,12 +108,18 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
                 break;
             case R.id.news_feedback_send_message_bt:
                 sendMessage();
+
                 break;
         }
     }
 
     public void sendMessage() {
         advice = editTextMessage.getText().toString();
+        if (advice.length() <= 0){
+//            ToastUtils.showShort(this,"意见不能为空值");
+            return;
+        }
+
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
             jsonObject.put("advice", advice);
@@ -161,11 +171,17 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
             resultBean.setUrl(App.userBean.getHead());
             resultBean.setOrgin("1");
             mlist.add(resultBean);
+
             newsFeedBackAdapter.notifyDataSetChanged();
+
+            editTextMessage.setText("");
 //            }else {
 //                ToastUtils.showShort(this, "发送失败");
 //            }
         }
+//        else {
+//
+//        }
 
     }
 }
