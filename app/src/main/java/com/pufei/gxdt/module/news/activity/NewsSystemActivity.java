@@ -60,6 +60,8 @@ public class NewsSystemActivity extends BaseMvpActivity<NewsPresenter> implement
         linearLayoutBack.setVisibility(View.VISIBLE);
 
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
+        layoutManage.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
+        layoutManage.setReverseLayout(true);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
     }
