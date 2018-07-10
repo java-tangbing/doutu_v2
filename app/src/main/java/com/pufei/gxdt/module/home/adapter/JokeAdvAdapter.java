@@ -1,15 +1,12 @@
 package com.pufei.gxdt.module.home.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.contents.Contents;
@@ -19,8 +16,6 @@ import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.comm.util.AdError;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>{
@@ -30,6 +25,7 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
     private int THREE_IMAGE = 3;
     private List<NativeExpressADView> adLists;
     private NativeExpressAD nativeExpressAD;
+    private NativeExpressADView nativeExpressADView = null;
     public JokeAdvAdapter(Context context, List<JokeResultBean.ResultBean> list,List<NativeExpressADView> adLists) {//获取数据源
         this.mcontext = context;
         this.list = list;
@@ -92,9 +88,13 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
     }
     private void setAdv(RelativeLayout layout){
         if(adLists!=null&&adLists.size()>0){
+            if(nativeExpressADView != null){
+                nativeExpressADView.destroy();
+            }
+            nativeExpressADView = adLists.get(0);
             layout.setVisibility(View.VISIBLE);
             layout.removeAllViews();
-            layout.addView(adLists.get(0));
+            layout.addView(nativeExpressADView);
             adLists.get(0).render();
             adLists.remove(0);
             if(adLists.size()<5){
@@ -152,6 +152,13 @@ public class JokeAdvAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHold
         }
     }
     private  MyItemClickListener mListener = null;//设置点击接口
+
+    public void DestoryAdView(){
+        if(nativeExpressADView != null){
+            nativeExpressADView.destroy();
+
+        }
+    }
 
     public void setOnItemClickListener(MyItemClickListener listener) {
         this.mListener = listener;
