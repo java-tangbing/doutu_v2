@@ -139,22 +139,22 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
             }
         });
 
-        jokeAdapter.setOnItemClickListener(new FavoriteJokeAdapter.MyItemClickListener() {
-            @Override
-            public void setOnItemClickListener(View itemview, View view, int postion) {
-                    try {
-                        Intent intent = new Intent(getActivity(), PictureDetailActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("picture_index", postion);
-                        bundle.putSerializable("picture_list", (Serializable) jokeList);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent,1);
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-        });
+//        jokeAdapter.setOnItemClickListener(new FavoriteJokeAdapter.MyItemClickListener() {
+//            @Override
+//            public void setOnItemClickListener(View itemview, View view, int postion) {
+//                    try {
+//                        Intent intent = new Intent(getActivity(), PictureDetailActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putInt("picture_index", postion);
+//                        bundle.putSerializable("picture_list", (Serializable) jokeList);
+//                        intent.putExtras(bundle);
+//                        startActivityForResult(intent,1);
+//                    } catch (NullPointerException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//        });
     }
 
     @Override
