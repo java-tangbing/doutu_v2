@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.app.App;
 import com.pufei.gxdt.base.BaseMvpActivity;
@@ -20,7 +21,9 @@ import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
+import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UserUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -101,18 +104,24 @@ public class UnBindActivity extends BaseMvpActivity<UnBindPresenter> implements 
     @Override
     public void unBindResult(BindAccountBean sendCodeBean) {
         if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
-            UserBean bean = App.userBean;
             if ("mobile".equals(orgin)) {
-                bean.setPhone(null);
+                App.userBean.setPhone(null);
             } else if ("qq".equals(orgin)) {
-                bean.setQq(null);
+                App.userBean.setQq(null);
             } else {
-                bean.setWechat(null);
+                App.userBean.setWechat(null);
             }
-            ToastUtils.showLong(UnBindActivity.this, "解绑成功");
-            EventBus.getDefault().postSticky(new EventMsg(MsgType.UNBIND_NEW));
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
+            String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
+            if (user_detail != null) {
+                App.userBean = new Gson().fromJson(user_detail, UserBean.class);
+                EventBus.getDefault().postSticky(new EventMsg(MsgType.UNBIND_NEW));
+                ToastUtils.showLong(UnBindActivity.this, "解绑成功");
+            }
+            AppManager.getAppManager().finishActivity();
+        } else {
+            ToastUtils.showShort(this, sendCodeBean.getMsg());
         }
-        AppManager.getAppManager().finishActivity();
     }
 
     @Override

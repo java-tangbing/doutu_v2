@@ -65,6 +65,7 @@ public class LoginNewBean {
         private String header;
         private String orgin;
         private String mind;
+        private String state;
 
         public String getAuth() {
             return auth;
@@ -144,6 +145,14 @@ public class LoginNewBean {
 
         public void setMind(String mind) {
             this.mind = mind;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
         }
     }
 }

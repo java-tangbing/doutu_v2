@@ -174,7 +174,11 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
     }
 
     private void joinPicture() {
-        GlideApp.with(this).load(pictureList.get(index).getUrl()).placeholder(R.mipmap.loading).into(iv_picture);
+        if(pictureList != null){
+            if(pictureList.get(index)!=null){
+                GlideApp.with(this).load(pictureList.get(index).getUrl()).placeholder(R.mipmap.loading).into(iv_picture);
+            }
+        }
     }
 
     private void refreshPictureData() {

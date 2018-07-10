@@ -120,7 +120,6 @@ public class JokeAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder>
 
     public interface MyItemClickListener {
         void setOnItemClickListener(View itemview, View view, int postion);
-
     }
 
 }

@@ -213,90 +213,102 @@ public class AdvUtil {
                     try {
                         JSONObject resultObj = new JSONObject(result);
                         Activity activity = (Activity) context;
-                        if (resultObj.optJSONObject("result").optJSONObject("data") != null) {
-                            final AdvBean advBean = new Gson().fromJson(result, AdvBean.class);
-                            if ("2".equals(advBean.getResult().getType())) {
-                                setAdvBaiDu(context, layout);
-                            } else if ("3".equals(advBean.getResult().getType())) {
-                                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        if(resultObj != null) {
+                            if (resultObj.optJSONObject("result").optJSONObject("data") != null) {
+                                final AdvBean advBean = new Gson().fromJson(result, AdvBean.class);
+                                if ("2".equals(advBean.getResult().getType())) {
+                                    setAdvBaiDu(context, layout);
+                                } else if ("3".equals(advBean.getResult().getType())) {
+                                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 //                                            openPermissin(context,layout);
+                                        activity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                layout.setVisibility(View.GONE);
+                                            }
+                                        });
+                                    } else {
+                                        setAdvTecent(context, layout);
+                                    }
+
+                                } else if ("1".equals(advBean.getResult().getType())) {
+                                    if (position == 7) {
+                                        EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV));
+                                    }
+                                    activity.runOnUiThread(new Runnable() {
+                                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                        @Override
+                                        public void run() {
+                                            ImageView imageView = layout.findViewById(R.id.iv_adv);
+                                            imageView.setVisibility(View.VISIBLE);
+                                            if (!((Activity) context).isDestroyed()) {
+                                                GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
+                                            }
+                                            imageView.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    if (advBean.getResult().getData().getLink() != null) {
+                                                        Intent intent = new Intent();
+                                                        intent.setAction("android.intent.action.VIEW");
+                                                        Uri content_url = Uri.parse(advBean.getResult().getData().getLink() + "");
+                                                        intent.setData(content_url);
+                                                        context.startActivity(intent);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (position == 7) {
+                                                EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
+                                            }
+                                            layout.setVisibility(View.GONE);
+                                        }
+                                    });
+                                }
+
+                            } else {
+                                String advType = resultObj.optJSONObject("result").optString("type");
+                                if ("2".equals(advType)) {
+                                    setAdvBaiDu(context, layout);
+                                } else if ("3".equals(advType)) {
+                                    setAdvTecent(context, layout);
+                                } else if ("1".equals(advType)) {
                                     activity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             layout.setVisibility(View.GONE);
+                                            if (position == 7) {
+                                                EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
+                                            }
                                         }
                                     });
+
                                 } else {
-                                    setAdvTecent(context, layout);
-                                }
-
-                            } else if ("1".equals(advBean.getResult().getType())) {
-                                if (position == 7) {
-                                    EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV));
-                                }
-                                activity.runOnUiThread(new Runnable() {
-                                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-                                    @Override
-                                    public void run() {
-                                        ImageView imageView = layout.findViewById(R.id.iv_adv);
-                                        imageView.setVisibility(View.VISIBLE);
-                                        if (!((Activity) context).isDestroyed()) {
-                                            GlideApp.with(context).load(advBean.getResult().getData().getImage()).error(R.mipmap.newloding).into(imageView);
-                                        }
-                                        imageView.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                if (advBean.getResult().getData().getLink() != null) {
-                                                    Intent intent = new Intent();
-                                                    intent.setAction("android.intent.action.VIEW");
-                                                    Uri content_url = Uri.parse(advBean.getResult().getData().getLink() + "");
-                                                    intent.setData(content_url);
-                                                    context.startActivity(intent);
-                                                }
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            layout.setVisibility(View.GONE);
+                                            if (position == 7) {
+                                                EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
                                             }
-                                        });
-                                    }
-                                });
-                            } else {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (position == 7) {
-                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
                                         }
-                                        layout.setVisibility(View.GONE);
-                                    }
-                                });
+                                    });
+                                }
                             }
-
-                        } else {
-                            String advType = resultObj.optJSONObject("result").optString("type");
-                            if ("2".equals(advType)) {
-                                setAdvBaiDu(context, layout);
-                            } else if ("3".equals(advType)) {
-                                setAdvTecent(context, layout);
-                            } else if ("1".equals(advType)) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layout.setVisibility(View.GONE);
-                                        if (position == 7) {
-                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
-                                        }
+                        }else{
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    layout.setVisibility(View.GONE);
+                                    if (position == 7) {
+                                        EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
                                     }
-                                });
-
-                            } else {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        layout.setVisibility(View.GONE);
-                                        if (position == 7) {
-                                            EventBus.getDefault().post(new EvenMsg(MsgType.START_ADV_NO));
-                                        }
-                                    }
-                                });
-                            }
+                                }
+                            });
                         }
 
                     } catch (JSONException e) {
