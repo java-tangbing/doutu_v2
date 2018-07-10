@@ -364,7 +364,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 jokeList.get(index).setIs_show("0");
             }
             jokeAdapter.notifyDataSetChanged();
-            ToastUtils.showShort(this,bean.getMsg());
         }
     }
 
@@ -374,7 +373,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             jokeList.remove(index);
             jokeAdapter.notifyItemRemoved(index);
             jokeAdapter.notifyDataSetChanged();
-            ToastUtils.showShort(this,bean.getMsg());
             if(jokeList.size() == 0){
                 headView.setVisibility(View.GONE);
                 no_data_failed.setVisibility(View.VISIBLE);
@@ -466,7 +464,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         @Override
         public void onResult(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PublishActivity.this, "分享成功");
             if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                 UmengStatisticsUtil.statisticsEvent(PublishActivity.this, "17");
             } else if (platform.equals(SHARE_MEDIA.QQ)) {
@@ -477,13 +474,11 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PublishActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PublishActivity.this, "分享取消");
         }
     };
 

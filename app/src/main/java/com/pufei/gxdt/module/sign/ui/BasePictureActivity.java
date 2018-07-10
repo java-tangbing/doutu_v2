@@ -218,23 +218,17 @@ public class BasePictureActivity extends AppCompatActivity {
         @Override
         public void onResult(SHARE_MEDIA platform) {
             sharedialog.dismiss();
-//            if (App.token != null) {
-//                MissionUtils.getInstance().getDayMission(App.token, "3", "image");
-//            }
-            Toast.makeText(BasePictureActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
             Log.d("plat", "platform" + platform);
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             sharedialog.dismiss();
-            Toast.makeText(BasePictureActivity.this, platform + " 分享失败啦" + t.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             sharedialog.dismiss();
-            Toast.makeText(BasePictureActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
 

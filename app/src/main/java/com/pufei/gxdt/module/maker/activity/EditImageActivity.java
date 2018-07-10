@@ -752,12 +752,11 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-            ToastUtils.showShort(EditImageActivity.this, "开始分享");
+            //ToastUtils.showShort(EditImageActivity.this, "开始分享");
         }
 
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            ToastUtils.showShort(EditImageActivity.this, "分享成功");
             if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                 UmengStatisticsUtil.statisticsEvent(EditImageActivity.this, "17");
             } else if (platform.equals(SHARE_MEDIA.QQ)) {
@@ -770,12 +769,10 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             for (int i = 0; i < t.getStackTrace().length; i++) {
                 Log.e("share error",t.getStackTrace()[i]+"");
             }
-            ToastUtils.showShort(EditImageActivity.this, platform.getName()+"分享失败:"+ t.getMessage());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            ToastUtils.showShort(EditImageActivity.this, "分享取消");
         }
     };
 

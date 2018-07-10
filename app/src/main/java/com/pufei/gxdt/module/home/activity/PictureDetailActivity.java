@@ -569,7 +569,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         public void onResult(SHARE_MEDIA platform) {
             countView(pictureList.get(index).getId(), 3, pictureList.get(index).getOrgintable(), "share");
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
             if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                 UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this, "17");
             } else if (platform.equals(SHARE_MEDIA.QQ)) {
@@ -580,13 +579,11 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PictureDetailActivity.this, "分享取消");
         }
     };
 

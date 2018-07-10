@@ -219,10 +219,6 @@ public class ImageActivity extends FragmentActivity {
 
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(ImageActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
-//            if (App.userBean!=null){
-//                MissionUtils.getInstance().getDayMission(App.token,"3","image");
-//            }
             Log.d("plat", "platform" + platform);
             sharedialog.dismiss();
         }
@@ -230,13 +226,11 @@ public class ImageActivity extends FragmentActivity {
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             sharedialog.dismiss();
-            Toast.makeText(ImageActivity.this, platform + " 分享失败啦" + t.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             sharedialog.dismiss();
-            Toast.makeText(ImageActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
 

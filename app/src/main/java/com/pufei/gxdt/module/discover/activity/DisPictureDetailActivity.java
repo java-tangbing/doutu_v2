@@ -643,20 +643,17 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
 
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            ToastUtils.showShort(DisPictureDetailActivity.this, "分享成功");
             hideAlertDialog(sharedialog);
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(DisPictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(DisPictureDetailActivity.this, "分享取消");
         }
     };
 
