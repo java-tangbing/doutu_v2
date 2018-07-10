@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -215,6 +216,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         textDrafts = new ArrayList<>();
         defaultSelect();
         initGuideView();
+        initPhotoViewBg();
     }
 
     private void initGuideView() {
@@ -239,6 +241,28 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     .show();
         }
 
+    }
+
+    private void initPhotoViewBg() {
+        GlideApp.with(this).load(R.drawable.com_made_ic_bg).into(photoEditorView.getSource());
+        FileOutputStream outputStream = null;
+        File file = null;
+        try {
+            file = File.createTempFile(System.currentTimeMillis()+".png","",getCacheDir());
+            Resources res = getResources();
+            Bitmap bitmap = BitmapFactory.decodeResource(res,R.drawable.com_made_ic_bg);
+            outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream);
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(file != null) {
+            imagePath = file.getAbsolutePath();
+        }else {
+            imagePath = "";
+        }
     }
 
     @Override

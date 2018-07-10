@@ -249,14 +249,6 @@ public class PhotoEditor implements BrushViewChangeListener {
                 imageView.requestLayout();
                 imageView.getLayoutParams().width = (int) (bean.getBgWidth() * bean.getImageWidth());
                 imageView.getLayoutParams().height = (int) (bean.getBgHeight() * bean.getImageHeight());
-//                GlideApp.with(context).asBitmap().load(desiredImage).into(new SimpleTarget<Bitmap>((int)(imageView.getWidth() * bean.getImageWidth()),(int)(imageView.getHeight() * bean.getImageHeight())) {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                        imageView.setImageBitmap(resource);
-//                    }
-//                });
-//                imageView.setImageBitmap(desiredImage);
-                Log.e("path", path);
                 GlideApp.with(context).load(path).into(imageView);
             }
         });
@@ -1269,109 +1261,6 @@ public class PhotoEditor implements BrushViewChangeListener {
             Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
         }
         return bitmaps;
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void decodeGif(final String bgPath, final int bgWidth, final int bgHeight, @NonNull final OnDecodeGifStickerListener onDecodeListener) {
-        final List<Bitmap> bitmaps = new ArrayList<>();
-        final List<BitmapBean> frameBitmaps = new ArrayList<>();
-        final List<List<BitmapBean>> decodeGifResultList = new ArrayList<>();
-
-        new AsyncTask<String, String, Exception>() {
-            @Override
-            protected void onPreExecute() {
-                clearTextHelperBox();
-                parentView.setDrawingCacheEnabled(false);
-            }
-
-            @SuppressLint("MissingPermission")
-            @Override
-            protected Exception doInBackground(String... strings) {
-                RequestManager bgRC = GlideApp.with(context);
-                FutureTarget<File> cacheBgFile = bgRC.downloadOnly().load(bgPath).submit();
-                File bgFile = null;
-                try {
-                    bgFile = cacheBgFile.get();
-                    bitmaps.add(BitmapFactory.decodeFile(bgFile.getPath()));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                    Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
-                }
-
-                if (addedViews.size() > 0) {
-                    for (AddViewBean beans : addedViews) {
-                        if (beans.getType() == ViewType.IMAGE) {
-//                            Log.e("PhotoEditor","Image postion " + beans.getAddView().getWidth() +" " + beans.getAddView().getHeight());
-                            RequestManager rc = GlideApp.with(context);
-                            FutureTarget<File> cacheFile = rc.downloadOnly().load(beans.getChildImagePath()).submit();
-                            File file = null;
-                            try {
-                                file = cacheFile.get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                                Log.e("PhotoEditor", "Gif decode error " + e.getMessage());
-                            }
-                            if (beans.getChildImagePath().contains(".gif")) {
-                                if (file != null) {
-                                    GifDecoder gifDecoder = new GifDecoder();
-                                    final GifImageIterator iterator = gifDecoder.loadUsingIterator(file.getPath());
-                                    if (iterator != null) {
-                                        int[] loaction = new int[2];
-                                        beans.getAddView().getLocationOnScreen(loaction);
-                                        float centerX = ((float) beans.getView().getWidth()) / 2 + beans.getView().getLeft() + beans.getView().getTranslationX();
-                                        float centerY = ((float) beans.getView().getHeight()) / 2 + beans.getView().getTop() + beans.getView().getTranslationY();
-//                                        Log.e("z",loaction[0] + " " +loaction[1]);
-                                        while (iterator.hasNext()) {
-                                            GifImage next = iterator.next();
-                                            if (null != next) {
-                                                BitmapBean bean = new BitmapBean();
-                                                bean.setBitmap(next.bitmap);
-                                                bean.setDelay(next.delayMs);
-                                                bean.setWidth((int) (beans.getAddView().getWidth() * beans.getView().getScaleX()));
-                                                bean.setHeight((int) (beans.getAddView().getHeight() * beans.getView().getScaleY()));
-                                                bean.setRotation(beans.getView().getRotation());
-                                                bean.setScale(beans.getView().getScaleX());
-                                                bean.setCenterX(centerX);
-                                                bean.setCenterY(centerY);
-                                                frameBitmaps.add(bean);
-                                            }
-                                        }
-                                        decodeGifResultList.add(frameBitmaps);
-                                        iterator.close();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Exception e) {
-                if (e == null) {
-                    onDecodeListener.onDecodeStickerSuccess(decodeGifResultList, bitmaps);
-                } else {
-                    onDecodeListener.onDecodeStickerFailed(e);
-                }
-            }
-        }.execute();
-
-
-    }
-
-
-    private boolean isSDCARDMounted() {
-        String status = Environment.getExternalStorageState();
-        return status.equals(Environment.MEDIA_MOUNTED);
     }
 
     private static String convertEmoji(String emoji) {
