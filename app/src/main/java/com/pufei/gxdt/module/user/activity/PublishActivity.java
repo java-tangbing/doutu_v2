@@ -367,7 +367,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 jokeList.get(index).setIs_show("0");
             }
             jokeAdapter.notifyDataSetChanged();
-            ToastUtils.showShort(this,bean.getMsg());
+            ToastUtils.showShort(this,"设置成功");
         }
     }
 
