@@ -978,7 +978,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 map.put("option","edit");
                 presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
-            ToastUtils.showShort(this, "发布成功");
+            //ToastUtils.showShort(this, "发布成功");
         }else {
             ToastUtils.showShort(this, response.getMsg());
         }

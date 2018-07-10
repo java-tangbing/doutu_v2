@@ -98,7 +98,6 @@ public class BindPhoneNewActivity extends BaseMvpActivity<LoginNewPresenter> imp
             if (user_detail != null) {
                 App.userBean = new Gson().fromJson(user_detail, UserBean.class);
                 EventBus.getDefault().postSticky(new EventMsg(MsgType.BIND_NEW));
-                ToastUtils.showLong(BindPhoneNewActivity.this, "绑定成功");
             }
             AppManager.getAppManager().finishActivity();
         } else {

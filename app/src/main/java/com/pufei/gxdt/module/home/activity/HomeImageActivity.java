@@ -314,7 +314,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         if("0".equals(bean.getCode())){
             ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
             resultBean.setIsSave("1");
-            ToastUtils.showShort(this,"收藏成功");
             Intent mIntent = new Intent();
             this.setResult(1, mIntent);
         }else{
@@ -327,7 +326,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
         if("0".equals(bean.getCode())){
             ll_right.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
             resultBean.setIsSave("0");
-            ToastUtils.showShort(this,"取消收藏成功");
             Intent mIntent = new Intent();
             this.setResult(1, mIntent);
         }else{

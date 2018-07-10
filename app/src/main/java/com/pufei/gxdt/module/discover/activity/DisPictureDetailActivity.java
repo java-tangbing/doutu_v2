@@ -326,7 +326,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList.get(index).setIsSaveImg("1");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
-                        ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
+                        //ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
                         setResulits("1");
                     } else {
                         pictureList.get(index).setIsSaveImg("0");
@@ -338,7 +338,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList01.get(index).setIsSaveImg("1");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
-                        ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
+                        //ToastUtils.showShort(this, getResources().getString(R.string.collection_success));
                     } else {
                         pictureList01.get(index).setIsSaveImg("0");
                         ToastUtils.showShort(this, bean.getMsg());
@@ -358,7 +358,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList.get(index).setIsSaveImg("0");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-                        ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
+                        //ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
                         setResulits("0");
 
                     } else {
@@ -370,7 +370,7 @@ public class DisPictureDetailActivity extends BaseMvpActivity<DisPicDetPresenter
                     if ("0".equals(bean.getCode())) {
                         pictureList01.get(index).setIsSaveImg("0");
                         activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-                        ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
+                        //ToastUtils.showShort(this, getResources().getString(R.string.cancel_collection_success));
                     } else {
                         pictureList01.get(index).setIsSaveImg("1");
                         ToastUtils.showShort(this, bean.getMsg());

@@ -115,7 +115,6 @@ public class BindPhoneActivity extends BaseMvpActivity<LoginPresenter> implement
         if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
             UserBean bean = App.userBean;
             bean.setPhone(loginIphone.getText().toString());
-            Toast.makeText(BindPhoneActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
             UmengStatisticsUtil.statisticsEvent(this,"36");
             if(AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
                 Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
