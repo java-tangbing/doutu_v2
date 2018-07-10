@@ -3,6 +3,7 @@ package com.pufei.gxdt.module.user.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.pufei.gxdt.base.BaseMvpFragment;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.module.home.activity.HotImageActivity;
 import com.pufei.gxdt.module.home.activity.JokeDetailActivity;
+import com.pufei.gxdt.module.home.activity.PictureDetailActivity;
 import com.pufei.gxdt.module.home.adapter.JokeAdapter;
 import com.pufei.gxdt.module.home.model.JokeDetailBean;
 import com.pufei.gxdt.module.home.model.JokeResultBean;
@@ -45,6 +47,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,33 +138,23 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
                 }, 2000);
             }
         });
-//
-//        jokeAdapter.setOnItemClickListener(new JokeAdapter.MyItemClickListener() {
-//            @Override
-//            public void setOnItemClickListener(View itemview, View view, int postion) {
-//
-//                    try {
-//                        Intent intent = new Intent(getActivity(), JokeDetailActivity.class);
-//                        intent.putExtra("id", jokeList.get(postion).getId());
-//                        intent.putExtra("title", jokeList.get(postion).getTitle());
-//                        intent.putExtra("time", jokeList.get(postion).getDateline());
-//                        startActivity(intent);
-//                    } catch (NullPointerException e) {
-//                        jokeList.remove(postion);
-//                        notify();
-//                        e.printStackTrace();
-//                    }
-//                }
-//            @Override
-//            public void OnLike(int position) {
-//                //showShare("http://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E6%99%AF%E7%94%9C&step_word=&hs=0&pn=40&spn=0&di=100938213560&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=1636489337%2C340249600&os=4078026530%2C4243386462&simid=0%2C0&adpicid=0&ln=3946&fr=&fmq=1482737443249_R&fm=&ic=undefined&s=undefined&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=star&bdtype=11&oriquery=&objurl=http%3A%2F%2Fpic.yesky.com%2FuploadImages%2F2016%2F324%2F13%2F9973OGM66IW9.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Frtv_z%26e3Byjfhy_z%26e3Bv54AzdH3FkkfAzdH3Fpi6jw1-nnm8ca-8-8_z%26e3Bip4s&gsm=0&rpstart=0&rpnum=0");
-//            }
-//
-//            @Override
-//            public void OnBtDelete(int position) {
-//                Toast.makeText(getActivity(), "已收藏", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
+        jokeAdapter.setOnItemClickListener(new FavoriteJokeAdapter.MyItemClickListener() {
+            @Override
+            public void setOnItemClickListener(View itemview, View view, int postion) {
+                    try {
+                        Intent intent = new Intent(getActivity(), PictureDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("picture_index", postion);
+                        bundle.putSerializable("picture_list", (Serializable) jokeList);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent,1);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+        });
     }
 
     @Override

@@ -264,6 +264,12 @@ public class JokeActivity extends BaseMvpActivity<JokePresenter> implements Joke
         if (nativeExpressADView != null) {
             nativeExpressADView.destroy();
         }
+        if(adLists != null&&adLists.size()>0){
+            for(int i = 0;i<adLists.size();i++){
+                adLists.get(i).destroy();
+            }
+        }
+        jokeAdapter.DestoryAdView();
     }
 
     //广告
