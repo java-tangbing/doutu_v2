@@ -28,6 +28,7 @@ import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.RetrofitFactory;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
+import com.pufei.gxdt.utils.UserUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -92,16 +93,12 @@ public class BindPhoneNewActivity extends BaseMvpActivity<LoginNewPresenter> imp
         if (sendCodeBean.getCode().equals(Contents.CODE_ZERO)) {
             UserBean bean = App.userBean;
             bean.setPhone(loginIphone.getText().toString());
-            Toast.makeText(BindPhoneNewActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
-//            if (AppManager.getAppManager().activityStackCount() == 1 || AppManager.getAppManager().activityStackCount() == 2) {
-//                Intent intent = new Intent(BindPhoneNewActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            } else {
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(bean));
             String user_detail = SharedPreferencesUtil.getInstance().getString(Contents.USER_DETAIL, null);
             if (user_detail != null) {
-                EventBus.getDefault().postSticky(new EventMsg(MsgType.BIND_NEW));
                 App.userBean = new Gson().fromJson(user_detail, UserBean.class);
-//                }
+                EventBus.getDefault().postSticky(new EventMsg(MsgType.BIND_NEW));
+                ToastUtils.showLong(BindPhoneNewActivity.this, "绑定成功");
             }
             AppManager.getAppManager().finishActivity();
         } else {

@@ -9,8 +9,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="3dp"
-        android:padding="3dp"
-        android:scaleType="fitXY"
-        android:background="@drawable/image_border"/>
+        android:background="@drawable/image_border"
+        android:padding="3dp" />
 
 </LinearLayout>

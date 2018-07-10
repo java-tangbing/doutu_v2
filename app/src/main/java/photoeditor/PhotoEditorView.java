@@ -58,7 +58,7 @@ public class PhotoEditorView extends RelativeLayout {
         mImgSource = new ImageView(getContext());
         mImgSource.setId(imgSrcId);
         mImgSource.setAdjustViewBounds(true);
-        mImgSource.setScaleType(ImageView.ScaleType.FIT_XY);
+//        mImgSource.setScaleType(ImageView.ScaleType.FIT_XY);
         LayoutParams imgSrcParam = new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imgSrcParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);

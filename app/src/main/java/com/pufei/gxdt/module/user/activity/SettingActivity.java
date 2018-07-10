@@ -21,7 +21,6 @@ import com.pufei.gxdt.base.BaseMvpActivity;
 import com.pufei.gxdt.contents.Contents;
 import com.pufei.gxdt.contents.EventMsg;
 import com.pufei.gxdt.contents.MsgType;
-import com.pufei.gxdt.module.login.activity.BindPhoneActivity;
 import com.pufei.gxdt.module.login.activity.BindPhoneNewActivity;
 import com.pufei.gxdt.module.login.activity.UnBindActivity;
 import com.pufei.gxdt.module.update.model.UpdateBean;
@@ -79,24 +78,15 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     TextView qqBind;
     @BindView(R.id.setting_log_out)
     Button settingLogOut;
-    String mobile = "";
-    String qq = "";
-    String wechat = "";
     private String filepath;
     private PushAgent mPushAgent;
-    private String nickName;
-    private String openid;
-    private String province;
-    private String city;
-    private String gender;
-    private String header;
-    private String orgin;
     private int type;
     private String newVersion = "";
     private String oldVersion = "";
     private String des;
     private int newcode;
     private int oldcode;
+    private String nickName = "";
 
 
     @Override
@@ -105,14 +95,16 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         tv_title.setText("设置");
         ll_left.setVisibility(View.VISIBLE);
         filepath = FileUtil.getCachePath(getApplicationContext());
+
         if (App.userBean != null) {
-            if (Contents.CODE_ZERO.equals(App.userBean.getState()) || TextUtils.isEmpty(App.userBean.getState())) {
+            if (Contents.CODE_ZERO.equals(App.userBean.getState())) {
                 settingLogOut.setText(R.string.log_out);
                 settingLogOut.setVisibility(View.VISIBLE);
             } else {
                 settingLogOut.setVisibility(View.GONE);
             }
         }
+
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.onAppStart();
         switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -132,7 +124,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                     } else {
                         mPushAgent.disable(new IUmengCallback() {
                             @Override
-                            public void onSuccess() {
+                            public void onSuccess() {// 491.06
                             }
 
                             @Override
@@ -168,26 +160,34 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onEvent(EventMsg type) {
-        if (type.getTYPE() == MsgType.UNBIND_NEW || type.getTYPE() == MsgType.BIND_NEW) {
-            mobile = App.userBean.getPhone();
-            qq = App.userBean.getQq();
-            wechat = App.userBean.getWechat();
-            if (TextUtils.isEmpty(mobile)) {
-                phoneBind.setText("未绑定");
+    public void onEvent(EventMsg msgType) {
+        if (msgType.getTYPE() == MsgType.UNBIND_NEW) {
+            setBindState();
+            if (type == 1) {
+                UMShareAPI.get(this).deleteOauth(SettingActivity.this, SHARE_MEDIA.WEIXIN, null);
             } else {
-                phoneBind.setText("已绑定");
+                UMShareAPI.get(this).deleteOauth(SettingActivity.this, SHARE_MEDIA.WEIXIN, null);
             }
-            if (TextUtils.isEmpty(qq)) {
-                qqBind.setText("未绑定");
-            } else {
-                qqBind.setText(qq);
-            }
-            if (TextUtils.isEmpty(wechat)) {
-                wechatBind.setText("未绑定");
-            } else {
-                wechatBind.setText(wechat);
-            }
+        } else if (msgType.getTYPE() == MsgType.BIND_NEW) {
+            setBindState();
+        }
+    }
+
+    private void setBindState() {
+        if (TextUtils.isEmpty(App.userBean.getPhone())) {
+            phoneBind.setText("未绑定");
+        } else {
+            phoneBind.setText("已绑定");
+        }
+        if (TextUtils.isEmpty(App.userBean.getQq())) {
+            qqBind.setText("未绑定");
+        } else {
+            qqBind.setText(App.userBean.getQq());
+        }
+        if (TextUtils.isEmpty(App.userBean.getWechat())) {
+            wechatBind.setText("未绑定");
+        } else {
+            wechatBind.setText(App.userBean.getWechat());
         }
     }
 
@@ -204,21 +204,12 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.setting_data_editor:
                 UmengStatisticsUtil.statisticsEvent(SettingActivity.this, "35");
-                if (TextUtils.isEmpty(mobile)) {
-                    if (App.userBean.getState().equals(Contents.CODE_ZERO)) {
-                        Intent intent = new Intent(this, BindPhoneActivity.class);
-                        intent.putExtra("openId", openid);
-                        intent.putExtra("iconUrl", header);
-                        intent.putExtra("nickName", nickName);
-                        intent.putExtra("gender", gender);
-                        intent.putExtra("type", type);
-                        intent.putExtra("orgin", orgin);
-                        startActivity(intent);
-                    } else {
+                if (!App.userBean.getState().equals(Contents.CODE_ZERO)) {
+                    if (TextUtils.isEmpty(App.userBean.getPhone())) {
                         startActivity(new Intent(SettingActivity.this, BindPhoneNewActivity.class));
+                    } else {
+                        startActivity(setIntent("mobile"));
                     }
-                } else {
-                    startActivity(setIntent("mobile"));
                 }
                 break;
             case R.id.setting_update_version:
@@ -296,7 +287,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.userdata_name_ll:
                 type = 1;
-                if (TextUtils.isEmpty(wechat)) {
+                if (TextUtils.isEmpty(App.userBean.getWechat())) {
                     bindAccount(SHARE_MEDIA.WEIXIN);
                 } else {
                     startActivity(setIntent("wechat"));
@@ -304,7 +295,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 break;
             case R.id.userdata_name_qq:
                 type = 2;
-                if (TextUtils.isEmpty(qq)) {
+                if (TextUtils.isEmpty(App.userBean.getQq())) {
                     bindAccount(SHARE_MEDIA.QQ);
                 } else {
                     startActivity(setIntent("qq"));
@@ -323,24 +314,25 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
     @Override
     public void resultSets(SetsBean bean) {
         if (bean.getCode().equals(Contents.CODE_ZERO)) {
-            mobile = bean.getResult().getMobile();
-            qq = bean.getResult().getQq();
-            wechat = bean.getResult().getWechat();
-            if (TextUtils.isEmpty(mobile)) {
+            if (TextUtils.isEmpty(bean.getResult().getMobile())) {
                 phoneBind.setText("未绑定");
             } else {
                 phoneBind.setText("已绑定");
+                App.userBean.setPhone(bean.getResult().getMobile());
             }
-            if (TextUtils.isEmpty(qq)) {
+            if (TextUtils.isEmpty(bean.getResult().getQq())) {
                 qqBind.setText("未绑定");
             } else {
-                qqBind.setText(qq);
+                qqBind.setText(bean.getResult().getQq());
+                App.userBean.setQq(bean.getResult().getQq());
             }
-            if (TextUtils.isEmpty(wechat)) {
+            if (TextUtils.isEmpty(bean.getResult().getWechat())) {
                 wechatBind.setText("未绑定");
             } else {
-                wechatBind.setText(wechat);
+                wechatBind.setText(bean.getResult().getWechat());
+                App.userBean.setWechat(bean.getResult().getWechat());
             }
+            SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
         } else {
             ToastUtils.showShort(this, bean.getMsg() + " ");
         }
@@ -356,6 +348,7 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 App.userBean.setQq(nickName);
                 qqBind.setText(nickName);
             }
+            nickName = "";
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             Toast.makeText(SettingActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
         } else {
@@ -381,17 +374,13 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
         api.getPlatformInfo(this, share_media, new UMAuthListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
-                ToastUtils.showLong(SettingActivity.this, "开始");
+                //ToastUtils.showLong(SettingActivity.this, "开始");
             }
 
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                openid = map.get("uid");
                 nickName = map.get("name");
-                province = map.get("province");
-                //city = map.get("city");
-                //gender = map.get("gender");
-                //header = map.get("iconurl");
+                String orgin = "";
                 if (type == 1) {
                     orgin = "wechat";
                 } else {
@@ -400,9 +389,9 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
                 try {
                     if (NetWorkUtil.isNetworkConnected(SettingActivity.this)) {
                         JSONObject jsonObject = KeyUtil.getJson(SettingActivity.this);
-                        jsonObject.put("openid", openid);
+                        jsonObject.put("openid", map.get("uid"));
                         jsonObject.put("orgin", orgin);
-                        jsonObject.put("nickname", nickName);
+                        jsonObject.put("nickname", map.get("name"));
                         presenter.bindAccount(RetrofitFactory.getRequestBody(jsonObject.toString()));
                     } else {
                         ToastUtils.showShort(SettingActivity.this, "请检查网络设置");
