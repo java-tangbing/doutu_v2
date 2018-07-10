@@ -47,7 +47,7 @@ public class App extends Application {
             return;
         }
         LeakCanary.install(this);
-        LogUtils.isShow = true;
+        LogUtils.isShow = false;
         AppContext = getApplicationContext();
         ResolutionUtil.getInstance().init(this);
         File file = new File(path1);
