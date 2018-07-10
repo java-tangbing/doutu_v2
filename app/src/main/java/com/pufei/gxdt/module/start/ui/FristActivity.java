@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
+
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.floating.FloatWindowService;
@@ -66,7 +68,8 @@ public class FristActivity extends Activity {
         View view2 = inflater.inflate(R.layout.frist_vp2, null);
         Button button_v2 = (Button) view2.findViewById(R.id.frist_loading2_btn);
         View view3 = inflater.inflate(R.layout.frist_vp3, null);
-        Button button_v3 = (Button) view3.findViewById(R.id.frist_loading3_btn);
+//        Button button_v3 = (Button) view3.findViewById(R.id.frist_loading3_btn);
+        RelativeLayout button_v3 = (RelativeLayout) view3.findViewById(R.id.rl_main);
         final CheckBox cb = (CheckBox) view3.findViewById(R.id.checkBox);
         viewList.add(view1);
         viewList.add(view2);
