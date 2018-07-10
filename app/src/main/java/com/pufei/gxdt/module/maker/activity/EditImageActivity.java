@@ -546,7 +546,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.ll_delete:
                 mPhotoEditor.clearAllViews();
-                GlideApp.with(this).load(R.drawable.com_made_ic_bg).into(photoEditorView.getSource());
+                initPhotoViewBg();
                 break;
             case R.id.ll_pic_mode:
                 setSelectedItemState(0);
