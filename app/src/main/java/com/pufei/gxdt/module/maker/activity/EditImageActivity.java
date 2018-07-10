@@ -594,6 +594,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
                 @Override
                 public void onDecodeFailed(Exception e) {
+                    hideLoading();
                     if (e.getMessage() == null) {
                         ToastUtils.showShort(EditImageActivity.this, "画笔不能超出画布!");
                     } else {
