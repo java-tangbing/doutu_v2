@@ -222,6 +222,7 @@ public class FavoriteJokeFragment extends BaseMvpFragment<FavoritePresenter> imp
                 if(bean.getResult()!=null&&bean.getResult().size()==0){
                     no_data_failed.setVisibility(View.VISIBLE);
                     main_bg.setBackgroundColor(Color.parseColor("#F0F0F0"));
+                    jokeAdapter.notifyDataSetChanged();
                 }else{
                     jokeList.addAll(bean.getResult());
                     jokeAdapter.notifyDataSetChanged();
