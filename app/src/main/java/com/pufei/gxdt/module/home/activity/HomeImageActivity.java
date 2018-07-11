@@ -229,7 +229,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                 JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("category_id", getIntent().getExtras().getString("category_id"));
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.getThemeDetail(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -250,7 +249,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         if("0".equals(resultBean.getIsSave())){//加收藏
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
-                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                                 jsonObject.put("type", 2 + "");
                                 jsonObject.put("url",  getIntent().getExtras().getString("category_id"));
                                 presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
@@ -260,7 +258,6 @@ public class HomeImageActivity extends BaseMvpActivity<ThemeImagePresenter> impl
                         }else{//取消收藏
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
-                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                                 jsonObject.put("type", 2 + "");
                                 jsonObject.put("id", getIntent().getExtras().getString("category_id"));
                                 presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));

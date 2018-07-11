@@ -251,7 +251,8 @@
             android:layout_marginTop="100dp"
             android:background="@drawable/setting_login_btn"
             android:text="未登录"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

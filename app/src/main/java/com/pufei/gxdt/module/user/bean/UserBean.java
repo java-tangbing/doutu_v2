@@ -9,14 +9,17 @@ public class UserBean {
     private String head;
     private String gender;
     private String address;
-    private String auth;
+    private String auth = "";
     private String phone;
     private String mind;
     private String uid;
     private String wechat;
     private String qq;
+    private String state = "";
+    private String openid = "";
+    private String orgin = "";
 
-    public UserBean(String name, String head, String gender, String address, String auth, String phone,String uid) {
+    public UserBean(String name, String head, String gender, String address, String auth, String phone, String uid) {
         this.name = name;
         this.head = head;
         this.gender = gender;
@@ -99,12 +102,12 @@ public class UserBean {
     }
 
     public String getMind() {
-            return mind;
-        }
+        return mind;
+    }
 
     public void setMind(String mind) {
-            this.mind = mind;
-        }
+        this.mind = mind;
+    }
 
     public String getWechat() {
         return wechat;
@@ -120,5 +123,29 @@ public class UserBean {
 
     public void setQq(String qq) {
         this.qq = qq;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public String getOrgin() {
+        return orgin;
+    }
+
+    public void setOrgin(String orgin) {
+        this.orgin = orgin;
     }
 }

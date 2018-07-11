@@ -1,10 +1,47 @@
 package com.pufei.gxdt.module.maker.common;
 
+import android.graphics.Bitmap;
+
 public class MakerEventMsg {
     private int type;
     private String url;
     private int color;
     private int textFontStyle;
+    private float x;
+    private float y;
+    private Bitmap bitmap;
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+
+    public MakerEventMsg(int type, float x, float y, Bitmap bitmap) {
+        this.type = type;
+        this.x = x;
+        this.y = y;
+        this.bitmap = bitmap;
+    }
 
     public MakerEventMsg(int type, String url) {
         this.type = type;

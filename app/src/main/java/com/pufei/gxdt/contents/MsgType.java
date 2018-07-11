@@ -14,4 +14,6 @@ public class MsgType {
     public static final int MAKER_FINISH = 900;
     public static final int START_ADV = 100;
     public static final int START_ADV_NO = 400;
+    public static final int UNBIND_NEW = 0x005;
+    public static final int BIND_NEW = 0x006;
 }

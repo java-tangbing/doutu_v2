@@ -279,7 +279,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                         if (NetWorkUtil.isNetworkConnected(PictureDetailActivity.this)) {
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
-                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                                 jsonObject.put("type", 1 + "");
                                 jsonObject.put("url", URL);
                                 presenter.addFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));
@@ -294,7 +293,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
                         if (NetWorkUtil.isNetworkConnected(PictureDetailActivity.this)) {
                             try {
                                 JSONObject jsonObject = KeyUtil.getJson(this);
-                                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                                 jsonObject.put("type", 1 + "");
                                 jsonObject.put("id", URL);
                                 presenter.cancleFavorite(RetrofitFactory.getRequestBody(jsonObject.toString()));

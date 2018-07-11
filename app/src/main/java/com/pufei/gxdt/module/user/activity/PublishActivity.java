@@ -281,7 +281,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("page", page + "");
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.getPublish(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -296,7 +295,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("id", id);
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 presenter.delMyDesignImages(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -310,7 +308,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("id", id);
-                jsonObject.put("auth", SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH));
                 jsonObject.put("is_show", isShow + "");
                 presenter.setMyDesignImages(RetrofitFactory.getRequestBody(jsonObject.toString()));
             } catch (JSONException e) {

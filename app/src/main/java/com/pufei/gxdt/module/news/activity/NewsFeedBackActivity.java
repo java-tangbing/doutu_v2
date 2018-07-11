@@ -54,12 +54,10 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
 
     NewsFeedBackAdapter newsFeedBackAdapter;
     private List<NewsTypeTwoBean.ResultBean> mlist;
-    private String auth = "";
     private String advice = "";
 
     @Override
     public void initView() {
-        auth = SharedPreferencesUtil.getInstance().getString(Contents.STRING_AUTH);
         textViewTitle.setText(getResources().getString(R.string.news_feedback));
         backlinearLayout.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
@@ -81,7 +79,6 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
 
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", auth);
             jsonObject.put("type", "3");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -115,7 +112,6 @@ public class NewsFeedBackActivity extends BaseMvpActivity<NewsPresenter> impleme
         advice = editTextMessage.getText().toString();
         JSONObject jsonObject = KeyUtil.getJson(this);
         try {
-            jsonObject.put("auth", auth);
             jsonObject.put("advice", advice);
         } catch (JSONException e) {
             e.printStackTrace();

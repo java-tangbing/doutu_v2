@@ -1,6 +1,11 @@
-package com.pufei.gxdt.module.login.model;
+package com.pufei.gxdt.module.home.model;
 
-public class LoginResultBean {
+/**
+ * Created by tb on 2018/6/1.
+ */
+
+public class LoginNewBean {
+
 
     /**
      * code : 0

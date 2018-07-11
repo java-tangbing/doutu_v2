@@ -13,10 +13,14 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.pufei.gxdt.module.maker.common.MakerEventMsg;
 import com.pufei.gxdt.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -309,6 +313,7 @@ public class BrushDrawingView extends View {
             mBrushViewChangeListener.onStopDrawing();
             mBrushViewChangeListener.onViewAdd(this, ViewType.BRUSH_DRAWING);
         }
+
     }
 
     public Bitmap generateBimap() {
@@ -323,9 +328,10 @@ public class BrushDrawingView extends View {
                 map = bitmapList.get(0);
                 try {
                     newMap = Bitmap.createBitmap(map,(int)minTouchx,(int)minTouchY,(int)(maxTouchx - minTouchx) + 10,(int)(maxTouchY - minTouchY) + 10);
-//                map.recycle();
                 }catch (Exception e) {
-                    ToastUtils.showShort(getContext(),"画笔不能超过屏幕边界");
+                    Log.e("BrushDrawing","Drawing Error is 画笔超过边界!");
+                    return null;
+//                    ToastUtils.showShort(getContext(),"画笔不能超过屏幕边界");
                 }
             }
             return newMap;
@@ -342,4 +348,17 @@ public class BrushDrawingView extends View {
         return Collections.min(mTouchYList);
     }
 
+
+
+    public boolean isBounds() {
+        float maxTouchx = Collections.max(mTouchXList);
+        float minTouchx = Collections.min(mTouchXList);
+        float maxTouchY = Collections.max(mTouchYList);
+        float minTouchY = Collections.min(mTouchYList);
+        if((int)minTouchx + (int)(maxTouchx - minTouchx) + 10 <= (int)(maxTouchx - minTouchx) + 10) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

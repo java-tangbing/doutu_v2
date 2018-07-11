@@ -32,6 +32,7 @@ import com.pufei.gxdt.module.user.view.SetPersonalView;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.DialogUtil;
 import com.pufei.gxdt.utils.ImageUtils;
+import com.pufei.gxdt.utils.KeyUtil;
 import com.pufei.gxdt.utils.NetWorkUtil;
 import com.pufei.gxdt.utils.SharedPreferencesUtil;
 import com.pufei.gxdt.utils.ToastUtils;
@@ -278,8 +279,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
         try {
             if (NetWorkUtil.isNetworkConnected(this)) {
                 showLoading("上传中...");
-                org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
-                jsonObject.put("auth", App.userBean.getAuth());
+                org.json.JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("header", value);
                 jsonObject.put("username", "");
                 jsonObject.put("gender", "");
@@ -314,8 +314,7 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
     private void requestSetSex(String sex) {
         try {
             if (NetWorkUtil.isNetworkConnected(this)) {
-                org.json.JSONObject jsonObject = com.pufei.gxdt.utils.KeyUtil.getJson(this);
-                jsonObject.put("auth", App.userBean.getAuth());
+                org.json.JSONObject jsonObject = KeyUtil.getJson(this);
                 jsonObject.put("header", "");
                 jsonObject.put("username", "");
                 jsonObject.put("gender", sex);
