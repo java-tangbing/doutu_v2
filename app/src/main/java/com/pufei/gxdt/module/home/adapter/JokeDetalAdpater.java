@@ -48,7 +48,7 @@ public class JokeDetalAdpater extends XRecyclerView.Adapter<JokeDetalAdpater.MyH
                 holder.ll.setTag(i);
             }
         }
-        if (value.contains("jpg") && value.contains("http")) {
+        if (value.contains("jpg") && value.contains("http")||(value.contains("image") && value.contains("http"))) {
             holder.tv.setVisibility(View.GONE);
             holder.ll.setVisibility(View.VISIBLE);
             holder.ivgif.setVisibility(View.GONE);
