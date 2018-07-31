@@ -203,6 +203,7 @@ public class FavoritePkgFragment extends BaseMvpFragment<FavoritePresenter> impl
             if (page == 1) {
                 jokeList.clear();
                 if(bean.getResult()!=null&&bean.getResult().size()==0){
+                    jokeAdapter.notifyDataSetChanged();
                     no_data_failed.setVisibility(View.VISIBLE);
                     main_bg.setBackgroundColor(Color.parseColor("#F0F0F0"));
                 }else {
