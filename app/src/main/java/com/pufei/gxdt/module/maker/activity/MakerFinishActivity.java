@@ -207,7 +207,7 @@ public class MakerFinishActivity extends BaseMvpActivity<EditImagePresenter> imp
                 map.put("option","edit");
                 presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
-            ToastUtils.showShort(this, "发布成功");
+            //ToastUtils.showShort(this, "发布成功");
             Intent intent = new Intent(this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("make_finish",MsgType.MAKER_FINISH);

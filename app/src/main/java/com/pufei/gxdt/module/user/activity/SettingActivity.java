@@ -350,7 +350,6 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
             }
             nickName = "";
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
-            Toast.makeText(SettingActivity.this, "绑定成功", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(SettingActivity.this, resultBean.getMsg(), Toast.LENGTH_SHORT).show();
         }
@@ -410,7 +409,6 @@ public class SettingActivity extends BaseMvpActivity<SettingPresenter> implement
 
             @Override
             public void onCancel(SHARE_MEDIA share_media, int i) {
-                ToastUtils.showLong(SettingActivity.this, "取消登录");
 
             }
         });

@@ -346,7 +346,6 @@ public class ProfileActivity extends BaseMvpActivity<SetPersonalPresenter> imple
             SharedPreferencesUtil.getInstance().putString(Contents.USER_DETAIL, UserUtils.getUser(App.userBean));
             EventBus.getDefault().postSticky(new EventMsg(MsgType.UPDATA_USER));
         }
-        ToastUtils.showShort(this, bean.getMsg());
     }
 
     @Override

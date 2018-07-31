@@ -391,7 +391,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             if ("0".equals(bean.getCode())) {
                 pictureList.get(index).setIsSaveImg("1");
                 activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_select);
-                ToastUtils.showShort(this, "收藏成功");
                 Intent mIntent = new Intent();
                 this.setResult(1, mIntent);
                 UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this, "12");
@@ -409,7 +408,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
             if ("0".equals(bean.getCode())) {
                 pictureList.get(index).setIsSaveImg("0");
                 activity_home1_shoucang.setBackgroundResource(R.mipmap.com_bt_ttab_star_normal);
-                ToastUtils.showShort(this, "取消收藏成功");
                 Intent mIntent = new Intent();
                 this.setResult(1, mIntent);
                 UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this, "13");
@@ -569,7 +567,6 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         public void onResult(SHARE_MEDIA platform) {
             countView(pictureList.get(index).getId(), 3, pictureList.get(index).getOrgintable(), "share");
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PictureDetailActivity.this, "分享成功");
             if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                 UmengStatisticsUtil.statisticsEvent(PictureDetailActivity.this, "17");
             } else if (platform.equals(SHARE_MEDIA.QQ)) {
@@ -580,13 +577,11 @@ public class PictureDetailActivity extends BaseMvpActivity<ImageTypePresenter> i
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PictureDetailActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PictureDetailActivity.this, "分享取消");
         }
     };
 

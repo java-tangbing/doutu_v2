@@ -383,7 +383,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
             @Override
             public void onCancel(SHARE_MEDIA share_media, int i) {
-                ToastUtils.showLong(LoginActivity.this, "取消登录");
 
             }
         });

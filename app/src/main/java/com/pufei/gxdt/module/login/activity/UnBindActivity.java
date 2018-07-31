@@ -116,7 +116,6 @@ public class UnBindActivity extends BaseMvpActivity<UnBindPresenter> implements 
             if (user_detail != null) {
                 App.userBean = new Gson().fromJson(user_detail, UserBean.class);
                 EventBus.getDefault().postSticky(new EventMsg(MsgType.UNBIND_NEW));
-                ToastUtils.showLong(UnBindActivity.this, "解绑成功");
             }
             AppManager.getAppManager().finishActivity();
         } else {

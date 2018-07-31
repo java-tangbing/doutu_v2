@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
@@ -60,12 +61,15 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMEmoji;
 import com.umeng.socialize.media.UMImage;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -92,21 +96,22 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     private List<PictureResultBean.ResultBean> jokeList = new ArrayList<>();
     private List<PictureResultBean.ResultBean> cashList = new ArrayList<>();
     private int page = 1;
-    private int show = 1,index;
+    private int show = 1, index;
     private View headView;
     private AlertDialog sharedialog;
     private CommonPopupWindow popupWindow;
+
     @Override
     public void initView() {
         tv_title.setText("我的发布");
         ll_left.setVisibility(View.VISIBLE);
-        LayoutInflater lif = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater lif = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         headView = lif.inflate(R.layout.publish_head, null);
         rl_publish.addHeaderView(headView);
-        jokeAdapter = new PublishAdapter(PublishActivity.this,jokeList);
+        jokeAdapter = new PublishAdapter(PublishActivity.this, jokeList);
         final GridLayoutManager layoutManager = new GridLayoutManager(PublishActivity.this, 3);
         rl_publish.setLayoutManager(layoutManager);
-        rl_publish.addItemDecoration(new SpaceItemDecoration(10,3));
+        rl_publish.addItemDecoration(new SpaceItemDecoration(10, 3));
         rl_publish.setAdapter(jokeAdapter);
         fragmentJokeSmart.setRefreshHeader(new ClassicsHeader(this).setSpinnerStyle(SpinnerStyle.Translate));
         fragmentJokeSmart.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Translate));
@@ -119,16 +124,16 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                         (layoutManager.findLastVisibleItemPosition() ==
                                 layoutManager.getItemCount() - 1)
                         ) {
-                    if(NetWorkUtil.isNetworkConnected(PublishActivity.this)){
-                        if(cashList.size()>0){
+                    if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
+                        if (cashList.size() > 0) {
                             jokeList.addAll(cashList);
                             jokeAdapter.notifyDataSetChanged();
                             cashList.clear();
                             page++;
                             requestJoke(page);
                         }
-                    }else{
-                        ToastUtils.showShort(PublishActivity.this,"请检查网络设置");
+                    } else {
+                        ToastUtils.showShort(PublishActivity.this, "请检查网络设置");
                     }
 
                 }
@@ -177,7 +182,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 bundle.putInt("picture_index", postion);
                 bundle.putSerializable("picture_list", (Serializable) jokeList);
                 intent.putExtras(bundle);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
 
             }
         });
@@ -187,11 +192,12 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             @Override
             public void setOnItemLongClickListener(View itemview, View view, int postion) {
                 index = postion;
-                showDialog(jokeList.get(postion).getUrl(),Integer.parseInt(jokeList.get(postion).getIs_show()),jokeList.get(postion).getId());
+                showDialog(jokeList.get(postion).getUrl(), Integer.parseInt(jokeList.get(postion).getIs_show()), jokeList.get(postion).getId());
             }
         });
     }
-    private void showDialog(final String url ,final int isShow,final String imageId){
+
+    private void showDialog(final String url, final int isShow, final String imageId) {
         popupWindow = new CommonPopupWindow.Builder(this)
                 .setView(R.layout.publish_dialog)
                 .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -201,18 +207,18 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                 .setViewOnclickListener(new CommonPopupWindow.ViewInterface() {
                     @Override
                     public void getChildView(final View view, int layoutResId) {
-                        MyFrontTextView textView =  view.findViewById(R.id.tv_isShow);
-                        if(isShow == 1){
+                        MyFrontTextView textView = view.findViewById(R.id.tv_isShow);
+                        if (isShow == 1) {
                             textView.setText("设为不可见 ");
                             show = 0;
-                        }else{
+                        } else {
                             textView.setText("设为公开可见");
                             show = 1;
                         }
                         view.findViewById(R.id.rl_is_see).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                requstShowPublish(show,imageId);
+                                requstShowPublish(show, imageId);
                                 popupWindow.dismiss();
                             }
                         });
@@ -255,7 +261,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     public void getData() {
         if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
             requestJoke(page);
-        }else{
+        } else {
             headView.setVisibility(View.GONE);
             request_failed.setVisibility(View.VISIBLE);
             main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
@@ -268,8 +274,8 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                         main_bg.setBackgroundColor(getResources().getColor(R.color.white));
                         page = 1;
                         requestJoke(page);
-                    }else {
-                        ToastUtils.showShort(PublishActivity.this,"请先打开网络连接");
+                    } else {
+                        ToastUtils.showShort(PublishActivity.this, "请先打开网络连接");
                     }
                 }
             });
@@ -285,12 +291,13 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            ToastUtils.showShort(this,"请检查网络设置");
+        } else {
+            ToastUtils.showShort(this, "请检查网络设置");
         }
 
     }
-    private void requstDeletePublish(String id){
+
+    private void requstDeletePublish(String id) {
         if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -299,11 +306,12 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            ToastUtils.showShort(this,"请检查网络设置");
+        } else {
+            ToastUtils.showShort(this, "请检查网络设置");
         }
     }
-    private void requstShowPublish(int isShow,String id){
+
+    private void requstShowPublish(int isShow, String id) {
         if (NetWorkUtil.isNetworkConnected(PublishActivity.this)) {
             try {
                 JSONObject jsonObject = KeyUtil.getJson(this);
@@ -313,36 +321,37 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            ToastUtils.showShort(this,"请检查网络设置");
+        } else {
+            ToastUtils.showShort(this, "请检查网络设置");
         }
     }
+
     @Override
     public int getLayout() {
         return R.layout.activity_publish;
     }
 
     @OnClick(R.id.ll_title_left)
-    public  void backLastActivity(){
+    public void backLastActivity() {
         AppManager.getAppManager().finishActivity();
     }
 
     @Override
     public void resultPublish(PictureResultBean bean) {
-        if(bean != null){
-            if(page == 1){
+        if (bean != null) {
+            if (page == 1) {
                 jokeList.clear();
-                if(bean.getResult()!=null&&bean.getResult().size()==0){
+                if (bean.getResult() != null && bean.getResult().size() == 0) {
                     no_data_failed.setVisibility(View.VISIBLE);
                     headView.setVisibility(View.GONE);
                     main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
-                }else{
+                } else {
                     jokeList.addAll(bean.getResult());
                     jokeAdapter.notifyDataSetChanged();
                     page++;
                     requestJoke(page);
                 }
-            }else{
+            } else {
                 cashList.addAll(bean.getResult());
             }
 
@@ -357,25 +366,23 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
 
     @Override
     public void setMyDesignImagesResult(FavoriteBean bean) {
-        if(bean!=null){
-            if(show == 1){
+        if (bean != null) {
+            if (show == 1) {
                 jokeList.get(index).setIs_show("1");
-            }else{
+            } else {
                 jokeList.get(index).setIs_show("0");
             }
             jokeAdapter.notifyDataSetChanged();
-            ToastUtils.showShort(this,"设置成功");
         }
     }
 
     @Override
     public void delMyDesignImagesResult(FavoriteBean bean) {
-        if(bean!=null){
+        if (bean != null) {
             jokeList.remove(index);
             jokeAdapter.notifyItemRemoved(index);
             jokeAdapter.notifyDataSetChanged();
-            ToastUtils.showShort(this,bean.getMsg());
-            if(jokeList.size() == 0){
+            if (jokeList.size() == 0) {
                 headView.setVisibility(View.GONE);
                 no_data_failed.setVisibility(View.VISIBLE);
                 main_bg.setBackgroundColor(getResources().getColor(R.color.select_color22));
@@ -390,10 +397,12 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
             this.presenter.attachView(this);
         }
     }
-    private  int dp2px(Context context, float dpVal) {
+
+    private int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
     }
+
     private void openPermissin() {
         Acp.getInstance(this)
                 .request(new AcpOptions.Builder().setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE).build(),
@@ -409,6 +418,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                             }
                         });
     }
+
     private void QQshowShare(String URL, SHARE_MEDIA share_media) {//分享
         if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
             UmengStatisticsUtil.statisticsEvent(this, "16");
@@ -451,7 +461,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
                         .setPlatform(share_media)
                         .setCallback(umShareListener).share();
             }
-        } else{
+        } else {
             ToastUtils.showLong(this, "选中图片错误，请重新选择");
         }
 
@@ -466,7 +476,6 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         @Override
         public void onResult(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PublishActivity.this, "分享成功");
             if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                 UmengStatisticsUtil.statisticsEvent(PublishActivity.this, "17");
             } else if (platform.equals(SHARE_MEDIA.QQ)) {
@@ -477,13 +486,11 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PublishActivity.this, "分享失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             hideAlertDialog(sharedialog);
-            ToastUtils.showShort(PublishActivity.this, "分享取消");
         }
     };
 
@@ -504,7 +511,7 @@ public class PublishActivity extends BaseMvpActivity<PublishPresenter> implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 1){
+        if (resultCode == 1) {
             page = 1;
             requestJoke(page);
         }

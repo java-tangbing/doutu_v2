@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -215,12 +216,13 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         textDrafts = new ArrayList<>();
         defaultSelect();
         initGuideView();
+        initPhotoViewBg();
     }
 
     private void initGuideView() {
-        int isShowGuideView = SharedPreferencesUtil.getInstance().getInt("GuideView",0);//0---show,1--hide
+        int isShowGuideView = SharedPreferencesUtil.getInstance().getInt("GuideView", 0);//0---show,1--hide
         if (isShowGuideView == 0) {
-            SharedPreferencesUtil.getInstance().putInt("GuideView",1);
+            SharedPreferencesUtil.getInstance().putInt("GuideView", 1);
             ImageView iv = new ImageView(this);
             iv.setImageResource(R.mipmap.ic_picture_hint);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -239,6 +241,28 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     .show();
         }
 
+    }
+
+    private void initPhotoViewBg() {
+        GlideApp.with(this).load(R.drawable.com_made_ic_bg).into(photoEditorView.getSource());
+        FileOutputStream outputStream = null;
+        File file = null;
+        try {
+            file = File.createTempFile(System.currentTimeMillis() + ".png", "", getCacheDir());
+            Resources res = getResources();
+            Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.com_made_ic_bg);
+            outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (file != null) {
+            imagePath = file.getAbsolutePath();
+        } else {
+            imagePath = "";
+        }
     }
 
     @Override
@@ -311,7 +335,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 try {
                     text1 = URLDecoder.decode(dataBean.getTextName(), "utf-8");
                 } catch (UnsupportedEncodingException e) {
-                    Log.e(getClass().getSimpleName(),"encodeErr "+e.getMessage());
+                    Log.e(getClass().getSimpleName(), "encodeErr " + e.getMessage());
                 }
                 bean.setText(text1);
                 bean.setTextColor(Color.parseColor("#" + dataBean.getTextFontColor()));
@@ -489,7 +513,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             brushBitmap = msg.getBitmap();
             brushX = msg.getX();
             brushY = msg.getY();
-        }else if (msg.getType() == 12) {
+        } else if (msg.getType() == 12) {
             presenter.upLoadImage(RetrofitFactory.getRequestBody(msg.getUrl()));
         }
     }
@@ -502,7 +526,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back,R.id.ll_down_load,R.id.tv_share_qq,R.id.tv_share_wx})
+    @OnClick({R.id.btn_next, R.id.tv_save_draft, R.id.ll_redo, R.id.ll_undo, R.id.ll_delete, R.id.ll_pic_mode, R.id.ll_text_mode, R.id.ll_blush_mode, R.id.ll_title_back, R.id.ll_down_load, R.id.tv_share_qq, R.id.tv_share_wx})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_title_back:
@@ -522,6 +546,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 break;
             case R.id.ll_delete:
                 mPhotoEditor.clearAllViews();
+                initPhotoViewBg();
                 break;
             case R.id.ll_pic_mode:
                 setSelectedItemState(0);
@@ -539,13 +564,13 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 previousIndex = 2;
                 break;
             case R.id.ll_down_load:
-                doneImage(true,null);
+                doneImage(true, null);
                 break;
             case R.id.tv_share_qq:
-                doneImage(false,SHARE_MEDIA.QQ);
+                doneImage(false, SHARE_MEDIA.QQ);
                 break;
             case R.id.tv_share_wx:
-                doneImage(false,SHARE_MEDIA.WEIXIN);
+                doneImage(false, SHARE_MEDIA.WEIXIN);
                 break;
         }
     }
@@ -559,9 +584,9 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             mPhotoEditor.generateImage(photoEditorView.getWidth(), photoEditorView.getHeight(), imagePath, new PhotoEditor.OnDecodeImageListener() {
                 @Override
                 public void onDecodeSuccess(List<String> path) {
-                    if(path.size() > 0) {
+                    if (path.size() > 0) {
                         draftImgPath = path.get(0);
-                        saveToDraft(isdraft,media);
+                        saveToDraft(isdraft, media);
 //                        Log.e("path",draftImgPath);
                     }
 
@@ -569,6 +594,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
                 @Override
                 public void onDecodeFailed(Exception e) {
+                    hideLoading();
                     if (e.getMessage() == null) {
                         ToastUtils.showShort(EditImageActivity.this, "画笔不能超出画布!");
                     } else {
@@ -582,7 +608,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         }
     }
 
-    private void saveToDraft(final boolean isDraft,SHARE_MEDIA media) {
+    private void saveToDraft(final boolean isDraft, SHARE_MEDIA media) {
         SQLite.delete().from(DraftInfo.class).where(DraftInfo_Table.imageId.is(imageId)).and(DraftInfo_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(isDraft)).execute();
         SQLite.delete().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(isDraft)).execute();
@@ -677,7 +703,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                         draft.stickerImagePath = ImageUtils.bitmapToBase64(brushBitmap);
                         draft.imageId = imageId;
                         draft.isDraft = isDraft;
-                        draft.imageWidth = (float)brushBitmap.getWidth() / photoEditorView.getWidth();
+                        draft.imageWidth = (float) brushBitmap.getWidth() / photoEditorView.getWidth();
                         draft.imageHeight = (float) brushBitmap.getHeight() / photoEditorView.getHeight();
                         draft.type = 1;
                         draft.insert();
@@ -687,7 +713,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         }
         hideLoading();
         if (isDraft) {
-            if(!TextUtils.isEmpty(draftImgPath)) {
+            if (!TextUtils.isEmpty(draftImgPath)) {
                 try {
                     File file = new File(draftImgPath);
                     MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), "斗图大师", "");
@@ -699,26 +725,26 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 }
             }
         } else {
-            if(cxPublish.isChecked()) {
+            if (cxPublish.isChecked()) {
                 if (App.userBean != null) {
-                    setRequestData(info,draftImgPath,imagePath);
+                    setRequestData(info, draftImgPath, imagePath);
                 }
             }
-            share(draftImgPath,media);
+            share(draftImgPath, media);
         }
     }
 
-    private void share(String path,SHARE_MEDIA media) {
-        if(path.contains(".gif") && media.equals(SHARE_MEDIA.WEIXIN)) {
-            UMEmoji emoji = new UMEmoji(this,new File(path));
+    private void share(String path, SHARE_MEDIA media) {
+        if (path.contains(".gif") && media.equals(SHARE_MEDIA.WEIXIN)) {
+            UMEmoji emoji = new UMEmoji(this, new File(path));
             emoji.setThumb(new UMImage(this, new File(path)));
             new ShareAction(EditImageActivity.this).setCallback(umShareListener)
                     .withMedia(emoji).setPlatform(media).share();
-        }else {
+        } else {
             UMImage image = new UMImage(EditImageActivity.this, new File(path));//本地文件
             image.compressStyle = UMImage.CompressStyle.SCALE;
             image.compressStyle = UMImage.CompressStyle.QUALITY;
-            UMImage thumb =  new UMImage(this, new File(path));
+            UMImage thumb = new UMImage(this, new File(path));
             image.setThumb(thumb);
             new ShareAction(EditImageActivity.this).withMedia(image).setPlatform(media).setCallback(umShareListener).share();
         }
@@ -728,12 +754,11 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
     private UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-            ToastUtils.showShort(EditImageActivity.this, "开始分享");
+            //ToastUtils.showShort(EditImageActivity.this, "开始分享");
         }
 
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            ToastUtils.showShort(EditImageActivity.this, "分享成功");
             if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                 UmengStatisticsUtil.statisticsEvent(EditImageActivity.this, "17");
             } else if (platform.equals(SHARE_MEDIA.QQ)) {
@@ -744,19 +769,17 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             for (int i = 0; i < t.getStackTrace().length; i++) {
-                Log.e("share error",t.getStackTrace()[i]+"");
+                Log.e("share error", t.getStackTrace()[i] + "");
             }
-            ToastUtils.showShort(EditImageActivity.this, platform.getName()+"分享失败:"+ t.getMessage());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            ToastUtils.showShort(EditImageActivity.this, "分享取消");
         }
     };
 
     private void setRequestData(final DraftInfo info, final String makeUrl, String bgPath) {
-        UploadImageUtil.getImageBase64(this,bgPath, makeUrl, new UploadImageUtil.OnGetBase64Listener() {
+        UploadImageUtil.getImageBase64(this, bgPath, makeUrl, new UploadImageUtil.OnGetBase64Listener() {
             @Override
             public void getBase64Success(List<String> base64List) {
                 if (!TextUtils.isEmpty(base64List.get(0)) && !TextUtils.isEmpty(base64List.get(1))) {
@@ -764,14 +787,14 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                     final List<ImageDraft> imageDrafts = new Select().from(ImageDraft.class).where(ImageDraft_Table.imageId.is(imageId)).and(ImageDraft_Table.isDraft.is(false)).queryList();
                     final List<TextDraft> textDrafts = new Select().from(TextDraft.class).where(TextDraft_Table.imageId.is(imageId)).and(TextDraft_Table.isDraft.is(false)).queryList();
                     UploadImageUtil.uploadImage(EditImageActivity.this, info, makeUrl, base64List.get(1), base64List.get(0), imageDrafts, textDrafts);
-                }else {
-                    ToastUtils.showShort(EditImageActivity.this,"图片解析错误,请稍后重试!");
+                } else {
+                    ToastUtils.showShort(EditImageActivity.this, "图片解析错误,请稍后重试!");
                 }
             }
 
             @Override
             public void getBase64Failed(Exception e) {
-                ToastUtils.showShort(EditImageActivity.this,"图片解析错误,请稍后重试!");
+                ToastUtils.showShort(EditImageActivity.this, "图片解析错误,请稍后重试!");
             }
         });
 
@@ -941,24 +964,24 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
 
     @Override
     public void upLoadImageResult(ModifyResultBean response) {
-        if(response.getCode() == 0 ) {
-            if(!TextUtils.isEmpty(id)) {
-                Map<String,String> map = new HashMap<>();
+        if (response.getCode() == 0) {
+            if (!TextUtils.isEmpty(id)) {
+                Map<String, String> map = new HashMap<>();
                 map.put("deviceid", SystemInfoUtils.deviced(this));
                 map.put("version", SystemInfoUtils.versionName(this));
-                map.put("sign","sign");
-                map.put("key","key");
+                map.put("sign", "sign");
+                map.put("key", "key");
                 map.put("timestamp", (System.currentTimeMillis() / 1000) + "");
                 map.put("os", "1");
-                map.put("id",id);
-                map.put("type","3");
-                map.put("orgintable",originTable);
-                map.put("option","edit");
+                map.put("id", id);
+                map.put("type", "3");
+                map.put("orgintable", originTable);
+                map.put("option", "edit");
                 presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
-            ToastUtils.showShort(this, "发布成功");
-        }else {
-            ToastUtils.showShort(this, response.getMsg());
+            //ToastUtils.showShort(this, "发布成功");
+        } else {
+            //ToastUtils.showShort(this, response.getMsg());
         }
     }
 

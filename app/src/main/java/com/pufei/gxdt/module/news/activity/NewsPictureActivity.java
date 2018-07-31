@@ -58,6 +58,8 @@ public class NewsPictureActivity extends BaseMvpActivity<NewsPresenter> implemen
         llTitleLeft.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.news_pic));
         LinearLayoutManager layoutManage = new LinearLayoutManager(this);
+        layoutManage.setStackFromEnd(true);//列表再底部开始展示，反转后由上面开始展示
+        layoutManage.setReverseLayout(true);
         layoutManage.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManage);
     }
