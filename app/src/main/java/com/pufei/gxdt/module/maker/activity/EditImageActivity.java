@@ -514,7 +514,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
             brushX = msg.getX();
             brushY = msg.getY();
         } else if (msg.getType() == 12) {
-            presenter.upLoadImage(RetrofitFactory.getRequestBody(msg.getUrl()));
+           // presenter.upLoadImage(RetrofitFactory.getRequestBody(msg.getUrl()));
         }
     }
 
@@ -977,7 +977,7 @@ public class EditImageActivity extends BaseMvpActivity<EditImagePresenter> imple
                 map.put("type", "3");
                 map.put("orgintable", originTable);
                 map.put("option", "edit");
-                presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
+              //  presenter.favoriteCounter(RetrofitFactory.getRequestBody(new Gson().toJson(map)));
             }
             //ToastUtils.showShort(this, "发布成功");
         } else {

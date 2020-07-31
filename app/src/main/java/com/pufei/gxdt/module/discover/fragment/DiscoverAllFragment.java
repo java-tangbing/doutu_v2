@@ -169,7 +169,7 @@ public class DiscoverAllFragment extends BaseMvpFragment<DiscoverPresenter> impl
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            //presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
             swipeRefreshLayout.setVisibility(View.GONE);
 //            mlist.clear();

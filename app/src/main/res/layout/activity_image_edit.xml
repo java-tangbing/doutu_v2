@@ -9,12 +9,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <RelativeLayout
+
             android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/yellow">
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_title_back"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
@@ -145,6 +147,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_share_qq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,6 +163,7 @@
                 android:background="@drawable/share_border"
                 android:drawableLeft="@mipmap/bt_ic_logo_qq"/>
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_share_wx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

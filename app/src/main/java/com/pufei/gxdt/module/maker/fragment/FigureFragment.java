@@ -68,7 +68,7 @@ public class FigureFragment extends BaseMvpFragment<EditImagePresenter> implemen
         map1.put("key", "key");
         map1.put("page", page+"");
         map1.put("type", "2");
-        presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map1)), 2);
+        //presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map1)), 2);
 
     }
 

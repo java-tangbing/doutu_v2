@@ -3,14 +3,12 @@ def dbflow_version = "4.2.4"
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
-
     defaultConfig {
         applicationId "com.pufei.gxdt"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 30
-        versionName "3.5.2"
+        versionName "3.5.4"
         flavorDimensions "versionCode"
         multiDexEnabled true
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -106,6 +104,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support:design:27.1.0'
     implementation "com.android.support:exifinterface:27.1.1"
+    implementation "com.android.support:exifinterface:27.1.1"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -132,7 +131,10 @@ dependencies {
     implementation 'com.mylhyl:acp:1.2.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation 'com.github.donkingliang:ImageSelector:1.5.0'
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+ /*   implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'*/
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
     implementation 'com.jcodecraeer:xrecyclerview:1.2.7'
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"

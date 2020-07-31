@@ -18,6 +18,7 @@ import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.module.floating.FloatWindowService;
 import com.pufei.gxdt.module.login.activity.LoginActivity;
+import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AppManager;
 import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
@@ -159,7 +160,7 @@ public class FristActivity extends Activity {
         button_v3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FristActivity.this, MainActivity.class));
+                startActivity(new Intent(FristActivity.this, EditImageActivity.class));
                 AppManager.getAppManager().finishActivity();
 //                if (cb.isChecked()) {
 //

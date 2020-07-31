@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:id="@+id/main_bg"
     android:orientation="vertical">
@@ -103,12 +104,25 @@
             android:id="@+id/srf_home_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+         <!--   <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/gifview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/gif_header_repast"
+                app:layout_srlSpinnerStyle="Scale"
+                app:layout_srlBackgroundColor="@android:color/transparent"/>-->
+            <com.scwang.smartrefresh.header.TaurusHeader
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:focusableInTouchMode="true"
                 android:id="@+id/rl_home_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         <include layout="@layout/internet_fail"/>
     </FrameLayout>

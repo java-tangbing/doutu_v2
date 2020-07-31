@@ -67,7 +67,7 @@ public class FeaturedFragment extends BaseMvpFragment<EditImagePresenter> implem
         map.put("key", "key");
         map.put("page", page +"");
         map.put("type", "1");
-        presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map)), 1);
+       // presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map)), 1);
 
     }
 

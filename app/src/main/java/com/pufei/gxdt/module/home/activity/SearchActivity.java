@@ -84,7 +84,7 @@ public class SearchActivity extends BaseMvpActivity  implements TextView.OnEdito
     @Override
     public void initView() {
         list=new ArrayList<>();
-        sharedPreferences=getSharedPreferences(SHARE_TAG,0);
+        sharedPreferences = getSharedPreferences(SHARE_TAG,0);
         editor=sharedPreferences.edit();
         history=sharedPreferences.getString(SHARE_TYPE_TAG,"[]");
         LayoutInflater lif = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

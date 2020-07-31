@@ -123,9 +123,9 @@ public class UserFragment extends BaseFragment {
 
         initSign();
         if (App.userBean != null) {
-            getScore();
+           // getScore();
         }
-        initLoading();
+       // initLoading();
     }
 
     @Override

@@ -75,7 +75,7 @@ public class MainActivity extends BaseMvpActivity<LoginNewPresenter> implements 
         if (user_detail != null) {
             App.userBean = new Gson().fromJson(user_detail, UserBean.class);
 //            Log.e("fdsaf",App.userBean.getUid() +" ");
-            initUPush(App.userBean.getUid());
+            //initUPush(App.userBean.getUid());
         }
         addFragment();
         tabAdapter = new TabVpAdapter(this, getSupportFragmentManager(), fragmentList);
@@ -152,9 +152,9 @@ public class MainActivity extends BaseMvpActivity<LoginNewPresenter> implements 
                                     public void run() {
                                         EventBus.getDefault().post(new EvenMsg(1));
                                     }
-                                }, 200);
-                                loginNew();
-                                StartUtils.getInstance(MainActivity.this).detection();
+                                }, 1000);
+                                //loginNew();
+                                //StartUtils.getInstance(MainActivity.this).detection();
                             }
 
                             @Override
@@ -164,7 +164,7 @@ public class MainActivity extends BaseMvpActivity<LoginNewPresenter> implements 
                                     public void run() {
                                         EventBus.getDefault().post(new EvenMsg(1));
                                     }
-                                }, 200);
+                                }, 1000);
                                 ToastUtils.showShort(MainActivity.this, "请求权限失败,请手动开启！");
                             }
                         });
@@ -187,7 +187,7 @@ public class MainActivity extends BaseMvpActivity<LoginNewPresenter> implements 
         if (type.getTYPE() == MsgType.MAKER_IMAGE) {
             homeVp.setCurrentItem(previousItem);
         } else if (type.getTYPE() == MsgType.LOGIN_SUCCESS) {
-            initUPush(App.userBean.getUid());
+           // initUPush(App.userBean.getUid());
         }
     }
 
@@ -198,10 +198,10 @@ public class MainActivity extends BaseMvpActivity<LoginNewPresenter> implements 
 
     private void addFragment() {
         fragmentList = new ArrayList<Fragment>();
-        fragmentList.add(new HomeFragment());
+        fragmentList.add(new MakerFragment());
         fragmentList.add(new DiscoverFragment());
         fragmentList.add(new MakerFragment());
-        fragmentList.add(new UserFragment());
+        fragmentList.add(new MakerFragment());
     }
 
     @Override

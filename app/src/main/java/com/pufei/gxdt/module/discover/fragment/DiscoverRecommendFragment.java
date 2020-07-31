@@ -144,7 +144,7 @@ public class DiscoverRecommendFragment extends BaseMvpFragment<DiscoverPresenter
                 e.printStackTrace();
             }
 
-            presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
+            //presenter.discoverHotList(RetrofitFactory.getRequestBody(jsonObject.toString()));
         } else {
             swipeRefreshLayout.setVisibility(View.GONE);
 //            mlist.clear();

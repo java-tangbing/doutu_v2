@@ -141,6 +141,6 @@ public class ExpressionFragment extends BaseMvpFragment<EditImagePresenter> impl
         map2.put("key","key");
         map2.put("page",pageNumber +"");
         map2.put("type","3");
-        presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map2)),3);
+        //presenter.getMaterial(RetrofitFactory.getRequestBody(new Gson().toJson(map2)),3);
     }
 }

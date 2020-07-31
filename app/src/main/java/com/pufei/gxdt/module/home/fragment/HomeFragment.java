@@ -92,17 +92,18 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
 
     @Override
     public void initView() {
-        UmengStatisticsUtil.statisticsEvent(getActivity(),"1");
+        //UmengStatisticsUtil.statisticsEvent(getActivity(),"1");
         LayoutInflater lif = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         headView = lif.inflate(R.layout.home_head, null);
         rl_home_list.addHeaderView(headView);
+        rl_home_list.setPullRefreshEnabled(true);
         adapter = new HomeListAdapter(getActivity(), homeList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());//布局管理�
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rl_home_list.setLayoutManager(layoutManager);
         rl_home_list.setAdapter(adapter);
-        srf_home_lisyt.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
-        srf_home_lisyt.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        /*srf_home_lisyt.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        srf_home_lisyt.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));*/
         srf_home_lisyt.setEnableLoadmore(false);
         rl_home_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -198,7 +199,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     }
 
     private void countView(String id,int type,String orgintable,String option){
-        if(NetWorkUtil.isNetworkConnected(getActivity())){
+        /*if(NetWorkUtil.isNetworkConnected(getActivity())){
             try {
                 JSONObject countViewObj = KeyUtil.getJson(getActivity());
                 countViewObj.put("id", id);
@@ -210,7 +211,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
     }
     @Override
@@ -234,12 +235,12 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getAdv(EvenMsg type) {
         if(type.getTYPE() == 1){
-            AdvUtil.getInstance(getActivity()).getAdvHttp(getActivity(),your_original_layout,1);
+            //AdvUtil.getInstance(getActivity()).getAdvHttp(getActivity(),your_original_layout,1);
         }
     }
     @Override
     public void getData() {
-        if (NetWorkUtil.isNetworkConnected(getActivity())) {
+        /*if (NetWorkUtil.isNetworkConnected(getActivity())) {
             try {
                 JSONObject getHomeTypeObj = KeyUtil.getJson(getActivity());
                 getHomeTypeObj.put("net", NetWorkUtil.netType(getActivity()));
@@ -278,11 +279,11 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
                     }
                 }
             });
-        }
+        }*/
     }
 
     private void requestHomeList(int page) {
-        if (NetWorkUtil.isNetworkConnected(getActivity())) {
+      /*  if (NetWorkUtil.isNetworkConnected(getActivity())) {
             try {
                 JSONObject getHomeListObj = KeyUtil.getJson(getActivity());
                 getHomeListObj.put("net", NetWorkUtil.netType(getActivity()));
@@ -293,7 +294,7 @@ public class HomeFragment extends BaseMvpFragment<HomeListPresenter> implements 
             }
         } else {
             ToastUtils.showShort(getActivity(),"请检查网络设置");
-        }
+        }*/
     }
 
 

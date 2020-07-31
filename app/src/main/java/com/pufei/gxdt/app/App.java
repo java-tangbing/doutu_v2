@@ -46,7 +46,7 @@ public class App extends Application {
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+       // LeakCanary.install(this);
         LogUtils.isShow = false;
         AppContext = getApplicationContext();
         ResolutionUtil.getInstance().init(this);
@@ -56,8 +56,8 @@ public class App extends Application {
         }
         initPrefs();
         FlowManager.init(this);
-        initUMConfig();
-        PushAgent mPushAgent = PushAgent.getInstance(this);
+        //initUMConfig();
+       /* PushAgent mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(new IUmengRegisterCallback() {
 
             @Override
@@ -84,18 +84,18 @@ public class App extends Application {
         mPushAgent.setNotificationClickHandler(clickHandler);
 
         UmengMessageHandler messageHandler = new UmengMessageHandler() {
-            /**
+            *//**
              * 通知的回调方法
              * @param context
              * @param msg
-             */
+             *//*
             @Override
             public void dealWithNotificationMessage(Context context, UMessage msg) {
                 super.dealWithNotificationMessage(context, msg);
                 Log.e("UPush", msg.text + "");
             }
         };
-        mPushAgent.setMessageHandler(messageHandler);
+        mPushAgent.setMessageHandler(messageHandler);*/
     }
 
     /**

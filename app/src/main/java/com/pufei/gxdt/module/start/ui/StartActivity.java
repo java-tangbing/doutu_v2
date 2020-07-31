@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.pufei.gxdt.MainActivity;
 import com.pufei.gxdt.R;
 import com.pufei.gxdt.contents.MsgType;
+import com.pufei.gxdt.module.maker.activity.EditImageActivity;
 import com.pufei.gxdt.utils.AdvUtil;
 import com.pufei.gxdt.utils.AppManager;
 import com.pufei.gxdt.utils.EvenMsg;
@@ -103,12 +104,12 @@ public class StartActivity extends Activity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        if(NetWorkUtil.isNetworkConnected(this)){
+       /* if(NetWorkUtil.isNetworkConnected(this)){
             AdvUtil.getInstance(this).getAdvHttp(this,rl_adv,7);
         }else{
-            ToastUtils.showShort(this,"请检查网络设置");
+            ToastUtils.showShort(this,"请检查网络设置");*/
             handler.sendEmptyMessage(1);
-        }
+     //   }
 
 //        if (!user_first) {
 //            //getAdvert();
@@ -179,7 +180,7 @@ public class StartActivity extends Activity {
             startActivity(new Intent(StartActivity.this, FristActivity.class));
             AppManager.getAppManager().finishActivity();
         } else {
-            startActivity(new Intent(StartActivity.this, MainActivity.class));
+            startActivity(new Intent(StartActivity.this, EditImageActivity.class));
             AppManager.getAppManager().finishActivity();
         }
     }
